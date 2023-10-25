@@ -1,0 +1,68 @@
+var excludeClassesFromReport = new ArrayList<String>()
+file('jacoco-exclude-class').withInputStream {
+    it ->
+        excludeClassesFromReport.addAll(new BufferedReader(new InputStreamReader(it))
+                .lines()
+                .parallel()
+                .map(s -> s.substring(7).strip())
+                .toList())
+}
+
+apply plugin: 'java'
+apply plugin: 'jacoco'
+
+repositories {
+    mavenCentral()
+}
+
+jacocoTestReport {
+    dependsOn test
+
+    reports {
+        xml.required = true
+        html.required = true
+    }
+
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: excludeClassesFromReport.stream()
+                    .map(s -> s + ".class")
+                    .toList())
+        }))
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            enabled = true
+            element = 'CLASS'
+
+            excludes += excludeClassesFromReport.stream()
+                    .map(s -> s.replace("/", "."))
+                    .toList()
+
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.00
+            }
+
+            limit {
+                counter = 'METHOD'
+                value = 'COVEREDRATIO'
+                minimum = 0.00
+            }
+        }
+    }
+}
+
+task testWithCoverage {
+    group 'verification'
+    description 'run w/ jacoco test report'
+
+    dependsOn ':test', ':jacocoTestReport', ':jacocoTestCoverageVerification'
+
+    tasks.jacocoTestReport.mustRunAfter tasks.test
+    tasks.jacocoTestCoverageVerification.mustRunAfter tasks.jacocoTestReport
+}
