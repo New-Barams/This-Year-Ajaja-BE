@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+docker rm mysql
+docker rmi mysql:latest
+
+docker volume rm mysql_container_config
+docker volume rm mysql_container_data
