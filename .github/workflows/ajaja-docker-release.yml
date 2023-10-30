@@ -6,7 +6,6 @@ on:
       - main
 
 env:
-  DEFAULT_OS: ubuntu-latest
   GRADLE_VERSION: 8.3
   JAVA_VERSION: '17'
   JAVA_DISTRIBUTION: 'temurin'

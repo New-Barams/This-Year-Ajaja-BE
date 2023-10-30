@@ -6,8 +6,6 @@ on:
       - main
 
 env:
-  REVIEWERS: 2jie0516, kys0411, Hejow
-  DEFAULT_OS: ubuntu-latest
   GRADLE_VERSION: 8.3
   JAVA_VERSION: '17'
   JAVA_DISTRIBUTION: 'temurin'
@@ -15,18 +13,7 @@ env:
   JACOCO_TEST_REPORT: /build/reports/jacoco/test/jacocoTestReport.xml
 
 jobs:
-  assign-reviewer:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Assign Reviewer
-        uses: hkusu/review-assign-action@v1
-        with:
-          assignees: ${{ github.actor }}
-          reviewers: ${{ env.REVIEWERS }}
-
   check:
-    needs: assign-reviewer
     runs-on: ubuntu-latest
 
     steps:
