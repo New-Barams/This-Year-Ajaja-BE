@@ -1,2 +1,3 @@
 exclude com/newbarams/ajaja/AjajaApplication
-exclude com/newbarams/ajaja/global/*
+exclude com/newbarams/ajaja/global/config/*
+exclude com/newbarams/ajaja/global/common/*

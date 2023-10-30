@@ -8,6 +8,11 @@ file('jacoco-exclude-class').withInputStream {
                 .toList())
 }
 
+def qDomains = []
+for(qPattern in "**/QA" .. "**/QZ") {
+    qDomains.add(qPattern+"*")
+}
+
 apply plugin: 'java'
 apply plugin: 'jacoco'
 
@@ -27,7 +32,7 @@ jacocoTestReport {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it, exclude: excludeClassesFromReport.stream()
                     .map(s -> s + ".class")
-                    .toList())
+                    .toList() + qDomains)
         }))
     }
 }
@@ -40,7 +45,7 @@ jacocoTestCoverageVerification {
 
             excludes += excludeClassesFromReport.stream()
                     .map(s -> s.replace("/", "."))
-                    .toList()
+                    .toList() + qDomains
 
             limit {
                 counter = 'LINE'
