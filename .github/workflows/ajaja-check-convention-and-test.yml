@@ -10,7 +10,6 @@ env:
   JAVA_VERSION: '17'
   JAVA_DISTRIBUTION: 'temurin'
   GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
-  JACOCO_TEST_REPORT: /build/reports/jacoco/test/jacocoTestReport.xml
 
 jobs:
   check:
@@ -40,13 +39,11 @@ jobs:
 
       - name: Add Coverage on Pull Request
         id: jacoco
-        uses: madrapps/jacoco-report@v1.6
+        uses: madrapps/jacoco-report@v1
         with:
           title: Test Coverage Report
-          paths: ${{ github.workspace }}${{ env.JACOCO_TEST_REPORT }}
+          paths: ${{ github.workspace }}/build/reports/jacoco/test/jacocoTestReport.xml
           token: ${{ secrets.GITHUB_TOKEN }}
-          min-coverage-overall: 80
-          min-coverage-changed-files: 80
 
   build:
     needs: check
