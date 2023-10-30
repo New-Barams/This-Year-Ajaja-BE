@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.global;
+package com.newbarams.ajaja.global.config;
 
 import org.jasypt.encryption.StringEncryptor;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
