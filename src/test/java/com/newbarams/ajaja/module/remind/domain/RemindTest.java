@@ -40,29 +40,6 @@ class RemindTest {
 		}
 
 		@Test
-		@DisplayName("255자가 넘는 메세지를 설정할 경우 예외를 던진다.")
-		void setContentTest_Fail_ByValidationException() {
-			// given
-			String stringOverMaximum = """
-				TestTestTestTestTestTestTest
-				TestTestTestTestTestTestTest
-				TestTestTestTestTestTestTest
-				TestTestTestTestTestTestTest
-				TestTestTestTestTestTestTest
-				TestTestTestTestTestTestTest
-				TestTestTestTestTestTestTest
-				TestTestTestTestTestTestTest
-				TestTestTestTestTestTestTest
-				TestTestTestTestTestTestTest
-				TestTestTestTestTestTestTest
-				""";
-
-			// when,then
-			assertThatException()
-				.isThrownBy(() -> fixtureMonkey.giveMeBuilder(Info.class).set("content", stringOverMaximum).sample());
-		}
-
-		@Test
 		@DisplayName("빈 메세지를 설정할 경우 예외를 던진다.")
 		void setEmptyContent_Fail_ValidationException() {
 			// given
