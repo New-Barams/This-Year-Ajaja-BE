@@ -2,6 +2,7 @@ name: assign reviewers, assignee
 
 on:
   pull_request:
+  issues:
     types:
       - opened
 
