@@ -1,0 +1,27 @@
+version: '3.8'
+
+networks:
+  default:
+    name: kdt
+
+volumes:
+  data:
+    driver: local
+  config:
+    driver: local
+
+services:
+  mysql:
+    image: mysql
+    container_name: mysql
+    ports:
+      - 3306:3306
+    volumes:
+      - data:/var/lib/mysql
+      - config:/etc/mysql/conf.d
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_USER=kdt
+      - MYSQL_PASSWORD=password
+    platform: linux/arm64/v8
+    restart: always

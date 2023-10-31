@@ -5,28 +5,18 @@ on:
     branches:
       - main
 
+permissions:
+  checks: write
+  pull-requests: write
+
 env:
-  REVIEWERS: 2jie0516, kys0411, Hejow
-  DEFAULT_OS: ubuntu-latest
   GRADLE_VERSION: 8.3
   JAVA_VERSION: '17'
   JAVA_DISTRIBUTION: 'temurin'
   GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
-  JACOCO_TEST_REPORT: /build/reports/jacoco/test/jacocoTestReport.xml
 
 jobs:
-  assign-reviewer:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Assign Reviewer
-        uses: hkusu/review-assign-action@v1
-        with:
-          assignees: ${{ github.actor }}
-          reviewers: ${{ env.REVIEWERS }}
-
   check:
-    needs: assign-reviewer
     runs-on: ubuntu-latest
 
     steps:
@@ -53,13 +43,13 @@ jobs:
 
       - name: Add Coverage on Pull Request
         id: jacoco
-        uses: madrapps/jacoco-report@v1.6
+        uses: madrapps/jacoco-report@v1.6.1
         with:
-          title: Test Coverage Report
-          paths: ${{ github.workspace }}${{ env.JACOCO_TEST_REPORT }}
+          paths: ${{ github.workspace }}/build/reports/jacoco/test/jacocoTestReport.xml
           token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: 80
           min-coverage-changed-files: 80
+          title: Test Coverage Report
 
   build:
     needs: check

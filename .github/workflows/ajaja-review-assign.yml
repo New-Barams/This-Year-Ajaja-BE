@@ -1,0 +1,19 @@
+name: assign reviewers, assignee
+
+on:
+  pull_request:
+    types:
+      - opened
+
+env:
+  REVIEWERS: 2jie0516, kys0411, Hejow
+
+jobs:
+  assign:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: hkusu/review-assign-action@v1
+        with:
+          assignees: ${{ github.actor }}
+          reviewers: ${{ env.REVIEWERS }}

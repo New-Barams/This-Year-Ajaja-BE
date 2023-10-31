@@ -1,0 +1,23 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ENC(1jd8QY238D6rcdiD3AzG0zzAs5Gc/YljhxEncOlK2y/2PwyLiBZJ9PrMmo05bWKhJW/DsHXVrp4kqvJhNNO4LN2s2EQ6mJfvsij8M/V//t4=)
+    username: ENC(FGx0dc3++sojudGdtIAC2OVT/AcfJbiP)
+    password: ENC(C+NVkZc/loGSOiNw3rdhIGmOLY8Web4P)
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ENC(tGwdWhKp3JANKDooNLD7c4uxrljB6JUuL0RGqUTIwf8INRmmQEAUbMMZY4XpcinE)
+    username: ENC(sU5cFR/NcS3lcWR+BE7tJw==)
+    password: ENC(E0BPQSOtdRe3yrRS/F2AZ9iCkzZfXAT8)
