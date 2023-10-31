@@ -3,7 +3,7 @@ name: pull docker image, re-run container
 on:
   workflow_run:
     workflows:
-      - "ajaja-docker-release"
+      - "generate docker image, upload to docker hub"
     types:
       - completed
 
