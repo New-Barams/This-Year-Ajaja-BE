@@ -46,4 +46,4 @@ jobs:
           push: true
           build-args: |
             JASYPT_PASSWORD= ${{ secrets.JASYPT_PASSWORD }}
-          tags: newbarams/ajaja:latest
+          tags: gmlwh124/ajaja:latest
