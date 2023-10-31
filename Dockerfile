@@ -6,8 +6,8 @@ ARG JASYPT_PASSWORD
 
 COPY ${JAR_FILE} ajaja.jar
 
-ENV jasypt_password=${JASYPT_PASSWORD} \
-    spring_profile=${SPRING_PROFILE}
+ENV spring_profile=${SPRING_PROFILE} \
+    jasypt_password=${JASYPT_PASSWORD}
 
 ENTRYPOINT java -jar ajaja.jar \
             --spring.profiles.active=${spring_profile} \
