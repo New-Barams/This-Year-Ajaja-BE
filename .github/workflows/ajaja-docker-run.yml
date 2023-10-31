@@ -1,9 +1,9 @@
-name: pull docker image, re-run container
+name: re-run server
 
 on:
   workflow_run:
     workflows:
-      - "generate docker image, upload to docker hub"
+      - "renew docker image"
     types:
       - completed
 

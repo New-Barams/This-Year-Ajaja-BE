@@ -33,7 +33,6 @@ jobs:
         uses: gradle/gradle-build-action@v2.9.0
         with:
           gradle-version: ${{ env.GRADLE_VERSION }}
-          cache-read-only: true # will be update
 
       - name: Check Code Convention
         run: gradle check

@@ -1,10 +1,9 @@
-name: assign reviewers, assignee
+name: Auto assgin
 
 on:
   pull_request:
   issues:
-    types:
-      - opened
+    types: [opened, labeled, unlabeled]
 
 env:
   REVIEWERS: 2jie0516, kys0411, Hejow
@@ -14,7 +13,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: hkusu/review-assign-action@v1
+      - uses: wow-actions/auto-assign@v3
         with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           assignees: ${{ github.actor }}
           reviewers: ${{ env.REVIEWERS }}
