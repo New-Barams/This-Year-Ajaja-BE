@@ -43,6 +43,6 @@ jobs:
           push: true
           file: ./Dockerfile
           platforms: ${{ secrets.HOST_PLATFORM }}
-          build-args: JASYPT_PASSWORD= ${{ secrets.JASYPT_PASSWORD }}
+          build-args: JASYPT_PASSWORD=${{ secrets.JASYPT_PASSWORD }}
           tags: gmlwh124/ajaja:latest
           context: .
