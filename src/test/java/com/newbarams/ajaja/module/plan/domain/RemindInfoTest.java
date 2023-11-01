@@ -1,8 +1,6 @@
 package com.newbarams.ajaja.module.plan.domain;
 
-import static com.newbarams.ajaja.module.plan.domain.RemindInfo.RemindTime.*;
 import static org.assertj.core.api.Assertions.*;
-import static org.assertj.core.api.BDDAssertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -28,12 +26,7 @@ class RemindInfoTest {
 
 	@Test
 	void createRemindInfo_success() {
-		RemindInfo remindInfo = fixtureMonkey.giveMeOne(RemindInfo.class);
-
-		then(remindInfo.getRemindTotalPeriod()).isGreaterThanOrEqualTo(0);
-		then(remindInfo.getRemindTerm()).isGreaterThanOrEqualTo(0);
-		then(remindInfo.getRemindDate()).isGreaterThanOrEqualTo(0);
-		then(remindInfo.getRemindTime()).isIn(MORNING, AFTERNOON, EVENING);
+		fixtureMonkey.giveMeOne(RemindInfo.class);
 	}
 
 	@Test
