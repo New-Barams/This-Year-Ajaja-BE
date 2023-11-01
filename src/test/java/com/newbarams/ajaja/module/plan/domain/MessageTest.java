@@ -50,4 +50,13 @@ class MessageTest {
 			.sample())
 			.isInstanceOf(FilterMissException.class);
 	}
+
+	@Test
+	@DisplayName("비어있는 content로 생성 요청을 하면 예외가 발생한다.")
+	void createMessage_fail_byEmptyContent() {
+		assertThatThrownBy(() -> fixtureMonkey.giveMeBuilder(Message.class)
+			.set("content", " ")
+			.sample())
+			.isInstanceOf(FilterMissException.class);
+	}
 }
