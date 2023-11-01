@@ -17,7 +17,7 @@ public class SwaggerConfig {
 	private static final String JWT = "JWT";
 
 	@Bean
-	OpenAPI ajajaAPI() {
+	OpenAPI ajajaApi() {
 		return new OpenAPI()
 			.info(ajajaInfo())
 			.components(securityComponent())
