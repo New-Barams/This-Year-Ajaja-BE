@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.newbarams.ajaja.global.common.AjajaResponse;
-import com.newbarams.ajaja.module.remind.domain.dto.GetReminds;
+import com.newbarams.ajaja.module.remind.domain.dto.CommonResponse;
+import com.newbarams.ajaja.module.remind.domain.dto.Response;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -28,15 +29,13 @@ public class RemindController {
 	})
 	@GetMapping("/list")
 	@ResponseStatus(OK)
-	public AjajaResponse<GetReminds.CommonResponse> getReminds(
+	public AjajaResponse<CommonResponse> getReminds() {
+		List<Response> responses = List.of(
+			new Response("화이팅", true, 60, Timestamp.valueOf("2023-4-02 23:59:59")),
+			new Response("아좌좌", true, 60, Timestamp.valueOf("2023-7-02 23:59:59")),
+			new Response("할수있다", false, 0, Timestamp.valueOf("2023-10-02 23:59:59")));
 
-	) {
-		List<GetReminds.Response> responses = List.of(
-			new GetReminds.Response("화이팅", true, 60, Timestamp.valueOf("2023-4-02 23:59:59")),
-			new GetReminds.Response("아좌좌", true, 60, Timestamp.valueOf("2023-7-02 23:59:59")),
-			new GetReminds.Response("할수있다", false, 0, Timestamp.valueOf("2023-10-02 23:59:59")));
-
-		GetReminds.CommonResponse commonResponse = new GetReminds.CommonResponse("moring", 2, 3, 1, true, responses);
+		CommonResponse commonResponse = new CommonResponse("moring", 2, 3, 1, true, responses);
 		return AjajaResponse.ok(commonResponse);
 	}
 }
