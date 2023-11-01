@@ -17,3 +17,6 @@ spring:
   flyway:
     enabled: true
     baseline-on-migrate: true
+
+springdoc:
+  use-fqn: true
