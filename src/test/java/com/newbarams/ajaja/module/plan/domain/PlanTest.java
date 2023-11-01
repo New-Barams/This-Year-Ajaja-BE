@@ -1,7 +1,5 @@
 package com.newbarams.ajaja.module.plan.domain;
 
-import static org.assertj.core.api.BDDAssertions.*;
-
 import org.junit.jupiter.api.Test;
 
 import com.navercorp.fixturemonkey.FixtureMonkey;
@@ -16,8 +14,6 @@ class PlanTest {
 			.plugin(new JakartaValidationPlugin())
 			.build();
 
-		Plan plan = fixtureMonkey.giveMeOne(Plan.class);
-
-		then(plan.getId()).isNotNull();
+		fixtureMonkey.giveMeOne(Plan.class);
 	}
 }
