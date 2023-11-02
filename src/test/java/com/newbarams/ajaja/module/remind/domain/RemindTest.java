@@ -6,7 +6,6 @@ import java.time.Instant;
 import java.time.Year;
 import java.time.ZoneId;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -16,15 +15,10 @@ import com.navercorp.fixturemonkey.api.introspector.ConstructorPropertiesArbitra
 import com.navercorp.fixturemonkey.jakarta.validation.plugin.JakartaValidationPlugin;
 
 class RemindTest {
-	private FixtureMonkey fixtureMonkey;
-
-	@BeforeEach
-	void setUp() {
-		fixtureMonkey = FixtureMonkey.builder()
-			.objectIntrospector(ConstructorPropertiesArbitraryIntrospector.INSTANCE)
-			.plugin(new JakartaValidationPlugin())
-			.build();
-	}
+	private final FixtureMonkey fixtureMonkey = FixtureMonkey.builder()
+		.objectIntrospector(ConstructorPropertiesArbitraryIntrospector.INSTANCE)
+		.plugin(new JakartaValidationPlugin())
+		.build();
 
 	@Nested
 	@DisplayName("리마인드 받을 메세지를 테스트한다.")

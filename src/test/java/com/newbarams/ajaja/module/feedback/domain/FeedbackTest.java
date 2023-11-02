@@ -2,7 +2,6 @@ package com.newbarams.ajaja.module.feedback.domain;
 
 import static org.assertj.core.api.Assertions.*;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -11,15 +10,10 @@ import com.navercorp.fixturemonkey.api.introspector.ConstructorPropertiesArbitra
 import com.navercorp.fixturemonkey.jakarta.validation.plugin.JakartaValidationPlugin;
 
 class FeedbackTest {
-	private FixtureMonkey fixtureMonkey;
-
-	@BeforeEach
-	void setUp() {
-		fixtureMonkey = FixtureMonkey.builder()
-			.objectIntrospector(ConstructorPropertiesArbitraryIntrospector.INSTANCE)
-			.plugin(new JakartaValidationPlugin())
-			.build();
-	}
+	private final FixtureMonkey fixtureMonkey = FixtureMonkey.builder()
+		.objectIntrospector(ConstructorPropertiesArbitraryIntrospector.INSTANCE)
+		.plugin(new JakartaValidationPlugin())
+		.build();
 
 	@Test
 	@DisplayName("유저id 값이 null일 경우 예외를 던진다.")
