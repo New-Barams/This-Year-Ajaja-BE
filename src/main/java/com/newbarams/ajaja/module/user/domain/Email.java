@@ -24,4 +24,12 @@ public class Email extends SelfValidating<Email> {
 		this.isVerified = false;
 		this.validateSelf();
 	}
+
+	void verified() {
+		this.isVerified = true;
+	}
+
+	boolean isVerified() {
+		return isVerified;
+	}
 }
