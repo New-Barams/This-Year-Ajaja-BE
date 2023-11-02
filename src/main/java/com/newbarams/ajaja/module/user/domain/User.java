@@ -28,14 +28,25 @@ public class User extends BaseEntity<User> {
 	@Enumerated(value = EnumType.STRING)
 	private Status status;
 
-	public User(String email) {
-		this.nickname = Nickname.generateNickname();
-		this.email = new Email(email);
+	public User(Nickname nickname, Email email) {
+		this.nickname = nickname;
+		this.email = email;
 		this.status = Status.NORMAL;
 	}
 
-	public String resetNickname() {
-		this.nickname = Nickname.generateNickname();
-		return nickname.getNickname();
+	public void verifyEmail() {
+		if (isEmailVerified()) {
+			throw new IllegalStateException("already verified!");
+		}
+
+		email.verified();
+	}
+
+	public boolean isEmailVerified() {
+		return email.isVerified();
+	}
+
+	Status getStatus() {
+		return status;
 	}
 }

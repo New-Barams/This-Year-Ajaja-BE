@@ -17,12 +17,8 @@ public class Nickname extends SelfValidating<Nickname> {
 	@Size(max = 20)
 	private String nickname;
 
-	private Nickname(String nickname) {
+	public Nickname(String nickname) {
 		this.nickname = nickname;
 		this.validateSelf();
-	}
-
-	public static Nickname generateNickname() {
-		return new Nickname("default");
 	}
 }
