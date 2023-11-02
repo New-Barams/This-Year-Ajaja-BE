@@ -28,8 +28,8 @@ class MockController {
 	private static final String ACCESS_TOKEN = "thisismockkakaoaccesstoken";
 	private static final String REFRESH_TOKEN = "thisismockkakaorefreshtoken";
 	private static final String NEW_ACCESS_TOKEN = "thisisnewmockkakaoaccesstoken";
-	private static final List<String> nicknames =
-		Arrays.asList("노래부르는 다람쥐", "부끄러워하는 코끼리", "춤추는 강아지", "고백하는 고양이 ", "거절하는 거북이 ", "손을 번쩍든 오리");
+	private static final List<String> nicknames = Arrays.asList("노래부르는 다람쥐", "부끄러워하는 코끼리", "춤추는 강아지", "고백하는 고양이 ",
+		"거절하는 거북이 ", "손을 번쩍든 오리");
 
 	@Tag(name = "mock")
 	@Operation(description = "가짜 회원가입 API")
@@ -43,10 +43,10 @@ class MockController {
 	@PostMapping("/login")
 	@ResponseStatus(OK)
 	Map<String, String> login() {
-		return new HashMap<>() {{
-			put("accessToken", ACCESS_TOKEN);
-			put("refreshToken", REFRESH_TOKEN);
-		}};
+		Map<String, String> response = new HashMap<>();
+		response.put("accessToken", ACCESS_TOKEN);
+		response.put("refreshToken", REFRESH_TOKEN);
+		return response;
 	}
 
 	@Tag(name = "mock")
@@ -57,9 +57,9 @@ class MockController {
 		String token = extractToken(refreshToken);
 		validateRefreshToken(token);
 
-		return new HashMap<>() {{
-			put("accessToken", NEW_ACCESS_TOKEN);
-		}};
+		Map<String, String> response = new HashMap<>();
+		response.put("accessToken", NEW_ACCESS_TOKEN);
+		return response;
 	}
 
 	@Tag(name = "mock")
@@ -78,9 +78,9 @@ class MockController {
 		validateAccessToken(token);
 
 		Collections.shuffle(nicknames);
-		return new HashMap<>() {{
-			put("nickname", nicknames.get(0));
-		}};
+		Map<String, String> response = new HashMap<>();
+		response.put("nickname", nicknames.get(0));
+		return response;
 	}
 
 	@Tag(name = "mock")
@@ -91,9 +91,9 @@ class MockController {
 		String token = extractToken(accessToken);
 		validateAccessToken(token);
 
-		return new HashMap<>() {{
-			put("certification", CERTIFICATION);
-		}};
+		Map<String, String> response = new HashMap<>();
+		response.put("certification", CERTIFICATION);
+		return response;
 	}
 
 	@Tag(name = "mock")

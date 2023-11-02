@@ -17,32 +17,26 @@ public class CorsConfig {
 	@Bean
 	CorsConfigurationSource corsConfigurationSource() {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-
 		source.registerCorsConfiguration("/**", defaultCorsConfig());
 		source.registerCorsConfiguration("/mock/**", mockCorsConfig());
-		
 		return source;
 	}
 
 	private CorsConfiguration defaultCorsConfig() {
 		CorsConfiguration configuration = new CorsConfiguration();
-
 		configuration.setAllowedOrigins(List.of(FRONT_LOCAL_ENV)); // will update
 		configuration.setAllowedMethods(allowedMethods);
 		configuration.addAllowedHeader("*");
 		configuration.setAllowCredentials(true);
-
 		return configuration;
 	}
 
 	private CorsConfiguration mockCorsConfig() {
 		CorsConfiguration configuration = new CorsConfiguration();
-
 		configuration.setAllowedOrigins(List.of(FRONT_LOCAL_ENV));
 		configuration.setAllowedMethods(allowedMethods);
 		configuration.addAllowedHeader("*");
 		configuration.setAllowCredentials(true);
-
 		return configuration;
 	}
 }
