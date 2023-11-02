@@ -8,7 +8,7 @@ import com.navercorp.fixturemonkey.jakarta.validation.plugin.JakartaValidationPl
 
 class PlanTest {
 	@Test
-	void createPlan_success() {
+	void createPlan_Success() {
 		FixtureMonkey fixtureMonkey = FixtureMonkey.builder()
 			.objectIntrospector(FieldReflectionArbitraryIntrospector.INSTANCE)
 			.plugin(new JakartaValidationPlugin())

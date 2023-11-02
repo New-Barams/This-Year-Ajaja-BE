@@ -2,7 +2,6 @@ package com.newbarams.ajaja.module.plan.domain;
 
 import static org.assertj.core.api.Assertions.*;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -14,24 +13,19 @@ import com.navercorp.fixturemonkey.api.introspector.FieldReflectionArbitraryIntr
 import com.navercorp.fixturemonkey.jakarta.validation.plugin.JakartaValidationPlugin;
 
 class RemindInfoTest {
-	private FixtureMonkey fixtureMonkey;
-
-	@BeforeEach
-	void setUp() {
-		fixtureMonkey = FixtureMonkey.builder()
-			.objectIntrospector(FieldReflectionArbitraryIntrospector.INSTANCE)
-			.plugin(new JakartaValidationPlugin())
-			.build();
-	}
+	private final FixtureMonkey fixtureMonkey = FixtureMonkey.builder()
+		.objectIntrospector(FieldReflectionArbitraryIntrospector.INSTANCE)
+		.plugin(new JakartaValidationPlugin())
+		.build();
 
 	@Test
-	void createRemindInfo_success() {
+	void createRemindInfo_Success() {
 		fixtureMonkey.giveMeOne(RemindInfo.class);
 	}
 
 	@Test
 	@DisplayName("음수인 TotalPeriod로 생성 요청을 하면 예외가 발생한다.")
-	void createRemindInfo_fail_byTotalPeriod() {
+	void createRemindInfo_Fail_ByTotalPeriod() {
 		assertThatThrownBy(() -> fixtureMonkey.giveMeBuilder(RemindInfo.class)
 			.set("remindTotalPeriod", Arbitraries.integers().lessOrEqual(-1))
 			.sample())
@@ -40,7 +34,7 @@ class RemindInfoTest {
 
 	@Test
 	@DisplayName("음수인 Term으로 생성 요청을 하면 예외가 발생한다.")
-	void createRemindInfo_fail_byTerm() {
+	void createRemindInfo_Fail_ByTerm() {
 		assertThatThrownBy(() -> fixtureMonkey.giveMeBuilder(RemindInfo.class)
 			.set("remindTerm", Arbitraries.integers().lessOrEqual(-1))
 			.sample())
@@ -49,7 +43,7 @@ class RemindInfoTest {
 
 	@Test
 	@DisplayName("음수인 Date로 생성 요청을 하면 예외가 발생한다.")
-	void createRemindInfo_fail_byDate() {
+	void createRemindInfo_Fail_ByDate() {
 		assertThatThrownBy(() -> fixtureMonkey.giveMeBuilder(RemindInfo.class)
 			.set("remindDate", Arbitraries.integers().lessOrEqual(-1))
 			.sample())
