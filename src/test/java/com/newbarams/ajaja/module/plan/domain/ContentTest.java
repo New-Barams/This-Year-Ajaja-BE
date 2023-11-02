@@ -2,7 +2,6 @@ package com.newbarams.ajaja.module.plan.domain;
 
 import static org.assertj.core.api.BDDAssertions.*;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -14,15 +13,10 @@ import com.navercorp.fixturemonkey.api.introspector.FieldReflectionArbitraryIntr
 import com.navercorp.fixturemonkey.jakarta.validation.plugin.JakartaValidationPlugin;
 
 class ContentTest {
-	private FixtureMonkey fixtureMonkey;
-
-	@BeforeEach
-	void setUp() {
-		fixtureMonkey = FixtureMonkey.builder()
-			.objectIntrospector(FieldReflectionArbitraryIntrospector.INSTANCE)
-			.plugin(new JakartaValidationPlugin())
-			.build();
-	}
+	private final FixtureMonkey fixtureMonkey = FixtureMonkey.builder()
+		.objectIntrospector(FieldReflectionArbitraryIntrospector.INSTANCE)
+		.plugin(new JakartaValidationPlugin())
+		.build();
 
 	@Test
 	void createContent_Success() {
