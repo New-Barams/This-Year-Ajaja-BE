@@ -25,13 +25,13 @@ class RemindInfoTest {
 	}
 
 	@Test
-	void createRemindInfo_success() {
+	void createRemindInfo_Success() {
 		fixtureMonkey.giveMeOne(RemindInfo.class);
 	}
 
 	@Test
 	@DisplayName("음수인 TotalPeriod로 생성 요청을 하면 예외가 발생한다.")
-	void createRemindInfo_fail_byTotalPeriod() {
+	void createRemindInfo_Fail_ByTotalPeriod() {
 		assertThatThrownBy(() -> fixtureMonkey.giveMeBuilder(RemindInfo.class)
 			.set("remindTotalPeriod", Arbitraries.integers().lessOrEqual(-1))
 			.sample())
@@ -40,7 +40,7 @@ class RemindInfoTest {
 
 	@Test
 	@DisplayName("음수인 Term으로 생성 요청을 하면 예외가 발생한다.")
-	void createRemindInfo_fail_byTerm() {
+	void createRemindInfo_Fail_ByTerm() {
 		assertThatThrownBy(() -> fixtureMonkey.giveMeBuilder(RemindInfo.class)
 			.set("remindTerm", Arbitraries.integers().lessOrEqual(-1))
 			.sample())
@@ -49,7 +49,7 @@ class RemindInfoTest {
 
 	@Test
 	@DisplayName("음수인 Date로 생성 요청을 하면 예외가 발생한다.")
-	void createRemindInfo_fail_byDate() {
+	void createRemindInfo_Fail_ByDate() {
 		assertThatThrownBy(() -> fixtureMonkey.giveMeBuilder(RemindInfo.class)
 			.set("remindDate", Arbitraries.integers().lessOrEqual(-1))
 			.sample())

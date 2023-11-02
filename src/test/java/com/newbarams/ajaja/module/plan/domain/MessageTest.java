@@ -25,13 +25,13 @@ class MessageTest {
 	}
 
 	@Test
-	void createMessage_success() {
+	void createMessage_Success() {
 		fixtureMonkey.giveMeOne(Message.class);
 	}
 
 	@Test
 	@DisplayName("content의 글자수가 초과되면 예외가 발생한다.")
-	void createMessage_fail_byContent() {
+	void createMessage_Fail_ByContent() {
 		assertThatThrownBy(() -> fixtureMonkey.giveMeBuilder(Message.class)
 			.set("content", Arbitraries.strings().ofMinLength(256))
 			.sample())
@@ -40,7 +40,7 @@ class MessageTest {
 
 	@Test
 	@DisplayName("0보다 작은 index로 생성 요청을 하면 예외가 발생한다.")
-	void createMessage_fail_byIndex() {
+	void createMessage_Fail_ByIndex() {
 		assertThatThrownBy(() -> fixtureMonkey.giveMeBuilder(Message.class)
 			.set("index", Arbitraries.integers().lessOrEqual(-1))
 			.sample())
@@ -49,7 +49,7 @@ class MessageTest {
 
 	@Test
 	@DisplayName("비어있는 content로 생성 요청을 하면 예외가 발생한다.")
-	void createMessage_fail_byEmptyContent() {
+	void createMessage_Fail_ByEmptyContent() {
 		assertThatThrownBy(() -> fixtureMonkey.giveMeBuilder(Message.class)
 			.set("content", " ")
 			.sample())

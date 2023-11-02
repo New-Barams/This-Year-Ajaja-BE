@@ -25,13 +25,13 @@ class ContentTest {
 	}
 
 	@Test
-	void createContent_success() {
+	void createContent_Success() {
 		fixtureMonkey.giveMeOne(Content.class);
 	}
 
 	@Test
 	@DisplayName("title의 글자수가 초과되면 예외가 발생한다.")
-	void createContent_fail_byTitle() {
+	void createContent_Fail_ByTitle() {
 		assertThatThrownBy(() -> fixtureMonkey.giveMeBuilder(Content.class)
 			.set("title", Arbitraries.strings().ofMinLength(51))
 			.sample())
@@ -40,7 +40,7 @@ class ContentTest {
 
 	@Test
 	@DisplayName("description의 글자수가 초과되면 예외가 발생한다.")
-	void createContent_fail_byDescription() {
+	void createContent_Fail_ByDescription() {
 		assertThatThrownBy(() -> fixtureMonkey.giveMeBuilder(Content.class)
 			.set("description", Arbitraries.strings().ofMinLength(301))
 			.sample())
