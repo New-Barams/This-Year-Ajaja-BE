@@ -95,7 +95,9 @@ class RemindTest {
 			Period period = fixtureMonkey.giveMeOne(Period.class);
 
 			// when,then
-			Remind.plan(1L, 1L, info, period);
+			assertThatNoException().isThrownBy(
+				() -> Remind.plan(1L, 1L, info, period));
+
 		}
 
 		@Test
@@ -105,7 +107,8 @@ class RemindTest {
 			Period period = fixtureMonkey.giveMeOne(Period.class);
 
 			// when,then
-			Remind.ajaja(1L, 1L, info, period);
+			assertThatNoException().isThrownBy(
+				() -> Remind.ajaja(1L, 1L, info, period));
 		}
 	}
 }
