@@ -36,7 +36,8 @@ class RemindTest {
 			String content = "title";
 
 			// when,then
-			fixtureMonkey.giveMeBuilder(Info.class).set("content", content).sample();
+			assertThatNoException()
+				.isThrownBy(() -> fixtureMonkey.giveMeBuilder(Info.class).set("content", content).sample());
 		}
 
 		@Test
@@ -70,7 +71,8 @@ class RemindTest {
 
 		@Test
 		void setPeriod_Success_WithNoException() {
-			fixtureMonkey.giveMeBuilder(Period.class).set("start", pastTime).set("end", pastTime).sample();
+			assertThatNoException().isThrownBy(
+				() -> fixtureMonkey.giveMeBuilder(Period.class).set("start", pastTime).set("end", pastTime).sample());
 		}
 
 		@Test
