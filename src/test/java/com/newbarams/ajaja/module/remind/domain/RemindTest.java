@@ -10,6 +10,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import net.jqwik.api.Arbitraries;
+
 import com.navercorp.fixturemonkey.FixtureMonkey;
 import com.navercorp.fixturemonkey.api.introspector.ConstructorPropertiesArbitraryIntrospector;
 import com.navercorp.fixturemonkey.jakarta.validation.plugin.JakartaValidationPlugin;
@@ -23,6 +25,19 @@ class RemindTest {
 	@Nested
 	@DisplayName("리마인드 받을 메세지를 테스트한다.")
 	class ContentTest {
+
+		@Test
+		@DisplayName("255자가 넘는 메세지를 설정할 경우 예외를 던진다.")
+		void setContentTest_Fail_ByValidationException() {
+			// given
+			int lengthOverMax = 256;
+
+			// when,then
+			assertThatException().isThrownBy(
+				() -> fixtureMonkey.giveMeBuilder(Info.class)
+					.set("content", Arbitraries.strings().ofMinLength(lengthOverMax))
+					.sample());
+		}
 
 		@Test
 		void setContent_Success_WithNoException() {
