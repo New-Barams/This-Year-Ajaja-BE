@@ -4,6 +4,8 @@ import static org.springframework.http.HttpHeaders.*;
 import static org.springframework.http.HttpStatus.*;
 
 import java.sql.Timestamp;
+import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.newbarams.ajaja.global.common.AjajaResponse;
 import com.newbarams.ajaja.module.feedback.domain.dto.GetAchieve;
 import com.newbarams.ajaja.module.feedback.domain.dto.UpdateFeedback;
+import com.newbarams.ajaja.module.plan.domain.dto.PlanResponse;
 import com.newbarams.ajaja.module.remind.domain.dto.GetReminds;
 import com.newbarams.ajaja.module.remind.domain.dto.ModifyAlarm;
 
@@ -211,5 +214,75 @@ class MockController {
 		GetAchieve achieve = new GetAchieve(90);
 
 		return new AjajaResponse<>(true, achieve);
+	}
+
+	@Tag(name = "mock")
+	@Operation(description = "[테스트] 계획 생성 API")
+	@PostMapping("/plans")
+	@ResponseStatus(CREATED)
+	public void createPlan() {
+
+	}
+
+	@Tag(name = "mock")
+	@Operation(description = "[테스트] 계획 전체 조회 API")
+	@GetMapping("/plans")
+	@ResponseStatus(OK)
+	public AjajaResponse<List<PlanResponse.GetAll>> getAllPlans() {
+		List<PlanResponse.GetAll> responses = new ArrayList<>();
+		List<String> tags = List.of("tag1", "tag2", "tag3");
+
+		for (long i = 0; i < 10; i++) {
+			responses.add(
+				new PlanResponse.GetAll(i, 1L, "노래하는 다람쥐", "제목",
+					10, tags, Instant.parse("2023-01-02T08:19:23Z"))
+			);
+		}
+
+		return new AjajaResponse<>(true, responses);
+	}
+
+	@Tag(name = "mock")
+	@Operation(description = "[테스트] 계획 단건 조회 API")
+	@GetMapping("/plans/{id}")
+	@ResponseStatus(OK)
+	public AjajaResponse<PlanResponse.GetOne> getOnePlan(@PathVariable Long id) {
+		List<String> tags = List.of("술", "금주", "알코올 중독");
+		PlanResponse.GetOne response = new PlanResponse.GetOne(1L, 1L, "노래하는 다람쥐", "술 줄이기",
+			"술 한 달에 두번만 먹기", true, 15, tags, Instant.parse("2023-01-04T04:14:14Z"));
+
+		return new AjajaResponse<>(true, response);
+	}
+
+	@Tag(name = "mock")
+	@Operation(description = "[테스트] 계획 수정 API")
+	@PutMapping("/plans/{id}")
+	@ResponseStatus(OK)
+	public void updatePlan(@PathVariable Long id) {
+
+	}
+
+	@Tag(name = "mock")
+	@Operation(description = "[테스트] 계획 삭제 API")
+	@DeleteMapping("/plans/{id}")
+	@ResponseStatus(OK)
+	public void deletePlan(@PathVariable Long id) {
+
+	}
+
+	@Tag(name = "mock")
+	@Operation(description = "[테스트] 계획을 비공개로 수정")
+	@PutMapping("/plans/{id}/private")
+	@ResponseStatus(OK)
+	public void switchPlanToPrivate(@PathVariable Long id) {
+
+	}
+
+	@Tag(name = "mock")
+	@Operation(description = "[테스트] 계획을 공개로 수정")
+	@PutMapping("/plans/{id}/public")
+	@ResponseStatus(OK)
+	public void switchPlanToPublic(@PathVariable Long id) {
+
 	}
 }
