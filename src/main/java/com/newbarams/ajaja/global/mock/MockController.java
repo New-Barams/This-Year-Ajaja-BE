@@ -3,19 +3,30 @@ package com.newbarams.ajaja.global.mock;
 import static org.springframework.http.HttpHeaders.*;
 import static org.springframework.http.HttpStatus.*;
 
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.newbarams.ajaja.global.common.AjajaResponse;
+import com.newbarams.ajaja.module.feedback.domain.dto.GetAchieve;
+import com.newbarams.ajaja.module.feedback.domain.dto.UpdateFeedback;
+import com.newbarams.ajaja.module.remind.domain.dto.GetReminds;
+import com.newbarams.ajaja.module.remind.domain.dto.ModifyAlarm;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -129,5 +140,76 @@ class MockController {
 		if (!ACCESS_TOKEN.equals(refreshToken)) {
 			throw new IllegalArgumentException("wrong refresh token");
 		}
+	}
+
+	@Tag(name = "mock")
+	@Operation(description = "[테스트-5초 후 발송] 리마인드 전송 API")
+	@PostMapping("/plans/{planId}/reminds")
+	@ResponseStatus(OK)
+	public AjajaResponse<GetReminds.Response> sendRemind() throws InterruptedException {
+		TimeUnit.SECONDS.sleep(5);
+		GetReminds.Response response = new GetReminds.Response(1, "화이팅", false, 0,
+			new Timestamp(System.currentTimeMillis()));
+
+		return new AjajaResponse<>(true, response);
+	}
+
+	@Tag(name = "mock")
+	@Operation(description = "[테스트] 리마인드 정보 조회 API")
+	@GetMapping("/plans/{planId}/reminds")
+	@ResponseStatus(OK)
+	public AjajaResponse<GetReminds.CommonResponse> getReminds() {
+		List<GetReminds.Response> responses = List.of(
+			new GetReminds.Response(1, "화이팅", true, 60, Timestamp.valueOf("2023-4-02 23:59:59")),
+			new GetReminds.Response(2, "아좌좌", true, 60, Timestamp.valueOf("2023-7-02 23:59:59")),
+			new GetReminds.Response(3, "할수있다", false, 0, Timestamp.valueOf("2023-10-02 23:59:59")));
+
+		GetReminds.CommonResponse commonResponse = new GetReminds.CommonResponse("moring", 2, 3, 1, true, responses);
+		return new AjajaResponse<>(true, commonResponse);
+	}
+
+	@Tag(name = "mock")
+	@Operation(description = "[테스트] 리마인드 알림 끄기 API")
+	@PutMapping("/plans/{planId}/reminds")
+	@ResponseStatus(OK)
+	public AjajaResponse<String> modifyRemindAlarm(
+		@PathVariable int planId,
+		@RequestBody ModifyAlarm modifyAlarm
+	) {
+		return new AjajaResponse<>(true, null);
+	}
+
+	@Tag(name = "mock")
+	@Operation(description = "[테스트] 피드백 수행 API")
+	@PostMapping("/feedbacks/{planId}")
+	@ResponseStatus(OK)
+	public AjajaResponse<Void> updateFeedback(
+		@PathVariable int planId,
+		@RequestBody UpdateFeedback updateFeedback
+	) {
+		return new AjajaResponse<>(true, null);
+	}
+
+	@Tag(name = "mock")
+	@Operation(description = "[테스트] 목표별 계획률 보기 API")
+	@GetMapping("/feedbacks/{planId}")
+	@ResponseStatus(OK)
+	public AjajaResponse<GetAchieve> findPlanAchieve(
+		@PathVariable int planId
+	) {
+		GetAchieve achieve = new GetAchieve(90);
+
+		return new AjajaResponse<>(true, achieve);
+	}
+
+	@Tag(name = "mock")
+	@Operation(description = "[테스트] 전체 달성률 보기")
+	@GetMapping("/feedbacks/user/{userId}")
+	public AjajaResponse<GetAchieve> findTotalAchieve(
+		@PathVariable int userId
+	) {
+		GetAchieve achieve = new GetAchieve(90);
+
+		return new AjajaResponse<>(true, achieve);
 	}
 }
