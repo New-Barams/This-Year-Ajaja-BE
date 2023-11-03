@@ -26,6 +26,7 @@ dependencies {
 
     // Cloud
     implementation 'org.springframework.cloud:spring-cloud-starter:4.0.4'
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.0.4'
 
     // DB
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
