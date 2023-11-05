@@ -4,6 +4,7 @@ spring:
       - datasource
       - jasypt
       - ses
+      - secret
 
   jpa:
     hibernate:
@@ -21,3 +22,7 @@ spring:
 
 springdoc:
   use-fqn: true
+
+logging:
+  level:
+    com.newbarams.ajaja: DEBUG
