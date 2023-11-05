@@ -21,11 +21,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-quartz'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springframework.boot:spring-boot-starter-mail:3.1.5'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
-    // Cloud
-    implementation 'org.springframework.cloud:spring-cloud-starter:4.0.4'
+    // AWS
+    implementation 'com.amazonaws:aws-java-sdk-ses:1.12.580'
+
+    // Openfeign
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.0.4'
 
     // DB
