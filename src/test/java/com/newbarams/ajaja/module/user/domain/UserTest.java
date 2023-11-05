@@ -1,6 +1,5 @@
 package com.newbarams.ajaja.module.user.domain;
 
-import static com.newbarams.ajaja.module.user.domain.User.*;
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
@@ -107,15 +106,12 @@ class UserTest {
 
 		@ParameterizedTest
 		@ValueSource(strings = {"gmlwh124@naver.com", "ajaja.net@gamil.com", "123123@kakao.net"})
-		@DisplayName("유효한 이메일로 유저를 생성하면 예외가 발생하지 않고 기본 상태를 가진다.")
+		@DisplayName("유효한 이메일로 유저를 생성하면 예외가 발생하지 않는다.")
 		void create_Success_WithoutExceptionAndNormalState(String input) {
 			// given
 
 			// when, then
-			assertThatNoException().isThrownBy(() -> {
-				User user = new User(nickname, new Email(input));
-				assertThat(user.getStatus()).isEqualTo(Status.NORMAL);
-			});
+			assertThatNoException().isThrownBy(() -> new User(nickname, new Email(input)));
 		}
 
 		@Test

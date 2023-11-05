@@ -4,34 +4,36 @@ import org.hibernate.annotations.Where;
 
 import com.newbarams.ajaja.global.common.BaseEntity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "users")
-@Where(clause = "status = NORMAL")
+@Where(clause = "is_deleted = false")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseEntity<User> {
-	enum Status {
-		NORMAL, DELETED
-	}
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "user_id")
+	private Long id;
 
 	@Embedded
 	private Nickname nickname;
 	private Email email;
 
-	@Enumerated(value = EnumType.STRING)
-	private Status status;
+	private boolean isDeleted;
 
 	public User(Nickname nickname, Email email) {
 		this.nickname = nickname;
 		this.email = email;
-		this.status = Status.NORMAL;
+		this.isDeleted = false;
 	}
 
 	public void verifyEmail() {
@@ -44,9 +46,5 @@ public class User extends BaseEntity<User> {
 
 	public boolean isEmailVerified() {
 		return email.isVerified();
-	}
-
-	Status getStatus() {
-		return status;
 	}
 }
