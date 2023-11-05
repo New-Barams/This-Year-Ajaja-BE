@@ -3,6 +3,7 @@ spring:
     include:
       - datasource
       - jasypt
+      - ses
 
   jpa:
     hibernate:
