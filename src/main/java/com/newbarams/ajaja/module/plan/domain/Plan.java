@@ -53,7 +53,7 @@ public class Plan extends BaseEntity<Plan> {
 
 	@Size
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "tag_id")
+	@JoinColumn(name = "plan_id")
 	private Set<Tag> tags = new HashSet<>();
 
 	@NotEmpty
