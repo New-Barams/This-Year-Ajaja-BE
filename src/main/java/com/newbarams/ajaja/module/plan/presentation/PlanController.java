@@ -25,7 +25,7 @@ public class PlanController {
 	public PlanController(CreatePlanService createPlanService) {
 		this.createPlanService = createPlanService;
 	}
-	
+
 	@Operation(summary = "계획 생성 API")
 	@PostMapping
 	@ResponseStatus(CREATED)
