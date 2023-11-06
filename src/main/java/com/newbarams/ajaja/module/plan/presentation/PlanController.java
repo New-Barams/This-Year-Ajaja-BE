@@ -13,6 +13,10 @@ import com.newbarams.ajaja.module.plan.application.CreatePlanService;
 import com.newbarams.ajaja.module.plan.domain.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.domain.dto.PlanResponse;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(name = "plan")
 @RestController
 @RequestMapping("/plans")
 public class PlanController {
@@ -21,7 +25,8 @@ public class PlanController {
 	public PlanController(CreatePlanService createPlanService) {
 		this.createPlanService = createPlanService;
 	}
-
+	
+	@Operation(summary = "계획 생성 API")
 	@PostMapping
 	@ResponseStatus(CREATED)
 	public AjajaResponse<PlanResponse.GetOne> createPlan(@RequestBody PlanRequest.Create request) {
