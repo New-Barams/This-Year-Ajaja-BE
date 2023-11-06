@@ -13,16 +13,14 @@ import com.newbarams.ajaja.module.plan.repository.PlanRepository;
 import com.newbarams.ajaja.module.tag.application.TagService;
 import com.newbarams.ajaja.module.tag.domain.Tag;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class CreatePlanService {
 	private final PlanRepository planRepository;
 	private final TagService tagService;
-
-	public CreatePlanService(PlanRepository planRepository, TagService tagService) {
-		this.planRepository = planRepository;
-		this.tagService = tagService;
-	}
 
 	public PlanResponse.GetOne create(PlanRequest.Create request) {
 		Set<Tag> tags = tagService.getTags(request.tags());

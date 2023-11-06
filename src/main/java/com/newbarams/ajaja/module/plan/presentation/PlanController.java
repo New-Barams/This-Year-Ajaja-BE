@@ -15,16 +15,14 @@ import com.newbarams.ajaja.module.plan.domain.dto.PlanResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 
 @Tag(name = "plan")
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/plans")
 public class PlanController {
 	private final CreatePlanService createPlanService;
-
-	public PlanController(CreatePlanService createPlanService) {
-		this.createPlanService = createPlanService;
-	}
 
 	@Operation(summary = "계획 생성 API")
 	@PostMapping

@@ -10,15 +10,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.newbarams.ajaja.module.tag.domain.Tag;
 import com.newbarams.ajaja.module.tag.repository.TagRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class TagService {
-
 	private final TagRepository tagRepository;
-
-	public TagService(TagRepository tagRepository) {
-		this.tagRepository = tagRepository;
-	}
 
 	public Set<Tag> getTags(List<String> tagNames) {
 		Set<Tag> tags = new HashSet<>(tagNames.size());
