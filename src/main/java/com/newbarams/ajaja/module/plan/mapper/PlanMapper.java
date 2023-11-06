@@ -17,7 +17,7 @@ import com.newbarams.ajaja.module.tag.domain.Tag;
 
 @Component
 public class PlanMapper {
-	public static Plan dtoToEntity(PlanRequest.Create dto, Long userId, Set<Tag> tags) {
+	public static Plan toEntity(PlanRequest.Create dto, Long userId, Set<Tag> tags) {
 		Content content = convertToContent(dto.title(), dto.description());
 		RemindInfo info = convertToRemindInfo(dto.remindTotalPeriod(), dto.remindTerm(), dto.remindDate(),
 			dto.remindTime());
@@ -57,7 +57,7 @@ public class PlanMapper {
 		return messages;
 	}
 
-	public static PlanResponse.GetOne entityToDto(Plan plan, String username) {
+	public static PlanResponse.GetOne toResponse(Plan plan, String username) {
 		return new PlanResponse.GetOne(
 			plan.getId(),
 			plan.getUserId(),

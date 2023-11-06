@@ -25,9 +25,9 @@ public class CreatePlanService {
 	public PlanResponse.GetOne create(PlanRequest.Create request) {
 		Set<Tag> tags = tagService.getTags(request.tags());
 
-		Plan plan = PlanMapper.dtoToEntity(request, 1L, tags);
+		Plan plan = PlanMapper.toEntity(request, 1L, tags);
 		Plan savedPlan = planRepository.save(plan);
 
-		return PlanMapper.entityToDto(savedPlan, "username");
+		return PlanMapper.toResponse(savedPlan, "username");
 	}
 }
