@@ -69,14 +69,13 @@ public class Plan extends BaseEntity<Plan> {
 
 	@Builder
 	public Plan(Long userId, Content content, RemindInfo info, boolean isPublic,
-		List<Message> messages, Set<Tag> tags, List<Ajaja> ajajas) {
+		List<Message> messages, Set<Tag> tags) {
 		this.userId = userId;
 		this.content = content;
 		this.info = info;
 		this.status = new PlanStatus(isPublic);
 		this.messages = messages;
 		this.tags = tags;
-		this.ajajas = ajajas;
 		this.validateSelf();
 	}
 }
