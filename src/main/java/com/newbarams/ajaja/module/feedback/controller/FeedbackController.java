@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.newbarams.ajaja.global.common.AjajaResponse;
 import com.newbarams.ajaja.module.feedback.domain.dto.UpdateFeedback;
+import com.newbarams.ajaja.module.feedback.service.GetPlanAchieveService;
 import com.newbarams.ajaja.module.feedback.service.GetTotalAchieveService;
 import com.newbarams.ajaja.module.feedback.service.UpdateFeedbackService;
 
@@ -21,11 +22,14 @@ public class FeedbackController {
 
 	private final UpdateFeedbackService updateFeedbackService;
 	private final GetTotalAchieveService getTotalAchieveService;
+	private final GetPlanAchieveService getPlanAchieveService;
 
 	public FeedbackController(UpdateFeedbackService updateFeedbackService,
-		GetTotalAchieveService getTotalAchieveService) {
+		GetTotalAchieveService getTotalAchieveService,
+		GetPlanAchieveService getPlanAchieveService) {
 		this.updateFeedbackService = updateFeedbackService;
 		this.getTotalAchieveService = getTotalAchieveService;
+		this.getPlanAchieveService = getPlanAchieveService;
 	}
 
 	@PostMapping("/{feedbackId}")
@@ -37,6 +41,16 @@ public class FeedbackController {
 		updateFeedbackService.updateFeedback(feedbackId, updateFeedback.rate());
 
 		return new AjajaResponse<>(true, null);
+	}
+
+	@GetMapping("/plan/{planId}")
+	@ResponseStatus(OK)
+	public AjajaResponse<Integer> getPlanAchieve(
+		@PathVariable Long planId
+	) {
+		int totalAchieve = getPlanAchieveService.loadPlanAchieve(planId);
+
+		return new AjajaResponse<>(true, totalAchieve);
 	}
 
 	@GetMapping("/{userId}")

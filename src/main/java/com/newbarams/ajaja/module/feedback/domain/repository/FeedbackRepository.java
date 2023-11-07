@@ -17,4 +17,13 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
 		WHERE year(f.createdAt) == year(now()) AND f.userId == :userId
 		""", nativeQuery = true)
 	List<Feedback> findAllByUserIdAndCreatedYear(Long userId);
+
+	@Query(value = """
+		SELECT NEW com.newbarams.ajaja.module.feedback.domain.Feedback(
+			f.userId, f.planId , f.achieve
+		)
+		FROM feedbacks f
+		WHERE year(f.createdAt) == year(now()) AND f.userId == :planId
+		""", nativeQuery = true)
+	List<Feedback> findAllByPlanIdIdAndCreatedYear(Long planId);
 }
