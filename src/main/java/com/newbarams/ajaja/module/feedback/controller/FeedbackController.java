@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.newbarams.ajaja.global.common.AjajaResponse;
 import com.newbarams.ajaja.module.feedback.domain.dto.UpdateFeedback;
-import com.newbarams.ajaja.module.feedback.service.GetPlanAchieveService;
 import com.newbarams.ajaja.module.feedback.service.GetTotalAchieveService;
 import com.newbarams.ajaja.module.feedback.service.UpdateFeedbackService;
 
@@ -27,14 +26,12 @@ public class FeedbackController {
 
 	private final UpdateFeedbackService updateFeedbackService;
 	private final GetTotalAchieveService getTotalAchieveService;
-	private final GetPlanAchieveService getPlanAchieveService;
 
 	public FeedbackController(UpdateFeedbackService updateFeedbackService,
-		GetTotalAchieveService getTotalAchieveService,
-		GetPlanAchieveService getPlanAchieveService) {
+		GetTotalAchieveService getTotalAchieveService
+	) {
 		this.updateFeedbackService = updateFeedbackService;
 		this.getTotalAchieveService = getTotalAchieveService;
-		this.getPlanAchieveService = getPlanAchieveService;
 	}
 
 	@ExceptionHandler(RuntimeException.class)
@@ -52,17 +49,6 @@ public class FeedbackController {
 		updateFeedbackService.updateFeedback(feedbackId, updateFeedback.rate());
 
 		return new AjajaResponse<>(true, null);
-	}
-
-	@Operation(description = "특정 목표 달성률 조회 API")
-	@GetMapping("/plan/{planId}")
-	@ResponseStatus(OK)
-	public AjajaResponse<Integer> getPlanAchieve(
-		@PathVariable Long planId
-	) {
-		int totalAchieve = getPlanAchieveService.loadPlanAchieve(planId);
-
-		return new AjajaResponse<>(true, totalAchieve);
 	}
 
 	@Operation(description = "유저 전체 목표 달성률 조회 API")

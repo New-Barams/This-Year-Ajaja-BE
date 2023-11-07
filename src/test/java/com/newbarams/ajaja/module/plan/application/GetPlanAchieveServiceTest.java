@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.feedback.service;
+package com.newbarams.ajaja.module.plan.application;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
