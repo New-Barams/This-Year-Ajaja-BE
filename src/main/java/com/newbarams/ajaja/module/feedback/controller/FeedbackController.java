@@ -2,6 +2,7 @@ package com.newbarams.ajaja.module.feedback.controller;
 
 import static org.springframework.http.HttpStatus.*;
 
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,6 +31,11 @@ public class FeedbackController {
 		this.updateFeedbackService = updateFeedbackService;
 		this.getTotalAchieveService = getTotalAchieveService;
 		this.getPlanAchieveService = getPlanAchieveService;
+	}
+
+	@ExceptionHandler(RuntimeException.class)
+	public AjajaResponse<String> fakeExceptionHandler(RuntimeException exception) {
+		return new AjajaResponse<>(false, exception.getMessage());
 	}
 
 	@PostMapping("/{feedbackId}")
