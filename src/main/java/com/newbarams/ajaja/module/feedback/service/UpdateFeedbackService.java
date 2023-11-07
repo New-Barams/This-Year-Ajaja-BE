@@ -32,7 +32,7 @@ public class UpdateFeedbackService {
 
 	private void checkDeadline(Instant remindDate) throws IllegalAccessException {
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-		Timestamp deadline = Timestamp.from(remindDate.plus(1, ChronoUnit.MONTHS));
+		Timestamp deadline = Timestamp.from(remindDate.plus(31, ChronoUnit.DAYS));
 
 		boolean isInvalidFeedback = timestamp.before(Timestamp.from(remindDate)) || timestamp.after(deadline);
 

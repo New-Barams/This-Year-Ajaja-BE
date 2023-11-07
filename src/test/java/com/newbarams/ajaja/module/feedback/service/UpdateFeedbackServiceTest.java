@@ -1,6 +1,11 @@
 package com.newbarams.ajaja.module.feedback.service;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.BDDMockito.*;
+
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -22,23 +27,39 @@ class UpdateFeedbackServiceTest {
 	@Mock
 	private FeedbackRepository feedbackRepository;
 
-	private Feedback feedback;
+	@Mock
+	private Feedback mockFeedback;
 
 	@Nested
 	class DeadlineTest {
 
-		// @Test
-		// @DisplayName("기간 내에 피드백을 시행할 경우 성공한다.")
-		// void updateTest_Success_WithNoException() {
-		// 	// given
-		// 	feedback = new Feedback(1L, 1L, Achieve.BAD);
-		//
-		// 	given(feedbackRepository.findById(any())).willReturn(Optional.of(feedback));
-		//
-		// 	// when,then
-		// 	assertThatNoException().isThrownBy(
-		// 		() -> updateFeedbackService.updateFeedback(1L, 50));
-		// }
+		@Test
+		@DisplayName("기간 내에 피드백을 시행할 경우 성공한다.")
+		void updateTest_Success_WithNoException() {
+			// given
+			Instant remindTime = Instant.now().minus(15, ChronoUnit.DAYS);
+
+			given(mockFeedback.getCreatedAt()).willReturn(remindTime);
+			given(feedbackRepository.findById(any())).willReturn(Optional.of(mockFeedback));
+
+			// when,then
+			assertThatNoException().isThrownBy(
+				() -> updateFeedbackService.updateFeedback(1L, 50));
+		}
+
+		@Test
+		@DisplayName("데드라인이 지난 피드백을 할 경우 예외를 던진다.")
+		void updateTest_Fail_ByIllegalAccessException() {
+			// given
+			Instant remindTime = Instant.now().minus(50, ChronoUnit.DAYS);
+
+			given(mockFeedback.getCreatedAt()).willReturn(remindTime);
+			given(feedbackRepository.findById(any())).willReturn(Optional.of(mockFeedback));
+
+			// when,then
+			assertThatException().isThrownBy(
+				() -> updateFeedbackService.updateFeedback(1L, 50));
+		}
 	}
 
 	@Nested
@@ -67,33 +88,5 @@ class UpdateFeedbackServiceTest {
 			// when,then
 			assertThat(achieve).isEqualTo(Achieve.SOSO);
 		}
-	}
-
-	@Nested
-	class SaveFeedbackTest {
-		// @Test
-		// @DisplayName("피드백을 반영한 엔티티를 저장한다.")
-		// void saveFeedback_Success_WithNoException() throws IllegalAccessException {
-		// 	// given
-		// 	String remind = "2024-02-20 10:20:30.0";
-		// 	Timestamp remindTime = Timestamp.valueOf(remind);
-		//
-		// 	String deadLineDate = "2024-03-20 10:20:30.0";
-		// 	Timestamp deadline = Timestamp.valueOf(deadLineDate);
-		//
-		// 	String now = "2024-02-27 10:20:30.0";
-		// 	Timestamp nowTime = Timestamp.valueOf(now);
-		//
-		// 	feedback = new Feedback(1L, 1L, Achieve.BAD);
-		//
-		// 	given(feedbackRepository.save(any())).willReturn(1L);
-		// 	given(feedbackRepository.findById(any())).willReturn(Optional.of(feedback));
-		//
-		// 	// when
-		// 	updateFeedbackService.updateFeedback(1L, 50);
-		//
-		// 	// then
-		// 	assertThat(feedbackRepository.findById(1L)).usingRecursiveComparison().isEqualTo(feedback);
-		// }
 	}
 }
