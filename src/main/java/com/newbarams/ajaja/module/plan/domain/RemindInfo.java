@@ -7,8 +7,10 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Positive;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RemindInfo extends SelfValidating<RemindInfo> {
@@ -30,11 +32,11 @@ public class RemindInfo extends SelfValidating<RemindInfo> {
 	@Enumerated(value = EnumType.STRING)
 	private RemindTime remindTime;
 
-	public RemindInfo(int remindTotalPeriod, int remindTerm, int remindDate, RemindTime remindTime) {
+	public RemindInfo(int remindTotalPeriod, int remindTerm, int remindDate, String remindTime) {
 		this.remindTotalPeriod = remindTotalPeriod;
 		this.remindTerm = remindTerm;
 		this.remindDate = remindDate;
-		this.remindTime = remindTime;
+		this.remindTime = RemindTime.valueOf(remindTime);
 		this.validateSelf();
 	}
 }
