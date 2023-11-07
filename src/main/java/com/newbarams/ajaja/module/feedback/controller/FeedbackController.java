@@ -17,6 +17,10 @@ import com.newbarams.ajaja.module.feedback.service.GetPlanAchieveService;
 import com.newbarams.ajaja.module.feedback.service.GetTotalAchieveService;
 import com.newbarams.ajaja.module.feedback.service.UpdateFeedbackService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(name = "feedback", description = "피드백 API")
 @RestController
 @RequestMapping("/feedbacks")
 public class FeedbackController {
@@ -38,6 +42,7 @@ public class FeedbackController {
 		return new AjajaResponse<>(false, exception.getMessage());
 	}
 
+	@Operation(description = "피드백 반영 API")
 	@PostMapping("/{feedbackId}")
 	@ResponseStatus(OK)
 	public AjajaResponse<Void> updateFeedback(
@@ -49,6 +54,7 @@ public class FeedbackController {
 		return new AjajaResponse<>(true, null);
 	}
 
+	@Operation(description = "특정 목표 달성률 조회 API")
 	@GetMapping("/plan/{planId}")
 	@ResponseStatus(OK)
 	public AjajaResponse<Integer> getPlanAchieve(
@@ -59,6 +65,7 @@ public class FeedbackController {
 		return new AjajaResponse<>(true, totalAchieve);
 	}
 
+	@Operation(description = "유저 전체 목표 달성률 조회 API")
 	@GetMapping("/{userId}")
 	@ResponseStatus(OK)
 	public AjajaResponse<Integer> getTotalAchieve(
