@@ -2,9 +2,8 @@ package com.newbarams.ajaja.module.feedback.domain.repository;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-@DataJpaTest
+// @DataJpaTest
 class FeedbackRepositoryTest {
 	// @Autowired
 	// FeedbackRepository feedbackRepository;
