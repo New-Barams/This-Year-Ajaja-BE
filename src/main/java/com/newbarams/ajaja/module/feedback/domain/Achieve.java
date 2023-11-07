@@ -2,8 +2,10 @@ package com.newbarams.ajaja.module.feedback.domain;
 
 import java.util.stream.Stream;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+@Getter
 @RequiredArgsConstructor
 public enum Achieve {
 	FAIL(0),

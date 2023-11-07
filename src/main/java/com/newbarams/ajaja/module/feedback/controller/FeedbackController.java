@@ -2,6 +2,7 @@ package com.newbarams.ajaja.module.feedback.controller;
 
 import static org.springframework.http.HttpStatus.*;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.newbarams.ajaja.global.common.AjajaResponse;
 import com.newbarams.ajaja.module.feedback.domain.dto.UpdateFeedback;
+import com.newbarams.ajaja.module.feedback.service.GetTotalAchieveService;
 import com.newbarams.ajaja.module.feedback.service.UpdateFeedbackService;
 
 @RestController
@@ -18,9 +20,12 @@ import com.newbarams.ajaja.module.feedback.service.UpdateFeedbackService;
 public class FeedbackController {
 
 	private final UpdateFeedbackService updateFeedbackService;
+	private final GetTotalAchieveService getTotalAchieveService;
 
-	public FeedbackController(UpdateFeedbackService updateFeedbackService) {
+	public FeedbackController(UpdateFeedbackService updateFeedbackService,
+		GetTotalAchieveService getTotalAchieveService) {
 		this.updateFeedbackService = updateFeedbackService;
+		this.getTotalAchieveService = getTotalAchieveService;
 	}
 
 	@PostMapping("/{feedbackId}")
@@ -32,5 +37,15 @@ public class FeedbackController {
 		updateFeedbackService.updateFeedback(feedbackId, updateFeedback.rate());
 
 		return new AjajaResponse<>(true, null);
+	}
+
+	@GetMapping("/{userId}")
+	@ResponseStatus(OK)
+	public AjajaResponse<Integer> getTotalAchieve(
+		@PathVariable Long userId
+	) {
+		int totalAchieve = getTotalAchieveService.loadTotalAchieve(userId);
+
+		return new AjajaResponse<>(true, totalAchieve);
 	}
 }
