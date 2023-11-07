@@ -44,4 +44,8 @@ public class Feedback extends BaseEntity<Feedback> {
 		this.isDeleted = false;
 		this.validateSelf();
 	}
+
+	public void updateAchieve(int rate) {
+		this.achieve = Achieve.findAchieve(rate);
+	}
 }

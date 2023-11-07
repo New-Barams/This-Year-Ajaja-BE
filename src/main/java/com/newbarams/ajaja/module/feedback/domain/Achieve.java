@@ -1,5 +1,7 @@
 package com.newbarams.ajaja.module.feedback.domain;
 
+import java.util.stream.Stream;
+
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -11,4 +13,11 @@ public enum Achieve {
 	PERFECT(100);
 
 	private final int rate;
+
+	public static Achieve findAchieve(int rate) {
+		return Stream.of(values())
+			.filter(achieve -> achieve.rate == rate)
+			.findAny()
+			.orElseThrow(IllegalArgumentException::new);
+	}
 }
