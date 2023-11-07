@@ -14,7 +14,11 @@ public sealed interface KakaoResponse permits Token, Profile {
 		int expiresIn,
 		String scope,
 		String refreshTokenExpiresIn
-	) implements KakaoResponse {
+	) implements KakaoResponse, AccessToken {
+		@Override
+		public String getContent() {
+			return accessToken;
+		}
 	}
 
 	@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
