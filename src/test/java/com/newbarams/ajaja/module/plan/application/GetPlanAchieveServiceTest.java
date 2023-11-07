@@ -36,7 +36,7 @@ class GetPlanAchieveServiceTest {
 
 	@Test
 	@DisplayName("조회하고 싶은 계획의 피드백을 통틀어서 달성률의 평균을 매긴다.")
-	void getTotalAchieve_Success_withNoException() {
+	void getTotalAchieve_Success_WithNoException() {
 		// given
 		Feedback feedback1 = sut.giveMeOne(Feedback.class);
 		Feedback feedback2 = sut.giveMeOne(Feedback.class);
@@ -56,7 +56,7 @@ class GetPlanAchieveServiceTest {
 
 	@Test
 	@DisplayName("만약 계획의 평가된 피드백이 없을 경우 점수는 0이 나온다.")
-	void getEmptyAchieve_Success_withNoException() {
+	void getEmptyAchieve_Success_WithNoException() {
 		// given
 		List<Feedback> feedbackList = Collections.emptyList();
 
