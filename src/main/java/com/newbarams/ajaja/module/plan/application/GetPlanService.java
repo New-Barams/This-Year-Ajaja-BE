@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.newbarams.ajaja.module.plan.domain.dto.PlanResponse;
-import com.newbarams.ajaja.module.plan.repository.PlanRepository;
+import com.newbarams.ajaja.module.plan.repository.PlanQueryRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -12,9 +12,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class GetPlanService {
-	private final PlanRepository planRepository;
+	private final PlanQueryRepository planQueryRepository;
 
 	public PlanResponse.GetOne loadById(Long id) {
-		return planRepository.findPlanById(id);
+		return planQueryRepository.findPlanById(id);
 	}
 }

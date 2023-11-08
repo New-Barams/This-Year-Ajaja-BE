@@ -19,10 +19,9 @@ import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class PlanRepositoryCustomImpl implements PlanRepositoryCustom {
+public class PlanQueryRepository {
 	private final JPAQueryFactory queryFactory;
 
-	@Override
 	public PlanResponse.GetOne findPlanById(Long id) {
 		List<Tuple> tuples = queryFactory.select(plan, user.nickname)
 			.from(plan, user)
