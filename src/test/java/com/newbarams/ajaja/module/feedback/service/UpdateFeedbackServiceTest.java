@@ -73,7 +73,7 @@ class UpdateFeedbackServiceTest {
 
 			// when,then
 			assertThatThrownBy(
-				() -> Achieve.findAchieve(rate));
+				() -> Achieve.findByRate(rate));
 		}
 
 		@Test
@@ -83,7 +83,7 @@ class UpdateFeedbackServiceTest {
 			int rate = 50;
 
 			// when
-			Achieve achieve = Achieve.findAchieve(rate);
+			Achieve achieve = Achieve.findByRate(rate);
 
 			// when,then
 			assertThat(achieve).isEqualTo(Achieve.SOSO);
