@@ -1,21 +1,15 @@
 package com.newbarams.ajaja.infra.feign.kakao;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-// todo: @ConstructorBinding
 @Getter
-@Component
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor
+@ConfigurationProperties(prefix = "secret.kakao")
 public class KakaoProperties {
-	@Value("${secret.kakao.client-id}")
-	private String clientId;
-	@Value("${secret.kakao.redirect-uri}")
-	private String redirectUri;
-	@Value("${secret.kakao.client-secret}")
-	private String clientSecret;
+	private final String clientId;
+	private final String redirectUri;
+	private final String clientSecret;
 }
