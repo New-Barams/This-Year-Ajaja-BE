@@ -1,9 +1,5 @@
 package com.newbarams.ajaja.module.feedback.service;
 
-import java.sql.Timestamp;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,20 +19,9 @@ public class UpdateFeedbackService {
 		Feedback feedback = feedbackRepository.findById(feedbackId)
 			.orElseThrow(NullPointerException::new);
 
-		checkDeadline(feedback.getCreatedAt());
+		feedback.checkDeadline();
 
 		feedback.updateAchieve(rate);
 		feedbackRepository.save(feedback);
-	}
-
-	private void checkDeadline(Instant remindDate) throws IllegalAccessException {
-		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-		Timestamp deadline = Timestamp.from(remindDate.plus(31, ChronoUnit.DAYS));
-
-		boolean isInvalidFeedback = timestamp.before(Timestamp.from(remindDate)) || timestamp.after(deadline);
-
-		if (isInvalidFeedback) {
-			throw new IllegalAccessException("평가 기간이 지났습니다.");
-		}
 	}
 }

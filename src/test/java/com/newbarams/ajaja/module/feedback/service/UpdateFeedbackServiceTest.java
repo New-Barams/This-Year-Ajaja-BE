@@ -3,8 +3,6 @@ package com.newbarams.ajaja.module.feedback.service;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
@@ -35,11 +33,9 @@ class UpdateFeedbackServiceTest {
 
 		@Test
 		@DisplayName("기간 내에 피드백을 시행할 경우 성공한다.")
-		void updateTest_Success_WithNoException() {
+		void updateTest_Success_WithNoException() throws IllegalAccessException {
 			// given
-			Instant remindTime = Instant.now().minus(15, ChronoUnit.DAYS);
-
-			given(mockFeedback.getCreatedAt()).willReturn(remindTime);
+			doNothing().when(mockFeedback).checkDeadline();
 			given(feedbackRepository.findById(any())).willReturn(Optional.of(mockFeedback));
 
 			// when,then
@@ -49,11 +45,9 @@ class UpdateFeedbackServiceTest {
 
 		@Test
 		@DisplayName("데드라인이 지난 피드백을 할 경우 예외를 던진다.")
-		void updateTest_Fail_ByIllegalAccessException() {
+		void updateTest_Fail_ByIllegalAccessException() throws IllegalAccessException {
 			// given
-			Instant remindTime = Instant.now().minus(50, ChronoUnit.DAYS);
-
-			given(mockFeedback.getCreatedAt()).willReturn(remindTime);
+			doThrow(IllegalAccessException.class).when(mockFeedback).checkDeadline();
 			given(feedbackRepository.findById(any())).willReturn(Optional.of(mockFeedback));
 
 			// when,then

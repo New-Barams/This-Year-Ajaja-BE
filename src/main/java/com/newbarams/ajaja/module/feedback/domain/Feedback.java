@@ -1,5 +1,9 @@
 package com.newbarams.ajaja.module.feedback.domain;
 
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+
 import org.hibernate.annotations.Where;
 
 import com.newbarams.ajaja.global.common.BaseEntity;
@@ -46,6 +50,19 @@ public class Feedback extends BaseEntity<Feedback> {
 		this.achieve = achieve;
 		this.isDeleted = false;
 		this.validateSelf();
+	}
+
+	public void checkDeadline() throws IllegalAccessException {
+		Instant remindDate = this.getCreatedAt();
+		Timestamp currentDate = new Timestamp(System.currentTimeMillis());
+
+		Timestamp deadline = Timestamp.from(remindDate.plus(31, ChronoUnit.DAYS));
+
+		boolean isInvalidFeedback = currentDate.before(Timestamp.from(remindDate)) || currentDate.after(deadline);
+
+		if (isInvalidFeedback) {
+			throw new IllegalAccessException("평가 기간이 지났습니다.");
+		}
 	}
 
 	public void updateAchieve(int rate) {
