@@ -21,9 +21,6 @@ public class GetPlanAchieveService {
 	public int loadPlanAchieve(Long planId) {
 		List<Feedback> feedbackList = feedbackRepository.findAllByPlanIdIdAndCreatedYear(planId);
 
-		return (int)feedbackList.stream()
-			.mapToInt(f -> f.getAchieve().getRate())
-			.average()
-			.orElse(0);
+		return (int)feedbackList.stream().mapToInt(f -> f.getAchieve().getRate()).average().orElse(0);
 	}
 }

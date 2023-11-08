@@ -19,9 +19,6 @@ public class GetTotalAchieveService {
 	public int loadTotalAchieve(Long userId) {
 		List<Feedback> userFeedbackList = feedbackRepository.findAllByUserIdAndCreatedYear(userId);
 
-		return (int)userFeedbackList.stream()
-			.mapToInt(f -> f.getAchieve().getRate())
-			.average()
-			.orElse(0);
+		return (int)userFeedbackList.stream().mapToInt(f -> f.getAchieve().getRate()).average().orElse(0);
 	}
 }
