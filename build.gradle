@@ -23,6 +23,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
+    // Test
+    testImplementation 'org.springframework.security:spring-security-test'
+
     // AWS
     implementation 'com.amazonaws:aws-java-sdk-ses:1.12.580'
 
