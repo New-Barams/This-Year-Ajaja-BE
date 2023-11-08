@@ -18,21 +18,16 @@ import com.newbarams.ajaja.module.feedback.service.UpdateFeedbackService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 
 @Tag(name = "feedback", description = "피드백 API")
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/feedbacks")
 public class FeedbackController {
 
 	private final UpdateFeedbackService updateFeedbackService;
 	private final GetTotalAchieveService getTotalAchieveService;
-
-	public FeedbackController(UpdateFeedbackService updateFeedbackService,
-		GetTotalAchieveService getTotalAchieveService
-	) {
-		this.updateFeedbackService = updateFeedbackService;
-		this.getTotalAchieveService = getTotalAchieveService;
-	}
 
 	@ExceptionHandler(RuntimeException.class)
 	public AjajaResponse<String> fakeExceptionHandler(RuntimeException exception) {
