@@ -28,4 +28,16 @@ public class PlanResponse {
 		Instant createdAt
 	) {
 	}
+
+	public record Create(
+		Long id,
+		Long userId,
+		String title,
+		String description,
+		boolean isPublic,
+		int ajajas,
+		List<String> tags,
+		Instant createdAt
+	) {
+	}
 }

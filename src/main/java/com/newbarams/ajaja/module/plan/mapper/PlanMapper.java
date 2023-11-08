@@ -57,6 +57,19 @@ public class PlanMapper {
 		return messages;
 	}
 
+	public static PlanResponse.Create toResponse(Plan plan) {
+		return new PlanResponse.Create(
+			plan.getId(),
+			plan.getUserId(),
+			plan.getContent().getTitle(),
+			plan.getContent().getDescription(),
+			plan.getStatus().isPublic(),
+			plan.getAjajas().size(),
+			convertTagToDto(plan.getTags()),
+			plan.getCreatedAt()
+		);
+	}
+
 	public static PlanResponse.GetOne toResponse(Plan plan, String username) {
 		return new PlanResponse.GetOne(
 			plan.getId(),
