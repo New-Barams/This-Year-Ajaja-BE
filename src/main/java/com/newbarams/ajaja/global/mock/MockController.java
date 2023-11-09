@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -45,25 +46,17 @@ class MockController {
 	private static final List<String> nicknames = Arrays.asList("노래부르는 다람쥐", "부끄러워하는 코끼리", "춤추는 강아지", "고백하는 고양이 ",
 		"거절하는 거북이 ", "손을 번쩍든 오리");
 
-	@Tag(name = "mock")
-	@Operation(description = "가짜 회원가입 API")
-	@PostMapping("/signup")
-	@ResponseStatus(OK)
-	void signup() {
-	}
-
-	@Tag(name = "mock")
 	@Operation(description = "가짜 로그인 API")
 	@PostMapping("/login")
 	@ResponseStatus(OK)
-	Map<String, String> login() {
+	Map<String, String> login(@RequestParam("code") String authorizationCode) {
 		Map<String, String> response = new HashMap<>();
+		response.put("code", authorizationCode);
 		response.put("accessToken", ACCESS_TOKEN);
 		response.put("refreshToken", REFRESH_TOKEN);
 		return response;
 	}
 
-	@Tag(name = "mock")
 	@Operation(description = "가짜 Token 재발급 API")
 	@PostMapping("/reissue")
 	@ResponseStatus(OK)
@@ -76,14 +69,12 @@ class MockController {
 		return response;
 	}
 
-	@Tag(name = "mock")
 	@Operation(description = "가짜 로그아웃 API")
 	@PostMapping("/logout")
 	@ResponseStatus(OK)
 	void logout() {
 	}
 
-	@Tag(name = "mock")
 	@Operation(description = "가짜 닉네임 새고로침 API")
 	@PostMapping("/users/refresh")
 	@ResponseStatus(OK)
@@ -97,7 +88,6 @@ class MockController {
 		return response;
 	}
 
-	@Tag(name = "mock")
 	@Operation(description = "가짜 이메일 인증 요청 API")
 	@PostMapping("/users/send-verification")
 	@ResponseStatus(OK)
@@ -110,7 +100,6 @@ class MockController {
 		return response;
 	}
 
-	@Tag(name = "mock")
 	@Operation(description = "가짜 이메일 인증 확인 API")
 	@PostMapping("/users/verify-email")
 	@ResponseStatus(OK)
@@ -120,7 +109,6 @@ class MockController {
 		}
 	}
 
-	@Tag(name = "mock")
 	@Operation(description = "가짜 회원탈퇴 API")
 	@DeleteMapping("/users")
 	@ResponseStatus(OK)
@@ -145,7 +133,6 @@ class MockController {
 		}
 	}
 
-	@Tag(name = "mock")
 	@Operation(description = "[테스트-5초 후 발송] 리마인드 전송 API")
 	@PostMapping("/plans/{planId}/reminds")
 	@ResponseStatus(OK)
@@ -157,7 +144,6 @@ class MockController {
 		return new AjajaResponse<>(true, response);
 	}
 
-	@Tag(name = "mock")
 	@Operation(description = "[테스트] 리마인드 정보 조회 API")
 	@GetMapping("/plans/{planId}/reminds")
 	@ResponseStatus(OK)
@@ -171,7 +157,6 @@ class MockController {
 		return new AjajaResponse<>(true, commonResponse);
 	}
 
-	@Tag(name = "mock")
 	@Operation(description = "[테스트] 리마인드 알림 끄기 API")
 	@PutMapping("/plans/{planId}/reminds")
 	@ResponseStatus(OK)
@@ -182,7 +167,6 @@ class MockController {
 		return new AjajaResponse<>(true, null);
 	}
 
-	@Tag(name = "mock")
 	@Operation(description = "[테스트] 피드백 수행 API")
 	@PostMapping("/feedbacks/{planId}")
 	@ResponseStatus(OK)
@@ -193,7 +177,6 @@ class MockController {
 		return new AjajaResponse<>(true, null);
 	}
 
-	@Tag(name = "mock")
 	@Operation(description = "[테스트] 목표별 계획률 보기 API")
 	@GetMapping("/feedbacks/{planId}")
 	@ResponseStatus(OK)
@@ -205,7 +188,6 @@ class MockController {
 		return new AjajaResponse<>(true, achieve);
 	}
 
-	@Tag(name = "mock")
 	@Operation(description = "[테스트] 전체 달성률 보기")
 	@GetMapping("/feedbacks/user/{userId}")
 	public AjajaResponse<GetAchieve> findTotalAchieve(
@@ -216,15 +198,12 @@ class MockController {
 		return new AjajaResponse<>(true, achieve);
 	}
 
-	@Tag(name = "mock")
 	@Operation(description = "[테스트] 계획 생성 API")
 	@PostMapping("/plans")
 	@ResponseStatus(CREATED)
 	public void createPlan() {
-
 	}
 
-	@Tag(name = "mock")
 	@Operation(description = "[테스트] 계획 전체 조회 API")
 	@GetMapping("/plans")
 	@ResponseStatus(OK)
@@ -242,7 +221,6 @@ class MockController {
 		return new AjajaResponse<>(true, responses);
 	}
 
-	@Tag(name = "mock")
 	@Operation(description = "[테스트] 계획 단건 조회 API")
 	@GetMapping("/plans/{id}")
 	@ResponseStatus(OK)
@@ -254,35 +232,27 @@ class MockController {
 		return new AjajaResponse<>(true, response);
 	}
 
-	@Tag(name = "mock")
 	@Operation(description = "[테스트] 계획 수정 API")
 	@PutMapping("/plans/{id}")
 	@ResponseStatus(OK)
 	public void updatePlan(@PathVariable Long id) {
-
 	}
 
-	@Tag(name = "mock")
 	@Operation(description = "[테스트] 계획 삭제 API")
 	@DeleteMapping("/plans/{id}")
 	@ResponseStatus(OK)
 	public void deletePlan(@PathVariable Long id) {
-
 	}
 
-	@Tag(name = "mock")
 	@Operation(description = "[테스트] 계획을 비공개로 수정")
 	@PutMapping("/plans/{id}/private")
 	@ResponseStatus(OK)
 	public void switchPlanToPrivate(@PathVariable Long id) {
-
 	}
 
-	@Tag(name = "mock")
 	@Operation(description = "[테스트] 계획을 공개로 수정")
 	@PutMapping("/plans/{id}/public")
 	@ResponseStatus(OK)
 	public void switchPlanToPublic(@PathVariable Long id) {
-
 	}
 }
