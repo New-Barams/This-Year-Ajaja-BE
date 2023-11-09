@@ -52,7 +52,7 @@ public class FeedbackController {
 	public AjajaResponse<Integer> getTotalAchieve(
 		@PathVariable Long userId
 	) {
-		int totalAchieve = getTotalAchieveService.loadTotalAchieve(userId);
+		int totalAchieve = getTotalAchieveService.calculateTotalAchieve(userId);
 
 		return new AjajaResponse<>(true, totalAchieve);
 	}

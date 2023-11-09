@@ -33,7 +33,7 @@ class PlanControllerTest {
 	@Test
 	@WithMockUser
 	void getPlanAchieve() throws Exception {
-		given(getPlanAchieveService.loadPlanAchieve(anyLong())).willReturn(50);
+		given(getPlanAchieveService.calculatePlanAchieve(anyLong())).willReturn(50);
 
 		mockMvc.perform(MockMvcRequestBuilders.get("/plans/feedbacks/1")
 				.with(csrf())

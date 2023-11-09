@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 public class GetTotalAchieveService {
 	private final FeedbackRepository feedbackRepository;
 
-	public int loadTotalAchieve(Long userId) {
+	public int calculateTotalAchieve(Long userId) {
 		return (int)feedbackRepository.findAllByUserIdAndCreatedYear(userId)
 			.stream()
 			.mapToInt(Feedback::getRate)

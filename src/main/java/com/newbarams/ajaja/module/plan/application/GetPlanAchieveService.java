@@ -15,7 +15,7 @@ public class GetPlanAchieveService {
 
 	private final FeedbackRepository feedbackRepository;
 
-	public int loadPlanAchieve(Long planId) {
+	public int calculatePlanAchieve(Long planId) {
 		return (int)feedbackRepository.findAllByPlanIdIdAndCreatedYear(planId)
 			.stream()
 			.mapToInt(Feedback::getRate)

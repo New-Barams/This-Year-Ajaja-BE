@@ -54,7 +54,7 @@ class FeedbackControllerTest {
 	@Test
 	@WithMockUser
 	void getTotalAchieve_Success_WithNoException() throws Exception {
-		given(getTotalAchieveService.loadTotalAchieve(anyLong())).willReturn(50);
+		given(getTotalAchieveService.calculateTotalAchieve(anyLong())).willReturn(50);
 
 		mockMvc.perform(MockMvcRequestBuilders.get("/feedbacks/1")
 				.with(csrf())

@@ -54,7 +54,7 @@ public class PlanController {
 	public AjajaResponse<Integer> getPlanAchieve(
 		@PathVariable Long planId
 	) {
-		int totalAchieve = getPlanAchieveService.loadPlanAchieve(planId);
+		int totalAchieve = getPlanAchieveService.calculatePlanAchieve(planId);
 
 		return new AjajaResponse<>(true, totalAchieve);
 	}

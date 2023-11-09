@@ -49,7 +49,7 @@ class GetPlanAchieveServiceTest {
 		given(feedbackRepository.findAllByPlanIdIdAndCreatedYear(any())).willReturn(feedbackList);
 
 		// then
-		int totalAchieve = getPlanAchieveService.loadPlanAchieve(1L);
+		int totalAchieve = getPlanAchieveService.calculatePlanAchieve(1L);
 
 		Assertions.assertThat(totalAchieve).isEqualTo(calculatedAchieve);
 	}
@@ -64,7 +64,7 @@ class GetPlanAchieveServiceTest {
 		given(feedbackRepository.findAllByPlanIdIdAndCreatedYear(any())).willReturn(feedbackList);
 
 		// then
-		int totalAchieve = getPlanAchieveService.loadPlanAchieve(1L);
+		int totalAchieve = getPlanAchieveService.calculatePlanAchieve(1L);
 
 		Assertions.assertThat(totalAchieve).isZero();
 	}

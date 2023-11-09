@@ -48,7 +48,7 @@ class GetTotalAchieveServiceTest {
 		given(feedbackRepository.findAllByUserIdAndCreatedYear(any())).willReturn(feedbackList);
 
 		// then
-		int totalAchieve = getTotalAchieveService.loadTotalAchieve(1L);
+		int totalAchieve = getTotalAchieveService.calculateTotalAchieve(1L);
 
 		Assertions.assertThat(totalAchieve).isEqualTo(calculatedAchieve);
 	}
@@ -63,7 +63,7 @@ class GetTotalAchieveServiceTest {
 		given(feedbackRepository.findAllByUserIdAndCreatedYear(any())).willReturn(feedbackList);
 
 		// then
-		int totalAchieve = getTotalAchieveService.loadTotalAchieve(1L);
+		int totalAchieve = getTotalAchieveService.calculateTotalAchieve(1L);
 
 		Assertions.assertThat(totalAchieve).isZero();
 	}
