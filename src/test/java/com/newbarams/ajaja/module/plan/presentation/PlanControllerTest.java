@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.newbarams.ajaja.module.plan.application.CreatePlanService;
 import com.newbarams.ajaja.module.plan.application.GetPlanAchieveService;
+import com.newbarams.ajaja.module.plan.application.GetPlanService;
 
 @AutoConfigureMockMvc
 @WebMvcTest(controllers = PlanController.class)
@@ -27,6 +28,8 @@ class PlanControllerTest {
 
 	@MockBean
 	private GetPlanAchieveService getPlanAchieveService;
+	@MockBean
+	private GetPlanService getPlanService;
 	@MockBean
 	private CreatePlanService createPlanService;
 
