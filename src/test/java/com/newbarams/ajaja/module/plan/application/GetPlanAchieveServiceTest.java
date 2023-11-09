@@ -38,12 +38,10 @@ class GetPlanAchieveServiceTest {
 	@DisplayName("조회하고 싶은 계획의 피드백을 통틀어서 달성률의 평균을 매긴다.")
 	void getTotalAchieve_Success_WithNoException() {
 		// given
-		Feedback feedback1 = sut.giveMeOne(Feedback.class);
-		Feedback feedback2 = sut.giveMeOne(Feedback.class);
+		List<Feedback> feedbackList = sut.giveMe(Feedback.class, 2);
 
-		List<Feedback> feedbackList = List.of(feedback1, feedback2);
-
-		int calculatedAchieve = (feedback1.getAchieve().getRate() + feedback2.getAchieve().getRate()) / 2;
+		int calculatedAchieve =
+			(feedbackList.get(0).getAchieve().getRate() + feedbackList.get(1).getAchieve().getRate()) / 2;
 
 		// when
 		given(feedbackRepository.findAllByPlanIdIdAndCreatedYear(any())).willReturn(feedbackList);
