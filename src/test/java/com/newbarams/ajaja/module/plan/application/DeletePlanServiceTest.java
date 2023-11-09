@@ -29,7 +29,7 @@ class DeletePlanServiceTest {
 
 	@Test
 	@DisplayName("planId가 존재하고, 요청 날짜가 1월일 경우 계획을 삭제할 수 있다.")
-	void delete_Plan_Success() {
+	void deletePlan_Success() {
 		Plan plan = Plan.builder()
 			.userId(1L)
 			.content(new Content("title", "description"))
@@ -58,7 +58,7 @@ class DeletePlanServiceTest {
 
 	@Test
 	@DisplayName("planId가 존재하지만, 요청 날짜가 1월이 아닐 경우 계획을 삭제할 수 업다.")
-	void delete_Plan_Fail_By_Date() {
+	void deletePlan_Fail_By_Date() {
 		Plan plan = Plan.builder()
 			.userId(1L)
 			.content(new Content("title", "description"))
