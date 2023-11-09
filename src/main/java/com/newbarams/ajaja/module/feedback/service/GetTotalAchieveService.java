@@ -3,6 +3,7 @@ package com.newbarams.ajaja.module.feedback.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.newbarams.ajaja.module.feedback.domain.Feedback;
 import com.newbarams.ajaja.module.feedback.domain.repository.FeedbackRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ public class GetTotalAchieveService {
 	public int loadTotalAchieve(Long userId) {
 		return (int)feedbackRepository.findAllByUserIdAndCreatedYear(userId)
 			.stream()
-			.mapToInt(f -> f.getAchieve().getRate())
+			.mapToInt(Feedback::getRate)
 			.average()
 			.orElse(0);
 	}

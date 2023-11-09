@@ -68,4 +68,8 @@ public class Feedback extends BaseEntity<Feedback> {
 	public void updateAchieve(int rate) {
 		this.achieve = Achieve.of(rate);
 	}
+
+	public int getRate() {
+		return this.achieve.getRate();
+	}
 }
