@@ -22,6 +22,5 @@ public class UpdateFeedbackService {
 		feedback.checkDeadline();
 
 		feedback.updateAchieve(rate);
-		feedbackRepository.save(feedback);
 	}
 }
