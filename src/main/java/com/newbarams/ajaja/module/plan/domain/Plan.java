@@ -1,5 +1,7 @@
 package com.newbarams.ajaja.module.plan.domain;
 
+import static com.newbarams.ajaja.module.plan.exception.ErrorMessage.*;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -77,5 +79,19 @@ public class Plan extends BaseEntity<Plan> {
 		this.messages = messages;
 		this.tags = tags;
 		this.validateSelf();
+	}
+
+	public void delete(String date) {
+		validateDate(date);
+		this.status.changeStatusToDeleted();
+	}
+
+	private void validateDate(String date) {
+		String[] dateString = date.split(" ");
+		String month = dateString[1];
+
+		if (!month.equals("JAN")) {
+			throw new IllegalStateException(INVALID_UPDATABLE_DATE.getMessage());
+		}
 	}
 }
