@@ -5,15 +5,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.newbarams.ajaja.module.feedback.domain.repository.FeedbackRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class GetPlanAchieveService {
 
 	private final FeedbackRepository feedbackRepository;
-
-	public GetPlanAchieveService(FeedbackRepository feedbackRepository) {
-		this.feedbackRepository = feedbackRepository;
-	}
 
 	public int loadPlanAchieve(Long planId) {
 		return (int)feedbackRepository.findAllByPlanIdIdAndCreatedYear(planId)
