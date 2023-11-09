@@ -10,6 +10,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.newbarams.ajaja.module.feedback.domain.Feedback;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
@@ -21,27 +22,23 @@ public class FeedbackRepositoryCustomImpl implements FeedbackRepositoryCustom {
 
 	@Override
 	public List<Feedback> findAllByUserIdAndCreatedYear(Long userId) {
-		int currentYear = getCurrentYear();
-
 		return queryFactory.select(feedback)
 			.from(feedback)
-			.where(feedback.userId.eq(userId).and(feedback.createdAt.year().eq(currentYear)))
+			.where(feedback.userId.eq(userId).and(isCurrentYear()))
 			.fetch();
 	}
 
 	@Override
 	public List<Feedback> findAllByPlanIdIdAndCreatedYear(Long planId) {
-		int currentYear = getCurrentYear();
-
 		return queryFactory.select(feedback)
 			.from(feedback)
-			.where(feedback.planId.eq(planId).and(feedback.createdAt.year().eq(currentYear)))
+			.where(feedback.planId.eq(planId).and(isCurrentYear()))
 			.fetch();
 	}
 
-	private int getCurrentYear() {
+	private BooleanExpression isCurrentYear() {
 		Instant instant = Instant.now();
 		ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault());
-		return zonedDateTime.getYear();
+		return feedback.createdAt.year().eq(zonedDateTime.getYear());
 	}
 }
