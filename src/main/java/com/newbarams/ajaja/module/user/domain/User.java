@@ -38,6 +38,10 @@ public class User extends BaseEntity<User> {
 		this.isDeleted = false;
 	}
 
+	public User(String nickname, String email) {
+		this(new Nickname(nickname), new Email(email));
+	}
+
 	public void verifyEmail() {
 		if (isEmailVerified()) {
 			throw new IllegalStateException("already verified!");
