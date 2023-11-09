@@ -16,7 +16,7 @@ public enum Achieve {
 
 	private final int rate;
 
-	public static Achieve findByRate(int rate) {
+	public static Achieve of(int rate) {
 		return Stream.of(values())
 			.filter(achieve -> achieve.rate == rate)
 			.findAny()
