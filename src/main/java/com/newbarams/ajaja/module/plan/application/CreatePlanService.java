@@ -22,12 +22,12 @@ public class CreatePlanService {
 	private final PlanRepository planRepository;
 	private final TagService tagService;
 
-	public PlanResponse.GetOne create(PlanRequest.Create request) {
+	public PlanResponse.Create create(PlanRequest.Create request) {
 		Set<Tag> tags = tagService.getTags(request.tags());
 
 		Plan plan = PlanMapper.toEntity(request, 1L, tags);
 		Plan savedPlan = planRepository.save(plan);
 
-		return PlanMapper.toResponse(savedPlan, "username");
+		return PlanMapper.toResponse(savedPlan);
 	}
 }
