@@ -5,7 +5,7 @@ import static com.newbarams.ajaja.module.user.auth.model.KakaoResponse.*;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
-public sealed interface KakaoResponse permits Token, Profile {
+public sealed interface KakaoResponse permits Token, UserInfo {
 	@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 	record Token(
 		String accessToken,
@@ -22,9 +22,13 @@ public sealed interface KakaoResponse permits Token, Profile {
 	}
 
 	@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-	record Profile(
+	record UserInfo(
 		Long id,
 		KakaoAccount kakaoAccount
-	) implements KakaoResponse {
+	) implements KakaoResponse, Profile {
+		@Override
+		public String getEmail() {
+			return kakaoAccount().email();
+		}
 	}
 }
