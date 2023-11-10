@@ -18,4 +18,8 @@ public class PlanStatus {
 		this.isRemindable = true;
 		this.isDeleted = false;
 	}
+
+	void changeToDeleted() {
+		this.isDeleted = true;
+	}
 }

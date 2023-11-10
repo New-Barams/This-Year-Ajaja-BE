@@ -15,7 +15,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @Embeddable
-@Where(clause = "isCanceled = false")
+@Where(clause = "is_canceled = false")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Ajaja extends SelfValidating<Ajaja> {
 	enum Type {

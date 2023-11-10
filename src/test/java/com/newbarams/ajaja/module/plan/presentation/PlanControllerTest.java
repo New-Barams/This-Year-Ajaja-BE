@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.newbarams.ajaja.module.plan.application.CreatePlanService;
+import com.newbarams.ajaja.module.plan.application.DeletePlanService;
 import com.newbarams.ajaja.module.plan.application.GetPlanAchieveService;
 import com.newbarams.ajaja.module.plan.application.GetPlanService;
 
@@ -32,6 +33,8 @@ class PlanControllerTest {
 	private GetPlanService getPlanService;
 	@MockBean
 	private CreatePlanService createPlanService;
+	@MockBean
+	private DeletePlanService deletePlanService;
 
 	@Test
 	@WithMockUser
