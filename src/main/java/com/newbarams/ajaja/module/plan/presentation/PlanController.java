@@ -78,22 +78,28 @@ public class PlanController {
 	@Operation(summary = "계획 공개 여부 변경 API")
 	@PutMapping("/{id}/public")
 	@ResponseStatus(OK)
-	public void updatePlanPublicStatus(@PathVariable Long id) {
+	public AjajaResponse updatePlanPublicStatus(@PathVariable Long id) {
 		updatePlanService.updatePublicStatus(id);
+
+		return new AjajaResponse(true, null);
 	}
 
 	@Operation(summary = "계획 리마인드 알림 여부 변경 API")
 	@PutMapping("/{id}/remindable")
 	@ResponseStatus(OK)
-	public void updatePlanRemindableStatus(@PathVariable Long id) {
+	public AjajaResponse updatePlanRemindableStatus(@PathVariable Long id) {
 		updatePlanService.updateRemindableStatus(id);
+
+		return new AjajaResponse(true, null);
 	}
 
 	@Operation(summary = "응원메시지 알림 여부 변경 API")
 	@PutMapping("/{id}/ajaja")
 	@ResponseStatus(OK)
-	public void updatePlanAjajaStatus(@PathVariable Long id) {
+	public AjajaResponse updatePlanAjajaStatus(@PathVariable Long id) {
 		updatePlanService.updateAjajaStatus(id);
+
+		return new AjajaResponse(true, null);
 	}
 
 	@Operation(summary = "계획 수정 API")
