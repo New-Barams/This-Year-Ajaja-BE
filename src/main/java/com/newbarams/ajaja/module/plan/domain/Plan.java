@@ -94,4 +94,12 @@ public class Plan extends BaseEntity<Plan> {
 			throw new IllegalStateException(INVALID_UPDATABLE_DATE.getMessage());
 		}
 	}
+
+	public void updatePublicStatus() {
+		this.status.changePublicOrNot();
+	}
+
+	public void updateRemindableStatus() {
+		this.status.changeRemindableOrNot();
+	}
 }

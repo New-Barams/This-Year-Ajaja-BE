@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import com.newbarams.ajaja.module.plan.application.CreatePlanService;
 import com.newbarams.ajaja.module.plan.application.DeletePlanService;
 import com.newbarams.ajaja.module.plan.application.GetPlanAchieveService;
 import com.newbarams.ajaja.module.plan.application.GetPlanService;
+import com.newbarams.ajaja.module.plan.application.UpdatePlanService;
 import com.newbarams.ajaja.module.plan.domain.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.domain.dto.PlanResponse;
 
@@ -33,6 +35,7 @@ public class PlanController {
 	private final GetPlanService getPlanService;
 	private final DeletePlanService deletePlanService;
 	private final GetPlanAchieveService getPlanAchieveService;
+	private final UpdatePlanService updatePlanService;
 
 	@Operation(summary = "계획 생성 API")
 	@PostMapping
@@ -70,5 +73,19 @@ public class PlanController {
 		int totalAchieve = getPlanAchieveService.calculatePlanAchieve(planId);
 
 		return new AjajaResponse<>(true, totalAchieve);
+	}
+
+	@Operation(summary = "계획 공개 여부 변경 API")
+	@PutMapping("/{id}/public")
+	@ResponseStatus(OK)
+	public void updatePlanPublicStatus(@PathVariable Long id) {
+		updatePlanService.updatePublicStatus(id);
+	}
+
+	@Operation(summary = "계획 리마인드 알림 여부 변경 API")
+	@PutMapping("/{id}/remindable")
+	@ResponseStatus(OK)
+	public void updatePlanRemindableStatus(@PathVariable Long id) {
+		updatePlanService.updateRemindableStatus(id);
 	}
 }

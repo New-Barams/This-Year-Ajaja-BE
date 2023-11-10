@@ -22,4 +22,12 @@ public class PlanStatus {
 	void changeToDeleted() {
 		this.isDeleted = true;
 	}
+
+	void changePublicOrNot() {
+		this.isPublic = !isPublic;
+	}
+
+	void changeRemindableOrNot() {
+		this.isRemindable = !isRemindable;
+	}
 }
