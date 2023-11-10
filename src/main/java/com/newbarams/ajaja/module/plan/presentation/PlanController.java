@@ -19,8 +19,8 @@ import com.newbarams.ajaja.module.plan.application.DeletePlanService;
 import com.newbarams.ajaja.module.plan.application.GetPlanAchieveService;
 import com.newbarams.ajaja.module.plan.application.GetPlanService;
 import com.newbarams.ajaja.module.plan.application.UpdatePlanService;
-import com.newbarams.ajaja.module.plan.domain.dto.PlanRequest;
-import com.newbarams.ajaja.module.plan.domain.dto.PlanResponse;
+import com.newbarams.ajaja.module.plan.dto.PlanRequest;
+import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

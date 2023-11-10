@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.newbarams.ajaja.module.plan.domain.Plan;
-import com.newbarams.ajaja.module.plan.domain.dto.PlanRequest;
-import com.newbarams.ajaja.module.plan.domain.dto.PlanResponse;
+import com.newbarams.ajaja.module.plan.dto.PlanRequest;
+import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 import com.newbarams.ajaja.module.plan.mapper.PlanMapper;
 import com.newbarams.ajaja.module.plan.repository.PlanRepository;
 import com.newbarams.ajaja.module.tag.application.TagService;

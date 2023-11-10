@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.plan.domain.dto;
+package com.newbarams.ajaja.module.plan.dto;
 
 import java.time.Instant;
 import java.util.List;
