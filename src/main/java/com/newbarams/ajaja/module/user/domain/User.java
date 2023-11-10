@@ -12,8 +12,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @Entity
 @Table(name = "users")
 @Where(clause = "is_deleted = false")
@@ -34,6 +36,10 @@ public class User extends BaseEntity<User> {
 		this.nickname = nickname;
 		this.email = email;
 		this.isDeleted = false;
+	}
+
+	public User(String nickname, String email) {
+		this(new Nickname(nickname), new Email(email));
 	}
 
 	public void verifyEmail() {

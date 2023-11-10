@@ -18,6 +18,7 @@ class UserTest {
 	private final FixtureMonkey sut = FixtureMonkey.builder()
 		.objectIntrospector(FieldReflectionArbitraryIntrospector.INSTANCE)
 		.plugin(new JakartaValidationPlugin())
+		.defaultNotNull(true)
 		.build();
 
 	@Nested
@@ -96,13 +97,12 @@ class UserTest {
 			// when, then
 			assertThatNoException().isThrownBy(() -> new Nickname(nickname));
 		}
-
 	}
 
 	@Nested
 	@DisplayName("유저 Entity 테스트")
 	class UserEntityTest {
-		private final Nickname nickname = sut.giveMeOne(Nickname.class);
+		private final String nickname = "imhejow";
 
 		@ParameterizedTest
 		@ValueSource(strings = {"gmlwh124@naver.com", "ajaja.net@gamil.com", "123123@kakao.net"})
@@ -111,16 +111,14 @@ class UserTest {
 			// given
 
 			// when, then
-			assertThatNoException().isThrownBy(() -> new User(nickname, new Email(input)));
+			assertThatNoException().isThrownBy(() -> new User(nickname, input));
 		}
 
 		@Test
 		@DisplayName("미검증 유저의 이메일을 검증하면 예외가 발생하지 않아야 한다.")
 		void verifyEmail_Success_WithoutException() {
 			// given
-			String input = "gmlwh124@naver.com";
-			Email email = new Email(input);
-
+			String email = "gmlwh124@naver.com";
 			User user = new User(nickname, email);
 
 			// when, then
@@ -136,7 +134,7 @@ class UserTest {
 			Email email = new Email(input);
 			email.verified();
 
-			User user = new User(nickname, email);
+			User user = new User(new Nickname(nickname), email);
 
 			// when, then
 			assertThatException().isThrownBy(user::verifyEmail);

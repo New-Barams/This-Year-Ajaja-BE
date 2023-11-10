@@ -6,6 +6,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.cache.annotation.EnableCaching;
 
 import com.newbarams.ajaja.infra.feign.kakao.KakaoProperties;
+
+@EnableCaching
 @EnableConfigurationProperties(KakaoProperties.class)
 @SpringBootApplication
 public class AjajaApplication {

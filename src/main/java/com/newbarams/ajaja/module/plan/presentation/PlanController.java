@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.newbarams.ajaja.global.common.AjajaResponse;
 import com.newbarams.ajaja.module.plan.application.CreatePlanService;
 import com.newbarams.ajaja.module.plan.application.DeletePlanService;
+import com.newbarams.ajaja.module.plan.application.GetPlanAchieveService;
 import com.newbarams.ajaja.module.plan.application.GetPlanService;
 import com.newbarams.ajaja.module.plan.domain.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.domain.dto.PlanResponse;
@@ -31,6 +32,7 @@ public class PlanController {
 	private final CreatePlanService createPlanService;
 	private final GetPlanService getPlanService;
 	private final DeletePlanService deletePlanService;
+	private final GetPlanAchieveService getPlanAchieveService;
 
 	@Operation(summary = "계획 생성 API")
 	@PostMapping
@@ -50,6 +52,7 @@ public class PlanController {
 		return new AjajaResponse<>(true, response);
 	}
 
+
 	@Operation(summary = "계획 삭제 API")
 	@DeleteMapping("/{id}")
 	@ResponseStatus(OK)
@@ -57,5 +60,16 @@ public class PlanController {
 		deletePlanService.delete(id, date);
 
 		return new AjajaResponse<>(true, null);
+  }
+
+	@Operation(description = "특정 목표 달성률 조회 API")
+	@GetMapping("/feedbacks/{planId}")
+	@ResponseStatus(OK)
+	public AjajaResponse<Integer> getPlanAchieve(
+		@PathVariable Long planId
+	) {
+		int totalAchieve = getPlanAchieveService.calculatePlanAchieve(planId);
+
+		return new AjajaResponse<>(true, totalAchieve);
 	}
 }

@@ -11,5 +11,5 @@ import com.newbarams.ajaja.module.user.auth.model.KakaoResponse;
 @FeignClient(name = "KakaoProfileFeignClient", url = "https://kapi.kakao.com")
 public interface KakaoProfileFeignClient {
 	@GetMapping("/v2/user/me")
-	KakaoResponse.Profile getKakaoProfile(@RequestHeader(AUTHORIZATION) String accessToken);
+	KakaoResponse.UserInfo getKakaoProfile(@RequestHeader(AUTHORIZATION) String accessToken);
 }
