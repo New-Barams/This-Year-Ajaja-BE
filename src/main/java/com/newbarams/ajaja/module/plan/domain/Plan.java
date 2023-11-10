@@ -83,7 +83,7 @@ public class Plan extends BaseEntity<Plan> {
 
 	public void delete(String date) {
 		validateDate(date);
-		this.status.changeStatusToDeleted();
+		this.status.changeToDeleted();
 	}
 
 	private void validateDate(String date) {

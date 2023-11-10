@@ -19,7 +19,7 @@ public class PlanStatus {
 		this.isDeleted = false;
 	}
 
-	void changeStatusToDeleted() {
+	void changeToDeleted() {
 		this.isDeleted = true;
 	}
 }
