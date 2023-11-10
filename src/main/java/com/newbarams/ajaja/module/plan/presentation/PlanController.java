@@ -87,8 +87,8 @@ public class PlanController {
 	@Operation(summary = "계획 리마인드 알림 여부 변경 API")
 	@PutMapping("/{id}/remindable")
 	@ResponseStatus(OK)
-	public AjajaResponse updatePlanRemindableStatus(@PathVariable Long id) {
-		updatePlanService.updateRemindableStatus(id);
+	public AjajaResponse updatePlanRemindStatus(@PathVariable Long id) {
+		updatePlanService.updateRemindStatus(id);
 
 		return new AjajaResponse(true, null);
 	}

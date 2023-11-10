@@ -28,10 +28,10 @@ public class UpdatePlanService {
 		plan.updatePublicStatus();
 	}
 
-	public void updateRemindableStatus(Long id) {
+	public void updateRemindStatus(Long id) {
 		Plan plan = getPlanService.loadPlanOrElseThrow(id);
 
-		plan.updateRemindableStatus();
+		plan.updateRemindStatus();
 	}
 
 	public void updateAjajaStatus(Long id) {

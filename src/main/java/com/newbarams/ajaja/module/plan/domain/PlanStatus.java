@@ -29,7 +29,7 @@ public class PlanStatus {
 		this.isPublic = !isPublic;
 	}
 
-	void changeRemindableOrNot() {
+	void changeCanRemindOrNot() {
 		this.canRemind = !canRemind;
 	}
 

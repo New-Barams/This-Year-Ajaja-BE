@@ -98,8 +98,8 @@ public class Plan extends BaseEntity<Plan> {
 		this.status.changePublicOrNot();
 	}
 
-	public void updateRemindableStatus() {
-		this.status.changeRemindableOrNot();
+	public void updateRemindStatus() {
+		this.status.changeCanRemindOrNot();
 	}
 
 	public void updateAjajaStatus() {
