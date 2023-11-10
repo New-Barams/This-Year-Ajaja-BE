@@ -1,8 +1,40 @@
 package com.newbarams.ajaja.module.user.application;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.newbarams.ajaja.global.security.jwt.JwtGenerator;
+import com.newbarams.ajaja.module.user.auth.model.AccessToken;
+import com.newbarams.ajaja.module.user.auth.model.Profile;
+import com.newbarams.ajaja.module.user.domain.User;
+import com.newbarams.ajaja.module.user.domain.UserRepository;
+import com.newbarams.ajaja.module.user.dto.UserResponse;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
-public interface LoginService {
-	String login(String authorizationCode);
+@Transactional
+@RequiredArgsConstructor
+public class LoginService {
+	private final AuthorizeService authorizeService;
+	private final GetProfileService getProfileService;
+	private final UserRepository userRepository;
+	private final JwtGenerator jwtGenerator;
+
+	public UserResponse.Token login(String authorizationCode) {
+		AccessToken accessToken = authorizeService.authorize(authorizationCode);
+		Profile profile = getProfileService.getProfile(accessToken.getContent());
+		User user = findUserOrCreateIfNotExists(profile.getEmail());
+		return jwtGenerator.generate(user.getId());
+	}
+
+	private User findUserOrCreateIfNotExists(String email) {
+		return userRepository.findByEmail(email)
+			.orElseGet(() -> createUser(email));
+	}
+
+	private User createUser(String email) {
+		User user = new User(RandomNicknameGenerator.generate(), email);
+		return userRepository.save(user);
+	}
 }
