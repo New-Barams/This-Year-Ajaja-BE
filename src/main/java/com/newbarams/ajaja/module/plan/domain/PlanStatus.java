@@ -10,12 +10,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PlanStatus {
 	private boolean isPublic;
-	private boolean isRemindable;
+	private boolean canRemind;
 	private boolean isDeleted;
 
 	public PlanStatus(boolean isPublic) {
 		this.isPublic = isPublic;
-		this.isRemindable = true;
+		this.canRemind = true;
 		this.isDeleted = false;
 	}
 
@@ -28,11 +28,11 @@ public class PlanStatus {
 	}
 
 	void changeRemindableOrNot() {
-		this.isRemindable = !isRemindable;
+		this.canRemind = !canRemind;
 	}
 
-	void update(boolean isPublic, boolean isRemindable) {
+	void update(boolean isPublic, boolean canRemind) {
 		this.isPublic = isPublic;
-		this.isRemindable = isRemindable;
+		this.canRemind = canRemind;
 	}
 }

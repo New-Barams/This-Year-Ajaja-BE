@@ -31,7 +31,7 @@ public class PlanRequest {
 		String remindTime,
 
 		boolean isPublic,
-		boolean isRemindable,
+		boolean canRemind,
 
 		List<String> tags,
 

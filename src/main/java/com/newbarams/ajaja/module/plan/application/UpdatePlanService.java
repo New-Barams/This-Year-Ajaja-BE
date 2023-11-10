@@ -46,7 +46,7 @@ public class UpdatePlanService {
 			request.remindDate(),
 			request.remindTime(),
 			request.isPublic(),
-			request.isRemindable(),
+			request.canRemind(),
 			tagService.getTags(request.tags()),
 			convertToMessage(request.messages())
 		);

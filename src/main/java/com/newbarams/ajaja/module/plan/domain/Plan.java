@@ -111,14 +111,14 @@ public class Plan extends BaseEntity<Plan> {
 		int remindDate,
 		String remindTime,
 		boolean isPublic,
-		boolean isRemindable,
+		boolean canRemind,
 		Set<Tag> tags,
 		List<Message> messages
 	) {
 		validateDate(date);
 		this.content.update(title, description);
 		this.info.update(remindTotalPeriod, remindTerm, remindDate, remindTime);
-		this.status.update(isPublic, isRemindable);
+		this.status.update(isPublic, canRemind);
 		this.tags = tags;
 		this.messages = messages;
 		this.validateSelf();
