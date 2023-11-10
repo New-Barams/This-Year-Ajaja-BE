@@ -102,6 +102,10 @@ public class Plan extends BaseEntity<Plan> {
 		this.status.changeRemindableOrNot();
 	}
 
+	public void updateAjajaStatus() {
+		this.status.changeCanAjajaOrNot();
+	}
+
 	public void update(
 		String date,
 		String title,

@@ -89,6 +89,13 @@ public class PlanController {
 		updatePlanService.updateRemindableStatus(id);
 	}
 
+	@Operation(summary = "응원메시지 알림 여부 변경 API")
+	@PutMapping("/{id}/ajaja")
+	@ResponseStatus(OK)
+	public void updatePlanAjajaStatus(@PathVariable Long id) {
+		updatePlanService.updateAjajaStatus(id);
+	}
+
 	@Operation(summary = "계획 수정 API")
 	@PutMapping("/{id}")
 	@ResponseStatus(OK)

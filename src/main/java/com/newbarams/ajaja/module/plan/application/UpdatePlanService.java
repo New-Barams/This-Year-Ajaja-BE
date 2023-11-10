@@ -34,6 +34,12 @@ public class UpdatePlanService {
 		plan.updateRemindableStatus();
 	}
 
+	public void updateAjajaStatus(Long id) {
+		Plan plan = getPlanService.loadPlanOrElseThrow(id);
+
+		plan.updateAjajaStatus();
+	}
+
 	public PlanResponse.Create update(Long id, PlanRequest.Update request, String date) {
 		Plan plan = getPlanService.loadPlanOrElseThrow(id);
 

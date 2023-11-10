@@ -33,6 +33,10 @@ public class PlanStatus {
 		this.canRemind = !canRemind;
 	}
 
+	void changeCanAjajaOrNot() {
+		this.canAjaja = !canAjaja;
+	}
+
 	void update(boolean isPublic, boolean canRemind) {
 		this.isPublic = isPublic;
 		this.canRemind = canRemind;
