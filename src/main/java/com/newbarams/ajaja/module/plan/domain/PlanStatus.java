@@ -11,11 +11,13 @@ import lombok.NoArgsConstructor;
 public class PlanStatus {
 	private boolean isPublic;
 	private boolean canRemind;
+	private boolean canAjaja;
 	private boolean isDeleted;
 
 	public PlanStatus(boolean isPublic) {
 		this.isPublic = isPublic;
 		this.canRemind = true;
+		this.canAjaja = true;
 		this.isDeleted = false;
 	}
 
