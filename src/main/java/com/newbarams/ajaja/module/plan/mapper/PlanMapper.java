@@ -10,7 +10,6 @@ import com.newbarams.ajaja.module.plan.domain.Content;
 import com.newbarams.ajaja.module.plan.domain.Message;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.domain.RemindInfo;
-import com.newbarams.ajaja.module.plan.domain.dto.MessageRequest;
 import com.newbarams.ajaja.module.plan.domain.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.domain.dto.PlanResponse;
 import com.newbarams.ajaja.module.tag.domain.Tag;
@@ -42,16 +41,15 @@ public class PlanMapper {
 		return new RemindInfo(remindTotalPeriod, remindTerm, remindDate, remindTime);
 	}
 
-	private static List<Message> convertToMessageList(List<MessageRequest.Create> requests) {
-		if (requests == null) {
+	private static List<Message> convertToMessageList(List<String> messageList) {
+		if (messageList == null) {
 			return null;
 		}
 
-		List<Message> messages = new ArrayList<>(requests.size());
+		List<Message> messages = new ArrayList<>(messageList.size());
 
-		for (MessageRequest.Create request : requests) {
-			Message message = new Message(request.content(), request.index());
-			messages.add(message);
+		for (String message : messageList) {
+			messages.add(new Message(message));
 		}
 
 		return messages;

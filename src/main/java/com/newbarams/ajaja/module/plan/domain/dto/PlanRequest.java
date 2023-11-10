@@ -17,7 +17,7 @@ public class PlanRequest {
 
 		List<String> tags,
 
-		List<MessageRequest.Create> messages
+		List<String> messages
 	) {
 	}
 

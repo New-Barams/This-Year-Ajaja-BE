@@ -35,7 +35,7 @@ class DeletePlanServiceTest {
 			.content(new Content("title", "description"))
 			.info(new RemindInfo(12, 3, 15, "MORNING"))
 			.isPublic(true)
-			.messages(List.of(new Message("content", 0)))
+			.messages(List.of(new Message("content")))
 			.tags(null)
 			.build();
 
@@ -64,7 +64,7 @@ class DeletePlanServiceTest {
 			.content(new Content("title", "description"))
 			.info(new RemindInfo(12, 3, 15, "MORNING"))
 			.isPublic(true)
-			.messages(List.of(new Message("content", 0)))
+			.messages(List.of(new Message("content")))
 			.tags(null)
 			.build();
 

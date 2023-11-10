@@ -21,9 +21,8 @@ public class Message extends SelfValidating<Message> {
 	@Column(name = "message_idx", insertable = false, updatable = false)
 	private int index;
 
-	public Message(String content, int index) {
+	public Message(String content) {
 		this.content = content;
-		this.index = index;
 		this.validateSelf();
 	}
 }
