@@ -35,6 +35,8 @@ public class PlanResponse {
 		String title,
 		String description,
 		boolean isPublic,
+		boolean canRemind,
+		boolean canAjaja,
 		int ajajas,
 		List<String> tags,
 		Instant createdAt

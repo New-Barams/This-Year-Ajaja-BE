@@ -62,6 +62,8 @@ public class PlanMapper {
 			plan.getContent().getTitle(),
 			plan.getContent().getDescription(),
 			plan.getStatus().isPublic(),
+			plan.getStatus().isCanRemind(),
+			plan.getStatus().isCanAjaja(),
 			plan.getAjajas().size(),
 			convertTagToDto(plan.getTags()),
 			plan.getCreatedAt()
