@@ -22,7 +22,7 @@ class PlanTest {
 	}
 
 	@Test
-	@DisplayName("요청 날짜가 1월이면 작성한 계획을 삭제할 수 있다.")
+	@DisplayName("삭제가능한 기간일 경우 작성한 계획을 삭제할 수 있다.")
 	void deletePlan_Success() {
 		PlanStatus planStatus = new PlanStatus(true);
 
@@ -36,7 +36,7 @@ class PlanTest {
 	}
 
 	@Test
-	@DisplayName("요청 날짜가 1월이 아닐 경우 계획을 삭제할 수 없다.")
+	@DisplayName("삭제가능한 기간이 아닌 경우 계획을 삭제할 수 없다.")
 	void deletePlan_Fail_By_Date() {
 		PlanStatus planStatus = new PlanStatus(true);
 
