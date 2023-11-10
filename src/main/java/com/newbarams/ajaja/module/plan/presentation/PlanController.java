@@ -88,4 +88,14 @@ public class PlanController {
 	public void updatePlanRemindableStatus(@PathVariable Long id) {
 		updatePlanService.updateRemindableStatus(id);
 	}
+
+	@Operation(summary = "계획 수정 API")
+	@PutMapping("/{id}")
+	@ResponseStatus(OK)
+	public AjajaResponse<PlanResponse.Create> updatePlan(@PathVariable Long id,
+		@RequestBody PlanRequest.Update request, @RequestHeader(name = "Date") String date) {
+		PlanResponse.Create updated = updatePlanService.update(id, request, date);
+
+		return new AjajaResponse<>(true, updated);
+	}
 }

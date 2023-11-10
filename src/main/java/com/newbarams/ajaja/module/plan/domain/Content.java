@@ -26,4 +26,10 @@ public class Content extends SelfValidating<Content> {
 		this.description = description;
 		this.validateSelf();
 	}
+
+	void update(String title, String description) {
+		this.title = title;
+		this.description = description;
+		this.validateSelf();
+	}
 }

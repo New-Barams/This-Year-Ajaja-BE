@@ -13,7 +13,6 @@ import com.newbarams.ajaja.global.common.BaseEntity;
 import com.newbarams.ajaja.module.ajaja.Ajaja;
 import com.newbarams.ajaja.module.tag.domain.Tag;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -54,7 +53,7 @@ public class Plan extends BaseEntity<Plan> {
 	private PlanStatus status;
 
 	@Size
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany
 	@JoinColumn(name = "plan_id")
 	private Set<Tag> tags = new HashSet<>();
 
@@ -101,5 +100,27 @@ public class Plan extends BaseEntity<Plan> {
 
 	public void updateRemindableStatus() {
 		this.status.changeRemindableOrNot();
+	}
+
+	public void update(
+		String date,
+		String title,
+		String description,
+		int remindTotalPeriod,
+		int remindTerm,
+		int remindDate,
+		String remindTime,
+		boolean isPublic,
+		boolean isRemindable,
+		Set<Tag> tags,
+		List<Message> messages
+	) {
+		validateDate(date);
+		this.content.update(title, description);
+		this.info.update(remindTotalPeriod, remindTerm, remindDate, remindTime);
+		this.status.update(isPublic, isRemindable);
+		this.tags = tags;
+		this.messages = messages;
+		this.validateSelf();
 	}
 }

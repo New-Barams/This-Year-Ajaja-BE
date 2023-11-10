@@ -20,4 +20,22 @@ public class PlanRequest {
 		List<MessageRequest.Create> messages
 	) {
 	}
+
+	public record Update(
+		String title,
+		String description,
+
+		int remindTotalPeriod,
+		int remindTerm,
+		int remindDate,
+		String remindTime,
+
+		boolean isPublic,
+		boolean isRemindable,
+
+		List<String> tags,
+
+		List<String> messages
+	) {
+	}
 }

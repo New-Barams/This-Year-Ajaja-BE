@@ -30,4 +30,9 @@ public class PlanStatus {
 	void changeRemindableOrNot() {
 		this.isRemindable = !isRemindable;
 	}
+
+	void update(boolean isPublic, boolean isRemindable) {
+		this.isPublic = isPublic;
+		this.isRemindable = isRemindable;
+	}
 }
