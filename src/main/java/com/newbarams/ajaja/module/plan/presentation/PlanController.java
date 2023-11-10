@@ -52,7 +52,6 @@ public class PlanController {
 		return new AjajaResponse<>(true, response);
 	}
 
-
 	@Operation(summary = "계획 삭제 API")
 	@DeleteMapping("/{id}")
 	@ResponseStatus(OK)
@@ -60,7 +59,7 @@ public class PlanController {
 		deletePlanService.delete(id, date);
 
 		return new AjajaResponse<>(true, null);
-  }
+	}
 
 	@Operation(description = "특정 목표 달성률 조회 API")
 	@GetMapping("/feedbacks/{planId}")
