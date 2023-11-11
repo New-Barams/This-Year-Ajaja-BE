@@ -17,19 +17,23 @@ import com.newbarams.ajaja.module.plan.domain.Content;
 import com.newbarams.ajaja.module.plan.domain.Message;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.domain.RemindInfo;
+import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.repository.PlanRepository;
 
 @SpringBootTest
-class DeletePlanServiceTest {
+class UpdatePlanServiceTest {
 	@Autowired
-	DeletePlanService deletePlanService;
+	private UpdatePlanService updatePlanService;
 
 	@Autowired
-	PlanRepository planRepository;
+	private GetPlanService getPlanService;
+
+	@Autowired
+	private PlanRepository planRepository;
 
 	@Test
-	@DisplayName("planId가 존재하고, 삭제가능한 기간일 경우 계획을 삭제할 수 있다.")
-	void deletePlan_Success() {
+	@DisplayName("planId가 존재하고, 수정가능한 기간일 경우 계획을 수정할 수 있다.")
+	void updatePlan_Success() {
 		Plan plan = Plan.builder()
 			.userId(1L)
 			.content(new Content("title", "description"))
@@ -39,26 +43,32 @@ class DeletePlanServiceTest {
 			.tags(null)
 			.build();
 
+		PlanRequest.Update request = new PlanRequest.Update("title", "des", 12, 1,
+			15, "MORNING", true, true, true, null, List.of("message"));
+
 		Plan saved = planRepository.save(plan);
 
 		assertThatNoException().isThrownBy(
-			() -> deletePlanService.delete(saved.getId(), "Thu JAN 09 2023")
+			() -> updatePlanService.update(saved.getId(), request, "Thu JAN 09 2023")
 		);
 	}
 
 	@Test
-	@DisplayName("planId가 존재하지 않을 경우 계획을 삭제할 수 없다.")
-	void deletePlan_Fail_By_Not_Found_Plan() {
+	@DisplayName("planId가 존재하지 않을 경우 계획을 수정할 수 없다.")
+	void updatePlan_Fail_By_Not_Found_Plan() {
 		Long planId = Arbitraries.longs().lessOrEqual(-1L).sample();
 
-		assertThatThrownBy(() -> deletePlanService.delete(planId, "Thu JAN 09 2023"))
+		PlanRequest.Update request = new PlanRequest.Update("title", "des", 12, 1,
+			15, "MORNING", true, true, true, null, List.of("message"));
+
+		assertThatThrownBy(() -> updatePlanService.update(planId, request, "Thu JAN 09 2023"))
 			.isInstanceOf(NoSuchElementException.class)
 			.hasMessage(NOT_FOUND_PLAN.getMessage());
 	}
 
 	@Test
-	@DisplayName("planId가 존재하지만, 삭제가능한 기간이 아닌 경우 계획을 삭제할 수 업다.")
-	void deletePlan_Fail_By_Date() {
+	@DisplayName("planId가 존재하지만, 수정가능한 기간이 아닌 경우 계획을 수정할 수 업다.")
+	void updatePlan_Fail_By_Not_Updatable_Date() {
 		Plan plan = Plan.builder()
 			.userId(1L)
 			.content(new Content("title", "description"))
@@ -68,9 +78,12 @@ class DeletePlanServiceTest {
 			.tags(null)
 			.build();
 
+		PlanRequest.Update request = new PlanRequest.Update("title", "des", 12, 1,
+			15, "MORNING", true, true, true, null, List.of("message"));
+
 		Plan saved = planRepository.save(plan);
 
-		assertThatThrownBy(() -> deletePlanService.delete(saved.getId(), "Thu DEC 09 2023"))
+		assertThatThrownBy(() -> updatePlanService.update(saved.getId(), request, "Thu DEC 09 2023"))
 			.isInstanceOf(IllegalStateException.class)
 			.hasMessage(INVALID_UPDATABLE_DATE.getMessage());
 	}

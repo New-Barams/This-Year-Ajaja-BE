@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.newbarams.ajaja.global.common.AjajaResponse;
 import com.newbarams.ajaja.module.feedback.domain.dto.GetAchieve;
 import com.newbarams.ajaja.module.feedback.domain.dto.UpdateFeedback;
-import com.newbarams.ajaja.module.plan.domain.dto.PlanResponse;
+import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 import com.newbarams.ajaja.module.remind.domain.dto.GetReminds;
 import com.newbarams.ajaja.module.remind.domain.dto.ModifyAlarm;
 

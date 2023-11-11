@@ -10,7 +10,7 @@ import java.util.NoSuchElementException;
 import org.springframework.stereotype.Repository;
 
 import com.newbarams.ajaja.module.plan.domain.Plan;
-import com.newbarams.ajaja.module.plan.domain.dto.PlanResponse;
+import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 import com.newbarams.ajaja.module.plan.mapper.PlanMapper;
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;

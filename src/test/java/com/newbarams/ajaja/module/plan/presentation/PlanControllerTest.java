@@ -19,6 +19,7 @@ import com.newbarams.ajaja.module.plan.application.CreatePlanService;
 import com.newbarams.ajaja.module.plan.application.DeletePlanService;
 import com.newbarams.ajaja.module.plan.application.GetPlanAchieveService;
 import com.newbarams.ajaja.module.plan.application.GetPlanService;
+import com.newbarams.ajaja.module.plan.application.UpdatePlanService;
 
 @AutoConfigureMockMvc
 @WebMvcTest(controllers = PlanController.class)
@@ -35,6 +36,8 @@ class PlanControllerTest {
 	private CreatePlanService createPlanService;
 	@MockBean
 	private DeletePlanService deletePlanService;
+	@MockBean
+	private UpdatePlanService updatePlanService;
 
 	@Test
 	@WithMockUser

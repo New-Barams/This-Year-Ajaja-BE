@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.plan.domain.dto;
+package com.newbarams.ajaja.module.plan.dto;
 
 import java.time.Instant;
 import java.util.List;
@@ -35,6 +35,8 @@ public class PlanResponse {
 		String title,
 		String description,
 		boolean isPublic,
+		boolean canRemind,
+		boolean canAjaja,
 		int ajajas,
 		List<String> tags,
 		Instant createdAt
