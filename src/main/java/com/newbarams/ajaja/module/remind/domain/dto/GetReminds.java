@@ -16,9 +16,11 @@ public sealed interface GetReminds permits GetReminds.CommonResponse, GetReminds
 
 	record Response(
 		int index,
+		Long feedbackId,
 		String remindMessage,
-		boolean feedBack,
+		boolean isFeedback,
 		int rate,
+		boolean isExpired,
 		Timestamp deadLine
 	) implements GetReminds {
 	}
