@@ -1,12 +1,8 @@
 package com.newbarams.ajaja.module.plan.application;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.newbarams.ajaja.module.plan.domain.Message;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
@@ -54,15 +50,9 @@ public class UpdatePlanService {
 			request.isPublic(),
 			request.canRemind(),
 			tagService.getTags(request.tags()),
-			convertToMessage(request.messages())
+			PlanMapper.convertToMessageList(request.messages())
 		);
 
 		return PlanMapper.toResponse(plan);
-	}
-
-	private List<Message> convertToMessage(List<String> messages) {
-		return messages.stream()
-			.map((content) -> new Message(content))
-			.collect(Collectors.toList());
 	}
 }

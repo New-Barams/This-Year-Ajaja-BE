@@ -41,7 +41,7 @@ public class PlanMapper {
 		return new RemindInfo(remindTotalPeriod, remindTerm, remindDate, remindTime);
 	}
 
-	private static List<Message> convertToMessageList(List<String> messageList) {
+	public static List<Message> convertToMessageList(List<String> messageList) {
 		if (messageList == null) {
 			return null;
 		}
