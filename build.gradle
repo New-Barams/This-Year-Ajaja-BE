@@ -64,6 +64,9 @@ dependencies {
 
     // Fixture-Monkey
     testImplementation 'com.navercorp.fixturemonkey:fixture-monkey-starter:0.6.8'
+
+    // Embedded Redis
+    testImplementation 'it.ozimov:embedded-redis:0.7.3'
 }
 
 configurations {
