@@ -13,7 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import net.jqwik.api.Arbitraries;
 
-import com.newbarams.ajaja.common.MockTestSupport;
 import com.newbarams.ajaja.module.plan.domain.Content;
 import com.newbarams.ajaja.module.plan.domain.Message;
 import com.newbarams.ajaja.module.plan.domain.Plan;
@@ -22,7 +21,7 @@ import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.repository.PlanRepository;
 
 @SpringBootTest
-class UpdatePlanServiceTest extends MockTestSupport {
+class UpdatePlanServiceTest {
 	@Autowired
 	private UpdatePlanService updatePlanService;
 
