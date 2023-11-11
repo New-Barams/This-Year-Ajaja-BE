@@ -41,7 +41,7 @@ class PlanControllerTest {
 	void getPlanAchieve() throws Exception {
 		given(getPlanAchieveService.calculatePlanAchieve(anyLong())).willReturn(50);
 
-		mockMvc.perform(MockMvcRequestBuilders.get("/plans/feedbacks/1")
+		mockMvc.perform(MockMvcRequestBuilders.get("/plans/1/feedbacks")
 				.with(csrf())
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk());
