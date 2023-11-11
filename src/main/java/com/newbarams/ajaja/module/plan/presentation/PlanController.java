@@ -61,8 +61,8 @@ public class PlanController {
 		return new AjajaResponse<>(true, null);
 	}
 
-	@Operation(description = "특정 목표 달성률 조회 API")
-	@GetMapping("/feedbacks/{planId}")
+	@Operation(summary = "특정 목표 달성률 조회 API")
+	@GetMapping("/{planId}/feedbacks")
 	@ResponseStatus(OK)
 	public AjajaResponse<Integer> getPlanAchieve(
 		@PathVariable Long planId

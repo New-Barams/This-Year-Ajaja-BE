@@ -34,7 +34,7 @@ public class FeedbackController {
 		return new AjajaResponse<>(false, exception.getMessage());
 	}
 
-	@Operation(description = "피드백 반영 API")
+	@Operation(summary = "피드백 반영 API")
 	@PostMapping("/{feedbackId}")
 	@ResponseStatus(OK)
 	public AjajaResponse<Void> updateFeedback(
@@ -46,7 +46,7 @@ public class FeedbackController {
 		return new AjajaResponse<>(true, null);
 	}
 
-	@Operation(description = "유저 전체 목표 달성률 조회 API")
+	@Operation(summary = "유저 전체 목표 달성률 조회 API")
 	@GetMapping("/{userId}")
 	@ResponseStatus(OK)
 	public AjajaResponse<Integer> getTotalAchieve(
