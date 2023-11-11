@@ -19,6 +19,10 @@ public class TagService {
 	private final TagRepository tagRepository;
 
 	public Set<Tag> getTags(List<String> tagNames) {
+		if (tagNames == null) {
+			return null;
+		}
+
 		Set<Tag> tags = new HashSet<>(tagNames.size());
 
 		for (String name : tagNames) {
