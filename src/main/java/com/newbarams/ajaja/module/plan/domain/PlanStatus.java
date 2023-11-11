@@ -21,19 +21,19 @@ public class PlanStatus {
 		this.isDeleted = false;
 	}
 
-	void changeToDeleted() {
+	void toDeleted() {
 		this.isDeleted = true;
 	}
 
-	void changePublicOrNot() {
+	void switchPublic() {
 		this.isPublic = !isPublic;
 	}
 
-	void changeCanRemindOrNot() {
+	void switchRemind() {
 		this.canRemind = !canRemind;
 	}
 
-	void changeCanAjajaOrNot() {
+	void switchAjaja() {
 		this.canAjaja = !canAjaja;
 	}
 

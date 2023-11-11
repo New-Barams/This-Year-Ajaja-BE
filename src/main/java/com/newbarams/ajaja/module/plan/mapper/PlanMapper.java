@@ -17,10 +17,10 @@ import com.newbarams.ajaja.module.tag.domain.Tag;
 @Component
 public class PlanMapper {
 	public static Plan toEntity(PlanRequest.Create dto, Long userId, Set<Tag> tags) {
-		Content content = convertToContent(dto.title(), dto.description());
-		RemindInfo info = convertToRemindInfo(dto.remindTotalPeriod(), dto.remindTerm(), dto.remindDate(),
+		Content content = toContent(dto.title(), dto.description());
+		RemindInfo info = toRemindInfo(dto.remindTotalPeriod(), dto.remindTerm(), dto.remindDate(),
 			dto.remindTime());
-		List<Message> messages = convertToMessageList(dto.messages());
+		List<Message> messages = toMessages(dto.messages());
 
 		return Plan.builder()
 			.userId(userId)
@@ -32,16 +32,16 @@ public class PlanMapper {
 			.build();
 	}
 
-	private static Content convertToContent(String title, String description) {
+	private static Content toContent(String title, String description) {
 		return new Content(title, description);
 	}
 
-	private static RemindInfo convertToRemindInfo(int remindTotalPeriod, int remindTerm, int remindDate,
+	private static RemindInfo toRemindInfo(int remindTotalPeriod, int remindTerm, int remindDate,
 		String remindTime) {
 		return new RemindInfo(remindTotalPeriod, remindTerm, remindDate, remindTime);
 	}
 
-	public static List<Message> convertToMessageList(List<String> messageList) {
+	public static List<Message> toMessages(List<String> messageList) {
 		if (messageList == null) {
 			return null;
 		}
@@ -65,7 +65,7 @@ public class PlanMapper {
 			plan.getStatus().isCanRemind(),
 			plan.getStatus().isCanAjaja(),
 			plan.getAjajas().size(),
-			convertTagToDto(plan.getTags()),
+			toTagResponse(plan.getTags()),
 			plan.getCreatedAt()
 		);
 	}
@@ -79,12 +79,12 @@ public class PlanMapper {
 			plan.getContent().getDescription(),
 			plan.getStatus().isPublic(),
 			plan.getAjajas().size(),
-			convertTagToDto(plan.getTags()),
+			toTagResponse(plan.getTags()),
 			plan.getCreatedAt()
 		);
 	}
 
-	private static List<String> convertTagToDto(Set<Tag> tags) {
+	private static List<String> toTagResponse(Set<Tag> tags) {
 		if (tags == null) {
 			return null;
 		}

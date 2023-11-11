@@ -51,7 +51,7 @@ public class UpdatePlanService {
 			request.canRemind(),
 			request.canAjaja(),
 			tagService.getTags(request.tags()),
-			PlanMapper.convertToMessageList(request.messages())
+			PlanMapper.toMessages(request.messages())
 		);
 
 		return PlanMapper.toResponse(plan);

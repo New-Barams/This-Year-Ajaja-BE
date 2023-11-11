@@ -82,7 +82,7 @@ public class Plan extends BaseEntity<Plan> {
 
 	public void delete(String date) {
 		validateDate(date);
-		this.status.changeToDeleted();
+		this.status.toDeleted();
 	}
 
 	private void validateDate(String date) {
@@ -95,15 +95,15 @@ public class Plan extends BaseEntity<Plan> {
 	}
 
 	public void updatePublicStatus() {
-		this.status.changePublicOrNot();
+		this.status.switchPublic();
 	}
 
 	public void updateRemindStatus() {
-		this.status.changeCanRemindOrNot();
+		this.status.switchRemind();
 	}
 
 	public void updateAjajaStatus() {
-		this.status.changeCanAjajaOrNot();
+		this.status.switchAjaja();
 	}
 
 	public void update(
