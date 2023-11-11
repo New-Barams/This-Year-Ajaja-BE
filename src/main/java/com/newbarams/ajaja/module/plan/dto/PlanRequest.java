@@ -32,6 +32,7 @@ public class PlanRequest {
 
 		boolean isPublic,
 		boolean canRemind,
+		boolean canAjaja,
 
 		List<String> tags,
 

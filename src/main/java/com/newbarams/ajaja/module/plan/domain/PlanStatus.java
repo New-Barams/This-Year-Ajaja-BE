@@ -37,8 +37,9 @@ public class PlanStatus {
 		this.canAjaja = !canAjaja;
 	}
 
-	void update(boolean isPublic, boolean canRemind) {
+	void update(boolean isPublic, boolean canRemind, boolean canAjaja) {
 		this.isPublic = isPublic;
 		this.canRemind = canRemind;
+		this.canAjaja = canAjaja;
 	}
 }
