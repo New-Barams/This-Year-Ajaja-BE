@@ -46,7 +46,7 @@ class MockController {
 	private static final List<String> nicknames = Arrays.asList("노래부르는 다람쥐", "부끄러워하는 코끼리", "춤추는 강아지", "고백하는 고양이 ",
 		"거절하는 거북이 ", "손을 번쩍든 오리");
 
-	@Operation(description = "가짜 로그인 API")
+	@Operation(summary = "가짜 로그인 API")
 	@PostMapping("/login")
 	@ResponseStatus(OK)
 	Map<String, String> login(@RequestParam("code") String authorizationCode) {
@@ -57,7 +57,7 @@ class MockController {
 		return response;
 	}
 
-	@Operation(description = "가짜 Token 재발급 API")
+	@Operation(summary = "가짜 Token 재발급 API")
 	@PostMapping("/reissue")
 	@ResponseStatus(OK)
 	Map<String, String> reissue(@RequestHeader(AUTHORIZATION) String refreshToken) {
@@ -69,13 +69,13 @@ class MockController {
 		return response;
 	}
 
-	@Operation(description = "가짜 로그아웃 API")
+	@Operation(summary = "가짜 로그아웃 API")
 	@PostMapping("/logout")
 	@ResponseStatus(OK)
 	void logout() {
 	}
 
-	@Operation(description = "가짜 닉네임 새고로침 API")
+	@Operation(summary = "가짜 닉네임 새고로침 API")
 	@PostMapping("/users/refresh")
 	@ResponseStatus(OK)
 	Map<String, String> refreshNickname(@RequestHeader(AUTHORIZATION) String accessToken) {
@@ -88,7 +88,7 @@ class MockController {
 		return response;
 	}
 
-	@Operation(description = "가짜 이메일 인증 요청 API")
+	@Operation(summary = "가짜 이메일 인증 요청 API")
 	@PostMapping("/users/send-verification")
 	@ResponseStatus(OK)
 	Map<String, String> sendVerification(@RequestHeader(AUTHORIZATION) String accessToken) {
@@ -100,7 +100,7 @@ class MockController {
 		return response;
 	}
 
-	@Operation(description = "가짜 이메일 인증 확인 API")
+	@Operation(summary = "가짜 이메일 인증 확인 API")
 	@PostMapping("/users/verify-email")
 	@ResponseStatus(OK)
 	void verifyEmail(@RequestBody String certification) {
@@ -109,7 +109,7 @@ class MockController {
 		}
 	}
 
-	@Operation(description = "가짜 회원탈퇴 API")
+	@Operation(summary = "가짜 회원탈퇴 API")
 	@DeleteMapping("/users")
 	@ResponseStatus(OK)
 	void withdraw(@RequestHeader(AUTHORIZATION) String accessToken) {
@@ -133,31 +133,31 @@ class MockController {
 		}
 	}
 
-	@Operation(description = "[테스트-5초 후 발송] 리마인드 전송 API")
+	@Operation(summary = "[테스트-5초 후 발송] 리마인드 전송 API")
 	@PostMapping("/plans/{planId}/reminds")
 	@ResponseStatus(OK)
 	public AjajaResponse<GetReminds.Response> sendRemind() throws InterruptedException {
 		TimeUnit.SECONDS.sleep(5);
-		GetReminds.Response response = new GetReminds.Response(1, "화이팅", false, 0,
-			new Timestamp(System.currentTimeMillis()));
+		GetReminds.Response response = new GetReminds.Response(1, 1L, "화이팅", false, 0,
+			false, new Timestamp(System.currentTimeMillis()));
 
 		return new AjajaResponse<>(true, response);
 	}
 
-	@Operation(description = "[테스트] 리마인드 정보 조회 API")
+	@Operation(summary = "[테스트] 리마인드 정보 조회 API")
 	@GetMapping("/plans/{planId}/reminds")
 	@ResponseStatus(OK)
 	public AjajaResponse<GetReminds.CommonResponse> getReminds() {
 		List<GetReminds.Response> responses = List.of(
-			new GetReminds.Response(1, "화이팅", true, 60, Timestamp.valueOf("2023-4-02 23:59:59")),
-			new GetReminds.Response(2, "아좌좌", true, 60, Timestamp.valueOf("2023-7-02 23:59:59")),
-			new GetReminds.Response(3, "할수있다", false, 0, Timestamp.valueOf("2023-10-02 23:59:59")));
+			new GetReminds.Response(1, 1L, "화이팅", true, 75, true, Timestamp.valueOf("2023-4-02 23:59:59")),
+			new GetReminds.Response(2, 2L, "아좌좌", true, 50, true, Timestamp.valueOf("2023-7-02 23:59:59")),
+			new GetReminds.Response(3, 3L, "할수있다", false, 0, false, Timestamp.valueOf("2023-10-02 23:59:59")));
 
 		GetReminds.CommonResponse commonResponse = new GetReminds.CommonResponse("moring", 2, 3, 1, true, responses);
 		return new AjajaResponse<>(true, commonResponse);
 	}
 
-	@Operation(description = "[테스트] 리마인드 알림 끄기 API")
+	@Operation(summary = "[테스트] 리마인드 알림 끄기 API")
 	@PutMapping("/plans/{planId}/reminds")
 	@ResponseStatus(OK)
 	public AjajaResponse<String> modifyRemindAlarm(
@@ -167,18 +167,18 @@ class MockController {
 		return new AjajaResponse<>(true, null);
 	}
 
-	@Operation(description = "[테스트] 피드백 수행 API")
-	@PostMapping("/feedbacks/{planId}")
+	@Operation(summary = "[테스트] 피드백 수행 API")
+	@PostMapping("/feedbacks/{feedbackId}")
 	@ResponseStatus(OK)
 	public AjajaResponse<Void> updateFeedback(
-		@PathVariable int planId,
+		@PathVariable int feedbackId,
 		@RequestBody UpdateFeedback updateFeedback
 	) {
 		return new AjajaResponse<>(true, null);
 	}
 
-	@Operation(description = "[테스트] 목표별 계획률 보기 API")
-	@GetMapping("/feedbacks/{planId}")
+	@Operation(summary = "[테스트] 목표별 계획률 보기 API")
+	@GetMapping("/{planId}/feedbacks")
 	@ResponseStatus(OK)
 	public AjajaResponse<GetAchieve> findPlanAchieve(
 		@PathVariable int planId
@@ -188,7 +188,7 @@ class MockController {
 		return new AjajaResponse<>(true, achieve);
 	}
 
-	@Operation(description = "[테스트] 전체 달성률 보기")
+	@Operation(summary = "[테스트] 전체 달성률 보기")
 	@GetMapping("/feedbacks/user/{userId}")
 	public AjajaResponse<GetAchieve> findTotalAchieve(
 		@PathVariable int userId
@@ -198,13 +198,13 @@ class MockController {
 		return new AjajaResponse<>(true, achieve);
 	}
 
-	@Operation(description = "[테스트] 계획 생성 API")
+	@Operation(summary = "[테스트] 계획 생성 API")
 	@PostMapping("/plans")
 	@ResponseStatus(CREATED)
 	public void createPlan() {
 	}
 
-	@Operation(description = "[테스트] 계획 전체 조회 API")
+	@Operation(summary = "[테스트] 계획 전체 조회 API")
 	@GetMapping("/plans")
 	@ResponseStatus(OK)
 	public AjajaResponse<List<PlanResponse.GetAll>> getAllPlans() {
@@ -221,7 +221,7 @@ class MockController {
 		return new AjajaResponse<>(true, responses);
 	}
 
-	@Operation(description = "[테스트] 계획 단건 조회 API")
+	@Operation(summary = "[테스트] 계획 단건 조회 API")
 	@GetMapping("/plans/{id}")
 	@ResponseStatus(OK)
 	public AjajaResponse<PlanResponse.GetOne> getOnePlan(@PathVariable Long id) {
@@ -232,25 +232,25 @@ class MockController {
 		return new AjajaResponse<>(true, response);
 	}
 
-	@Operation(description = "[테스트] 계획 수정 API")
+	@Operation(summary = "[테스트] 계획 수정 API")
 	@PutMapping("/plans/{id}")
 	@ResponseStatus(OK)
 	public void updatePlan(@PathVariable Long id) {
 	}
 
-	@Operation(description = "[테스트] 계획 삭제 API")
+	@Operation(summary = "[테스트] 계획 삭제 API")
 	@DeleteMapping("/plans/{id}")
 	@ResponseStatus(OK)
 	public void deletePlan(@PathVariable Long id) {
 	}
 
-	@Operation(description = "[테스트] 계획을 비공개로 수정")
+	@Operation(summary = "[테스트] 계획을 비공개로 수정")
 	@PutMapping("/plans/{id}/private")
 	@ResponseStatus(OK)
 	public void switchPlanToPrivate(@PathVariable Long id) {
 	}
 
-	@Operation(description = "[테스트] 계획을 공개로 수정")
+	@Operation(summary = "[테스트] 계획을 공개로 수정")
 	@PutMapping("/plans/{id}/public")
 	@ResponseStatus(OK)
 	public void switchPlanToPublic(@PathVariable Long id) {
