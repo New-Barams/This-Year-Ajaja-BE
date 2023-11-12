@@ -26,4 +26,8 @@ public class AjajaException extends RuntimeException {
 		String message = errorCode.getMessage() + " Wrong with Id :" + id;
 		return new AjajaException(message, errorCode);
 	}
+
+	public int getHttpStatus() {
+		return errorCode.getHttpStatus().value();
+	}
 }
