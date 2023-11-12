@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
  * Adapter Class of User and UserDetails to separate dependency from Domain <br>
  * @author hejow
  */
-record UserAdapter(Long id, String email) implements UserDetails {
+public record UserAdapter(Long id, String email) implements UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return Collections.emptyList();
