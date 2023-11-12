@@ -4,6 +4,9 @@ import static com.newbarams.ajaja.module.plan.domain.QPlan.*;
 import static com.newbarams.ajaja.module.plan.exception.ErrorMessage.*;
 import static com.newbarams.ajaja.module.user.domain.QUser.*;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -15,6 +18,7 @@ import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 import com.newbarams.ajaja.module.plan.mapper.PlanMapper;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
@@ -52,7 +56,15 @@ public class PlanQueryRepository {
 				plan.status.canRemind,
 				plan.achieveRate))
 			.from(plan)
-			.where(plan.userId.eq(user.id).and(plan.id.eq(userId)))
+			.where(plan.userId.eq(userId)
+				.and(isCurrentYear()))
 			.fetch();
+	}
+
+	private BooleanExpression isCurrentYear() {
+		Instant instant = Instant.now();
+		ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault());
+
+		return plan.createdAt.year().eq(zonedDateTime.getYear());
 	}
 }
