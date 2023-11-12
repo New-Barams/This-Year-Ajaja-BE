@@ -1,12 +1,12 @@
 package com.newbarams.ajaja.module.plan.application;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +15,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.newbarams.ajaja.module.feedback.domain.Feedback;
-import com.newbarams.ajaja.module.feedback.domain.repository.FeedbackRepository;
+import com.newbarams.ajaja.module.plan.domain.Plan;
+import com.newbarams.ajaja.module.plan.repository.PlanRepository;
 
 import com.navercorp.fixturemonkey.FixtureMonkey;
 import com.navercorp.fixturemonkey.api.introspector.FieldReflectionArbitraryIntrospector;
@@ -27,7 +28,7 @@ class GetPlanAchieveServiceTest {
 	private GetPlanAchieveService getPlanAchieveService;
 
 	@Mock
-	private FeedbackRepository feedbackRepository;
+	private PlanRepository planRepository;
 
 	private final FixtureMonkey sut = FixtureMonkey.builder()
 		.objectIntrospector(FieldReflectionArbitraryIntrospector.INSTANCE)
@@ -43,27 +44,26 @@ class GetPlanAchieveServiceTest {
 		int calculatedAchieve =
 			(feedbackList.get(0).getAchieve().getRate() + feedbackList.get(1).getAchieve().getRate()) / 2;
 
+		Plan plan = sut.giveMeOne(Plan.class);
+		plan.updateAchieve(calculatedAchieve);
+
 		// when
-		given(feedbackRepository.findAllByPlanIdIdAndCreatedYear(any())).willReturn(feedbackList);
+		given(planRepository.findById(any())).willReturn(Optional.of(plan));
 
 		// then
 		int totalAchieve = getPlanAchieveService.calculatePlanAchieve(1L);
 
-		Assertions.assertThat(totalAchieve).isEqualTo(calculatedAchieve);
+		assertThat(totalAchieve).isEqualTo(calculatedAchieve);
 	}
 
 	@Test
-	@DisplayName("만약 계획의 평가된 피드백이 없을 경우 점수는 0이 나온다.")
+	@DisplayName("조회하고 싶은 계획의 정보가 존재하지 않는 경우 예외를 던진다.")
 	void getEmptyAchieve_Success_WithNoException() {
-		// given
-		List<Feedback> feedbackList = Collections.emptyList();
-
 		// when
-		given(feedbackRepository.findAllByPlanIdIdAndCreatedYear(any())).willReturn(feedbackList);
+		given(planRepository.findById(any())).willReturn(Optional.empty());
 
 		// then
-		int totalAchieve = getPlanAchieveService.calculatePlanAchieve(1L);
-
-		Assertions.assertThat(totalAchieve).isZero();
+		assertThatThrownBy(() ->
+			getPlanAchieveService.calculatePlanAchieve(1L));
 	}
 }
