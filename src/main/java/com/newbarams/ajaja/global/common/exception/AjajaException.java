@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.global.common.exeption;
+package com.newbarams.ajaja.global.common.exception;
 
 import com.newbarams.ajaja.global.common.error.ErrorCode;
 

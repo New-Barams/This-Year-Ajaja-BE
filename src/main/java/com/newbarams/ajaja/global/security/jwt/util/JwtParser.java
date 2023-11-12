@@ -7,7 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import com.newbarams.ajaja.global.common.exeption.AjajaException;
+import com.newbarams.ajaja.global.common.exception.AjajaException;
 import com.newbarams.ajaja.global.security.common.CustomUserDetailService;
 
 import io.jsonwebtoken.Claims;

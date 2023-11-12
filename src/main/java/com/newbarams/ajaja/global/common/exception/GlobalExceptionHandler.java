@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.global.common.exeption;
+package com.newbarams.ajaja.global.common.exception;
 
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

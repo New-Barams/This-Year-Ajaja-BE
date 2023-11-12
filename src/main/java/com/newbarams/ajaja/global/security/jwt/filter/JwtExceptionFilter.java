@@ -10,7 +10,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.newbarams.ajaja.global.common.error.ErrorResponse;
-import com.newbarams.ajaja.global.common.exeption.AjajaException;
+import com.newbarams.ajaja.global.common.exception.AjajaException;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

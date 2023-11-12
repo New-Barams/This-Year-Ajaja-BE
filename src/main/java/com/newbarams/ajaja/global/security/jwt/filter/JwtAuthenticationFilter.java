@@ -10,7 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.newbarams.ajaja.global.common.exeption.AjajaException;
+import com.newbarams.ajaja.global.common.exception.AjajaException;
 import com.newbarams.ajaja.global.security.jwt.util.JwtParser;
 
 import jakarta.servlet.FilterChain;
