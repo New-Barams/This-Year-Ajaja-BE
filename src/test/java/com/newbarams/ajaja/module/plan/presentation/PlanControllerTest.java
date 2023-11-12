@@ -45,7 +45,7 @@ class PlanControllerTest extends MockTestSupport {
 
 	@Test
 	@WithMockUser
-	void getPlanAchieve() throws Exception {
+	void getPlanAchieve_Success_WithNoException() throws Exception {
 		given(getPlanAchieveService.calculatePlanAchieve(anyLong())).willReturn(50);
 
 		mockMvc.perform(MockMvcRequestBuilders.get("/plans/1/feedbacks")
@@ -56,7 +56,7 @@ class PlanControllerTest extends MockTestSupport {
 
 	@Test
 	@WithMockUser
-	void getPlanInfo() throws Exception {
+	void getPlanInfo_Success_WithNoException() throws Exception {
 		given(getPlanInfoService.loadPlanInfo(any())).willReturn(null);
 
 		mockMvc.perform(MockMvcRequestBuilders.get("/plans/main/1")
