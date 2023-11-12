@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.global.security.jwt;
+package com.newbarams.ajaja.global.security.jwt.util;
 
 import java.security.Key;
 
