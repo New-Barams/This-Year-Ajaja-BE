@@ -13,8 +13,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.newbarams.ajaja.module.feedback.domain.Feedback;
-import com.newbarams.ajaja.module.feedback.domain.repository.FeedbackRepository;
+import com.newbarams.ajaja.module.plan.dto.PlanInfo;
+import com.newbarams.ajaja.module.plan.repository.PlanQueryRepository;
 
 import com.navercorp.fixturemonkey.FixtureMonkey;
 import com.navercorp.fixturemonkey.api.introspector.FieldReflectionArbitraryIntrospector;
@@ -26,7 +26,7 @@ class GetTotalAchieveServiceTest {
 	private GetTotalAchieveService getTotalAchieveService;
 
 	@Mock
-	private FeedbackRepository feedbackRepository;
+	private PlanQueryRepository planQueryRepository;
 
 	private final FixtureMonkey sut = FixtureMonkey.builder()
 		.objectIntrospector(FieldReflectionArbitraryIntrospector.INSTANCE)
@@ -37,13 +37,14 @@ class GetTotalAchieveServiceTest {
 	@DisplayName("그 해 유저의 피드백을 통틀어서 달성률의 평균을 매긴다.")
 	void getTotalAchieve_Success_WithNoException() {
 		// given
-		List<Feedback> feedbackList = sut.giveMe(Feedback.class, 2);
+		PlanInfo.GetPlanInfo planInfo1 = new PlanInfo.GetPlanInfo("title", true, 50);
+		PlanInfo.GetPlanInfo planInfo2 = new PlanInfo.GetPlanInfo("title", true, 100);
 
 		int calculatedAchieve =
-			(feedbackList.get(0).getAchieve().getRate() + feedbackList.get(1).getAchieve().getRate()) / 2;
+			(planInfo1.getAchieveRate() + planInfo2.getAchieveRate()) / 2;
 
 		// when
-		given(feedbackRepository.findAllByUserIdAndCreatedYear(any())).willReturn(feedbackList);
+		given(planQueryRepository.findAllPlanByUserId(any())).willReturn(List.of(planInfo1, planInfo2));
 
 		// then
 		int totalAchieve = getTotalAchieveService.calculateTotalAchieve(1L);
@@ -55,10 +56,10 @@ class GetTotalAchieveServiceTest {
 	@DisplayName("만약 평가된 피드백이 없을 경우 점수는 0이 나온다.")
 	void getEmptyAchieve_Success_WithNoException() {
 		// given
-		List<Feedback> feedbackList = Collections.emptyList();
+		List<PlanInfo.GetPlanInfo> planInfoList = Collections.emptyList();
 
 		// when
-		given(feedbackRepository.findAllByUserIdAndCreatedYear(any())).willReturn(feedbackList);
+		given(planQueryRepository.findAllPlanByUserId(any())).willReturn(planInfoList);
 
 		// then
 		int totalAchieve = getTotalAchieveService.calculateTotalAchieve(1L);
