@@ -22,16 +22,14 @@ public class FeedbackRepositoryCustomImpl implements FeedbackRepositoryCustom {
 
 	@Override
 	public List<Feedback> findAllByUserIdAndCreatedYear(Long userId) {
-		return queryFactory.select(feedback)
-			.from(feedback)
+		return queryFactory.selectFrom(feedback)
 			.where(feedback.userId.eq(userId).and(isCurrentYear()))
 			.fetch();
 	}
 
 	@Override
 	public List<Feedback> findAllByPlanIdIdAndCreatedYear(Long planId) {
-		return queryFactory.select(feedback)
-			.from(feedback)
+		return queryFactory.selectFrom(feedback)
 			.where(feedback.planId.eq(planId).and(isCurrentYear()))
 			.fetch();
 	}
