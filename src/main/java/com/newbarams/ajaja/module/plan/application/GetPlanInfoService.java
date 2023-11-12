@@ -17,14 +17,14 @@ public class GetPlanInfoService {
 	private final PlanQueryRepository planQueryRepository;
 
 	public PlanInfo.PlanInfoResponse loadPlanInfo(Long userId) {
-		List<PlanInfo.GetPlanInfo> planInfoList = planQueryRepository.findAllPlanByUserId(userId);
+		List<PlanInfo.GetPlanInfo> planInfos = planQueryRepository.findAllPlanByUserId(userId);
 
-		int totalAchieve = (int)planInfoList
+		int totalAchieve = (int)planInfos
 			.stream()
 			.mapToInt(PlanInfo.GetPlanInfo::getAchieveRate)
 			.average()
 			.orElse(0);
 
-		return new PlanInfo.PlanInfoResponse(totalAchieve, planInfoList);
+		return new PlanInfo.PlanInfoResponse(totalAchieve, planInfos);
 	}
 }
