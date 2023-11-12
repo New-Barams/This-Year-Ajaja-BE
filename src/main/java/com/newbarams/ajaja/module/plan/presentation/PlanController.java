@@ -17,8 +17,10 @@ import com.newbarams.ajaja.global.common.AjajaResponse;
 import com.newbarams.ajaja.module.plan.application.CreatePlanService;
 import com.newbarams.ajaja.module.plan.application.DeletePlanService;
 import com.newbarams.ajaja.module.plan.application.GetPlanAchieveService;
+import com.newbarams.ajaja.module.plan.application.GetPlanInfoService;
 import com.newbarams.ajaja.module.plan.application.GetPlanService;
 import com.newbarams.ajaja.module.plan.application.UpdatePlanService;
+import com.newbarams.ajaja.module.plan.dto.PlanInfo;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 
@@ -36,6 +38,7 @@ public class PlanController {
 	private final DeletePlanService deletePlanService;
 	private final GetPlanAchieveService getPlanAchieveService;
 	private final UpdatePlanService updatePlanService;
+	private final GetPlanInfoService getPlanInfoService;
 
 	@Operation(summary = "계획 생성 API")
 	@PostMapping
@@ -110,5 +113,17 @@ public class PlanController {
 		PlanResponse.Create updated = updatePlanService.update(id, request, date);
 
 		return new AjajaResponse<>(true, updated);
+
+	}
+
+	@Operation(description = "메인페이지 목표 조회 API")
+	@GetMapping("/main/{userId}")
+	@ResponseStatus(OK)
+	public AjajaResponse<PlanInfo.PlanInfoResponse> getPlanInfo(
+		@PathVariable Long userId
+	) {
+		PlanInfo.PlanInfoResponse planInfoResponse = getPlanInfoService.loadPlanInfo(userId);
+
+		return new AjajaResponse<>(true, planInfoResponse);
 	}
 }
