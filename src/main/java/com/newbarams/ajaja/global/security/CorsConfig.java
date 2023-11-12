@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.global.config;
+package com.newbarams.ajaja.global.security;
 
 import java.util.List;
 

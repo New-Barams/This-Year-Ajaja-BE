@@ -4,10 +4,10 @@ import org.springframework.http.HttpStatus;
 
 public record ErrorResponse(
 	HttpStatus httpStatus,
-	String ErrorName,
-	String ErrorMessage
+	String errorName,
+	String errorMessage
 ) {
-	public static ErrorResponse from(AjajaErrorCode errorCode) {
+	public static ErrorResponse from(ErrorCode errorCode) {
 		return new ErrorResponse(errorCode.getHttpStatus(), errorCode.name(), errorCode.getMessage());
 	}
 }

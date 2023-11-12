@@ -53,4 +53,8 @@ public class User extends BaseEntity<User> {
 	public boolean isEmailVerified() {
 		return email.isVerified();
 	}
+
+	public String getEmail() {
+		return email.getEmail();
+	}
 }

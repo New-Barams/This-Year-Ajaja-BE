@@ -3,7 +3,7 @@ package com.newbarams.ajaja.module.user.application;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.newbarams.ajaja.global.security.jwt.JwtGenerator;
+import com.newbarams.ajaja.global.security.jwt.util.JwtGenerator;
 import com.newbarams.ajaja.module.user.auth.model.AccessToken;
 import com.newbarams.ajaja.module.user.auth.model.Profile;
 import com.newbarams.ajaja.module.user.domain.User;

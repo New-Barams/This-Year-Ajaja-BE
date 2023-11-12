@@ -1,6 +1,6 @@
-package com.newbarams.ajaja.global.security.jwt;
+package com.newbarams.ajaja.global.security.jwt.util;
 
-import java.security.Key;
+import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -12,7 +12,7 @@ import lombok.Getter;
 @Getter
 @Component
 class JwtSecretProvider {
-	private final Key secretKey;
+	private final SecretKey secretKey;
 	private final String signature;
 
 	public JwtSecretProvider(@Value("${secret.jwt.key}") String key) {
