@@ -6,8 +6,10 @@ import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Email extends SelfValidating<Email> {
@@ -27,9 +29,5 @@ public class Email extends SelfValidating<Email> {
 
 	void verified() {
 		this.isVerified = true;
-	}
-
-	boolean isVerified() {
-		return isVerified;
 	}
 }
