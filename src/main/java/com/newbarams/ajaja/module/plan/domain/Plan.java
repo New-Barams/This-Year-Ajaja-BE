@@ -48,7 +48,6 @@ public class Plan extends BaseEntity<Plan> {
 	private Long userId;
 
 	@Getter
-	@Column(name = "achieve_rate")
 	@NotNull
 	private int achieveRate;
 
