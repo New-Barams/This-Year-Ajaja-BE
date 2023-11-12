@@ -8,8 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.newbarams.ajaja.global.common.exeption.AjajaException;
 import com.newbarams.ajaja.module.feedback.domain.Feedback;
 import com.newbarams.ajaja.module.feedback.domain.repository.FeedbackRepository;
-import com.newbarams.ajaja.module.plan.domain.Plan;
-import com.newbarams.ajaja.module.plan.repository.PlanRepository;
+import com.newbarams.ajaja.module.plan.application.UpdatePlanAchieveService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 public class UpdateFeedbackService {
 	private final FeedbackRepository feedbackRepository;
-	private final PlanRepository planRepository;
+	private final UpdatePlanAchieveService updatePlanAchieveService;
 
 	@Transactional
 	public void updateFeedback(Long feedbackId, int rate) {
@@ -40,9 +39,6 @@ public class UpdateFeedbackService {
 			.average()
 			.orElse(0);
 
-		Plan plan = planRepository.findById(planId)
-			.orElseThrow(() -> AjajaException.withId(planId, NOT_FOUND_PLAN));
-
-		plan.updateAchieve(feedbackAverage);
+		updatePlanAchieveService.updatePlanAchieve(planId, feedbackAverage);
 	}
 }

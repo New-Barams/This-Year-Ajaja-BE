@@ -18,8 +18,8 @@ import com.newbarams.ajaja.global.common.exeption.AjajaException;
 import com.newbarams.ajaja.module.feedback.domain.Achieve;
 import com.newbarams.ajaja.module.feedback.domain.Feedback;
 import com.newbarams.ajaja.module.feedback.domain.repository.FeedbackRepository;
+import com.newbarams.ajaja.module.plan.application.UpdatePlanAchieveService;
 import com.newbarams.ajaja.module.plan.domain.Plan;
-import com.newbarams.ajaja.module.plan.repository.PlanRepository;
 
 import com.navercorp.fixturemonkey.FixtureMonkey;
 import com.navercorp.fixturemonkey.api.introspector.FieldReflectionArbitraryIntrospector;
@@ -39,7 +39,7 @@ class UpdateFeedbackServiceTest {
 	private FeedbackRepository feedbackRepository;
 
 	@Mock
-	private PlanRepository planRepository;
+	private UpdatePlanAchieveService updatePlanAchieveService;
 
 	@Mock
 	private Feedback mockFeedback;
@@ -58,7 +58,7 @@ class UpdateFeedbackServiceTest {
 			// mock
 			doNothing().when(mockFeedback).checkDeadline();
 			given(feedbackRepository.findById(any())).willReturn(Optional.of(mockFeedback));
-			given(planRepository.findById(any())).willReturn(Optional.of(plan));
+			doNothing().when(updatePlanAchieveService).updatePlanAchieve(anyLong(), anyInt());
 			given(feedbackRepository.findAllByPlanIdIdAndCreatedYear(any())).willReturn(feedbacks);
 
 			// when,then
