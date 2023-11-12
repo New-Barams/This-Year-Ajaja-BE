@@ -1,0 +1,54 @@
+package com.newbarams.ajaja.module.plan.application;
+
+import static org.mockito.BDDMockito.*;
+
+import java.util.Collections;
+import java.util.List;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.newbarams.ajaja.common.MockTestSupport;
+import com.newbarams.ajaja.module.plan.dto.PlanInfo;
+import com.newbarams.ajaja.module.plan.repository.PlanQueryRepository;
+
+@ExtendWith(MockitoExtension.class)
+class GetPlanInfoServiceTest extends MockTestSupport {
+	@InjectMocks
+	private GetPlanInfoService getPlanInfoService;
+
+	@Mock
+	private PlanQueryRepository planQueryRepository;
+
+	@Test
+	@DisplayName("조회된 계획의 평균을 내서 총 달성률을 구한다.")
+	void name1() {
+		// given
+		List<PlanInfo.GetPlanInfo> planInfos = monkey.giveMe(PlanInfo.GetPlanInfo.class, 2);
+		given(planQueryRepository.findAllPlanByUserId(any())).willReturn(planInfos);
+
+		// when
+		getPlanInfoService.loadPlanInfo(1L);
+
+		// then
+		then(planQueryRepository).should(times(1)).findAllPlanByUserId(any());
+	}
+
+	@Test
+	@DisplayName("조회된 계획들이 없는 경우 총 달성량은 0이 나온다.")
+	void name2() {
+		// given
+		List<PlanInfo.GetPlanInfo> planInfos = Collections.emptyList();
+		given(planQueryRepository.findAllPlanByUserId(any())).willReturn(planInfos);
+
+		// when
+		getPlanInfoService.loadPlanInfo(1L);
+
+		// then
+		then(planQueryRepository).should(times(1)).findAllPlanByUserId(any());
+	}
+}
