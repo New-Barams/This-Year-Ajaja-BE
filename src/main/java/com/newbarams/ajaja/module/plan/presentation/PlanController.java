@@ -20,7 +20,7 @@ import com.newbarams.ajaja.module.plan.application.GetPlanAchieveService;
 import com.newbarams.ajaja.module.plan.application.GetPlanInfoService;
 import com.newbarams.ajaja.module.plan.application.GetPlanService;
 import com.newbarams.ajaja.module.plan.application.UpdatePlanService;
-import com.newbarams.ajaja.module.plan.dto.PlanInfo;
+import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 
@@ -119,11 +119,11 @@ public class PlanController {
 	@Operation(description = "메인페이지 목표 조회 API")
 	@GetMapping("/main/{userId}")
 	@ResponseStatus(OK)
-	public AjajaResponse<PlanInfo.PlanInfoResponse> getPlanInfo(
+	public AjajaResponse<PlanInfoResponse.GetPlanInfoResponse> getPlanInfo(
 		@PathVariable Long userId
 	) {
-		PlanInfo.PlanInfoResponse planInfoResponse = getPlanInfoService.loadPlanInfo(userId);
+		PlanInfoResponse.GetPlanInfoResponse getPlanInfo = getPlanInfoService.loadPlanInfo(userId);
 
-		return new AjajaResponse<>(true, planInfoResponse);
+		return new AjajaResponse<>(true, getPlanInfo);
 	}
 }

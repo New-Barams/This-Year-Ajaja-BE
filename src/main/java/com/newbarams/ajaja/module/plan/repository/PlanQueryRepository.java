@@ -13,7 +13,7 @@ import java.util.NoSuchElementException;
 import org.springframework.stereotype.Repository;
 
 import com.newbarams.ajaja.module.plan.domain.Plan;
-import com.newbarams.ajaja.module.plan.dto.PlanInfo;
+import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 import com.newbarams.ajaja.module.plan.mapper.PlanMapper;
 import com.querydsl.core.Tuple;
@@ -50,8 +50,8 @@ public class PlanQueryRepository {
 		return PlanMapper.toResponse(planFromTuple, nickname);
 	}
 
-	public List<PlanInfo.GetPlanInfo> findAllPlanByUserId(Long userId) {
-		return queryFactory.select(Projections.bean(PlanInfo.GetPlanInfo.class,
+	public List<PlanInfoResponse.GetGetPlan> findAllPlanByUserId(Long userId) {
+		return queryFactory.select(Projections.bean(PlanInfoResponse.GetGetPlan.class,
 				plan.content.title,
 				plan.status.canRemind,
 				plan.achieveRate))

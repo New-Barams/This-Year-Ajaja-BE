@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.newbarams.ajaja.module.plan.dto.PlanInfo;
+import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
 import com.newbarams.ajaja.module.plan.repository.PlanQueryRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -16,15 +16,15 @@ import lombok.RequiredArgsConstructor;
 public class GetPlanInfoService {
 	private final PlanQueryRepository planQueryRepository;
 
-	public PlanInfo.PlanInfoResponse loadPlanInfo(Long userId) {
-		List<PlanInfo.GetPlanInfo> planInfos = planQueryRepository.findAllPlanByUserId(userId);
+	public PlanInfoResponse.GetPlanInfoResponse loadPlanInfo(Long userId) {
+		List<PlanInfoResponse.GetGetPlan> planInfos = planQueryRepository.findAllPlanByUserId(userId);
 
 		int totalAchieve = (int)planInfos
 			.stream()
-			.mapToInt(PlanInfo.GetPlanInfo::getAchieveRate)
+			.mapToInt(PlanInfoResponse.GetGetPlan::getAchieveRate)
 			.average()
 			.orElse(0);
 
-		return new PlanInfo.PlanInfoResponse(totalAchieve, planInfos);
+		return new PlanInfoResponse.GetPlanInfoResponse(totalAchieve, planInfos);
 	}
 }
