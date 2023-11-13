@@ -1,10 +1,11 @@
 package com.newbarams.ajaja.module.plan.application;
 
+import static com.newbarams.ajaja.global.common.error.ErrorCode.*;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.newbarams.ajaja.global.common.error.AjajaErrorCode;
-import com.newbarams.ajaja.global.common.exeption.AjajaException;
+import com.newbarams.ajaja.global.common.exception.AjajaException;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.repository.PlanRepository;
 
@@ -19,7 +20,7 @@ public class GetPlanAchieveService {
 
 	public int calculatePlanAchieve(Long planId) {
 		Plan plan = planRepository.findById(planId)
-			.orElseThrow(() -> AjajaException.withId(planId, AjajaErrorCode.NOT_FOUND_PLAN));
+			.orElseThrow(() -> AjajaException.withId(planId, NOT_FOUND_PLAN));
 
 		return plan.getAchieveRate();
 	}

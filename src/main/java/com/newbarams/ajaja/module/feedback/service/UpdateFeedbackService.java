@@ -1,11 +1,11 @@
 package com.newbarams.ajaja.module.feedback.service;
 
-import static com.newbarams.ajaja.global.common.error.AjajaErrorCode.*;
+import static com.newbarams.ajaja.global.common.error.ErrorCode.*;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.newbarams.ajaja.global.common.exeption.AjajaException;
+import com.newbarams.ajaja.global.common.exception.AjajaException;
 import com.newbarams.ajaja.module.feedback.domain.Feedback;
 import com.newbarams.ajaja.module.feedback.domain.repository.FeedbackRepository;
 import com.newbarams.ajaja.module.plan.application.UpdatePlanAchieveService;
