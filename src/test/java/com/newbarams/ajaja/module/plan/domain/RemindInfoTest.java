@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import net.jqwik.api.Arbitraries;
 
 import com.navercorp.fixturemonkey.FixtureMonkey;
-import com.navercorp.fixturemonkey.api.exception.FilterMissException;
 import com.navercorp.fixturemonkey.api.introspector.FieldReflectionArbitraryIntrospector;
 import com.navercorp.fixturemonkey.jakarta.validation.plugin.JakartaValidationPlugin;
 
@@ -29,7 +28,7 @@ class RemindInfoTest {
 		assertThatThrownBy(() -> fixtureMonkey.giveMeBuilder(RemindInfo.class)
 			.set("remindTotalPeriod", Arbitraries.integers().lessOrEqual(-1))
 			.sample())
-			.isInstanceOf(FilterMissException.class);
+			.isInstanceOf(IllegalArgumentException.class);
 	}
 
 	@Test
@@ -38,7 +37,7 @@ class RemindInfoTest {
 		assertThatThrownBy(() -> fixtureMonkey.giveMeBuilder(RemindInfo.class)
 			.set("remindTerm", Arbitraries.integers().lessOrEqual(-1))
 			.sample())
-			.isInstanceOf(FilterMissException.class);
+			.isInstanceOf(IllegalArgumentException.class);
 	}
 
 	@Test
@@ -47,6 +46,6 @@ class RemindInfoTest {
 		assertThatThrownBy(() -> fixtureMonkey.giveMeBuilder(RemindInfo.class)
 			.set("remindDate", Arbitraries.integers().lessOrEqual(-1))
 			.sample())
-			.isInstanceOf(FilterMissException.class);
+			.isInstanceOf(IllegalArgumentException.class);
 	}
 }

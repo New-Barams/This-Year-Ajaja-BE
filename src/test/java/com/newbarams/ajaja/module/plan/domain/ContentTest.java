@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import net.jqwik.api.Arbitraries;
 
 import com.navercorp.fixturemonkey.FixtureMonkey;
-import com.navercorp.fixturemonkey.api.exception.FilterMissException;
 import com.navercorp.fixturemonkey.api.introspector.FieldReflectionArbitraryIntrospector;
 import com.navercorp.fixturemonkey.jakarta.validation.plugin.JakartaValidationPlugin;
 
@@ -29,7 +28,7 @@ class ContentTest {
 		assertThatThrownBy(() -> fixtureMonkey.giveMeBuilder(Content.class)
 			.set("title", Arbitraries.strings().ofMinLength(51))
 			.sample())
-			.isInstanceOf(FilterMissException.class);
+			.isInstanceOf(IllegalArgumentException.class);
 	}
 
 	@Test
@@ -38,6 +37,6 @@ class ContentTest {
 		assertThatThrownBy(() -> fixtureMonkey.giveMeBuilder(Content.class)
 			.set("description", Arbitraries.strings().ofMinLength(301))
 			.sample())
-			.isInstanceOf(FilterMissException.class);
+			.isInstanceOf(IllegalArgumentException.class);
 	}
 }
