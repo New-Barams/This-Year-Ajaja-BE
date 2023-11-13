@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.feedback.service;
+package com.newbarams.ajaja.module.plan.application;
 
 import java.util.List;
 
@@ -11,18 +11,20 @@ import com.newbarams.ajaja.module.plan.repository.PlanQueryRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class GetTotalAchieveService {
+@RequiredArgsConstructor
+public class GetPlanInfoService {
 	private final PlanQueryRepository planQueryRepository;
 
-	public int calculateTotalAchieve(Long userId) {
-		List<PlanInfoResponse.GetGetPlan> planList = planQueryRepository.findAllPlanByUserId(userId);
+	public PlanInfoResponse.GetPlanInfoResponse loadPlanInfo(Long userId) {
+		List<PlanInfoResponse.GetGetPlan> planInfos = planQueryRepository.findAllPlanByUserId(userId);
 
-		return (int)planList
+		int totalAchieve = (int)planInfos
 			.stream()
 			.mapToInt(PlanInfoResponse.GetGetPlan::getAchieveRate)
 			.average()
 			.orElse(0);
+
+		return new PlanInfoResponse.GetPlanInfoResponse(totalAchieve, planInfos);
 	}
 }

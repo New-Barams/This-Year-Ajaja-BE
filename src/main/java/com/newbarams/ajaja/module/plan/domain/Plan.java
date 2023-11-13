@@ -47,6 +47,10 @@ public class Plan extends BaseEntity<Plan> {
 	@NotNull
 	private Long userId;
 
+	@Getter
+	@NotNull
+	private int achieveRate;
+
 	@Embedded
 	private Content content;
 	private RemindInfo info;
@@ -77,6 +81,7 @@ public class Plan extends BaseEntity<Plan> {
 		this.status = new PlanStatus(isPublic);
 		this.messages = messages;
 		this.tags = tags;
+		this.achieveRate = 0;
 		this.validateSelf();
 	}
 
@@ -127,5 +132,9 @@ public class Plan extends BaseEntity<Plan> {
 		this.tags = tags;
 		this.messages = messages;
 		this.validateSelf();
+	}
+
+	public void updateAchieve(int achieveRate) {
+		this.achieveRate = achieveRate;
 	}
 }

@@ -3,6 +3,8 @@ package com.newbarams.ajaja.module.feedback.domain;
 import org.hibernate.annotations.Where;
 
 import com.newbarams.ajaja.global.common.BaseEntity;
+import com.newbarams.ajaja.global.common.error.AjajaErrorCode;
+import com.newbarams.ajaja.global.common.exeption.AjajaException;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -32,6 +34,7 @@ public class Feedback extends BaseEntity<Feedback> {
 	@NotNull
 	private Long userId;
 
+	@Getter
 	@NotNull
 	private Long planId;
 
@@ -55,11 +58,11 @@ public class Feedback extends BaseEntity<Feedback> {
 		this.validateSelf();
 	}
 
-	public void checkDeadline() throws IllegalAccessException {
+	public void checkDeadline() {
 		boolean isInvalidFeedback = validDate.isExpired();
 
 		if (isInvalidFeedback) {
-			throw new IllegalAccessException("평가 기간이 지났습니다.");
+			throw new AjajaException(AjajaErrorCode.EXPIRED_FEEDBACK);
 		}
 	}
 
