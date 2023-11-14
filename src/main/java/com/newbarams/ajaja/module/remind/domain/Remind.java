@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Where(clause = "is_deleted = false")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Remind extends BaseEntity<Remind> {
-	enum Type {
+	public enum Type {
 		PLAN,
 		AJAJA
 	}

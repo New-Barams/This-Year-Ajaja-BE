@@ -23,7 +23,9 @@ public class RemindQueryRepository {
 	public List<Remind> findRemindByHour(int remindHour) {
 		return queryFactory
 			.selectFrom(remind)
-			.where(remind.period.start.hour().eq(remindHour).and(isCurrentYear()))
+			.where(remind.period.start.hour().eq(remindHour)
+				.and(isCurrentYear())
+				.and(remind.type.eq(Remind.Type.PLAN)))
 			.fetch();
 	}
 
