@@ -58,4 +58,8 @@ public class User extends BaseEntity<User> {
 	public String getEmail() {
 		return email.getEmail();
 	}
+
+	public void delete() {
+		this.isDeleted = true;
+	}
 }
