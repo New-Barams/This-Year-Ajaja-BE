@@ -9,7 +9,6 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
@@ -114,7 +113,7 @@ public class PlanQueryRepository {
 	private List<PlanResponse.GetAll> tupleToResponse(List<Tuple> tuples) {
 		return tuples.stream()
 			.map((tuple) -> PlanMapper.toGetAllResponse(tuple.get(plan), tuple.get(user.nickname).getNickname()))
-			.collect(Collectors.toList());
+			.toList();
 	}
 
 	public List<PlanInfoResponse.GetGetPlan> findAllPlanByUserId(Long userId) {
