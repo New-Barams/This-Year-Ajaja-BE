@@ -24,7 +24,7 @@ public class GetPlanService {
 	private final PlanQueryRepository planQueryRepository;
 
 	public PlanResponse.GetOne loadById(Long id) {
-		return planQueryRepository.findPlanById(id);
+		return planQueryRepository.findById(id);
 	}
 
 	public Plan loadPlanOrElseThrow(Long id) {
@@ -33,6 +33,6 @@ public class GetPlanService {
 	}
 
 	public List<PlanResponse.GetAll> loadAllPlans(PlanRequest.GetAll request) {
-		return planQueryRepository.findAllPlans(request);
+		return planQueryRepository.findAllByCursorAndSorting(request);
 	}
 }

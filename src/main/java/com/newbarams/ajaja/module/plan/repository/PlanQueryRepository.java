@@ -36,7 +36,7 @@ public class PlanQueryRepository {
 
 	private final JPAQueryFactory queryFactory;
 
-	public PlanResponse.GetOne findPlanById(Long id) {
+	public PlanResponse.GetOne findById(Long id) {
 		List<Tuple> tuples = queryFactory.select(plan, user.nickname)
 			.from(plan, user)
 			.where(plan.userId.eq(user.id).and(plan.id.eq(id)))
@@ -59,12 +59,12 @@ public class PlanQueryRepository {
 		return PlanMapper.toResponse(planFromTuple, nickname);
 	}
 
-	public List<PlanResponse.GetAll> findAllPlans(PlanRequest.GetAll conditions) {
+	public List<PlanResponse.GetAll> findAllByCursorAndSorting(PlanRequest.GetAll conditions) {
 		List<Tuple> tuples = queryFactory.select(plan, user.nickname)
 			.from(plan, user)
 
 			.where(plan.userId.eq(user.id),
-				yearEquals(conditions.isNewYear()),
+				isEqualsYear(conditions.isNewYear()),
 				cursorCreatedAtAndId(conditions.cursorCreatedAt(), conditions.cursorId()))
 
 			.orderBy(sortBy(conditions.sortCondition()))
@@ -74,7 +74,7 @@ public class PlanQueryRepository {
 		return tupleToResponse(tuples);
 	}
 
-	private BooleanExpression yearEquals(boolean isNewYear) {
+	private BooleanExpression isEqualsYear(boolean isNewYear) {
 		int currentYear = Instant.now()
 			.atZone(ZoneId.systemDefault())
 			.getYear();
