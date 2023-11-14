@@ -23,16 +23,28 @@ public class RemindQueryRepository {
 	public List<Remind> findRemindByHour(int remindHour) {
 		return queryFactory
 			.selectFrom(remind)
-			.where(remind.period.start.hour().eq(remindHour)
+			.where(remind.type.eq(Remind.Type.PLAN)
+				.and(remind.period.start.hour().eq(remindHour))
 				.and(isCurrentYear())
-				.and(remind.type.eq(Remind.Type.PLAN)))
+				.and(isCurrentMonth())
+				.and(isCurrentDate()))
 			.fetch();
 	}
 
 	private BooleanExpression isCurrentYear() {
-		Instant instant = Instant.now();
-		ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault());
+		return remind.createdAt.year().eq(getInstantTime().getYear());
+	}
 
-		return remind.createdAt.year().eq(zonedDateTime.getYear());
+	private BooleanExpression isCurrentMonth() {
+		return remind.createdAt.month().eq(getInstantTime().getMonthValue());
+	}
+
+	private BooleanExpression isCurrentDate() {
+		return remind.createdAt.dayOfMonth().eq(getInstantTime().getDayOfMonth());
+	}
+
+	private ZonedDateTime getInstantTime() {
+		Instant instant = Instant.now();
+		return instant.atZone(ZoneId.systemDefault());
 	}
 }
