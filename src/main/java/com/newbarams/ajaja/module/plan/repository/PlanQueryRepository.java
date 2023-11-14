@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
-import com.newbarams.ajaja.global.common.exception.AjajaException;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
@@ -109,7 +108,7 @@ public class PlanQueryRepository {
 			return new OrderSpecifier(Order.DESC, plan.ajajas.size());
 		}
 
-		throw new AjajaException(BEAN_VALIDATE_FAIL_EXCEPTION);
+		return null;
 	}
 
 	private List<PlanResponse.GetAll> tupleToResponse(List<Tuple> tuples) {
