@@ -8,7 +8,7 @@ public class PlanResponse {
 	public record GetOne(
 		Long id,
 		Long userId,
-		String username,
+		String nickname,
 		String title,
 		String description,
 		boolean isPublic,
@@ -21,7 +21,7 @@ public class PlanResponse {
 	public record GetAll(
 		Long id,
 		Long userId,
-		String username,
+		String nickname,
 		String title,
 		int ajajas,
 		List<String> tags,

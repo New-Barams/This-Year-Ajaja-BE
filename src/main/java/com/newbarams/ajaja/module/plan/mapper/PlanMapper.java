@@ -70,11 +70,11 @@ public class PlanMapper {
 		);
 	}
 
-	public static PlanResponse.GetOne toResponse(Plan plan, String username) {
+	public static PlanResponse.GetOne toResponse(Plan plan, String nickname) {
 		return new PlanResponse.GetOne(
 			plan.getId(),
 			plan.getUserId(),
-			username,
+			nickname,
 			plan.getContent().getTitle(),
 			plan.getContent().getDescription(),
 			plan.getStatus().isPublic(),
@@ -98,11 +98,11 @@ public class PlanMapper {
 		return tagNames;
 	}
 
-	public static PlanResponse.GetAll toGetAllResponse(Plan plan, String username) {
+	public static PlanResponse.GetAll toGetAllResponse(Plan plan, String nickname) {
 		return new PlanResponse.GetAll(
 			plan.getId(),
 			plan.getUserId(),
-			username,
+			nickname,
 			plan.getContent().getTitle(),
 			plan.getAjajas().size(),
 			toTagResponse(plan.getTags()),
