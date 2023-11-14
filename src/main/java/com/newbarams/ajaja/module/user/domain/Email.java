@@ -6,8 +6,10 @@ import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Email extends SelfValidating<Email> {
@@ -17,19 +19,28 @@ public class Email extends SelfValidating<Email> {
 	@Pattern(regexp = EMAIL_REGEXP)
 	private String email;
 
+	@NotBlank
+	@Pattern(regexp = EMAIL_REGEXP)
+	private String remindEmail;
+
 	private boolean isVerified;
 
-	public Email(String email) {
+	private Email(String email, String remindEmail, boolean isVerified) {
 		this.email = email;
-		this.isVerified = false;
+		this.remindEmail = remindEmail;
+		this.isVerified = isVerified;
 		this.validateSelf();
 	}
 
-	void verified() {
-		this.isVerified = true;
+	public Email(String email) {
+		this(email, email, false);
 	}
 
-	boolean isVerified() {
-		return isVerified;
+	public Email newRemind(String remindEmail) {
+		return new Email(email, remindEmail, isVerified);
+	}
+
+	public Email verified() {
+		return new Email(email, remindEmail, true);
 	}
 }

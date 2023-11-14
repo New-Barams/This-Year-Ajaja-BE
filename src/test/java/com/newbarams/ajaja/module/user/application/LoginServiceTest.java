@@ -12,7 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import com.newbarams.ajaja.common.MockTestSupport;
-import com.newbarams.ajaja.global.security.jwt.JwtGenerator;
+import com.newbarams.ajaja.global.security.jwt.util.JwtGenerator;
 import com.newbarams.ajaja.module.user.auth.model.AccessToken;
 import com.newbarams.ajaja.module.user.auth.model.KakaoAccount;
 import com.newbarams.ajaja.module.user.auth.model.KakaoResponse;

@@ -7,6 +7,8 @@ import static com.newbarams.ajaja.module.user.domain.QUser.*;
 
 import java.time.Instant;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
+
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -15,12 +17,14 @@ import org.springframework.stereotype.Repository;
 
 import com.newbarams.ajaja.global.common.exeption.AjajaException;
 import com.newbarams.ajaja.module.plan.domain.Plan;
+import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 import com.newbarams.ajaja.module.plan.mapper.PlanMapper;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -114,5 +118,23 @@ public class PlanQueryRepository {
 		return tuples.stream()
 			.map((tuple) -> PlanMapper.toGetAllResponse(tuple.get(plan), tuple.get(user.nickname).getNickname()))
 			.collect(Collectors.toList());
+  }
+
+	public List<PlanInfoResponse.GetGetPlan> findAllPlanByUserId(Long userId) {
+		return queryFactory.select(Projections.bean(PlanInfoResponse.GetGetPlan.class,
+				plan.content.title,
+				plan.status.canRemind,
+				plan.achieveRate))
+			.from(plan)
+			.where(plan.userId.eq(userId)
+				.and(isCurrentYear()))
+			.fetch();
+	}
+
+	private BooleanExpression isCurrentYear() {
+		Instant instant = Instant.now();
+		ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault());
+
+		return plan.createdAt.year().eq(zonedDateTime.getYear());
 	}
 }

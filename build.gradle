@@ -26,8 +26,8 @@ dependencies {
     // Test
     testImplementation 'org.springframework.security:spring-security-test'
 
-    // AWS
-    implementation 'com.amazonaws:aws-java-sdk-ses:1.12.580'
+    // AWS - spring jcl logging conflict
+    implementation 'com.amazonaws:aws-java-sdk-ses:1.12.580' exclude group: 'commons-logging', module: 'commons-logging'
 
     // Openfeign
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.0.4'
@@ -63,10 +63,10 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.3'
 
     // Fixture-Monkey
-    testImplementation 'com.navercorp.fixturemonkey:fixture-monkey-starter:0.6.8'
+    testImplementation 'com.navercorp.fixturemonkey:fixture-monkey-starter:1.0.0'
 
     // Embedded Redis
-    testImplementation 'it.ozimov:embedded-redis:0.7.3'
+    testImplementation 'it.ozimov:embedded-redis:0.7.2'
 }
 
 configurations {

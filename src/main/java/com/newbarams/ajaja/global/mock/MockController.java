@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.newbarams.ajaja.global.common.AjajaResponse;
 import com.newbarams.ajaja.module.feedback.domain.dto.GetAchieve;
 import com.newbarams.ajaja.module.feedback.domain.dto.UpdateFeedback;
+import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 import com.newbarams.ajaja.module.remind.domain.dto.GetReminds;
 import com.newbarams.ajaja.module.remind.domain.dto.ModifyAlarm;
@@ -201,7 +202,13 @@ class MockController {
 	@Operation(summary = "[테스트] 계획 생성 API")
 	@PostMapping("/plans")
 	@ResponseStatus(CREATED)
-	public void createPlan() {
+	public AjajaResponse<PlanResponse.Create> createPlan(@RequestBody PlanRequest.Create request,
+		@RequestHeader(name = "Date") String date) {
+		List<String> tags = List.of("tag1", "tag2", "tag3");
+		PlanResponse.Create response = new PlanResponse.Create(1L, 1L, "title", "des",
+			true, true, true, 0, tags, Instant.now());
+
+		return new AjajaResponse<>(true, response);
 	}
 
 	@Operation(summary = "[테스트] 계획 전체 조회 API")
@@ -235,24 +242,55 @@ class MockController {
 	@Operation(summary = "[테스트] 계획 수정 API")
 	@PutMapping("/plans/{id}")
 	@ResponseStatus(OK)
-	public void updatePlan(@PathVariable Long id) {
+	public AjajaResponse<PlanResponse.Create> updatePlan(@PathVariable Long id,
+		@RequestBody PlanRequest.Update request, @RequestHeader(name = "Date") String date) {
+		List<String> tags = List.of("tag1", "tag2", "tag3");
+		PlanResponse.Create updated = new PlanResponse.Create(1L, 1L, "title", "des",
+			true, true, true, 0, tags, Instant.now());
+
+		return new AjajaResponse<>(true, updated);
 	}
 
 	@Operation(summary = "[테스트] 계획 삭제 API")
 	@DeleteMapping("/plans/{id}")
 	@ResponseStatus(OK)
-	public void deletePlan(@PathVariable Long id) {
+	public AjajaResponse deletePlan(@PathVariable Long id, @RequestHeader(name = "Date") String date) {
+		return new AjajaResponse<>(true, null);
 	}
 
-	@Operation(summary = "[테스트] 계획을 비공개로 수정")
-	@PutMapping("/plans/{id}/private")
-	@ResponseStatus(OK)
-	public void switchPlanToPrivate(@PathVariable Long id) {
-	}
-
-	@Operation(summary = "[테스트] 계획을 공개로 수정")
+	@Operation(summary = "[테스트] 계획 공개 여부 변경 API")
 	@PutMapping("/plans/{id}/public")
 	@ResponseStatus(OK)
-	public void switchPlanToPublic(@PathVariable Long id) {
+	public AjajaResponse updatePlanPublicStatus(@PathVariable Long id) {
+		return new AjajaResponse(true, null);
+	}
+
+	@Operation(summary = "[테스트] 계획 리마인드 알림 여부 변경 API")
+	@PutMapping("/plans/{id}/remindable")
+	@ResponseStatus(OK)
+	public AjajaResponse updatePlanRemindStatus(@PathVariable Long id) {
+		return new AjajaResponse(true, null);
+	}
+
+	@Operation(summary = "[테스트] 응원메시지 알림 여부 변경 API")
+	@PutMapping("/plans/{id}/ajaja")
+	@ResponseStatus(OK)
+	public AjajaResponse updatePlanAjajaStatus(@PathVariable Long id) {
+		return new AjajaResponse(true, null);
+	}
+
+	@Operation(summary = "[테스트] 메인 페이지 API")
+	@GetMapping("/plans/main/{userId}")
+	@ResponseStatus(OK)
+	public AjajaResponse<MockPlanInfoResponse.GetPlanInfoResponse> getPlanInfo(@PathVariable Long userId) {
+		List<MockPlanInfoResponse.GetPlan> getPlan = List.of(
+			new MockPlanInfoResponse.GetPlan("매일 운동하기", true, 90, 1),
+			new MockPlanInfoResponse.GetPlan("매일 코딩하기", true, 90, 2),
+			new MockPlanInfoResponse.GetPlan("매일 아침 9시에 일어나기", false, 20, 3)
+		);
+
+		MockPlanInfoResponse.GetPlanInfoResponse getPlanInfo = new MockPlanInfoResponse.GetPlanInfoResponse(50,
+			getPlan);
+		return new AjajaResponse<>(true, getPlanInfo);
 	}
 }

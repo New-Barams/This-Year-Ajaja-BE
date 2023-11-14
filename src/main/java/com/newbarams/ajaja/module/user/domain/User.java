@@ -3,6 +3,8 @@ package com.newbarams.ajaja.module.user.domain;
 import org.hibernate.annotations.Where;
 
 import com.newbarams.ajaja.global.common.BaseEntity;
+import com.newbarams.ajaja.global.common.error.ErrorCode;
+import com.newbarams.ajaja.global.common.exception.AjajaException;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -32,25 +34,32 @@ public class User extends BaseEntity<User> {
 
 	private boolean isDeleted;
 
-	public User(Nickname nickname, Email email) {
-		this.nickname = nickname;
-		this.email = email;
+	public User(String nickname, String email) {
+		this.nickname = new Nickname(nickname);
+		this.email = new Email(email);
 		this.isDeleted = false;
 	}
 
-	public User(String nickname, String email) {
-		this(new Nickname(nickname), new Email(email));
+	public void verifyEmail() {
+		validateAlreadyVerified();
+		this.email = email.verified();
 	}
 
-	public void verifyEmail() {
+	private void validateAlreadyVerified() {
 		if (isEmailVerified()) {
-			throw new IllegalStateException("already verified!");
+			throw new AjajaException(ErrorCode.ALREADY_EMAIL_VERIFIED);
 		}
-
-		email.verified();
 	}
 
 	public boolean isEmailVerified() {
 		return email.isVerified();
+	}
+
+	public String getEmail() {
+		return email.getEmail();
+	}
+
+	public void delete() {
+		this.isDeleted = true;
 	}
 }
