@@ -1,6 +1,9 @@
 package com.newbarams.ajaja.module.plan.dto;
 
+import java.time.Instant;
 import java.util.List;
+
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 public class PlanRequest {
 
@@ -37,6 +40,21 @@ public class PlanRequest {
 		List<String> tags,
 
 		List<String> messages
+	) {
+	}
+
+	public record GetAll(
+		@DefaultValue("createdAt")
+		String sortCondition,
+
+		@DefaultValue("true")
+		boolean isNewYear,
+
+		Instant cursorCreatedAt,
+		Long cursorId,
+
+		@DefaultValue("30")
+		int pageSize
 	) {
 	}
 }

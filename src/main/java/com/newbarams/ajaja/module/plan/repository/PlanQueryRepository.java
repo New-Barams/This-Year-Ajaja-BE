@@ -1,18 +1,27 @@
 package com.newbarams.ajaja.module.plan.repository;
 
+import static com.newbarams.ajaja.global.common.error.AjajaErrorCode.*;
 import static com.newbarams.ajaja.module.plan.domain.QPlan.*;
 import static com.newbarams.ajaja.module.plan.exception.ErrorMessage.*;
 import static com.newbarams.ajaja.module.user.domain.QUser.*;
 
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
+import com.newbarams.ajaja.global.common.exeption.AjajaException;
 import com.newbarams.ajaja.module.plan.domain.Plan;
+import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 import com.newbarams.ajaja.module.plan.mapper.PlanMapper;
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
@@ -20,6 +29,9 @@ import lombok.RequiredArgsConstructor;
 @Repository
 @RequiredArgsConstructor
 public class PlanQueryRepository {
+	private static final String AJAJA = "Ajaja";
+	private static final String CREATED_AT = "CreatedAt";
+
 	private final JPAQueryFactory queryFactory;
 
 	public PlanResponse.GetOne findPlanById(Long id) {
@@ -28,19 +40,79 @@ public class PlanQueryRepository {
 			.where(plan.userId.eq(user.id).and(plan.id.eq(id)))
 			.fetch();
 
-		return validateAndGetResponse(tuples);
+		validateTuple(tuples);
+		return tupleToResponse(tuples.get(0));
 	}
 
-	private PlanResponse.GetOne validateAndGetResponse(List<Tuple> tuples) {
+	private void validateTuple(List<Tuple> tuples) {
 		if (tuples.isEmpty()) {
 			throw new NoSuchElementException(NOT_FOUND_PLAN.getMessage());
 		}
+	}
 
-		Tuple tuple = tuples.get(0);
-
+	private PlanResponse.GetOne tupleToResponse(Tuple tuple) {
 		Plan planFromTuple = tuple.get(plan);
 		String nickname = tuple.get(user.nickname).getNickname();
 
 		return PlanMapper.toResponse(planFromTuple, nickname);
+	}
+
+	public List<PlanResponse.GetAll> findAllPlans(PlanRequest.GetAll conditions) {
+		List<Tuple> tuples = queryFactory.select(plan, user.nickname)
+			.from(plan, user)
+
+			.where(plan.userId.eq(user.id),
+				yearEquals(conditions.isNewYear()),
+				cursorCreatedAtAndId(conditions.cursorCreatedAt(), conditions.cursorId()))
+
+			.orderBy(sortBy(conditions.sortCondition()))
+			.limit(conditions.pageSize())
+			.fetch();
+
+		return tupleToResponse(tuples);
+	}
+
+	private BooleanExpression yearEquals(boolean isNewYear) {
+		int currentYear = Instant.now()
+			.atZone(ZoneId.systemDefault())
+			.getYear();
+
+		if (isNewYear) {
+			return plan.createdAt.year().eq(currentYear);
+		}
+
+		return plan.createdAt.year().eq(currentYear).not();
+	}
+
+	private BooleanExpression cursorCreatedAtAndId(Instant cursorCreatedAt, Long cursorId) {
+		if (cursorCreatedAt == null || cursorId == null) {
+			return null;
+		}
+
+		return plan.createdAt.eq(cursorCreatedAt)
+			.and(plan.id.lt(cursorId))
+			.or(plan.createdAt.lt(cursorCreatedAt));
+	}
+
+	private OrderSpecifier<?> sortBy(String sortCondition) {
+		if (sortCondition == null) {
+			return null;
+		}
+
+		if (sortCondition.equalsIgnoreCase(CREATED_AT)) {
+			return new OrderSpecifier(Order.DESC, plan.createdAt);
+		}
+
+		if (sortCondition.equalsIgnoreCase(AJAJA)) {
+			return new OrderSpecifier(Order.DESC, plan.ajajas.size());
+		}
+
+		throw new AjajaException(BEAN_VALIDATE_FAIL_EXCEPTION);
+	}
+
+	private List<PlanResponse.GetAll> tupleToResponse(List<Tuple> tuples) {
+		return tuples.stream()
+			.map((tuple) -> PlanMapper.toGetAllResponse(tuple.get(plan), tuple.get(user.nickname).getNickname()))
+			.collect(Collectors.toList());
 	}
 }

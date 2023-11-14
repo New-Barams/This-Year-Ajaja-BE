@@ -97,4 +97,16 @@ public class PlanMapper {
 
 		return tagNames;
 	}
+
+	public static PlanResponse.GetAll toGetAllResponse(Plan plan, String username) {
+		return new PlanResponse.GetAll(
+			plan.getId(),
+			plan.getUserId(),
+			username,
+			plan.getContent().getTitle(),
+			plan.getAjajas().size(),
+			toTagResponse(plan.getTags()),
+			plan.getCreatedAt()
+		);
+	}
 }

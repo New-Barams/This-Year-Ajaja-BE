@@ -2,6 +2,8 @@ package com.newbarams.ajaja.module.plan.presentation;
 
 import static org.springframework.http.HttpStatus.*;
 
+import java.util.List;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -110,5 +112,14 @@ public class PlanController {
 		PlanResponse.Create updated = updatePlanService.update(id, request, date);
 
 		return new AjajaResponse<>(true, updated);
+	}
+
+	@Operation(summary = "계획 전체 조회 API")
+	@GetMapping
+	@ResponseStatus(OK)
+	public AjajaResponse<List<PlanResponse.GetAll>> getAllPlans(@RequestBody PlanRequest.GetAll request) {
+		List<PlanResponse.GetAll> responses = getPlanService.loadAllPlans(request);
+
+		return new AjajaResponse<>(true, responses);
 	}
 }
