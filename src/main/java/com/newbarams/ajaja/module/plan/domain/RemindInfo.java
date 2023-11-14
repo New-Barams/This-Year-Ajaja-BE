@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RemindInfo extends SelfValidating<RemindInfo> {
-	enum RemindTime {
+	public enum RemindTime {
 		MORNING,
 		AFTERNOON,
 		EVENING
