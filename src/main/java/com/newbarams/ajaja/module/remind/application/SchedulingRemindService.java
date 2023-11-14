@@ -5,8 +5,12 @@ import java.util.List;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import com.newbarams.ajaja.global.common.error.ErrorCode;
+import com.newbarams.ajaja.global.common.exception.AjajaException;
 import com.newbarams.ajaja.module.remind.domain.Remind;
 import com.newbarams.ajaja.module.remind.repository.RemindQueryRepository;
+import com.newbarams.ajaja.module.user.domain.User;
+import com.newbarams.ajaja.module.user.domain.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 public class SchedulingRemindService {
 	private final RemindQueryRepository remindQueryRepository;
 	private final SendEmailRemindService sendEmailRemindService;
+	private final UserRepository userRepository;
 
 	@Scheduled(cron = "0 0 9 * * *")
 	public void scheduleMorningRemind() {
@@ -49,7 +54,10 @@ public class SchedulingRemindService {
 
 	private void sendEmail(List<Remind> reminds) {
 		for (Remind remind : reminds) {
-			sendEmailRemindService.send("yamsang2002@naver.com", remind.getInfo().getContent(), remind.getPlanId());
+			User remindUser = userRepository.findById(remind.getUserId()).orElseThrow(
+				() -> new AjajaException(ErrorCode.USER_NOT_FOUND));
+
+			sendEmailRemindService.send(remindUser.getEmail(), remind.getInfo().getContent(), remind.getPlanId());
 		}
 	}
 }
