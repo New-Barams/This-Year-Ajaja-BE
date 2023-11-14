@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.newbarams.ajaja.global.common.AjajaResponse;
 import com.newbarams.ajaja.module.feedback.domain.dto.GetAchieve;
 import com.newbarams.ajaja.module.feedback.domain.dto.UpdateFeedback;
-import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 import com.newbarams.ajaja.module.remind.domain.dto.GetReminds;
@@ -283,14 +282,15 @@ class MockController {
 	@Operation(summary = "[테스트] 메인 페이지 API")
 	@GetMapping("/plans/main/{userId}")
 	@ResponseStatus(OK)
-	public AjajaResponse<PlanInfoResponse.GetPlanInfoResponse> getPlanInfo(@PathVariable Long userId) {
-		List<PlanInfoResponse.GetGetPlan> getPlan = List.of(
-			new PlanInfoResponse.GetGetPlan("매일 운동하기", true, 90),
-			new PlanInfoResponse.GetGetPlan("매일 코딩하기", true, 90),
-			new PlanInfoResponse.GetGetPlan("매일 아침 9시에 일어나기", false, 20)
+	public AjajaResponse<MockPlanInfoResponse.GetPlanInfoResponse> getPlanInfo(@PathVariable Long userId) {
+		List<MockPlanInfoResponse.GetPlan> getPlan = List.of(
+			new MockPlanInfoResponse.GetPlan("매일 운동하기", true, 90, 1),
+			new MockPlanInfoResponse.GetPlan("매일 코딩하기", true, 90, 2),
+			new MockPlanInfoResponse.GetPlan("매일 아침 9시에 일어나기", false, 20, 3)
 		);
 
-		PlanInfoResponse.GetPlanInfoResponse getPlanInfo = new PlanInfoResponse.GetPlanInfoResponse(50, getPlan);
+		MockPlanInfoResponse.GetPlanInfoResponse getPlanInfo = new MockPlanInfoResponse.GetPlanInfoResponse(50,
+			getPlan);
 		return new AjajaResponse<>(true, getPlanInfo);
 	}
 }
