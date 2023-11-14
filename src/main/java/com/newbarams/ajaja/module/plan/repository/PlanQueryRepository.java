@@ -1,21 +1,19 @@
 package com.newbarams.ajaja.module.plan.repository;
 
-import static com.newbarams.ajaja.global.common.error.AjajaErrorCode.*;
+import static com.newbarams.ajaja.global.common.error.ErrorCode.*;
 import static com.newbarams.ajaja.module.plan.domain.QPlan.*;
-import static com.newbarams.ajaja.module.plan.exception.ErrorMessage.*;
 import static com.newbarams.ajaja.module.user.domain.QUser.*;
 
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
-import com.newbarams.ajaja.global.common.exeption.AjajaException;
+import com.newbarams.ajaja.global.common.exception.AjajaException;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
@@ -118,7 +116,7 @@ public class PlanQueryRepository {
 		return tuples.stream()
 			.map((tuple) -> PlanMapper.toGetAllResponse(tuple.get(plan), tuple.get(user.nickname).getNickname()))
 			.collect(Collectors.toList());
-  }
+	}
 
 	public List<PlanInfoResponse.GetGetPlan> findAllPlanByUserId(Long userId) {
 		return queryFactory.select(Projections.bean(PlanInfoResponse.GetGetPlan.class,
