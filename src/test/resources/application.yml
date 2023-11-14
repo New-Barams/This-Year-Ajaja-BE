@@ -25,6 +25,7 @@ jasypt:
 secret:
   jwt:
     key: thisisfortestthisisfortestthisisfortestthisisfortestthisisfortestthisisfortestthisisfortest
+    signature: thisisfortest
 
   kakao:
     client-id: thisisfortest

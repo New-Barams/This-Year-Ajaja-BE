@@ -15,9 +15,12 @@ class JwtSecretProvider {
 	private final SecretKey secretKey;
 	private final String signature;
 
-	public JwtSecretProvider(@Value("${secret.jwt.key}") String key) {
+	public JwtSecretProvider(
+		@Value("${secret.jwt.key}") String key,
+		@Value("${secret.jwt.signature}") String signature
+	) {
 		byte[] keyBytes = Decoders.BASE64.decode(key);
 		this.secretKey = Keys.hmacShaKeyFor(keyBytes);
-		this.signature = "ajaja";
+		this.signature = signature;
 	}
 }
