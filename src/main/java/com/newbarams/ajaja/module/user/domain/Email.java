@@ -19,15 +19,28 @@ public class Email extends SelfValidating<Email> {
 	@Pattern(regexp = EMAIL_REGEXP)
 	private String email;
 
+	@NotBlank
+	@Pattern(regexp = EMAIL_REGEXP)
+	private String remindEmail;
+
 	private boolean isVerified;
 
-	public Email(String email) {
+	private Email(String email, String remindEmail, boolean isVerified) {
 		this.email = email;
-		this.isVerified = false;
+		this.remindEmail = remindEmail;
+		this.isVerified = isVerified;
 		this.validateSelf();
 	}
 
-	void verified() {
-		this.isVerified = true;
+	public Email(String email) {
+		this(email, email, false);
+	}
+
+	public Email newRemind(String remindEmail) {
+		return new Email(email, remindEmail, isVerified);
+	}
+
+	public Email verified() {
+		return new Email(email, remindEmail, true);
 	}
 }

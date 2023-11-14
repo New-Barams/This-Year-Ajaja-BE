@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import net.jqwik.api.Arbitraries;
 
 import com.navercorp.fixturemonkey.FixtureMonkey;
-import com.navercorp.fixturemonkey.api.exception.FilterMissException;
 import com.navercorp.fixturemonkey.api.introspector.FieldReflectionArbitraryIntrospector;
 import com.navercorp.fixturemonkey.jakarta.validation.plugin.JakartaValidationPlugin;
 
@@ -20,7 +19,8 @@ class MessageTest {
 
 	@Test
 	void createMessage_Success() {
-		fixtureMonkey.giveMeOne(Message.class);
+		assertThatNoException()
+			.isThrownBy(() -> fixtureMonkey.giveMeOne(Message.class));
 	}
 
 	@Test
@@ -29,7 +29,7 @@ class MessageTest {
 		assertThatThrownBy(() -> fixtureMonkey.giveMeBuilder(Message.class)
 			.set("content", Arbitraries.strings().ofMinLength(256))
 			.sample())
-			.isInstanceOf(FilterMissException.class);
+			.isInstanceOf(IllegalArgumentException.class);
 	}
 
 	@Test
@@ -38,7 +38,7 @@ class MessageTest {
 		assertThatThrownBy(() -> fixtureMonkey.giveMeBuilder(Message.class)
 			.set("index", Arbitraries.integers().lessOrEqual(-1))
 			.sample())
-			.isInstanceOf(FilterMissException.class);
+			.isInstanceOf(IllegalArgumentException.class);
 	}
 
 	@Test
@@ -47,6 +47,6 @@ class MessageTest {
 		assertThatThrownBy(() -> fixtureMonkey.giveMeBuilder(Message.class)
 			.set("content", " ")
 			.sample())
-			.isInstanceOf(FilterMissException.class);
+			.isInstanceOf(IllegalArgumentException.class);
 	}
 }

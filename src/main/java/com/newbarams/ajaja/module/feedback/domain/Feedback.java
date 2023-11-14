@@ -1,10 +1,11 @@
 package com.newbarams.ajaja.module.feedback.domain;
 
+import static com.newbarams.ajaja.global.common.error.ErrorCode.*;
+
 import org.hibernate.annotations.Where;
 
 import com.newbarams.ajaja.global.common.BaseEntity;
-import com.newbarams.ajaja.global.common.error.AjajaErrorCode;
-import com.newbarams.ajaja.global.common.exeption.AjajaException;
+import com.newbarams.ajaja.global.common.exception.AjajaException;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -62,7 +63,7 @@ public class Feedback extends BaseEntity<Feedback> {
 		boolean isInvalidFeedback = validDate.isExpired();
 
 		if (isInvalidFeedback) {
-			throw new AjajaException(AjajaErrorCode.EXPIRED_FEEDBACK);
+			throw new AjajaException(EXPIRED_FEEDBACK);
 		}
 	}
 
