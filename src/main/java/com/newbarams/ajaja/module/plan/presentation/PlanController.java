@@ -2,8 +2,11 @@ package com.newbarams.ajaja.module.plan.presentation;
 
 import static org.springframework.http.HttpStatus.*;
 
+import java.util.List;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -125,5 +128,14 @@ public class PlanController {
 		PlanInfoResponse.GetPlanInfoResponse getPlanInfo = getPlanInfoService.loadPlanInfo(userId);
 
 		return new AjajaResponse<>(true, getPlanInfo);
+	}
+
+	@Operation(summary = "계획 전체 조회 API")
+	@GetMapping
+	@ResponseStatus(OK)
+	public AjajaResponse<List<PlanResponse.GetAll>> getAllPlans(@ModelAttribute PlanRequest.GetAll request) {
+		List<PlanResponse.GetAll> responses = getPlanService.loadAllPlans(request);
+
+		return new AjajaResponse<>(true, responses);
 	}
 }
