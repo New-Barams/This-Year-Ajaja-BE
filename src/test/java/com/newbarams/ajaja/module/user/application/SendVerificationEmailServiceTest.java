@@ -19,6 +19,9 @@ class SendVerificationEmailServiceTest {
 	@MockBean
 	private SendCertificationService sendCertificationService;
 
+	@MockBean
+	private UpdateRemindEmailService updateRemindEmailService;
+
 	@Autowired
 	private RedisTemplate<String, Object> redisTemplate;
 
@@ -30,9 +33,10 @@ class SendVerificationEmailServiceTest {
 		String email = "gmlwh124@Naver.com";
 
 		// when
-		sendVerificationEmailService.sendVerification(email);
+		sendVerificationEmailService.sendVerification(1L, email);
 
 		// then
+		then(updateRemindEmailService).should(times(1)).updateIfDifferent(any(), any());
 		then(sendCertificationService).should(times(1)).send(any(), any());
 
 		Object saved = redisTemplate.opsForValue().get(prefix + email);

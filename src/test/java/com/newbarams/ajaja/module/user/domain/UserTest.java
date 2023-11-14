@@ -29,7 +29,6 @@ class UserTest {
 
 		// when, then
 		assertThatNoException().isThrownBy(user::verifyEmail);
-		assertThat(user.isEmailVerified()).isTrue();
 	}
 
 	@Test
@@ -51,6 +50,6 @@ class UserTest {
 		User user = new User(nickname, email);
 
 		// when, then
-		assertThat(user.getEmail()).isEqualTo(email);
+		assertThat(user.defaultEmail()).isEqualTo(email);
 	}
 }

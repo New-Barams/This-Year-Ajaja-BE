@@ -16,9 +16,11 @@ public class SendVerificationEmailService {
 	private static final String KEY_PREFIX = "AJAJA ";
 
 	private final SendCertificationService sendCertificationService;
+	private final UpdateRemindEmailService updateRemindEmailService;
 	private final RedisTemplate<String, Object> redisTemplate;
 
-	public void sendVerification(String email) {
+	public void sendVerification(Long id, String email) {
+		updateRemindEmailService.updateIfDifferent(id, email);
 		String certification = RandomCertificationGenerator.generate();
 		sendCertificationService.send(email, certification);
 		saveVerificationOnCache(email, certification);

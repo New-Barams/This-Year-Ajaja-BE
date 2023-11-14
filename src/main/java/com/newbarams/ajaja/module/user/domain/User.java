@@ -1,5 +1,7 @@
 package com.newbarams.ajaja.module.user.domain;
 
+import java.util.Objects;
+
 import org.hibernate.annotations.Where;
 
 import com.newbarams.ajaja.global.common.BaseEntity;
@@ -41,21 +43,23 @@ public class User extends BaseEntity<User> {
 	}
 
 	public void verifyEmail() {
-		validateAlreadyVerified();
+		validateDoneVerification();
 		this.email = email.verified();
 	}
 
-	private void validateAlreadyVerified() {
-		if (isEmailVerified()) {
+	public void validateDoneVerification() {
+		if (email.isVerified()) {
 			throw new AjajaException(ErrorCode.ALREADY_EMAIL_VERIFIED);
 		}
 	}
 
-	public boolean isEmailVerified() {
-		return email.isVerified();
+	public void updateRemindEmailIfDifferent(String remindEmail) {
+		if (!Objects.equals(email.getRemindEmail(), remindEmail)) {
+			this.email = email.newRemind(remindEmail);
+		}
 	}
 
-	public String getEmail() {
+	public String defaultEmail() {
 		return email.getEmail();
 	}
 
