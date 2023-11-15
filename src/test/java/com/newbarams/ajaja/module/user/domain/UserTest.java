@@ -74,4 +74,29 @@ class UserTest extends MonkeySupport {
 		assertThat(user.defaultEmail()).isEqualTo(email);
 		assertThat(user.getRemindEmail()).isEqualTo(email);
 	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {"kakao", "email", "both"})
+	@DisplayName("지원하는 수신 타입이 입력되면 예외 없이 입력된다.")
+	void updateReceive_Success_WithSupportType(String type) {
+		// given
+		String email = "gmlwh124@naver.com";
+		User user = new User(nickname, email);
+
+		// when, then
+		assertThatNoException().isThrownBy(() -> user.updateReceive(type));
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {"gagao", "sms", "line", "none"})
+	@DisplayName("지원하지 않는 수신 타입이 입력되면 예외를 던진다.")
+	void updateReceive_Fail_ByNotSupportType(String type) {
+		// given
+		String email = "gmlwh124@naver.com";
+		User user = new User(nickname, email);
+
+		// when, then
+		assertThatThrownBy(() -> user.updateReceive(type))
+			.isInstanceOf(IllegalArgumentException.class);
+	}
 }
