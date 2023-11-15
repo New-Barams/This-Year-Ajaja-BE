@@ -26,7 +26,7 @@ public class Tag extends BaseEntity<Tag> {
 
 	@NotBlank
 	@Size(max = 10)
-	@Column(name = "tag_name")
+	@Column(name = "tag_name", unique = true)
 	private String name;
 
 	public Tag(String name) {
