@@ -12,9 +12,11 @@ import com.newbarams.ajaja.global.security.common.CustomUserDetailService;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.security.SecurityException;
 
 @Component
 public class JwtParser {
@@ -22,7 +24,7 @@ public class JwtParser {
 	private final CustomUserDetailService userDetailService;
 	private final io.jsonwebtoken.JwtParser parser;
 
-	public JwtParser(JwtSecretProvider jwtSecretProvider, CustomUserDetailService userDetailService) {
+	JwtParser(JwtSecretProvider jwtSecretProvider, CustomUserDetailService userDetailService) {
 		this.jwtSecretProvider = jwtSecretProvider;
 		this.userDetailService = userDetailService;
 		this.parser = Jwts.parser().verifyWith(jwtSecretProvider.getSecretKey()).build();
@@ -42,13 +44,40 @@ public class JwtParser {
 	private Claims parseClaim(String jwt) {
 		try {
 			return parser.parseSignedClaims(jwt).getPayload();
-		} catch (SecurityException | MalformedJwtException e) {
+		} catch (JwtException | IllegalArgumentException e) {
+			handleParseException(e);
+		}
+
+		return null; // never reach here
+	}
+
+	private void handleParseException(RuntimeException exception) {
+		handleBadSignature(exception);
+		handleExpiredToken(exception);
+		handleUnsupportedToken(exception);
+		handleEmptyClaim(exception);
+	}
+
+	private void handleBadSignature(RuntimeException exception) {
+		if (exception instanceof SecurityException || exception instanceof MalformedJwtException) {
 			throw new AjajaException(INVALID_JWT_SIGNATURE);
-		} catch (ExpiredJwtException e) {
+		}
+	}
+
+	private void handleExpiredToken(RuntimeException exception) {
+		if (exception instanceof ExpiredJwtException) {
 			throw new AjajaException(EXPIRED_JWT);
-		} catch (UnsupportedJwtException e) {
+		}
+	}
+
+	private void handleUnsupportedToken(RuntimeException exception) {
+		if (exception instanceof UnsupportedJwtException) {
 			throw new AjajaException(UNSUPPORTED_JWT);
-		} catch (IllegalArgumentException e) {
+		}
+	}
+
+	private void handleEmptyClaim(RuntimeException exception) {
+		if (exception instanceof IllegalArgumentException) {
 			throw new AjajaException(INVALID_JWT);
 		}
 	}

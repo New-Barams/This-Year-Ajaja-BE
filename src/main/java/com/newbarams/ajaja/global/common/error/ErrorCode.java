@@ -17,7 +17,7 @@ public enum ErrorCode {
 	EXPIRED_FEEDBACK(CONFLICT, "평가 기간이 지났습니다."),
 	INVALID_BEARER_FORMAT(BAD_REQUEST, "유효한 Bearer 토큰의 형식이 아닙니다."),
 	INVALID_JWT_SIGNATURE(BAD_REQUEST, "잘못된 서명입니다."),
-	INVALID_JWT(BAD_REQUEST, "잘못된 토큰입니다."),
+	INVALID_JWT(BAD_REQUEST, "비어있는 토큰입니다."),
 	EXPIRED_JWT(BAD_REQUEST, "만료된 토큰입니다."),
 	UNSUPPORTED_JWT(BAD_REQUEST, "지원하지 않는 토큰입니다."),
 	CERTIFICATION_NOT_MATCH(BAD_REQUEST, "인증 번호가 일치하지 않습니다."),
