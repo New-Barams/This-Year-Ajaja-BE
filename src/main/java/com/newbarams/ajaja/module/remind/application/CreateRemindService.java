@@ -45,7 +45,7 @@ public class CreateRemindService {
 
 	private int getRemindTime(String name) {
 		if (name.equals("MORNING")) {
-			return 15;
+			return 03;
 		} else if (name.equals("AFTERNOON")) {
 			return 15;
 		} else {
@@ -56,6 +56,6 @@ public class CreateRemindService {
 	private Instant parseInstant(int remindDate, int remindMonth, int remindTime) {
 		return Instant.parse(
 			"2024-" + String.format("%02d", remindMonth) + "-" + String.format("%02d", remindDate) + "T"
-				+ remindTime + ":00:00Z");
+				+ String.format("%02d", remindTime) + ":00:00Z");
 	}
 }
