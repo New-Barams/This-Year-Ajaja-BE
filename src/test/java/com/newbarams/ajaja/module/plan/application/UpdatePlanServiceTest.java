@@ -40,7 +40,6 @@ class UpdatePlanServiceTest {
 			.info(new RemindInfo(12, 3, 15, "MORNING"))
 			.isPublic(true)
 			.messages(List.of(new Message("content")))
-			.tags(null)
 			.build();
 
 		PlanRequest.Update request = new PlanRequest.Update("title", "des", 12, 1,
@@ -75,7 +74,6 @@ class UpdatePlanServiceTest {
 			.info(new RemindInfo(12, 3, 15, "MORNING"))
 			.isPublic(true)
 			.messages(List.of(new Message("content")))
-			.tags(null)
 			.build();
 
 		PlanRequest.Update request = new PlanRequest.Update("title", "des", 12, 1,
