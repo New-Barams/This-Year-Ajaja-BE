@@ -1,5 +1,6 @@
 package com.newbarams.ajaja.module.plan.domain;
 
+import static com.newbarams.ajaja.global.common.error.ErrorCode.*;
 import static com.newbarams.ajaja.module.plan.exception.ErrorMessage.*;
 
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.List;
 import org.hibernate.annotations.Where;
 
 import com.newbarams.ajaja.global.common.BaseEntity;
+import com.newbarams.ajaja.global.common.exception.AjajaException;
 import com.newbarams.ajaja.module.ajaja.Ajaja;
 
 import jakarta.persistence.CollectionTable;
@@ -75,8 +77,9 @@ public class Plan extends BaseEntity<Plan> {
 		this.validateSelf();
 	}
 
-	public void delete(String date) {
+	public void delete(Long userId, String date) {
 		validateDate(date);
+		validateUser(userId);
 		this.status.toDeleted();
 	}
 
@@ -89,19 +92,29 @@ public class Plan extends BaseEntity<Plan> {
 		}
 	}
 
-	public void updatePublicStatus() {
+	private void validateUser(Long userId) {
+		if (!this.userId.equals(userId)) {
+			throw new AjajaException(INVALID_USER_ACCESS);
+		}
+	}
+
+	public void updatePublicStatus(Long userId) {
+		validateUser(userId);
 		this.status.switchPublic();
 	}
 
-	public void updateRemindStatus() {
+	public void updateRemindStatus(Long userId) {
+		validateUser(userId);
 		this.status.switchRemind();
 	}
 
-	public void updateAjajaStatus() {
+	public void updateAjajaStatus(Long userId) {
+		validateUser(userId);
 		this.status.switchAjaja();
 	}
 
 	public void update(
+		Long userId,
 		String date,
 		String title,
 		String description,
@@ -115,6 +128,7 @@ public class Plan extends BaseEntity<Plan> {
 		List<Message> messages
 	) {
 		validateDate(date);
+		validateUser(userId);
 		this.content.update(title, description);
 		this.info.update(remindTotalPeriod, remindTerm, remindDate, remindTime);
 		this.status.update(isPublic, canRemind, canAjaja);

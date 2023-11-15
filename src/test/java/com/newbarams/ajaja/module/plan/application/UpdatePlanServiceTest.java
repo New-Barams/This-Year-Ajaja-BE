@@ -48,7 +48,7 @@ class UpdatePlanServiceTest {
 		Plan saved = planRepository.save(plan);
 
 		assertThatNoException().isThrownBy(
-			() -> updatePlanService.update(saved.getId(), request, "Thu JAN 09 2023")
+			() -> updatePlanService.update(saved.getId(), 1L, request, "Thu JAN 09 2023")
 		);
 	}
 
@@ -60,7 +60,7 @@ class UpdatePlanServiceTest {
 		PlanRequest.Update request = new PlanRequest.Update("title", "des", 12, 1,
 			15, "MORNING", true, true, true, null, List.of("message"));
 
-		assertThatThrownBy(() -> updatePlanService.update(planId, request, "Thu JAN 09 2023"))
+		assertThatThrownBy(() -> updatePlanService.update(planId, 1L, request, "Thu JAN 09 2023"))
 			.isInstanceOf(NoSuchElementException.class)
 			.hasMessage(NOT_FOUND_PLAN.getMessage());
 	}
@@ -81,7 +81,7 @@ class UpdatePlanServiceTest {
 
 		Plan saved = planRepository.save(plan);
 
-		assertThatThrownBy(() -> updatePlanService.update(saved.getId(), request, "Thu DEC 09 2023"))
+		assertThatThrownBy(() -> updatePlanService.update(saved.getId(), 1L, request, "Thu DEC 09 2023"))
 			.isInstanceOf(IllegalStateException.class)
 			.hasMessage(INVALID_UPDATABLE_DATE.getMessage());
 	}

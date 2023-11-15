@@ -35,7 +35,7 @@ class PlanTest {
 			.set("status", planStatus)
 			.sample();
 
-		plan.delete("Thu JAN 09 2023");
+		plan.delete(plan.getUserId(), "Thu JAN 09 2023");
 
 		assertThat(plan.getStatus().isDeleted()).isEqualTo(true);
 	}
@@ -49,7 +49,7 @@ class PlanTest {
 			.set("status", planStatus)
 			.sample();
 
-		assertThatThrownBy(() -> plan.delete("Thu NOV 09 2023"))
+		assertThatThrownBy(() -> plan.delete(plan.getUserId(), "Thu NOV 09 2023"))
 			.isInstanceOf(IllegalStateException.class)
 			.hasMessage(INVALID_UPDATABLE_DATE.getMessage());
 	}
@@ -60,7 +60,7 @@ class PlanTest {
 		Plan plan = fixtureMonkey.giveMeOne(Plan.class);
 		boolean isPublic = plan.getStatus().isPublic();
 
-		plan.updatePublicStatus();
+		plan.updatePublicStatus(plan.getUserId());
 		assertThat(plan.getStatus().isPublic()).isEqualTo(!isPublic);
 	}
 
@@ -70,7 +70,7 @@ class PlanTest {
 		Plan plan = fixtureMonkey.giveMeOne(Plan.class);
 		boolean canRemind = plan.getStatus().isCanRemind();
 
-		plan.updateRemindStatus();
+		plan.updateRemindStatus(plan.getUserId());
 		assertThat(plan.getStatus().isCanRemind()).isEqualTo(!canRemind);
 	}
 
@@ -80,7 +80,7 @@ class PlanTest {
 		Plan plan = fixtureMonkey.giveMeOne(Plan.class);
 		boolean canAjaja = plan.getStatus().isCanAjaja();
 
-		plan.updateAjajaStatus();
+		plan.updateAjajaStatus(plan.getUserId());
 		assertThat(plan.getStatus().isCanAjaja()).isEqualTo(!canAjaja);
 	}
 
@@ -92,7 +92,7 @@ class PlanTest {
 		List<Message> messages = fixtureMonkey.giveMe(Message.class, 3);
 
 		assertThatNoException().isThrownBy(() ->
-			plan.update("Thu JAN 09 2023", "title", "des", 12, 3, 1,
+			plan.update(plan.getUserId(), "Thu JAN 09 2023", "title", "des", 12, 3, 1,
 				"EVENING", true, true, true, messages)
 		);
 	}
@@ -104,7 +104,7 @@ class PlanTest {
 		List<Tag> tags = fixtureMonkey.giveMe(Tag.class, 3);
 		List<Message> messages = fixtureMonkey.giveMe(Message.class, 3);
 
-		assertThatThrownBy(() -> plan.update("Thu DEC 09 2023", "title", "des", 12, 3,
+		assertThatThrownBy(() -> plan.update(plan.getUserId(), "Thu DEC 09 2023", "title", "des", 12, 3,
 			1, "EVENING", true, true, true, messages))
 			.isInstanceOf(IllegalStateException.class)
 			.hasMessage(INVALID_UPDATABLE_DATE.getMessage());
@@ -117,7 +117,7 @@ class PlanTest {
 		List<Tag> tags = fixtureMonkey.giveMe(Tag.class, 3);
 		List<Message> messages = fixtureMonkey.giveMe(Message.class, 3);
 
-		plan.update("Thu JAN 09 2023", "title", "des", 12, 3, 1,
+		plan.update(plan.getUserId(), "Thu JAN 09 2023", "title", "des", 12, 3, 1,
 			"EVENING", true, false, true, messages);
 
 		assertThat(plan.getContent().getTitle()).isEqualTo("title");

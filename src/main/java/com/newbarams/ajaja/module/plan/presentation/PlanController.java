@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.newbarams.ajaja.global.common.AjajaResponse;
+import com.newbarams.ajaja.global.security.common.UserId;
 import com.newbarams.ajaja.module.plan.application.CreatePlanService;
 import com.newbarams.ajaja.module.plan.application.DeletePlanService;
 import com.newbarams.ajaja.module.plan.application.GetPlanAchieveService;
@@ -46,8 +47,8 @@ public class PlanController {
 	@Operation(summary = "계획 생성 API")
 	@PostMapping
 	@ResponseStatus(CREATED)
-	public AjajaResponse<PlanResponse.Create> createPlan(@RequestBody PlanRequest.Create request) {
-		PlanResponse.Create response = createPlanService.create(request);
+	public AjajaResponse<PlanResponse.Create> createPlan(@UserId Long userId, @RequestBody PlanRequest.Create request) {
+		PlanResponse.Create response = createPlanService.create(userId, request);
 
 		return new AjajaResponse<>(true, response);
 	}
@@ -64,8 +65,9 @@ public class PlanController {
 	@Operation(summary = "계획 삭제 API")
 	@DeleteMapping("/{id}")
 	@ResponseStatus(OK)
-	public AjajaResponse deletePlan(@PathVariable Long id, @RequestHeader(name = "Date") String date) {
-		deletePlanService.delete(id, date);
+	public AjajaResponse deletePlan(@PathVariable Long id, @UserId Long userId,
+		@RequestHeader(name = "Date") String date) {
+		deletePlanService.delete(id, userId, date);
 
 		return new AjajaResponse<>(true, null);
 	}
@@ -84,8 +86,8 @@ public class PlanController {
 	@Operation(summary = "계획 공개 여부 변경 API")
 	@PutMapping("/{id}/public")
 	@ResponseStatus(OK)
-	public AjajaResponse updatePlanPublicStatus(@PathVariable Long id) {
-		updatePlanService.updatePublicStatus(id);
+	public AjajaResponse updatePlanPublicStatus(@PathVariable Long id, @UserId Long userId) {
+		updatePlanService.updatePublicStatus(id, userId);
 
 		return new AjajaResponse(true, null);
 	}
@@ -93,8 +95,8 @@ public class PlanController {
 	@Operation(summary = "계획 리마인드 알림 여부 변경 API")
 	@PutMapping("/{id}/remindable")
 	@ResponseStatus(OK)
-	public AjajaResponse updatePlanRemindStatus(@PathVariable Long id) {
-		updatePlanService.updateRemindStatus(id);
+	public AjajaResponse updatePlanRemindStatus(@PathVariable Long id, @UserId Long userId) {
+		updatePlanService.updateRemindStatus(id, userId);
 
 		return new AjajaResponse(true, null);
 	}
@@ -102,8 +104,8 @@ public class PlanController {
 	@Operation(summary = "응원메시지 알림 여부 변경 API")
 	@PutMapping("/{id}/ajaja")
 	@ResponseStatus(OK)
-	public AjajaResponse updatePlanAjajaStatus(@PathVariable Long id) {
-		updatePlanService.updateAjajaStatus(id);
+	public AjajaResponse updatePlanAjajaStatus(@PathVariable Long id, @UserId Long userId) {
+		updatePlanService.updateAjajaStatus(id, userId);
 
 		return new AjajaResponse(true, null);
 	}
@@ -111,9 +113,9 @@ public class PlanController {
 	@Operation(summary = "계획 수정 API")
 	@PutMapping("/{id}")
 	@ResponseStatus(OK)
-	public AjajaResponse<PlanResponse.Create> updatePlan(@PathVariable Long id,
+	public AjajaResponse<PlanResponse.Create> updatePlan(@PathVariable Long id, @UserId Long userId,
 		@RequestBody PlanRequest.Update request, @RequestHeader(name = "Date") String date) {
-		PlanResponse.Create updated = updatePlanService.update(id, request, date);
+		PlanResponse.Create updated = updatePlanService.update(id, userId, request, date);
 
 		return new AjajaResponse<>(true, updated);
 

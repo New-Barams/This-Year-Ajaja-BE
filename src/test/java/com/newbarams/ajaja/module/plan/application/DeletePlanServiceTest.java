@@ -41,7 +41,7 @@ class DeletePlanServiceTest {
 		Plan saved = planRepository.save(plan);
 
 		assertThatNoException().isThrownBy(
-			() -> deletePlanService.delete(saved.getId(), "Thu JAN 09 2023")
+			() -> deletePlanService.delete(saved.getId(), 1L, "Thu JAN 09 2023")
 		);
 	}
 
@@ -50,7 +50,7 @@ class DeletePlanServiceTest {
 	void deletePlan_Fail_By_Not_Found_Plan() {
 		Long planId = Arbitraries.longs().lessOrEqual(-1L).sample();
 
-		assertThatThrownBy(() -> deletePlanService.delete(planId, "Thu JAN 09 2023"))
+		assertThatThrownBy(() -> deletePlanService.delete(planId, 1L, "Thu JAN 09 2023"))
 			.isInstanceOf(NoSuchElementException.class)
 			.hasMessage(NOT_FOUND_PLAN.getMessage());
 	}
@@ -68,7 +68,7 @@ class DeletePlanServiceTest {
 
 		Plan saved = planRepository.save(plan);
 
-		assertThatThrownBy(() -> deletePlanService.delete(saved.getId(), "Thu DEC 09 2023"))
+		assertThatThrownBy(() -> deletePlanService.delete(saved.getId(), 1L, "Thu DEC 09 2023"))
 			.isInstanceOf(IllegalStateException.class)
 			.hasMessage(INVALID_UPDATABLE_DATE.getMessage());
 	}
