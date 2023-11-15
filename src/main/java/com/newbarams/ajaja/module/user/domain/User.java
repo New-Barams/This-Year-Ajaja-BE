@@ -57,4 +57,8 @@ public class User extends BaseEntity<User> {
 	public void delete() {
 		this.isDeleted = true;
 	}
+
+	public void updateNickname(String nickname) {
+		this.nickname = new Nickname(nickname);
+	}
 }
