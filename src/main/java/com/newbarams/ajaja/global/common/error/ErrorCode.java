@@ -21,6 +21,7 @@ public enum ErrorCode {
 	EXPIRED_JWT(BAD_REQUEST, "만료된 토큰입니다."),
 	UNSUPPORTED_JWT(BAD_REQUEST, "지원하지 않는 토큰입니다."),
 	ALREADY_EMAIL_VERIFIED(BAD_REQUEST, "이미 이메일 인증을 진행한 사용자입니다."),
+	UNABLE_TO_VERIFY_EMAIL(BAD_REQUEST, "이메일 인증을 할 수 없습니다. 인증이 완료된 상태라면 기존 리마인드 이메일과 다른 이메일을 입력해야 합니다."),
 
 	// 404
 	USER_NOT_FOUND(NOT_FOUND, "사용자가 존재하지 않습니다."),
