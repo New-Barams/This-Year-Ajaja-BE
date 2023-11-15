@@ -88,7 +88,6 @@ class PlanTest {
 	@DisplayName("수정가능한 기간일 경우 작성한 계획을 수정할 수 있다.")
 	void updatePlan_Success_With_Updatable_Date() {
 		Plan plan = fixtureMonkey.giveMeOne(Plan.class);
-		List<Tag> tags = fixtureMonkey.giveMe(Tag.class, 3);
 		List<Message> messages = fixtureMonkey.giveMe(Message.class, 3);
 
 		assertThatNoException().isThrownBy(() ->
@@ -101,7 +100,6 @@ class PlanTest {
 	@DisplayName("수정가능한 기간이 아닐 경우 작성한 계획을 수정할 수 없다.")
 	void updatePlan_Fail_By_Not_Updatable_Date() {
 		Plan plan = fixtureMonkey.giveMeOne(Plan.class);
-		List<Tag> tags = fixtureMonkey.giveMe(Tag.class, 3);
 		List<Message> messages = fixtureMonkey.giveMe(Message.class, 3);
 
 		assertThatThrownBy(() -> plan.update(plan.getUserId(), "Thu DEC 09 2023", "title", "des", 12, 3,
@@ -114,7 +112,6 @@ class PlanTest {
 	@DisplayName("수정하고자 하는 내용이 수정 후의 내용과 같아야 한다.")
 	void updatePlan_Success() {
 		Plan plan = fixtureMonkey.giveMeOne(Plan.class);
-		List<Tag> tags = fixtureMonkey.giveMe(Tag.class, 3);
 		List<Message> messages = fixtureMonkey.giveMe(Message.class, 3);
 
 		plan.update(plan.getUserId(), "Thu JAN 09 2023", "title", "des", 12, 3, 1,
