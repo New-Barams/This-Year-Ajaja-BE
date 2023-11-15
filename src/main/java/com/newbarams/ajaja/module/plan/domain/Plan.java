@@ -3,15 +3,12 @@ package com.newbarams.ajaja.module.plan.domain;
 import static com.newbarams.ajaja.module.plan.exception.ErrorMessage.*;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.hibernate.annotations.Where;
 
 import com.newbarams.ajaja.global.common.BaseEntity;
 import com.newbarams.ajaja.module.ajaja.Ajaja;
-import com.newbarams.ajaja.module.tag.domain.Tag;
 
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
@@ -22,7 +19,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderColumn;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
@@ -56,11 +52,6 @@ public class Plan extends BaseEntity<Plan> {
 	private RemindInfo info;
 	private PlanStatus status;
 
-	@Size
-	@OneToMany
-	@JoinColumn(name = "plan_id")
-	private Set<Tag> tags = new HashSet<>();
-
 	@NotEmpty
 	@ElementCollection
 	@CollectionTable(name = "remind_messages", joinColumns = @JoinColumn(name = "plan_id"))
@@ -74,13 +65,12 @@ public class Plan extends BaseEntity<Plan> {
 
 	@Builder
 	public Plan(Long userId, Content content, RemindInfo info, boolean isPublic,
-		List<Message> messages, Set<Tag> tags) {
+		List<Message> messages) {
 		this.userId = userId;
 		this.content = content;
 		this.info = info;
 		this.status = new PlanStatus(isPublic);
 		this.messages = messages;
-		this.tags = tags;
 		this.achieveRate = 0;
 		this.validateSelf();
 	}
@@ -122,14 +112,12 @@ public class Plan extends BaseEntity<Plan> {
 		boolean isPublic,
 		boolean canRemind,
 		boolean canAjaja,
-		Set<Tag> tags,
 		List<Message> messages
 	) {
 		validateDate(date);
 		this.content.update(title, description);
 		this.info.update(remindTotalPeriod, remindTerm, remindDate, remindTime);
 		this.status.update(isPublic, canRemind, canAjaja);
-		this.tags = tags;
 		this.messages = messages;
 		this.validateSelf();
 	}
