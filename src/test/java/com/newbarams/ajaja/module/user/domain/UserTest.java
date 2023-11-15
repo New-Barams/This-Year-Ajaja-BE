@@ -89,7 +89,7 @@ class UserTest extends MonkeySupport {
 
 	@ParameterizedTest
 	@ValueSource(strings = {"gagao", "sms", "line", "none"})
-	@DisplayName("지원하지 않는 수신 타입이 입력되면 예외 없이 입력된다.")
+	@DisplayName("지원하지 않는 수신 타입이 입력되면 예외를 던진다.")
 	void updateReceive_Fail_ByNotSupportType(String type) {
 		// given
 		String email = "gmlwh124@naver.com";
