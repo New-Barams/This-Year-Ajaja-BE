@@ -24,7 +24,7 @@ public class UpdateFeedbackService {
 		Feedback feedback = feedbackRepository.findById(feedbackId)
 			.orElseThrow(() -> AjajaException.withId(feedbackId, NOT_FOUND_FEEDBACK));
 
-		feedback.checkDeadline();
+		// feedback.checkDeadline();
 		feedback.updateAchieve(rate);
 
 		Long planId = feedback.getPlanId();

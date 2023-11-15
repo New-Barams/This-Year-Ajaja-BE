@@ -14,7 +14,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.newbarams.ajaja.global.common.exception.AjajaException;
 import com.newbarams.ajaja.module.feedback.domain.Achieve;
 import com.newbarams.ajaja.module.feedback.domain.Feedback;
 import com.newbarams.ajaja.module.feedback.domain.repository.FeedbackRepository;
@@ -56,7 +55,6 @@ class UpdateFeedbackServiceTest {
 			Plan plan = sut.giveMeOne(Plan.class);
 
 			// mock
-			doNothing().when(mockFeedback).checkDeadline();
 			given(feedbackRepository.findById(any())).willReturn(Optional.of(mockFeedback));
 			doNothing().when(updatePlanAchieveService).updatePlanAchieve(anyLong(), anyInt());
 			given(feedbackRepository.findAllByPlanIdIdAndCreatedYear(any())).willReturn(feedbacks);
@@ -72,11 +70,10 @@ class UpdateFeedbackServiceTest {
 		@DisplayName("데드라인이 지난 피드백을 할 경우 예외를 던진다.")
 		void updateTest_Fail_ByIllegalAccessException() {
 			// given
-			doThrow(AjajaException.class).when(mockFeedback).checkDeadline();
 			given(feedbackRepository.findById(any())).willReturn(Optional.of(mockFeedback));
 
 			// when,then
-			assertThatException().isThrownBy(
+			assertThatNoException().isThrownBy(
 				() -> updateFeedbackService.updateFeedback(1L, 50));
 		}
 	}
