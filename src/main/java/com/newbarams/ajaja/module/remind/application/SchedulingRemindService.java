@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.newbarams.ajaja.global.common.error.ErrorCode;
 import com.newbarams.ajaja.global.common.exception.AjajaException;
+import com.newbarams.ajaja.module.feedback.service.CreateFeedbackService;
 import com.newbarams.ajaja.module.remind.domain.Remind;
 import com.newbarams.ajaja.module.remind.repository.RemindQueryRepository;
 import com.newbarams.ajaja.module.user.domain.User;
@@ -20,10 +21,11 @@ public class SchedulingRemindService {
 	private final RemindQueryRepository remindQueryRepository;
 	private final SendEmailRemindService sendEmailRemindService;
 	private final UserRepository userRepository;
+	private final CreateFeedbackService createFeedbackService;
 
 	@Scheduled(cron = "0 0 9 * * *")
 	public void scheduleMorningRemind() {
-		int remindHour = 9;
+		int remindHour = 03;
 
 		executeRemindService(remindHour);
 	}
@@ -44,7 +46,6 @@ public class SchedulingRemindService {
 
 	private void executeRemindService(int remindHour) {
 		List<Remind> reminds = findReminds(remindHour);
-
 		sendEmail(reminds);
 	}
 
@@ -57,7 +58,9 @@ public class SchedulingRemindService {
 			User remindUser = userRepository.findById(remind.getUserId()).orElseThrow(
 				() -> new AjajaException(ErrorCode.USER_NOT_FOUND));
 
-			sendEmailRemindService.send(remindUser.getEmail(), remind.getInfo().getContent(), remind.getPlanId());
+			Long feedbackId = createFeedbackService.createFeedback(remind.getUserId(), remind.getPlanId());
+
+			sendEmailRemindService.send(remindUser.getEmail(), remind.getInfo().getContent(), feedbackId);
 		}
 	}
 }
