@@ -2,6 +2,8 @@ package com.newbarams.ajaja.module.plan.repository;
 
 import static com.newbarams.ajaja.global.common.error.ErrorCode.*;
 import static com.newbarams.ajaja.module.plan.domain.QPlan.*;
+import static com.newbarams.ajaja.module.tag.domain.QPlanTag.*;
+import static com.newbarams.ajaja.module.tag.domain.QTag.*;
 import static com.newbarams.ajaja.module.user.domain.QUser.*;
 
 import java.time.Instant;
@@ -54,7 +56,16 @@ public class PlanQueryRepository {
 		Plan planFromTuple = tuple.get(plan);
 		String nickname = tuple.get(user.nickname).getNickname();
 
-		return PlanMapper.toResponse(planFromTuple, nickname);
+		List<String> tags = findTagByPlanId(planFromTuple.getId());
+
+		return PlanMapper.toResponse(planFromTuple, nickname, tags);
+	}
+
+	private List<String> findTagByPlanId(Long planId) {
+		return queryFactory.select(tag.name)
+			.from(planTag, tag)
+			.where(planTag.tagId.eq(tag.id).and(planTag.planId.eq(planId)))
+			.fetch();
 	}
 
 	public List<PlanResponse.GetAll> findAllByCursorAndSorting(PlanRequest.GetAll conditions) {
@@ -112,7 +123,13 @@ public class PlanQueryRepository {
 
 	private List<PlanResponse.GetAll> tupleToResponse(List<Tuple> tuples) {
 		return tuples.stream()
-			.map((tuple) -> PlanMapper.toGetAllResponse(tuple.get(plan), tuple.get(user.nickname).getNickname()))
+			.map(tuple -> {
+				Plan planFromTuple = tuple.get(plan);
+				String nickname = tuple.get(user.nickname).getNickname();
+				List<String> tags = findTagByPlanId(planFromTuple.getId());
+
+				return PlanMapper.toGetAllResponse(planFromTuple, nickname, tags);
+			})
 			.toList();
 	}
 

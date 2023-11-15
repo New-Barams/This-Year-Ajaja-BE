@@ -2,7 +2,6 @@ package com.newbarams.ajaja.module.plan.mapper;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.stereotype.Component;
 
@@ -12,11 +11,10 @@ import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.domain.RemindInfo;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
-import com.newbarams.ajaja.module.tag.domain.Tag;
 
 @Component
 public class PlanMapper {
-	public static Plan toEntity(PlanRequest.Create dto, Long userId, Set<Tag> tags) {
+	public static Plan toEntity(PlanRequest.Create dto, Long userId) {
 		Content content = toContent(dto.title(), dto.description());
 		RemindInfo info = toRemindInfo(dto.remindTotalPeriod(), dto.remindTerm(), dto.remindDate(),
 			dto.remindTime());
@@ -28,7 +26,6 @@ public class PlanMapper {
 			.info(info)
 			.isPublic(dto.isPublic())
 			.messages(messages)
-			.tags(tags)
 			.build();
 	}
 
@@ -55,7 +52,7 @@ public class PlanMapper {
 		return messages;
 	}
 
-	public static PlanResponse.Create toResponse(Plan plan) {
+	public static PlanResponse.Create toResponse(Plan plan, List<String> tags) {
 		return new PlanResponse.Create(
 			plan.getId(),
 			plan.getUserId(),
@@ -65,12 +62,12 @@ public class PlanMapper {
 			plan.getStatus().isCanRemind(),
 			plan.getStatus().isCanAjaja(),
 			plan.getAjajas().size(),
-			toTagResponse(plan.getTags()),
+			tags,
 			plan.getCreatedAt()
 		);
 	}
 
-	public static PlanResponse.GetOne toResponse(Plan plan, String nickname) {
+	public static PlanResponse.GetOne toResponse(Plan plan, String nickname, List<String> tags) {
 		return new PlanResponse.GetOne(
 			plan.getId(),
 			plan.getUserId(),
@@ -79,33 +76,19 @@ public class PlanMapper {
 			plan.getContent().getDescription(),
 			plan.getStatus().isPublic(),
 			plan.getAjajas().size(),
-			toTagResponse(plan.getTags()),
+			tags,
 			plan.getCreatedAt()
 		);
 	}
 
-	private static List<String> toTagResponse(Set<Tag> tags) {
-		if (tags == null) {
-			return null;
-		}
-
-		List<String> tagNames = new ArrayList<>();
-
-		for (Tag tag : tags) {
-			tagNames.add(tag.getName());
-		}
-
-		return tagNames;
-	}
-
-	public static PlanResponse.GetAll toGetAllResponse(Plan plan, String nickname) {
+	public static PlanResponse.GetAll toGetAllResponse(Plan plan, String nickname, List<String> tags) {
 		return new PlanResponse.GetAll(
 			plan.getId(),
 			plan.getUserId(),
 			nickname,
 			plan.getContent().getTitle(),
 			plan.getAjajas().size(),
-			toTagResponse(plan.getTags()),
+			tags,
 			plan.getCreatedAt()
 		);
 	}
