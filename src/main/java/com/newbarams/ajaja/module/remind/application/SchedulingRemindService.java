@@ -27,24 +27,24 @@ public class SchedulingRemindService {
 	public void scheduleMorningRemind() {
 		int remindHour = 03;
 
-		executeRemindService(remindHour);
+		executeRemind(remindHour);
 	}
 
 	@Scheduled(cron = "0 0 13 * * *")
 	public void scheduleAfternoonRemind() {
 		int remindHour = 13;
 
-		executeRemindService(remindHour);
+		executeRemind(remindHour);
 	}
 
 	@Scheduled(cron = "0 0 22 * * *")
 	public void scheduleEveningRemind() {
 		int remindHour = 22;
 
-		executeRemindService(remindHour);
+		executeRemind(remindHour);
 	}
 
-	private void executeRemindService(int remindHour) {
+	private void executeRemind(int remindHour) {
 		List<Remind> reminds = findReminds(remindHour);
 		sendEmail(reminds);
 	}
