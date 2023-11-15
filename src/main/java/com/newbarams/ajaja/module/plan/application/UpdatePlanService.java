@@ -1,5 +1,7 @@
 package com.newbarams.ajaja.module.plan.application;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -7,7 +9,7 @@ import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 import com.newbarams.ajaja.module.plan.mapper.PlanMapper;
-import com.newbarams.ajaja.module.tag.application.TagService;
+import com.newbarams.ajaja.module.tag.application.UpdatePlanTagService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UpdatePlanService {
 	private final GetPlanService getPlanService;
-	private final TagService tagService;
+	private final UpdatePlanTagService updatePlanTagService;
 
 	public void updatePublicStatus(Long id) {
 		Plan plan = getPlanService.loadPlanOrElseThrow(id);
@@ -38,6 +40,7 @@ public class UpdatePlanService {
 
 	public PlanResponse.Create update(Long id, PlanRequest.Update request, String date) {
 		Plan plan = getPlanService.loadPlanOrElseThrow(id);
+		List<String> updatedTags = updatePlanTagService.update(id, request.tags());
 
 		plan.update(
 			date,
@@ -50,10 +53,9 @@ public class UpdatePlanService {
 			request.isPublic(),
 			request.canRemind(),
 			request.canAjaja(),
-			tagService.getTags(request.tags()),
 			PlanMapper.toMessages(request.messages())
 		);
 
-		return PlanMapper.toResponse(plan);
+		return PlanMapper.toResponse(plan, updatedTags);
 	}
 }

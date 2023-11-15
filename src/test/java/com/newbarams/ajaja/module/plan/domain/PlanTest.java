@@ -3,7 +3,6 @@ package com.newbarams.ajaja.module.plan.domain;
 import static com.newbarams.ajaja.module.plan.exception.ErrorMessage.*;
 import static org.assertj.core.api.Assertions.*;
 
-import java.util.HashSet;
 import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
@@ -94,7 +93,7 @@ class PlanTest {
 
 		assertThatNoException().isThrownBy(() ->
 			plan.update("Thu JAN 09 2023", "title", "des", 12, 3, 1,
-				"EVENING", true, true, true, new HashSet<>(tags), messages)
+				"EVENING", true, true, true, messages)
 		);
 	}
 
@@ -106,7 +105,7 @@ class PlanTest {
 		List<Message> messages = fixtureMonkey.giveMe(Message.class, 3);
 
 		assertThatThrownBy(() -> plan.update("Thu DEC 09 2023", "title", "des", 12, 3,
-			1, "EVENING", true, true, true, new HashSet<>(tags), messages))
+			1, "EVENING", true, true, true, messages))
 			.isInstanceOf(IllegalStateException.class)
 			.hasMessage(INVALID_UPDATABLE_DATE.getMessage());
 	}
@@ -119,7 +118,7 @@ class PlanTest {
 		List<Message> messages = fixtureMonkey.giveMe(Message.class, 3);
 
 		plan.update("Thu JAN 09 2023", "title", "des", 12, 3, 1,
-			"EVENING", true, false, true, new HashSet<>(tags), messages);
+			"EVENING", true, false, true, messages);
 
 		assertThat(plan.getContent().getTitle()).isEqualTo("title");
 		assertThat(plan.getInfo().getRemindDate()).isEqualTo(1);

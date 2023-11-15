@@ -7,30 +7,28 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "tags")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Tag extends BaseEntity<Tag> {
+public class PlanTag extends BaseEntity<PlanTag> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "tag_id")
+	@Column(name = "plan_tag_id")
 	private Long id;
 
-	@NotBlank
-	@Size(max = 10)
-	@Column(name = "tag_name", unique = true)
-	private String name;
+	@NotNull
+	private Long planId;
 
-	public Tag(String name) {
-		this.name = name;
-		this.validateSelf();
+	@NotNull
+	private Long tagId;
+
+	public PlanTag(Long planId, Long tagId) {
+		this.planId = planId;
+		this.tagId = tagId;
 	}
 }
