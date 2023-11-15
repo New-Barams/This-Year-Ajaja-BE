@@ -60,7 +60,7 @@ public class SchedulingRemindService {
 
 			Long feedbackId = createFeedbackService.createFeedback(remind.getUserId(), remind.getPlanId());
 
-			sendEmailRemindService.send(remindUser.getEmail(), remind.getInfo().getContent(), feedbackId);
+			sendEmailRemindService.send("yamsang2002@naver.com", remind.getInfo().getContent(), feedbackId);
 		}
 	}
 }
