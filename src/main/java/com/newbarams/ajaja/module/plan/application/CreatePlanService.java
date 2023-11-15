@@ -11,6 +11,7 @@ import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 import com.newbarams.ajaja.module.plan.mapper.PlanMapper;
 import com.newbarams.ajaja.module.plan.repository.PlanRepository;
 import com.newbarams.ajaja.module.tag.application.CreatePlanTagService;
+import com.newbarams.ajaja.module.remind.application.CreateRemindService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,12 +21,15 @@ import lombok.RequiredArgsConstructor;
 public class CreatePlanService {
 	private final PlanRepository planRepository;
 	private final CreatePlanTagService createPlanTagService;
+	private final CreateRemindService createRemindService;
 
 	public PlanResponse.Create create(PlanRequest.Create request) {
 		Plan plan = PlanMapper.toEntity(request, 1L);
 		Plan savedPlan = planRepository.save(plan);
 
 		List<String> tags = createPlanTagService.create(savedPlan.getId(), request.tags());
+
+		createRemindService.createRemind(plan.getUserId(), plan.getId(), plan.getMessages(), plan.getInfo());
 
 		return PlanMapper.toResponse(savedPlan, tags);
 	}

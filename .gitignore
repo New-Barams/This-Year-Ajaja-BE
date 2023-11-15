@@ -8,6 +8,7 @@ build/
 src/main/generated/**
 *.jqwik-database
 .env
+.jpb
 
 ### STS ###
 .apt_generated

@@ -1,6 +1,9 @@
 package com.newbarams.ajaja.module.user.domain;
 
+import static com.newbarams.ajaja.global.common.error.ErrorCode.*;
+
 import com.newbarams.ajaja.global.common.SelfValidating;
+import com.newbarams.ajaja.global.common.exception.AjajaException;
 
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotBlank;
@@ -36,11 +39,14 @@ public class Email extends SelfValidating<Email> {
 		this(email, email, false);
 	}
 
-	public Email newRemind(String remindEmail) {
-		return new Email(email, remindEmail, isVerified);
+	Email verified(String requestEmail) {
+		return remindEmail.equals(requestEmail) ? new Email(email, remindEmail, true) :
+			new Email(email, requestEmail, true);
 	}
 
-	public Email verified() {
-		return new Email(email, remindEmail, true);
+	void validateVerifiable(String requestEmail) {
+		if (this.isVerified() && remindEmail.equals(requestEmail)) {
+			throw new AjajaException(UNABLE_TO_VERIFY_EMAIL);
+		}
 	}
 }

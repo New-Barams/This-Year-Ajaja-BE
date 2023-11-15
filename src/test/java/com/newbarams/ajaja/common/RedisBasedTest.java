@@ -7,13 +7,13 @@ import java.lang.annotation.Target;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Integration Test With Embedded Redis
+ * Integration Test With Embedded Redis. <br>
+ * Must BE CAREFUL About Rollback
+ * @author hejow
  */
 @Import(TestRedisConfig.class)
-@Transactional
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

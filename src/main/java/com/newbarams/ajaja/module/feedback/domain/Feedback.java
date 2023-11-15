@@ -28,6 +28,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Feedback extends BaseEntity<Feedback> {
 	@Id
+	@Getter
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "feedback_id")
 	private Long id;
@@ -57,6 +58,10 @@ public class Feedback extends BaseEntity<Feedback> {
 		this.isDeleted = false;
 		this.validDate = new ValidDate(getCreatedAt());
 		this.validateSelf();
+	}
+
+	public static Feedback create(Long userId, Long planId) {
+		return new Feedback(userId, planId, Achieve.FAIL);
 	}
 
 	public void checkDeadline() {
