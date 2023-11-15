@@ -51,4 +51,14 @@ public class RemindInfo extends SelfValidating<RemindInfo> {
 	public int getRemindMonth() {
 		return this.remindTerm == 1 ? 2 : this.remindTerm;
 	}
+
+	public int getRemindTime(String name) {
+		if (name.equals("MORNING")) {
+			return 03;
+		} else if (name.equals("AFTERNOON")) {
+			return 15;
+		} else {
+			return 15;
+		}
+	}
 }
