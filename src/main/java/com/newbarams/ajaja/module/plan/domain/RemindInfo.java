@@ -47,4 +47,8 @@ public class RemindInfo extends SelfValidating<RemindInfo> {
 		this.remindTime = RemindTime.valueOf(remindTime);
 		this.validateSelf();
 	}
+
+	public int getRemindMonth() {
+		return this.remindTerm == 1 ? 2 : this.remindTerm;
+	}
 }

@@ -27,7 +27,7 @@ public class CreateRemindService {
 		ListIterator<Message> messageIterator = messages.listIterator();
 
 		int totalPeriod = remindInfo.getRemindTotalPeriod();
-		int remindMonth = remindInfo.getRemindTerm() == 1 ? 2 : remindInfo.getRemindTerm();
+		int remindMonth = remindInfo.getRemindMonth();
 
 		while (remindMonth <= totalPeriod) {
 			Info info = new Info(messageIterator.next().getContent());
