@@ -7,7 +7,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-class UserTest {
+import com.newbarams.ajaja.common.MonkeySupport;
+
+class UserTest extends MonkeySupport {
 	private final String nickname = "imhejow";
 
 	@ParameterizedTest
@@ -21,27 +23,45 @@ class UserTest {
 	}
 
 	@Test
-	@DisplayName("미검증 유저의 이메일을 검증하면 예외가 발생하지 않아야 한다.")
-	void verifyEmail_Success_WithoutException() {
+	@DisplayName("같은 리마인드 이메일로 사용자가 이메일 인증을 완료하면 검증 상태만 변경된 새로운 객체를 가져야 한다.")
+	void verified_Success_WithSameRemindEmail() {
 		// given
-		String email = "gmlwh124@naver.com";
-		User user = new User(nickname, email);
+		String mail = "gmlwh124@naver.com";
+		User user = monkey.giveMeBuilder(User.class)
+			.set("email", new Email(mail))
+			.sample();
 
-		// when, then
-		assertThatNoException().isThrownBy(user::verifyEmail);
-		assertThat(user.isEmailVerified()).isTrue();
+		Email email = user.getEmail();
+
+		// when
+		user.verified(mail);
+
+		// then
+		assertThat(user.getEmail()).isNotEqualTo(email);
+		assertThat(user.getEmail()).usingRecursiveComparison().isNotEqualTo(email);
+		assertThat(user.getEmail().isVerified()).isTrue();
+		assertThat(user.getEmail().getRemindEmail()).isEqualTo(mail);
 	}
 
 	@Test
-	@DisplayName("이미 검증을 실시한 유저는 예외를 던져야 한다.")
-	void verifyEmail_Fail_ByAlreadyVerified() {
+	@DisplayName("다른 리마인드 이메일로 사용자가 이메일 인증을 완료하면 검증 상태와 리마인드 이메일이 변경된 새로운 객체를 가져야 한다.")
+	void verified_Success_WithDifferentRemindEmail() {
 		// given
-		String email = "gmlwh124@naver.com";
-		User user = new User(nickname, email);
-		user.verifyEmail();
+		User user = monkey.giveMeBuilder(User.class)
+			.set("email", new Email("gmlwh124@naver.com"))
+			.sample();
 
-		// when, then
-		assertThatException().isThrownBy(user::verifyEmail);
+		Email email = user.getEmail();
+		String newMail = "hejow124@naver.com";
+
+		// when
+		user.verified(newMail);
+
+		// then
+		assertThat(user.getEmail()).isNotEqualTo(email);
+		assertThat(user.getEmail()).usingRecursiveComparison().isNotEqualTo(email);
+		assertThat(user.getEmail().isVerified()).isTrue();
+		assertThat(user.getEmail().getRemindEmail()).isEqualTo(newMail);
 	}
 
 	@Test
@@ -51,6 +71,7 @@ class UserTest {
 		User user = new User(nickname, email);
 
 		// when, then
-		assertThat(user.getEmail()).isEqualTo(email);
+		assertThat(user.defaultEmail()).isEqualTo(email);
+		assertThat(user.getRemindEmail()).isEqualTo(email);
 	}
 }

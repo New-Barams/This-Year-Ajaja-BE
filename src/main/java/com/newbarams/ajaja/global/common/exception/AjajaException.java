@@ -9,6 +9,7 @@ public class AjajaException extends RuntimeException {
 	private final ErrorCode errorCode;
 
 	public AjajaException(ErrorCode errorCode) {
+		super(errorCode.getMessage());
 		this.errorCode = errorCode;
 	}
 

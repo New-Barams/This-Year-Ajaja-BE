@@ -3,8 +3,6 @@ package com.newbarams.ajaja.module.user.domain;
 import org.hibernate.annotations.Where;
 
 import com.newbarams.ajaja.global.common.BaseEntity;
-import com.newbarams.ajaja.global.common.error.ErrorCode;
-import com.newbarams.ajaja.global.common.exception.AjajaException;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -40,23 +38,20 @@ public class User extends BaseEntity<User> {
 		this.isDeleted = false;
 	}
 
-	public void verifyEmail() {
-		validateAlreadyVerified();
-		this.email = email.verified();
+	public void validateEmail(String requestEmail) {
+		email.validateVerifiable(requestEmail);
 	}
 
-	private void validateAlreadyVerified() {
-		if (isEmailVerified()) {
-			throw new AjajaException(ErrorCode.ALREADY_EMAIL_VERIFIED);
-		}
+	public void verified(String validatedEmail) {
+		this.email = email.verified(validatedEmail);
 	}
 
-	public boolean isEmailVerified() {
-		return email.isVerified();
-	}
-
-	public String getEmail() {
+	public String defaultEmail() {
 		return email.getEmail();
+	}
+
+	public String getRemindEmail() {
+		return email.getRemindEmail();
 	}
 
 	public void delete() {
