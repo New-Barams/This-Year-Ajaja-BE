@@ -17,8 +17,8 @@ public class SesSendEmailRemindService implements SendEmailRemindService {
 
 	@Async
 	@Override
-	public void send(String email, String message, Long planId) {
-		String feedbackLink = "http://localhost:8080/feedbacks/" + planId;
+	public void send(String email, String message, Long feedbackId) {
+		String feedbackLink = "http://localhost:8080/feedbacks/" + feedbackId;
 
 		RemindMailForm remindMailForm = createMail(email, message, feedbackLink);
 		amazonSimpleEmailService.sendEmail(remindMailForm.toSesForm());
