@@ -47,8 +47,11 @@ public class PlanController {
 	@Operation(summary = "계획 생성 API")
 	@PostMapping
 	@ResponseStatus(CREATED)
-	public AjajaResponse<PlanResponse.Create> createPlan(@UserId Long userId, @RequestBody PlanRequest.Create request,
-		@RequestHeader(name = "Date") String date) {
+	public AjajaResponse<PlanResponse.Create> createPlan(
+		@UserId Long userId,
+		@RequestBody PlanRequest.Create request,
+		@RequestHeader(name = "Date") String date
+	) {
 		PlanResponse.Create response = createPlanService.create(userId, request, date);
 
 		return new AjajaResponse<>(true, response);
@@ -66,8 +69,11 @@ public class PlanController {
 	@Operation(summary = "계획 삭제 API")
 	@DeleteMapping("/{id}")
 	@ResponseStatus(OK)
-	public AjajaResponse deletePlan(@PathVariable Long id, @UserId Long userId,
-		@RequestHeader(name = "Date") String date) {
+	public AjajaResponse deletePlan(
+		@PathVariable Long id,
+		@UserId Long userId,
+		@RequestHeader(name = "Date") String date
+	) {
 		deletePlanService.delete(id, userId, date);
 
 		return new AjajaResponse<>(true, null);
@@ -76,9 +82,7 @@ public class PlanController {
 	@Operation(summary = "특정 목표 달성률 조회 API")
 	@GetMapping("/{planId}/feedbacks")
 	@ResponseStatus(OK)
-	public AjajaResponse<Integer> getPlanAchieve(
-		@PathVariable Long planId
-	) {
+	public AjajaResponse<Integer> getPlanAchieve(@PathVariable Long planId) {
 		int totalAchieve = getPlanAchieveService.calculatePlanAchieve(planId);
 
 		return new AjajaResponse<>(true, totalAchieve);
@@ -114,20 +118,21 @@ public class PlanController {
 	@Operation(summary = "계획 수정 API")
 	@PutMapping("/{id}")
 	@ResponseStatus(OK)
-	public AjajaResponse<PlanResponse.Create> updatePlan(@PathVariable Long id, @UserId Long userId,
-		@RequestBody PlanRequest.Update request, @RequestHeader(name = "Date") String date) {
+	public AjajaResponse<PlanResponse.Create> updatePlan(
+		@PathVariable Long id,
+		@UserId Long userId,
+		@RequestBody PlanRequest.Update request,
+		@RequestHeader(name = "Date") String date
+	) {
 		PlanResponse.Create updated = updatePlanService.update(id, userId, request, date);
 
 		return new AjajaResponse<>(true, updated);
-
 	}
 
 	@Operation(description = "메인페이지 목표 조회 API")
 	@GetMapping("/main/{userId}")
 	@ResponseStatus(OK)
-	public AjajaResponse<PlanInfoResponse.GetPlanInfoResponse> getPlanInfo(
-		@PathVariable Long userId
-	) {
+	public AjajaResponse<PlanInfoResponse.GetPlanInfoResponse> getPlanInfo(@PathVariable Long userId) {
 		PlanInfoResponse.GetPlanInfoResponse getPlanInfo = getPlanInfoService.loadPlanInfo(userId);
 
 		return new AjajaResponse<>(true, getPlanInfo);
