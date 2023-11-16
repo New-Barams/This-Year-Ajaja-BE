@@ -44,7 +44,7 @@ public class PlanController {
 	private final UpdatePlanService updatePlanService;
 	private final GetPlanInfoService getPlanInfoService;
 
-	@Operation(summary = "계획 생성 API")
+	@Operation(summary = "[토큰 필요] 계획 생성 API")
 	@PostMapping
 	@ResponseStatus(CREATED)
 	public AjajaResponse<PlanResponse.Create> createPlan(
@@ -66,7 +66,7 @@ public class PlanController {
 		return new AjajaResponse<>(true, response);
 	}
 
-	@Operation(summary = "계획 삭제 API")
+	@Operation(summary = "[토큰 필요] 계획 삭제 API")
 	@DeleteMapping("/{id}")
 	@ResponseStatus(OK)
 	public AjajaResponse deletePlan(
@@ -79,7 +79,7 @@ public class PlanController {
 		return new AjajaResponse<>(true, null);
 	}
 
-	@Operation(summary = "특정 목표 달성률 조회 API")
+	@Operation(summary = "[토큰 필요] 특정 목표 달성률 조회 API")
 	@GetMapping("/{planId}/feedbacks")
 	@ResponseStatus(OK)
 	public AjajaResponse<Integer> getPlanAchieve(@PathVariable Long planId) {
@@ -88,7 +88,7 @@ public class PlanController {
 		return new AjajaResponse<>(true, totalAchieve);
 	}
 
-	@Operation(summary = "계획 공개 여부 변경 API")
+	@Operation(summary = "[토큰 필요] 계획 공개 여부 변경 API")
 	@PutMapping("/{id}/public")
 	@ResponseStatus(OK)
 	public AjajaResponse updatePlanPublicStatus(@PathVariable Long id, @UserId Long userId) {
@@ -97,7 +97,7 @@ public class PlanController {
 		return new AjajaResponse(true, null);
 	}
 
-	@Operation(summary = "계획 리마인드 알림 여부 변경 API")
+	@Operation(summary = "[토큰 필요] 계획 리마인드 알림 여부 변경 API")
 	@PutMapping("/{id}/remindable")
 	@ResponseStatus(OK)
 	public AjajaResponse updatePlanRemindStatus(@PathVariable Long id, @UserId Long userId) {
@@ -106,7 +106,7 @@ public class PlanController {
 		return new AjajaResponse(true, null);
 	}
 
-	@Operation(summary = "응원메시지 알림 여부 변경 API")
+	@Operation(summary = "[토큰 필요] 응원메시지 알림 여부 변경 API")
 	@PutMapping("/{id}/ajaja")
 	@ResponseStatus(OK)
 	public AjajaResponse updatePlanAjajaStatus(@PathVariable Long id, @UserId Long userId) {
@@ -115,7 +115,7 @@ public class PlanController {
 		return new AjajaResponse(true, null);
 	}
 
-	@Operation(summary = "계획 수정 API")
+	@Operation(summary = "[토큰 필요] 계획 수정 API")
 	@PutMapping("/{id}")
 	@ResponseStatus(OK)
 	public AjajaResponse<PlanResponse.Create> updatePlan(
@@ -129,7 +129,7 @@ public class PlanController {
 		return new AjajaResponse<>(true, updated);
 	}
 
-	@Operation(description = "메인페이지 목표 조회 API")
+	@Operation(description = "[토큰 필요] 메인페이지 목표 조회 API")
 	@GetMapping("/main/{userId}")
 	@ResponseStatus(OK)
 	public AjajaResponse<PlanInfoResponse.GetPlanInfoResponse> getPlanInfo(@PathVariable Long userId) {
