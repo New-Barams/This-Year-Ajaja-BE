@@ -37,8 +37,8 @@ class GetTotalAchieveServiceTest {
 	@DisplayName("그 해 유저의 피드백을 통틀어서 달성률의 평균을 매긴다.")
 	void getTotalAchieve_Success_WithNoException() {
 		// given
-		PlanInfoResponse.GetGetPlan planInfo1 = new PlanInfoResponse.GetGetPlan("title", true, 50);
-		PlanInfoResponse.GetGetPlan planInfo2 = new PlanInfoResponse.GetGetPlan("title", true, 100);
+		PlanInfoResponse.GetPlan planInfo1 = new PlanInfoResponse.GetPlan("title", true, 50);
+		PlanInfoResponse.GetPlan planInfo2 = new PlanInfoResponse.GetPlan("title", true, 100);
 
 		int calculatedAchieve =
 			(planInfo1.getAchieveRate() + planInfo2.getAchieveRate()) / 2;
@@ -56,7 +56,7 @@ class GetTotalAchieveServiceTest {
 	@DisplayName("만약 평가된 피드백이 없을 경우 점수는 0이 나온다.")
 	void getEmptyAchieve_Success_WithNoException() {
 		// given
-		List<PlanInfoResponse.GetGetPlan> planInfoList = Collections.emptyList();
+		List<PlanInfoResponse.GetPlan> planInfoList = Collections.emptyList();
 
 		// when
 		given(planQueryRepository.findAllPlanByUserId(any())).willReturn(planInfoList);
