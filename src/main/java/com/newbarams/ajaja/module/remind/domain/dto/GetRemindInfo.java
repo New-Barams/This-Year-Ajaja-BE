@@ -3,7 +3,7 @@ package com.newbarams.ajaja.module.remind.domain.dto;
 import java.util.List;
 
 public sealed interface GetRemindInfo
-	permits GetRemindInfo.CommonResponse, GetRemindInfo.PastRemindResponse, GetRemindInfo.FutureRemindResponse {
+	permits GetRemindInfo.CommonResponse, GetRemindInfo.SentRemindResponse, GetRemindInfo.FutureRemindResponse {
 
 	record CommonResponse(
 		int remindTime,
@@ -11,13 +11,13 @@ public sealed interface GetRemindInfo
 		int remindTerm,
 		int remindTotalPeriod,
 		boolean isRemindable,
-		List<PastRemindResponse> pastRemindResponses,
+		List<SentRemindResponse> sentRemindResponses,
 		List<FutureRemindResponse> futureRemindResponses
 
 	) implements GetRemindInfo {
 	}
 
-	record PastRemindResponse(
+	record SentRemindResponse(
 		Long feedbackId,
 		String remindMessage,
 		int remindMonth,

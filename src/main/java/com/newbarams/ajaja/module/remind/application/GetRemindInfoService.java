@@ -34,7 +34,7 @@ public class GetRemindInfoService {
 
 		int sentRemindsNumber = sentReminds.size();
 
-		List<GetRemindInfo.PastRemindResponse> pastRemindResponses
+		List<GetRemindInfo.SentRemindResponse> sentRemindRespons
 			= getPastRemindResponse(sentRemindsNumber, sentReminds, feedbacks);
 
 		Plan plan = getPlanService.loadPlanOrElseThrow(planId);
@@ -53,14 +53,14 @@ public class GetRemindInfoService {
 			plan.getInfo().getRemindTerm(),
 			plan.getInfo().getRemindTotalPeriod(),
 			plan.getStatus().isCanRemind(),
-			pastRemindResponses,
+			sentRemindRespons,
 			futureRemindResponses
 		);
 	}
 
-	private List<GetRemindInfo.PastRemindResponse> getPastRemindResponse(int sentRemindsNumber,
+	private List<GetRemindInfo.SentRemindResponse> getPastRemindResponse(int sentRemindsNumber,
 		List<Remind> pastReminds, List<Feedback> feedbacks) {
-		List<GetRemindInfo.PastRemindResponse> pastRemindResponses = new ArrayList<>();
+		List<GetRemindInfo.SentRemindResponse> sentRemindRespons = new ArrayList<>();
 
 		for (int i = 0; i < sentRemindsNumber; i++) {
 			Remind remind = pastReminds.get(i);
@@ -77,7 +77,7 @@ public class GetRemindInfoService {
 			boolean isFeedback = feedback.getCreatedAt() == feedback.getUpdatedAt();
 			boolean isExpired = remind.getPeriod().getEnd().isAfter(Instant.now());
 
-			pastRemindResponses.add(new GetRemindInfo.PastRemindResponse(
+			sentRemindRespons.add(new GetRemindInfo.SentRemindResponse(
 					feedback.getId(),
 					remind.getInfo().getContent(),
 					remindMonth,
@@ -92,7 +92,7 @@ public class GetRemindInfoService {
 			);
 		}
 
-		return pastRemindResponses;
+		return sentRemindRespons;
 	}
 
 	private ZonedDateTime getDateTime(Instant instant) {
