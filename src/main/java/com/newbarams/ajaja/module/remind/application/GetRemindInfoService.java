@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.newbarams.ajaja.module.feedback.domain.Feedback;
-import com.newbarams.ajaja.module.feedback.domain.repository.FeedbackRepository;
+import com.newbarams.ajaja.module.feedback.service.GetFeedbackService;
+import com.newbarams.ajaja.module.plan.application.GetPlanService;
 import com.newbarams.ajaja.module.plan.domain.Message;
 import com.newbarams.ajaja.module.plan.domain.Plan;
-import com.newbarams.ajaja.module.plan.repository.PlanRepository;
 import com.newbarams.ajaja.module.remind.domain.Remind;
 import com.newbarams.ajaja.module.remind.domain.dto.GetRemindInfo;
 import com.newbarams.ajaja.module.remind.repository.RemindQueryRepository;
@@ -25,19 +25,19 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class GetRemindInfoService {
 	private final RemindQueryRepository remindQueryRepository;
-	private final FeedbackRepository feedbackRepository;
-	private final PlanRepository planRepository;
+	private final GetFeedbackService getFeedbackService;
+	private final GetPlanService getPlanService;
 
 	public GetRemindInfo getRemindInfo(Long planId) {
 		List<Remind> sentReminds = remindQueryRepository.findAllRemindByPlanId(planId);
-		List<Feedback> feedbacks = feedbackRepository.findAllByPlanIdIdAndCreatedYear(planId);
+		List<Feedback> feedbacks = getFeedbackService.getFeedback(planId);
 
 		int sentRemindsNumber = sentReminds.size();
 
 		List<GetRemindInfo.PastRemindResponse> pastRemindResponses
 			= getPastRemindResponse(sentRemindsNumber, sentReminds, feedbacks);
 
-		Plan plan = planRepository.findById(planId).orElseThrow();
+		Plan plan = getPlanService.loadPlanOrElseThrow(planId);
 		List<Message> messages = plan.getMessages();
 
 		ZonedDateTime lastRemindTime = getDateTime(sentReminds.get(sentRemindsNumber).getPeriod().getStart());
