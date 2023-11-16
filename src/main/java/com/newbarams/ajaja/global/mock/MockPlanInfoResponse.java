@@ -5,6 +5,7 @@ import java.util.List;
 public sealed interface MockPlanInfoResponse permits MockPlanInfoResponse.GetPlanInfoResponse,
 	MockPlanInfoResponse.GetPlan {
 	record GetPlanInfoResponse(
+		int year,
 		int totalAchieveRate,
 		List<GetPlan> getPlanList
 	) implements MockPlanInfoResponse {

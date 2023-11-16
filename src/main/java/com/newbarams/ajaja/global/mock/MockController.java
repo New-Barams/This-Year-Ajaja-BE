@@ -282,15 +282,39 @@ class MockController {
 	@Operation(summary = "[테스트] 메인 페이지 API")
 	@GetMapping("/plans/main/{userId}")
 	@ResponseStatus(OK)
-	public AjajaResponse<MockPlanInfoResponse.GetPlanInfoResponse> getPlanInfo(@PathVariable Long userId) {
-		List<MockPlanInfoResponse.GetPlan> getPlan = List.of(
+	public AjajaResponse<List<MockPlanInfoResponse.GetPlanInfoResponse>> getPlanInfo(@PathVariable Long userId) {
+		List<MockPlanInfoResponse.GetPlan> getPlan2023 = List.of(
 			new MockPlanInfoResponse.GetPlan("매일 운동하기", true, 90, 1),
 			new MockPlanInfoResponse.GetPlan("매일 코딩하기", true, 90, 2),
 			new MockPlanInfoResponse.GetPlan("매일 아침 9시에 일어나기", false, 20, 3)
 		);
 
-		MockPlanInfoResponse.GetPlanInfoResponse getPlanInfo = new MockPlanInfoResponse.GetPlanInfoResponse(50,
-			getPlan);
+		List<MockPlanInfoResponse.GetPlan> getPlan2022 = List.of(
+			new MockPlanInfoResponse.GetPlan("졸업 작품 끝내기", true, 90, 1),
+			new MockPlanInfoResponse.GetPlan("매일 아침 먹기", true, 70, 2),
+			new MockPlanInfoResponse.GetPlan("총 학점 4.0 이상 나오기", false, 50, 3)
+		);
+
+		MockPlanInfoResponse.GetPlanInfoResponse getPlanInfo2023 = new MockPlanInfoResponse.GetPlanInfoResponse(2023,
+			50,
+			getPlan2023);
+
+		MockPlanInfoResponse.GetPlanInfoResponse getPlanInfo2022 = new MockPlanInfoResponse.GetPlanInfoResponse(2022,
+			80,
+			getPlan2022);
+
+		List<MockPlanInfoResponse.GetPlanInfoResponse> getPlanInfo = List.of(getPlanInfo2023, getPlanInfo2022);
 		return new AjajaResponse<>(true, getPlanInfo);
+	}
+
+	@Operation(summary = "[테스트] 시즌일 때 계획 페이지에서 리마인드 메세지들 가져오기")
+	@GetMapping("/plans/{userId}/reminds/messages")
+	@ResponseStatus(OK)
+	public AjajaResponse<List<MockGetReminds.Response>> getReminds(@PathVariable Long userId) {
+		MockGetReminds.Response remind1 = new MockGetReminds.Response(0, "아좌좌");
+		MockGetReminds.Response remind2 = new MockGetReminds.Response(1, "화이팅");
+		MockGetReminds.Response remind3 = new MockGetReminds.Response(2, "할수 있다.");
+
+		return new AjajaResponse<>(true, List.of(remind1, remind2, remind3));
 	}
 }
