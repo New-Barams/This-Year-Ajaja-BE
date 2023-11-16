@@ -24,9 +24,6 @@ public class Message extends SelfValidating<Message> {
 	@Column(name = "message_idx", insertable = false, updatable = false)
 	private int index;
 
-	@Getter
-	boolean isSent;
-
 	public Message(String content) {
 		this.content = content;
 		this.validateSelf();
