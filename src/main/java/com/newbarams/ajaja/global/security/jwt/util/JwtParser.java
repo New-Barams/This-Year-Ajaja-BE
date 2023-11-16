@@ -39,7 +39,7 @@ public class JwtParser {
 	}
 
 	public Long parseId(String jwt) {
-		Claims claims = parseClaim(jwt).orElseThrow(() -> new AjajaException(EMPTY_JWT));
+		Claims claims = parseClaim(jwt).orElseThrow(() -> new AjajaException(EMPTY_TOKEN));
 		return claims.get(jwtSecretProvider.getSignature(), Long.class);
 	}
 
@@ -62,25 +62,25 @@ public class JwtParser {
 
 	private void handleBadSignature(RuntimeException exception) {
 		if (exception instanceof SecurityException || exception instanceof MalformedJwtException) {
-			throw new AjajaException(INVALID_JWT_SIGNATURE);
+			throw new AjajaException(INVALID_SIGNATURE);
 		}
 	}
 
 	private void handleExpiredToken(RuntimeException exception) {
 		if (exception instanceof ExpiredJwtException) {
-			throw new AjajaException(EXPIRED_JWT);
+			throw new AjajaException(EXPIRED_TOKEN);
 		}
 	}
 
 	private void handleUnsupportedToken(RuntimeException exception) {
 		if (exception instanceof UnsupportedJwtException) {
-			throw new AjajaException(UNSUPPORTED_JWT);
+			throw new AjajaException(UNSUPPORTED_TOKEN);
 		}
 	}
 
 	private void handleEmptyClaim(RuntimeException exception) {
 		if (exception instanceof IllegalArgumentException) {
-			throw new AjajaException(EMPTY_JWT);
+			throw new AjajaException(EMPTY_TOKEN);
 		}
 	}
 }
