@@ -1,7 +1,6 @@
 package com.newbarams.ajaja.module.plan.domain;
 
 import static com.newbarams.ajaja.global.common.error.ErrorCode.*;
-import static com.newbarams.ajaja.module.plan.exception.ErrorMessage.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,7 +88,7 @@ public class Plan extends BaseEntity<Plan> {
 		String month = dateString[1];
 
 		if (!month.equals("JAN")) {
-			throw new IllegalStateException(INVALID_UPDATABLE_DATE.getMessage());
+			throw new AjajaException(INVALID_UPDATABLE_DATE);
 		}
 	}
 

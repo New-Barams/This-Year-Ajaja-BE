@@ -1,10 +1,9 @@
 package com.newbarams.ajaja.module.plan.application;
 
-import static com.newbarams.ajaja.module.plan.exception.ErrorMessage.*;
+import static com.newbarams.ajaja.global.common.error.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import net.jqwik.api.Arbitraries;
 
+import com.newbarams.ajaja.global.common.exception.AjajaException;
 import com.newbarams.ajaja.module.plan.domain.Content;
 import com.newbarams.ajaja.module.plan.domain.Message;
 import com.newbarams.ajaja.module.plan.domain.Plan;
@@ -31,6 +31,7 @@ class DeletePlanServiceTest {
 	@DisplayName("planId가 존재하고, 삭제가능한 기간일 경우 계획을 삭제할 수 있다.")
 	void deletePlan_Success() {
 		Plan plan = Plan.builder()
+			.date("Thu JAN 09 2023")
 			.userId(1L)
 			.content(new Content("title", "description"))
 			.info(new RemindInfo(12, 3, 15, "MORNING"))
@@ -51,7 +52,7 @@ class DeletePlanServiceTest {
 		Long planId = Arbitraries.longs().lessOrEqual(-1L).sample();
 
 		assertThatThrownBy(() -> deletePlanService.delete(planId, 1L, "Thu JAN 09 2023"))
-			.isInstanceOf(NoSuchElementException.class)
+			.isInstanceOf(AjajaException.class)
 			.hasMessage(NOT_FOUND_PLAN.getMessage());
 	}
 
@@ -59,6 +60,7 @@ class DeletePlanServiceTest {
 	@DisplayName("planId가 존재하지만, 삭제가능한 기간이 아닌 경우 계획을 삭제할 수 업다.")
 	void deletePlan_Fail_By_Date() {
 		Plan plan = Plan.builder()
+			.date("Thu JAN 09 2023")
 			.userId(1L)
 			.content(new Content("title", "description"))
 			.info(new RemindInfo(12, 3, 15, "MORNING"))
@@ -69,7 +71,7 @@ class DeletePlanServiceTest {
 		Plan saved = planRepository.save(plan);
 
 		assertThatThrownBy(() -> deletePlanService.delete(saved.getId(), 1L, "Thu DEC 09 2023"))
-			.isInstanceOf(IllegalStateException.class)
+			.isInstanceOf(AjajaException.class)
 			.hasMessage(INVALID_UPDATABLE_DATE.getMessage());
 	}
 }

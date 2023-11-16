@@ -10,10 +10,10 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Repository;
 
+import com.newbarams.ajaja.global.common.exception.AjajaException;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
@@ -48,7 +48,7 @@ public class PlanQueryRepository {
 
 	private void validateTuple(List<Tuple> tuples) {
 		if (tuples.isEmpty()) {
-			throw new NoSuchElementException(NOT_FOUND_PLAN.getMessage());
+			throw new AjajaException(NOT_FOUND_PLAN);
 		}
 	}
 

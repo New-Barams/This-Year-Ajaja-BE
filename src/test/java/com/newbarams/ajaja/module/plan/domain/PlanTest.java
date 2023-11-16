@@ -1,6 +1,6 @@
 package com.newbarams.ajaja.module.plan.domain;
 
-import static com.newbarams.ajaja.module.plan.exception.ErrorMessage.*;
+import static com.newbarams.ajaja.global.common.error.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.newbarams.ajaja.module.tag.domain.Tag;
+import com.newbarams.ajaja.global.common.exception.AjajaException;
 
 import com.navercorp.fixturemonkey.FixtureMonkey;
 import com.navercorp.fixturemonkey.api.introspector.FieldReflectionArbitraryIntrospector;
@@ -50,7 +50,7 @@ class PlanTest {
 			.sample();
 
 		assertThatThrownBy(() -> plan.delete(plan.getUserId(), "Thu NOV 09 2023"))
-			.isInstanceOf(IllegalStateException.class)
+			.isInstanceOf(AjajaException.class)
 			.hasMessage(INVALID_UPDATABLE_DATE.getMessage());
 	}
 
@@ -104,7 +104,7 @@ class PlanTest {
 
 		assertThatThrownBy(() -> plan.update(plan.getUserId(), "Thu DEC 09 2023", "title", "des", 12, 3,
 			1, "EVENING", true, true, true, messages))
-			.isInstanceOf(IllegalStateException.class)
+			.isInstanceOf(AjajaException.class)
 			.hasMessage(INVALID_UPDATABLE_DATE.getMessage());
 	}
 
