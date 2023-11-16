@@ -47,8 +47,9 @@ public class PlanController {
 	@Operation(summary = "계획 생성 API")
 	@PostMapping
 	@ResponseStatus(CREATED)
-	public AjajaResponse<PlanResponse.Create> createPlan(@UserId Long userId, @RequestBody PlanRequest.Create request) {
-		PlanResponse.Create response = createPlanService.create(userId, request);
+	public AjajaResponse<PlanResponse.Create> createPlan(@UserId Long userId, @RequestBody PlanRequest.Create request,
+		@RequestHeader(name = "Date") String date) {
+		PlanResponse.Create response = createPlanService.create(userId, request, date);
 
 		return new AjajaResponse<>(true, response);
 	}

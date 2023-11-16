@@ -66,8 +66,9 @@ public class Plan extends BaseEntity<Plan> {
 	private List<Ajaja> ajajas = new ArrayList<>();
 
 	@Builder
-	public Plan(Long userId, Content content, RemindInfo info, boolean isPublic,
+	public Plan(String date, Long userId, Content content, RemindInfo info, boolean isPublic,
 		List<Message> messages) {
+		validateDate(date);
 		this.userId = userId;
 		this.content = content;
 		this.info = info;

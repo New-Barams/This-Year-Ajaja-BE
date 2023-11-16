@@ -14,13 +14,14 @@ import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 
 @Component
 public class PlanMapper {
-	public static Plan toEntity(PlanRequest.Create dto, Long userId) {
+	public static Plan toEntity(PlanRequest.Create dto, Long userId, String date) {
 		Content content = toContent(dto.title(), dto.description());
 		RemindInfo info = toRemindInfo(dto.remindTotalPeriod(), dto.remindTerm(), dto.remindDate(),
 			dto.remindTime());
 		List<Message> messages = toMessages(dto.messages());
 
 		return Plan.builder()
+			.date(date)
 			.userId(userId)
 			.content(content)
 			.info(info)
