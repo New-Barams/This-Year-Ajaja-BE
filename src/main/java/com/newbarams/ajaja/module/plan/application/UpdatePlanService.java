@@ -20,29 +20,30 @@ public class UpdatePlanService {
 	private final GetPlanService getPlanService;
 	private final UpdatePlanTagService updatePlanTagService;
 
-	public void updatePublicStatus(Long id) {
+	public void updatePublicStatus(Long id, Long userId) {
 		Plan plan = getPlanService.loadPlanOrElseThrow(id);
 
-		plan.updatePublicStatus();
+		plan.updatePublicStatus(userId);
 	}
 
-	public void updateRemindStatus(Long id) {
+	public void updateRemindStatus(Long id, Long userId) {
 		Plan plan = getPlanService.loadPlanOrElseThrow(id);
 
-		plan.updateRemindStatus();
+		plan.updateRemindStatus(userId);
 	}
 
-	public void updateAjajaStatus(Long id) {
+	public void updateAjajaStatus(Long id, Long userId) {
 		Plan plan = getPlanService.loadPlanOrElseThrow(id);
 
-		plan.updateAjajaStatus();
+		plan.updateAjajaStatus(userId);
 	}
 
-	public PlanResponse.Create update(Long id, PlanRequest.Update request, String date) {
+	public PlanResponse.Create update(Long id, Long userId, PlanRequest.Update request, String date) {
 		Plan plan = getPlanService.loadPlanOrElseThrow(id);
 		List<String> updatedTags = updatePlanTagService.update(id, request.tags());
 
 		plan.update(
+			userId,
 			date,
 			request.title(),
 			request.description(),

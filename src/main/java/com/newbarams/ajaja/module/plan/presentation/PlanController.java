@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.newbarams.ajaja.global.common.AjajaResponse;
+import com.newbarams.ajaja.global.security.common.UserId;
 import com.newbarams.ajaja.module.plan.application.CreatePlanService;
 import com.newbarams.ajaja.module.plan.application.DeletePlanService;
 import com.newbarams.ajaja.module.plan.application.GetPlanAchieveService;
@@ -43,11 +44,15 @@ public class PlanController {
 	private final UpdatePlanService updatePlanService;
 	private final GetPlanInfoService getPlanInfoService;
 
-	@Operation(summary = "계획 생성 API")
+	@Operation(summary = "[토큰 필요] 계획 생성 API")
 	@PostMapping
 	@ResponseStatus(CREATED)
-	public AjajaResponse<PlanResponse.Create> createPlan(@RequestBody PlanRequest.Create request) {
-		PlanResponse.Create response = createPlanService.create(request);
+	public AjajaResponse<PlanResponse.Create> createPlan(
+		@UserId Long userId,
+		@RequestBody PlanRequest.Create request,
+		@RequestHeader(name = "Date") String date
+	) {
+		PlanResponse.Create response = createPlanService.create(userId, request, date);
 
 		return new AjajaResponse<>(true, response);
 	}
@@ -61,70 +66,73 @@ public class PlanController {
 		return new AjajaResponse<>(true, response);
 	}
 
-	@Operation(summary = "계획 삭제 API")
+	@Operation(summary = "[토큰 필요] 계획 삭제 API")
 	@DeleteMapping("/{id}")
 	@ResponseStatus(OK)
-	public AjajaResponse deletePlan(@PathVariable Long id, @RequestHeader(name = "Date") String date) {
-		deletePlanService.delete(id, date);
+	public AjajaResponse deletePlan(
+		@PathVariable Long id,
+		@UserId Long userId,
+		@RequestHeader(name = "Date") String date
+	) {
+		deletePlanService.delete(id, userId, date);
 
 		return new AjajaResponse<>(true, null);
 	}
 
-	@Operation(summary = "특정 목표 달성률 조회 API")
+	@Operation(summary = "[토큰 필요] 특정 목표 달성률 조회 API")
 	@GetMapping("/{planId}/feedbacks")
 	@ResponseStatus(OK)
-	public AjajaResponse<Integer> getPlanAchieve(
-		@PathVariable Long planId
-	) {
+	public AjajaResponse<Integer> getPlanAchieve(@PathVariable Long planId) {
 		int totalAchieve = getPlanAchieveService.calculatePlanAchieve(planId);
 
 		return new AjajaResponse<>(true, totalAchieve);
 	}
 
-	@Operation(summary = "계획 공개 여부 변경 API")
+	@Operation(summary = "[토큰 필요] 계획 공개 여부 변경 API")
 	@PutMapping("/{id}/public")
 	@ResponseStatus(OK)
-	public AjajaResponse updatePlanPublicStatus(@PathVariable Long id) {
-		updatePlanService.updatePublicStatus(id);
+	public AjajaResponse updatePlanPublicStatus(@PathVariable Long id, @UserId Long userId) {
+		updatePlanService.updatePublicStatus(id, userId);
 
 		return new AjajaResponse(true, null);
 	}
 
-	@Operation(summary = "계획 리마인드 알림 여부 변경 API")
+	@Operation(summary = "[토큰 필요] 계획 리마인드 알림 여부 변경 API")
 	@PutMapping("/{id}/remindable")
 	@ResponseStatus(OK)
-	public AjajaResponse updatePlanRemindStatus(@PathVariable Long id) {
-		updatePlanService.updateRemindStatus(id);
+	public AjajaResponse updatePlanRemindStatus(@PathVariable Long id, @UserId Long userId) {
+		updatePlanService.updateRemindStatus(id, userId);
 
 		return new AjajaResponse(true, null);
 	}
 
-	@Operation(summary = "응원메시지 알림 여부 변경 API")
+	@Operation(summary = "[토큰 필요] 응원메시지 알림 여부 변경 API")
 	@PutMapping("/{id}/ajaja")
 	@ResponseStatus(OK)
-	public AjajaResponse updatePlanAjajaStatus(@PathVariable Long id) {
-		updatePlanService.updateAjajaStatus(id);
+	public AjajaResponse updatePlanAjajaStatus(@PathVariable Long id, @UserId Long userId) {
+		updatePlanService.updateAjajaStatus(id, userId);
 
 		return new AjajaResponse(true, null);
 	}
 
-	@Operation(summary = "계획 수정 API")
+	@Operation(summary = "[토큰 필요] 계획 수정 API")
 	@PutMapping("/{id}")
 	@ResponseStatus(OK)
-	public AjajaResponse<PlanResponse.Create> updatePlan(@PathVariable Long id,
-		@RequestBody PlanRequest.Update request, @RequestHeader(name = "Date") String date) {
-		PlanResponse.Create updated = updatePlanService.update(id, request, date);
+	public AjajaResponse<PlanResponse.Create> updatePlan(
+		@PathVariable Long id,
+		@UserId Long userId,
+		@RequestBody PlanRequest.Update request,
+		@RequestHeader(name = "Date") String date
+	) {
+		PlanResponse.Create updated = updatePlanService.update(id, userId, request, date);
 
 		return new AjajaResponse<>(true, updated);
-
 	}
 
-	@Operation(description = "메인페이지 목표 조회 API")
+	@Operation(description = "[토큰 필요] 메인페이지 목표 조회 API")
 	@GetMapping("/main/{userId}")
 	@ResponseStatus(OK)
-	public AjajaResponse<PlanInfoResponse.GetPlanInfoResponse> getPlanInfo(
-		@PathVariable Long userId
-	) {
+	public AjajaResponse<PlanInfoResponse.GetPlanInfoResponse> getPlanInfo(@PathVariable Long userId) {
 		PlanInfoResponse.GetPlanInfoResponse getPlanInfo = getPlanInfoService.loadPlanInfo(userId);
 
 		return new AjajaResponse<>(true, getPlanInfo);

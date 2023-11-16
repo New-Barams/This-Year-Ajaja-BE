@@ -1,13 +1,13 @@
 package com.newbarams.ajaja.module.plan.application;
 
-import static com.newbarams.ajaja.module.plan.exception.ErrorMessage.*;
+import static com.newbarams.ajaja.global.common.error.ErrorCode.*;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.newbarams.ajaja.global.common.exception.AjajaException;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
@@ -29,7 +29,7 @@ public class GetPlanService {
 
 	public Plan loadPlanOrElseThrow(Long id) {
 		return planRepository.findById(id)
-			.orElseThrow(() -> new NoSuchElementException(NOT_FOUND_PLAN.getMessage()));
+			.orElseThrow(() -> new AjajaException(NOT_FOUND_PLAN));
 	}
 
 	public List<PlanResponse.GetAll> loadAllPlans(PlanRequest.GetAll request) {

@@ -1,6 +1,6 @@
 package com.newbarams.ajaja.module.plan.domain;
 
-import static com.newbarams.ajaja.module.plan.exception.ErrorMessage.*;
+import static com.newbarams.ajaja.global.common.error.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.newbarams.ajaja.module.tag.domain.Tag;
+import com.newbarams.ajaja.global.common.exception.AjajaException;
 
 import com.navercorp.fixturemonkey.FixtureMonkey;
 import com.navercorp.fixturemonkey.api.introspector.FieldReflectionArbitraryIntrospector;
@@ -35,7 +35,7 @@ class PlanTest {
 			.set("status", planStatus)
 			.sample();
 
-		plan.delete("Thu JAN 09 2023");
+		plan.delete(plan.getUserId(), "Thu JAN 09 2023");
 
 		assertThat(plan.getStatus().isDeleted()).isEqualTo(true);
 	}
@@ -49,8 +49,8 @@ class PlanTest {
 			.set("status", planStatus)
 			.sample();
 
-		assertThatThrownBy(() -> plan.delete("Thu NOV 09 2023"))
-			.isInstanceOf(IllegalStateException.class)
+		assertThatThrownBy(() -> plan.delete(plan.getUserId(), "Thu NOV 09 2023"))
+			.isInstanceOf(AjajaException.class)
 			.hasMessage(INVALID_UPDATABLE_DATE.getMessage());
 	}
 
@@ -60,7 +60,7 @@ class PlanTest {
 		Plan plan = fixtureMonkey.giveMeOne(Plan.class);
 		boolean isPublic = plan.getStatus().isPublic();
 
-		plan.updatePublicStatus();
+		plan.updatePublicStatus(plan.getUserId());
 		assertThat(plan.getStatus().isPublic()).isEqualTo(!isPublic);
 	}
 
@@ -70,7 +70,7 @@ class PlanTest {
 		Plan plan = fixtureMonkey.giveMeOne(Plan.class);
 		boolean canRemind = plan.getStatus().isCanRemind();
 
-		plan.updateRemindStatus();
+		plan.updateRemindStatus(plan.getUserId());
 		assertThat(plan.getStatus().isCanRemind()).isEqualTo(!canRemind);
 	}
 
@@ -80,7 +80,7 @@ class PlanTest {
 		Plan plan = fixtureMonkey.giveMeOne(Plan.class);
 		boolean canAjaja = plan.getStatus().isCanAjaja();
 
-		plan.updateAjajaStatus();
+		plan.updateAjajaStatus(plan.getUserId());
 		assertThat(plan.getStatus().isCanAjaja()).isEqualTo(!canAjaja);
 	}
 
@@ -88,11 +88,10 @@ class PlanTest {
 	@DisplayName("수정가능한 기간일 경우 작성한 계획을 수정할 수 있다.")
 	void updatePlan_Success_With_Updatable_Date() {
 		Plan plan = fixtureMonkey.giveMeOne(Plan.class);
-		List<Tag> tags = fixtureMonkey.giveMe(Tag.class, 3);
 		List<Message> messages = fixtureMonkey.giveMe(Message.class, 3);
 
 		assertThatNoException().isThrownBy(() ->
-			plan.update("Thu JAN 09 2023", "title", "des", 12, 3, 1,
+			plan.update(plan.getUserId(), "Thu JAN 09 2023", "title", "des", 12, 3, 1,
 				"EVENING", true, true, true, messages)
 		);
 	}
@@ -101,12 +100,11 @@ class PlanTest {
 	@DisplayName("수정가능한 기간이 아닐 경우 작성한 계획을 수정할 수 없다.")
 	void updatePlan_Fail_By_Not_Updatable_Date() {
 		Plan plan = fixtureMonkey.giveMeOne(Plan.class);
-		List<Tag> tags = fixtureMonkey.giveMe(Tag.class, 3);
 		List<Message> messages = fixtureMonkey.giveMe(Message.class, 3);
 
-		assertThatThrownBy(() -> plan.update("Thu DEC 09 2023", "title", "des", 12, 3,
+		assertThatThrownBy(() -> plan.update(plan.getUserId(), "Thu DEC 09 2023", "title", "des", 12, 3,
 			1, "EVENING", true, true, true, messages))
-			.isInstanceOf(IllegalStateException.class)
+			.isInstanceOf(AjajaException.class)
 			.hasMessage(INVALID_UPDATABLE_DATE.getMessage());
 	}
 
@@ -114,10 +112,9 @@ class PlanTest {
 	@DisplayName("수정하고자 하는 내용이 수정 후의 내용과 같아야 한다.")
 	void updatePlan_Success() {
 		Plan plan = fixtureMonkey.giveMeOne(Plan.class);
-		List<Tag> tags = fixtureMonkey.giveMe(Tag.class, 3);
 		List<Message> messages = fixtureMonkey.giveMe(Message.class, 3);
 
-		plan.update("Thu JAN 09 2023", "title", "des", 12, 3, 1,
+		plan.update(plan.getUserId(), "Thu JAN 09 2023", "title", "des", 12, 3, 1,
 			"EVENING", true, false, true, messages);
 
 		assertThat(plan.getContent().getTitle()).isEqualTo("title");
