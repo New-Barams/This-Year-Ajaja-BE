@@ -54,11 +54,11 @@ public class RemindInfo extends SelfValidating<RemindInfo> {
 
 	public int getRemindTime(String name) {
 		if (name.equals("MORNING")) {
-			return 03;
+			return 9;
 		} else if (name.equals("AFTERNOON")) {
-			return 15;
+			return 13;
 		} else {
-			return 15;
+			return 22;
 		}
 	}
 }

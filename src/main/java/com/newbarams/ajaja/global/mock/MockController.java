@@ -30,7 +30,6 @@ import com.newbarams.ajaja.module.feedback.domain.dto.GetAchieve;
 import com.newbarams.ajaja.module.feedback.domain.dto.UpdateFeedback;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
-import com.newbarams.ajaja.module.remind.domain.dto.GetReminds;
 import com.newbarams.ajaja.module.remind.domain.dto.ModifyAlarm;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -137,9 +136,9 @@ class MockController {
 	@Operation(summary = "[테스트-5초 후 발송] 리마인드 전송 API")
 	@PostMapping("/plans/{planId}/reminds")
 	@ResponseStatus(OK)
-	public AjajaResponse<GetReminds.Response> sendRemind() throws InterruptedException {
+	public AjajaResponse<MockGetRemindInfo.Response> sendRemind() throws InterruptedException {
 		TimeUnit.SECONDS.sleep(5);
-		GetReminds.Response response = new GetReminds.Response(1, 1L, "화이팅", false, 0,
+		MockGetRemindInfo.Response response = new MockGetRemindInfo.Response(1, 1L, "화이팅", false, 0,
 			false, new Timestamp(System.currentTimeMillis()));
 
 		return new AjajaResponse<>(true, response);
@@ -148,13 +147,14 @@ class MockController {
 	@Operation(summary = "[테스트] 리마인드 정보 조회 API")
 	@GetMapping("/plans/{planId}/reminds")
 	@ResponseStatus(OK)
-	public AjajaResponse<GetReminds.CommonResponse> getReminds() {
-		List<GetReminds.Response> responses = List.of(
-			new GetReminds.Response(1, 1L, "화이팅", true, 75, true, Timestamp.valueOf("2023-4-02 23:59:59")),
-			new GetReminds.Response(2, 2L, "아좌좌", true, 50, true, Timestamp.valueOf("2023-7-02 23:59:59")),
-			new GetReminds.Response(3, 3L, "할수있다", false, 0, false, Timestamp.valueOf("2023-10-02 23:59:59")));
+	public AjajaResponse<MockGetRemindInfo.CommonResponse> getReminds() {
+		List<MockGetRemindInfo.Response> responses = List.of(
+			new MockGetRemindInfo.Response(1, 1L, "화이팅", true, 75, true, Timestamp.valueOf("2023-4-02 23:59:59")),
+			new MockGetRemindInfo.Response(2, 2L, "아좌좌", true, 50, true, Timestamp.valueOf("2023-7-02 23:59:59")),
+			new MockGetRemindInfo.Response(3, 3L, "할수있다", false, 0, false, Timestamp.valueOf("2023-10-02 23:59:59")));
 
-		GetReminds.CommonResponse commonResponse = new GetReminds.CommonResponse("moring", 2, 3, 1, true, responses);
+		MockGetRemindInfo.CommonResponse commonResponse = new MockGetRemindInfo.CommonResponse("moring", 2, 3, 1, true,
+			responses);
 		return new AjajaResponse<>(true, commonResponse);
 	}
 
