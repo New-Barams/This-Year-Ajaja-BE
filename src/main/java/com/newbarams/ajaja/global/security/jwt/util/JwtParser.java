@@ -2,6 +2,8 @@ package com.newbarams.ajaja.global.security.jwt.util;
 
 import static com.newbarams.ajaja.global.common.error.ErrorCode.*;
 
+import java.util.Optional;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -37,18 +39,18 @@ public class JwtParser {
 	}
 
 	public Long parseId(String jwt) {
-		Claims claims = parseClaim(jwt);
+		Claims claims = parseClaim(jwt).orElseThrow(() -> new AjajaException(EMPTY_JWT));
 		return claims.get(jwtSecretProvider.getSignature(), Long.class);
 	}
 
-	private Claims parseClaim(String jwt) {
+	private Optional<Claims> parseClaim(String jwt) {
 		try {
-			return parser.parseSignedClaims(jwt).getPayload();
+			return Optional.ofNullable(parser.parseSignedClaims(jwt).getPayload());
 		} catch (JwtException | IllegalArgumentException e) {
 			handleParseException(e);
 		}
 
-		return null; // never reach here
+		return Optional.empty();
 	}
 
 	private void handleParseException(RuntimeException exception) {
@@ -78,7 +80,7 @@ public class JwtParser {
 
 	private void handleEmptyClaim(RuntimeException exception) {
 		if (exception instanceof IllegalArgumentException) {
-			throw new AjajaException(INVALID_JWT);
+			throw new AjajaException(EMPTY_JWT);
 		}
 	}
 }
