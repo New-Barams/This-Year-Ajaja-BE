@@ -2,7 +2,7 @@ version: '3.8'
 
 networks:
   default:
-    name: kdt
+    name: ajaja
 
 volumes:
   data:
@@ -21,7 +21,13 @@ services:
       - config:/etc/mysql/conf.d
     environment:
       - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_USER=kdt
+      - MYSQL_USER=ajaja
       - MYSQL_PASSWORD=password
     platform: linux/arm64/v8
     restart: always
+
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - 6379:6379
