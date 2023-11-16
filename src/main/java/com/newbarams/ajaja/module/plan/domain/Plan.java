@@ -44,9 +44,8 @@ public class Plan extends BaseEntity<Plan> {
 	@NotNull
 	private Long userId;
 
-	@Getter
 	@NotNull
-	private int achieveRate;
+	private Integer achieveRate;
 
 	@Embedded
 	private Content content;
