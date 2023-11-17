@@ -53,9 +53,9 @@ public class RemindInfo extends SelfValidating<RemindInfo> {
 	}
 
 	public int getTotalRemindNumber() {
-		int totalRemindUmber = this.remindTotalPeriod / this.remindTerm;
+		int totalRemindNumber = this.remindTotalPeriod / this.remindTerm;
 
-		return this.remindTerm == 1 ? totalRemindUmber - 1 : totalRemindUmber;
+		return this.remindTerm == 1 ? totalRemindNumber - 1 : totalRemindNumber;
 	}
 
 	public int getRemindTime(String name) {
