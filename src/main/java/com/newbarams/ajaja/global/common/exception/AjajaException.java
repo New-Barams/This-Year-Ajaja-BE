@@ -18,8 +18,8 @@ public class AjajaException extends RuntimeException {
 		this.errorCode = errorCode;
 	}
 
-	public AjajaException(String message, Throwable cause, ErrorCode errorCode) {
-		super(message, cause);
+	public AjajaException(Throwable cause, ErrorCode errorCode) {
+		super(errorCode.getMessage(), cause);
 		this.errorCode = errorCode;
 	}
 

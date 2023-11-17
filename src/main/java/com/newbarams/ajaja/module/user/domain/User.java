@@ -1,8 +1,11 @@
 package com.newbarams.ajaja.module.user.domain;
 
+import static com.newbarams.ajaja.global.common.error.ErrorCode.*;
+
 import org.hibernate.annotations.Where;
 
 import com.newbarams.ajaja.global.common.BaseEntity;
+import com.newbarams.ajaja.global.common.exception.AjajaException;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -74,6 +77,14 @@ public class User extends BaseEntity<User> {
 	}
 
 	public void updateReceive(String receiveType) {
-		this.receiveType = ReceiveType.valueOf(receiveType.toUpperCase());
+		this.receiveType = toEnum(receiveType);
+	}
+
+	private ReceiveType toEnum(String receiveType) {
+		try {
+			return ReceiveType.valueOf(receiveType.toUpperCase());
+		} catch (IllegalArgumentException e) {
+			throw new AjajaException(e, NOT_SUPPORT_RECEIVE_TYPE);
+		}
 	}
 }
