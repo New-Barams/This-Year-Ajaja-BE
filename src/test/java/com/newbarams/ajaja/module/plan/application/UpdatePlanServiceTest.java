@@ -26,7 +26,7 @@ class UpdatePlanServiceTest {
 	private UpdatePlanService updatePlanService;
 
 	@Autowired
-	private GetPlanService getPlanService;
+	private LoadPlanService getPlanService;
 
 	@Autowired
 	private PlanRepository planRepository;

@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 @RequiredArgsConstructor
 public class UpdatePlanService {
-	private final GetPlanService getPlanService;
+	private final LoadPlanService getPlanService;
 	private final UpdatePlanTagService updatePlanTagService;
 
 	public void updatePublicStatus(Long id, Long userId) {

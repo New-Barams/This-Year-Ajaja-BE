@@ -17,7 +17,7 @@ import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
 import com.newbarams.ajaja.module.plan.repository.PlanQueryRepository;
 
 @ExtendWith(MockitoExtension.class)
-class GetPlanServiceTest extends MockTestSupport {
+class LoadPlanServiceTest extends MockTestSupport {
 	@InjectMocks
 	private GetPlanInfoService getPlanInfoService;
 

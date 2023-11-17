@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.newbarams.ajaja.module.feedback.domain.Feedback;
-import com.newbarams.ajaja.module.feedback.service.GetFeedbackService;
-import com.newbarams.ajaja.module.plan.application.GetPlanService;
+import com.newbarams.ajaja.module.feedback.service.LoadFeedbackService;
+import com.newbarams.ajaja.module.plan.application.LoadPlanService;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.remind.domain.Remind;
 import com.newbarams.ajaja.module.remind.domain.dto.GetRemindInfo;
@@ -24,19 +24,19 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class GetRemindInfoService {
 	private final RemindQueryRepository remindQueryRepository;
-	private final GetFeedbackService getFeedbackService;
-	private final GetPlanService getPlanService;
+	private final LoadFeedbackService loadFeedbackService;
+	private final LoadPlanService loadPlanService;
 
 	public GetRemindInfo getRemindInfo(Long planId) {
 		List<Remind> sentReminds = remindQueryRepository.findAllRemindByPlanId(planId); // todo: 오더에 대한 처리하기
-		List<Feedback> feedbacks = getFeedbackService.getFeedback(planId);
+		List<Feedback> feedbacks = loadFeedbackService.getFeedback(planId);
 
 		int sentRemindsNumber = sentReminds.size(); // todo: 굳이 사이즈 메소드를 써야할까?
 
 		List<GetRemindInfo.SentRemindResponse> sentRemindResponses
 			= getPastRemindResponse(sentRemindsNumber, sentReminds, feedbacks);
 
-		Plan plan = getPlanService.loadPlanOrElseThrow(planId);
+		Plan plan = loadPlanService.loadPlanOrElseThrow(planId);
 
 		ZonedDateTime lastRemindTime = getDateTime(
 			sentReminds.get(sentRemindsNumber).getPeriod().getStart()); // todo: 시간에 대한 vo로 빼기

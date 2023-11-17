@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 @RequiredArgsConstructor
 public class DeletePlanService {
-	private final GetPlanService getPlanService;
+	private final LoadPlanService getPlanService;
 	private final DeletePlanTagService deletePlanTagService;
 
 	public void delete(Long id, Long userId, String date) {

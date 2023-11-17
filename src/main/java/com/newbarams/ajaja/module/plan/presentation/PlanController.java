@@ -22,7 +22,7 @@ import com.newbarams.ajaja.module.plan.application.CreatePlanService;
 import com.newbarams.ajaja.module.plan.application.DeletePlanService;
 import com.newbarams.ajaja.module.plan.application.GetPlanAchieveService;
 import com.newbarams.ajaja.module.plan.application.GetPlanInfoService;
-import com.newbarams.ajaja.module.plan.application.GetPlanService;
+import com.newbarams.ajaja.module.plan.application.LoadPlanService;
 import com.newbarams.ajaja.module.plan.application.UpdatePlanService;
 import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
@@ -38,7 +38,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/plans")
 public class PlanController {
 	private final CreatePlanService createPlanService;
-	private final GetPlanService getPlanService;
+	private final LoadPlanService getPlanService;
 	private final DeletePlanService deletePlanService;
 	private final GetPlanAchieveService getPlanAchieveService;
 	private final UpdatePlanService updatePlanService;

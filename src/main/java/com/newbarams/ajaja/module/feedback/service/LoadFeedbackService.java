@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class GetFeedbackService {
+public class LoadFeedbackService {
 	private final FeedbackRepository feedbackRepository;
 
 	public List<Feedback> getFeedback(Long planId) {

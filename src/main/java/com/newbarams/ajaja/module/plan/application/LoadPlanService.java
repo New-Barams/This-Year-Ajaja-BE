@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class GetPlanService {
+public class LoadPlanService {
 	private final PlanRepository planRepository;
 	private final PlanQueryRepository planQueryRepository;
 
