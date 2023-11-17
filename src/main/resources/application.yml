@@ -26,3 +26,4 @@ springdoc:
 logging:
   level:
     com.newbarams.ajaja: DEBUG
+    org.springframework.core.LocalVariableTableParameterNameDiscoverer: error
