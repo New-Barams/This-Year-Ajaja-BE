@@ -23,7 +23,7 @@ public class RemindController {
 	private final GetRemindInfoService getRemindInfoService;
 
 	@Operation(summary = "비시즌일때 리마인드 조회 API")
-	@GetMapping("/{planId}/reminds")
+	@GetMapping("/{planId}")
 	@ResponseStatus(HttpStatus.OK)
 	public AjajaResponse<GetRemindInfo> getRemindResponse(
 		@PathVariable Long planId
