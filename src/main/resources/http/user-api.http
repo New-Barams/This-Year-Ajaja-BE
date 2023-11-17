@@ -32,10 +32,15 @@ Content-Type: application/json
 
 ###
 # @name 인증번호 검증
-POST http://localhost:8080/users/verify
+POST {{path}}/users/verify
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
   "certification": ""
 }
+
+###
+# @name 로그아웃
+POST {{path}}/users/logout
+Authorization: Bearer {{accessToken}}
