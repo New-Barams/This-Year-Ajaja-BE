@@ -28,23 +28,24 @@ public class GetRemindInfoService {
 	private final GetPlanService getPlanService;
 
 	public GetRemindInfo getRemindInfo(Long planId) {
-		List<Remind> sentReminds = remindQueryRepository.findAllRemindByPlanId(planId);
+		List<Remind> sentReminds = remindQueryRepository.findAllRemindByPlanId(planId); // todo: 오더에 대한 처리하기
 		List<Feedback> feedbacks = getFeedbackService.getFeedback(planId);
 
-		int sentRemindsNumber = sentReminds.size();
+		int sentRemindsNumber = sentReminds.size(); // todo: 굳이 사이즈 메소드를 써야할까?
 
 		List<GetRemindInfo.SentRemindResponse> sentRemindResponses
 			= getPastRemindResponse(sentRemindsNumber, sentReminds, feedbacks);
 
 		Plan plan = getPlanService.loadPlanOrElseThrow(planId);
 
-		ZonedDateTime lastRemindTime = getDateTime(sentReminds.get(sentRemindsNumber).getPeriod().getStart());
+		ZonedDateTime lastRemindTime = getDateTime(
+			sentReminds.get(sentRemindsNumber).getPeriod().getStart()); // todo: 시간에 대한 vo로 빼기
 		int totalRemindNumber = plan.getInfo().getTotalRemindNumber();
 
 		List<GetRemindInfo.FutureRemindResponse> futureRemindResponses
 			= getFutureRemindResponse(plan, totalRemindNumber, lastRemindTime);
 
-		String remindTime = plan.getInfo().getRemindTime().name();
+		String remindTime = plan.getInfo().getRemindTime().name(); // todo: 디미터의 법칙
 
 		return new GetRemindInfo.CommonResponse(
 			plan.getInfo().getRemindTime(remindTime),
@@ -58,7 +59,7 @@ public class GetRemindInfoService {
 	}
 
 	private List<GetRemindInfo.SentRemindResponse> getPastRemindResponse(int sentRemindsNumber,
-		List<Remind> pastReminds, List<Feedback> feedbacks) {
+		List<Remind> pastReminds, List<Feedback> feedbacks) { // todo : 도메인 서비스로 분리
 		List<GetRemindInfo.SentRemindResponse> sentRemindResponses = new ArrayList<>();
 
 		for (int i = 0; i < sentRemindsNumber; i++) {
