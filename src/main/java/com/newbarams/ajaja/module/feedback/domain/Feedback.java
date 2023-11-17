@@ -23,6 +23,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
 @Table(name = "feedbacks")
 @Where(clause = "is_deleted = false")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -78,5 +79,9 @@ public class Feedback extends BaseEntity<Feedback> {
 
 	public int getRate() {
 		return this.achieve.getRate();
+	}
+
+	public boolean isFeedback() {
+		return this.getCreatedAt() != this.getUpdatedAt();
 	}
 }

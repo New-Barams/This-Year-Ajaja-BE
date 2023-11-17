@@ -66,4 +66,8 @@ public class Remind extends BaseEntity<Remind> {
 	public static Remind ajaja(Long userId, Long planId, Info info, Period period) {
 		return new Remind(userId, planId, info, period, Type.AJAJA, false);
 	}
+
+	public boolean isExpired() {
+		return this.period.isExpired();
+	}
 }

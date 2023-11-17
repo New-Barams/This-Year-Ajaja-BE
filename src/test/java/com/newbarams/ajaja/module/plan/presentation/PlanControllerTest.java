@@ -20,7 +20,7 @@ import com.newbarams.ajaja.module.plan.application.CreatePlanService;
 import com.newbarams.ajaja.module.plan.application.DeletePlanService;
 import com.newbarams.ajaja.module.plan.application.GetPlanAchieveService;
 import com.newbarams.ajaja.module.plan.application.GetPlanInfoService;
-import com.newbarams.ajaja.module.plan.application.GetPlanService;
+import com.newbarams.ajaja.module.plan.application.LoadPlanService;
 import com.newbarams.ajaja.module.plan.application.UpdatePlanService;
 
 @AutoConfigureMockMvc
@@ -33,7 +33,7 @@ class PlanControllerTest extends MockTestSupport {
 	@MockBean
 	private GetPlanAchieveService getPlanAchieveService;
 	@MockBean
-	private GetPlanService getPlanService;
+	private LoadPlanService getPlanService;
 	@MockBean
 	private CreatePlanService createPlanService;
 	@MockBean

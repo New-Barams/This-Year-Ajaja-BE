@@ -4,14 +4,14 @@ import java.util.List;
 
 import lombok.Getter;
 
-public sealed interface PlanInfoResponse permits PlanInfoResponse.GetPlanInfoResponse, PlanInfoResponse.GetGetPlan {
+public sealed interface PlanInfoResponse permits PlanInfoResponse.GetPlanInfoResponse, PlanInfoResponse.GetPlan {
 	record GetPlanInfoResponse(
 		int totalAchieveRate,
-		List<GetGetPlan> getPlanList
+		List<GetPlan> getPlanList
 	) implements PlanInfoResponse {
 	}
 
-	record GetGetPlan(
+	record GetPlan(
 		String title,
 		boolean isRemindable,
 		@Getter

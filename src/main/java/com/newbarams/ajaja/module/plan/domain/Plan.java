@@ -44,9 +44,8 @@ public class Plan extends BaseEntity<Plan> {
 	@NotNull
 	private Long userId;
 
-	@Getter
 	@NotNull
-	private int achieveRate;
+	private Integer achieveRate;
 
 	@Embedded
 	private Content content;
@@ -138,5 +137,9 @@ public class Plan extends BaseEntity<Plan> {
 
 	public void updateAchieve(int achieveRate) {
 		this.achieveRate = achieveRate;
+	}
+
+	public String getTimeName() {
+		return info.getTimeName();
 	}
 }

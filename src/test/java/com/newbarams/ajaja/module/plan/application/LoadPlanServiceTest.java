@@ -17,7 +17,7 @@ import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
 import com.newbarams.ajaja.module.plan.repository.PlanQueryRepository;
 
 @ExtendWith(MockitoExtension.class)
-class GetPlanServiceTest extends MockTestSupport {
+class LoadPlanServiceTest extends MockTestSupport {
 	@InjectMocks
 	private GetPlanInfoService getPlanInfoService;
 
@@ -28,7 +28,7 @@ class GetPlanServiceTest extends MockTestSupport {
 	@DisplayName("조회된 계획의 평균을 내서 총 달성률을 구한다.")
 	void getPlanAchieveAverage_Success_WithNoException() {
 		// given
-		List<PlanInfoResponse.GetGetPlan> planInfos = monkey.giveMe(PlanInfoResponse.GetGetPlan.class, 2);
+		List<PlanInfoResponse.GetPlan> planInfos = monkey.giveMe(PlanInfoResponse.GetPlan.class, 2);
 		given(planQueryRepository.findAllPlanByUserId(any())).willReturn(planInfos);
 
 		// when
@@ -42,7 +42,7 @@ class GetPlanServiceTest extends MockTestSupport {
 	@DisplayName("조회된 계획들이 없는 경우 총 달성량은 0이 나온다.")
 	void getPlanZeroAverage_Success_WithNoException() {
 		// given
-		List<PlanInfoResponse.GetGetPlan> planInfos = Collections.emptyList();
+		List<PlanInfoResponse.GetPlan> planInfos = Collections.emptyList();
 		given(planQueryRepository.findAllPlanByUserId(any())).willReturn(planInfos);
 
 		// when

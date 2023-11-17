@@ -133,8 +133,8 @@ public class PlanQueryRepository {
 			.toList();
 	}
 
-	public List<PlanInfoResponse.GetGetPlan> findAllPlanByUserId(Long userId) {
-		return queryFactory.select(Projections.bean(PlanInfoResponse.GetGetPlan.class,
+	public List<PlanInfoResponse.GetPlan> findAllPlanByUserId(Long userId) {
+		return queryFactory.select(Projections.bean(PlanInfoResponse.GetPlan.class,
 				plan.content.title,
 				plan.status.canRemind,
 				plan.achieveRate))

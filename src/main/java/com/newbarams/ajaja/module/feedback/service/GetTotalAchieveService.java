@@ -17,11 +17,11 @@ public class GetTotalAchieveService {
 	private final PlanQueryRepository planQueryRepository;
 
 	public int calculateTotalAchieve(Long userId) {
-		List<PlanInfoResponse.GetGetPlan> planList = planQueryRepository.findAllPlanByUserId(userId);
+		List<PlanInfoResponse.GetPlan> planList = planQueryRepository.findAllPlanByUserId(userId);
 
 		return (int)planList
 			.stream()
-			.mapToInt(PlanInfoResponse.GetGetPlan::getAchieveRate)
+			.mapToInt(PlanInfoResponse.GetPlan::getAchieveRate)
 			.average()
 			.orElse(0);
 	}
