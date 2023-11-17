@@ -45,7 +45,7 @@ public class GetRemindInfoService {
 		List<GetRemindInfo.FutureRemindResponse> futureRemindResponses
 			= getFutureRemindResponse(plan, totalRemindNumber, lastRemindTime);
 
-		String remindTime = plan.getInfo().getRemindTime().name(); // todo: 디미터의 법칙
+		String remindTime = plan.getTimeName(); // todo: 디미터의 법칙
 
 		return new GetRemindInfo.CommonResponse(
 			plan.getInfo().getRemindTime(remindTime),

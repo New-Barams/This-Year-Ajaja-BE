@@ -138,4 +138,8 @@ public class Plan extends BaseEntity<Plan> {
 	public void updateAchieve(int achieveRate) {
 		this.achieveRate = achieveRate;
 	}
+
+	public String getTimeName() {
+		return info.getTimeName();
+	}
 }
