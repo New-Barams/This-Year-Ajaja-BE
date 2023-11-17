@@ -1,5 +1,6 @@
 package com.newbarams.ajaja.module.user.domain;
 
+import static com.newbarams.ajaja.global.common.error.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
@@ -8,6 +9,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import com.newbarams.ajaja.common.MonkeySupport;
+import com.newbarams.ajaja.global.common.exception.AjajaException;
 
 class UserTest extends MonkeySupport {
 	private final String nickname = "imhejow";
@@ -96,7 +98,8 @@ class UserTest extends MonkeySupport {
 		User user = new User(nickname, email);
 
 		// when, then
-		assertThatThrownBy(() -> user.updateReceive(type))
-			.isInstanceOf(IllegalArgumentException.class);
+		assertThatExceptionOfType(AjajaException.class)
+			.isThrownBy(() -> user.updateReceive(type))
+			.withMessage(NOT_SUPPORT_RECEIVE_TYPE.getMessage());
 	}
 }

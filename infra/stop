@@ -1,3 +1,4 @@
 #!/usr/bin/env sh
 
 docker stop mysql
+docker stop redis

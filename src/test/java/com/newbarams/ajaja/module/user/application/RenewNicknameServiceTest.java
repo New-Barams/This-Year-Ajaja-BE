@@ -33,9 +33,9 @@ class RenewNicknameServiceTest extends MockTestSupport {
 		given(retrieveUserService.loadExistUserById(any())).willReturn(user);
 
 		// when
-		renewNicknameService.renew(user.getId());
+		String newNickname = renewNicknameService.renew(user.getId());
 
 		// then
-		assertThat(oldNickname).isNotEqualTo(user.getNickname());
+		assertThat(oldNickname.getNickname()).isNotEqualTo(newNickname);
 	}
 }

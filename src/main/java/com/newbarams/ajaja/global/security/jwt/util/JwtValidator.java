@@ -23,45 +23,33 @@ public class JwtValidator {
 		this.parser = Jwts.parser().verifyWith(jwtSecretProvider.getSecretKey()).build();
 	}
 
-	public void validate(Long userId, String accessToken, String refreshToken) {
-		if (isValid(accessToken)) {
-			return;
-		}
-
-		validateRefreshToken(userId, refreshToken);
+	public void validateReissueable(Long userId, String refreshToken) {
+		validateToken(refreshToken);
+		validateHistory(userId, refreshToken);
 	}
 
-	private boolean isValid(String jwt) {
+	private void validateToken(String jwt) {
 		try {
 			parser.parseSignedClaims(jwt);
-			return true;
 		} catch (JwtException | IllegalArgumentException e) {
-			return false;
-		}
-	}
-
-	private void validateRefreshToken(Long userId, String refreshToken) {
-		if (!isValid(refreshToken)) {
 			throw new AjajaException(INVALID_TOKEN);
 		}
-
-		compareWithSaved(userId, refreshToken);
 	}
 
-	private void compareWithSaved(Long userId, String refreshToken) {
-		String savedToken = getSavedOnCache(userId);
+	private void validateHistory(Long userId, String refreshToken) {
+		String savedToken = getSavedFromCache(userId);
 		compare(savedToken, refreshToken);
 	}
 
-	private String getSavedOnCache(Long userId) {
+	private String getSavedFromCache(Long userId) {
 		Object saved = redisTemplate.opsForValue().get(jwtSecretProvider.getSignature() + userId);
-		validateExpired(saved);
+		validateExists(saved);
 		return (String)saved;
 	}
 
-	private void validateExpired(Object refreshToken) {
+	private void validateExists(Object refreshToken) {
 		if (refreshToken == null) {
-			throw new AjajaException(EXPIRED_TOKEN);
+			throw new AjajaException(NEVER_LOGIN);
 		}
 	}
 
