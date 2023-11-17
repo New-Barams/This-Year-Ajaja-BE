@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.newbarams.ajaja.module.feedback.domain.Feedback;
 import com.newbarams.ajaja.module.feedback.service.GetFeedbackService;
 import com.newbarams.ajaja.module.plan.application.GetPlanService;
-import com.newbarams.ajaja.module.plan.domain.Message;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.remind.domain.Remind;
 import com.newbarams.ajaja.module.remind.domain.dto.GetRemindInfo;
@@ -34,16 +33,16 @@ public class GetRemindInfoService {
 
 		int sentRemindsNumber = sentReminds.size();
 
-		List<GetRemindInfo.SentRemindResponse> sentRemindRespons
+		List<GetRemindInfo.SentRemindResponse> sentRemindResponses
 			= getPastRemindResponse(sentRemindsNumber, sentReminds, feedbacks);
 
 		Plan plan = getPlanService.loadPlanOrElseThrow(planId);
-		List<Message> messages = plan.getMessages();
 
 		ZonedDateTime lastRemindTime = getDateTime(sentReminds.get(sentRemindsNumber).getPeriod().getStart());
+		int totalRemindNumber = plan.getInfo().getTotalRemindUmber();
 
-		List<GetRemindInfo.FutureRemindResponse> futureRemindResponses = getFutureRemindResponse(plan, lastRemindTime,
-			messages);
+		List<GetRemindInfo.FutureRemindResponse> futureRemindResponses
+			= getFutureRemindResponse(plan, totalRemindNumber, lastRemindTime);
 
 		String remindTime = plan.getInfo().getRemindTime().name();
 
@@ -53,14 +52,14 @@ public class GetRemindInfoService {
 			plan.getInfo().getRemindTerm(),
 			plan.getInfo().getRemindTotalPeriod(),
 			plan.getStatus().isCanRemind(),
-			sentRemindRespons,
+			sentRemindResponses,
 			futureRemindResponses
 		);
 	}
 
 	private List<GetRemindInfo.SentRemindResponse> getPastRemindResponse(int sentRemindsNumber,
 		List<Remind> pastReminds, List<Feedback> feedbacks) {
-		List<GetRemindInfo.SentRemindResponse> sentRemindRespons = new ArrayList<>();
+		List<GetRemindInfo.SentRemindResponse> sentRemindResponses = new ArrayList<>();
 
 		for (int i = 0; i < sentRemindsNumber; i++) {
 			Remind remind = pastReminds.get(i);
@@ -77,7 +76,7 @@ public class GetRemindInfoService {
 			boolean isFeedback = feedback.getCreatedAt() == feedback.getUpdatedAt();
 			boolean isExpired = remind.getPeriod().getEnd().isAfter(Instant.now());
 
-			sentRemindRespons.add(new GetRemindInfo.SentRemindResponse(
+			sentRemindResponses.add(new GetRemindInfo.SentRemindResponse(
 					feedback.getId(),
 					remind.getInfo().getContent(),
 					remindMonth,
@@ -92,38 +91,36 @@ public class GetRemindInfoService {
 			);
 		}
 
-		return sentRemindRespons;
+		return sentRemindResponses;
 	}
 
 	private ZonedDateTime getDateTime(Instant instant) {
 		return instant.atZone(ZoneId.systemDefault());
 	}
 
-	private List<GetRemindInfo.FutureRemindResponse> getFutureRemindResponse(Plan plan, ZonedDateTime lastRemindTime,
-		List<Message> messages) {
+	private List<GetRemindInfo.FutureRemindResponse> getFutureRemindResponse(Plan plan, int totalRemindNumber,
+		ZonedDateTime lastRemindTime) {
 		List<GetRemindInfo.FutureRemindResponse> futureRemindResponses = new ArrayList<>();
 
 		int remindTerm = plan.getInfo().getRemindTerm();
 		int remindMonth = lastRemindTime.getDayOfMonth();
 		int remindDate = plan.getInfo().getRemindDate();
 
-		for (Message message : messages) {
-			if (!message.isSent()) {
-				remindMonth += remindTerm;
+		for (int i = 0; i < totalRemindNumber; i++) {
+			remindMonth += remindTerm;
 
-				new GetRemindInfo.FutureRemindResponse(
-					0L,
-					message.getContent(),
-					remindMonth,
-					remindDate,
-					0,
-					false,
-					false,
-					false,
-					0,
-					0
-				);
-			}
+			new GetRemindInfo.FutureRemindResponse(
+				0L,
+				"",
+				remindMonth,
+				remindDate,
+				0,
+				false,
+				false,
+				false,
+				0,
+				0
+			);
 		}
 
 		return futureRemindResponses;
