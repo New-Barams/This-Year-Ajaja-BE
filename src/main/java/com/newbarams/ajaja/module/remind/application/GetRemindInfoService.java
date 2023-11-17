@@ -73,7 +73,7 @@ public class GetRemindInfoService {
 			int endMonth = expiredTime.getMonthValue();
 			int endDate = expiredTime.getDayOfMonth();
 
-			boolean isFeedback = feedback.getCreatedAt() == feedback.getUpdatedAt();
+			boolean isFeedback = feedback.getCreatedAt() != feedback.getUpdatedAt();
 			boolean isExpired = remind.getPeriod().getEnd().isAfter(Instant.now());
 
 			sentRemindResponses.add(new GetRemindInfo.SentRemindResponse(
