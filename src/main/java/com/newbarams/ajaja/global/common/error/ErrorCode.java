@@ -22,7 +22,6 @@ public enum ErrorCode {
 	UNSUPPORTED_TOKEN(BAD_REQUEST, "지원하지 않는 토큰입니다."),
 	TOKEN_NOT_MATCH(BAD_REQUEST, "일치하지 않는 토큰입니다."),
 	CERTIFICATION_NOT_MATCH(BAD_REQUEST, "인증 번호가 일치하지 않습니다."),
-	UNABLE_TO_VERIFY_EMAIL(BAD_REQUEST, "이메일 인증을 할 수 없습니다. 인증이 완료된 상태라면 기존 리마인드 이메일과 다른 이메일을 입력해야 합니다."),
 	INVALID_USER_ACCESS(BAD_REQUEST, "잘못된 유저의 접근입니다."),
 	INVALID_UPDATABLE_DATE(BAD_REQUEST, "변경 가능한 기간이 아닙니다."),
 
@@ -33,6 +32,7 @@ public enum ErrorCode {
 
 	// 409
 	EXPIRED_FEEDBACK(CONFLICT, "평가 기간이 지났습니다."),
+	UNABLE_TO_VERIFY_EMAIL(CONFLICT, "이메일 인증을 할 수 없습니다. 인증이 완료된 상태라면 기존 리마인드 이메일과 다른 이메일을 입력해야 합니다."),
 
 	// 500
 	AJAJA_SERVER_ERROR(INTERNAL_SERVER_ERROR, "서버 내부 오류입니다. 관리자에게 문의바랍니다.");

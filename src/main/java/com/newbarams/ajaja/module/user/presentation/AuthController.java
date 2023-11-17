@@ -17,6 +17,7 @@ import com.newbarams.ajaja.module.user.dto.UserResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Tag(name = "auth", description = "인증 API")
@@ -44,7 +45,7 @@ public class AuthController {
 	})
 	@PostMapping("/reissue")
 	@ResponseStatus(OK)
-	public AjajaResponse<UserResponse.Token> reissue(@RequestBody UserRequest.Reissue request) {
+	public AjajaResponse<UserResponse.Token> reissue(@Valid @RequestBody UserRequest.Reissue request) {
 		UserResponse.Token response = reissueTokenService.reissue(request.accessToken(), request.refreshToken());
 		return AjajaResponse.ok(response);
 	}

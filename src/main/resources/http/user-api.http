@@ -18,3 +18,13 @@ Content-Type: application/json
 # @name 닉네임 새로고침
 POST {{path}}/users/refresh
 Authorization: Bearer {{accessToken}}
+
+###
+# @name 이메일 인증요청
+POST {{path}}/users/send-verification
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "email": ""
+}
