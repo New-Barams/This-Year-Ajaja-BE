@@ -21,4 +21,8 @@ public class Period extends SelfValidating<Period> {
 		this.end = end;
 		this.validateSelf();
 	}
+
+	public boolean isExpired() {
+		return Instant.now().isAfter(this.end);
+	}
 }
