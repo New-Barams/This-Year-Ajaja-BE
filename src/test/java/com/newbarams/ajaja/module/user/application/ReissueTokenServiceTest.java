@@ -9,6 +9,7 @@ import org.mockito.Mock;
 
 import com.newbarams.ajaja.common.MockTestSupport;
 import com.newbarams.ajaja.global.security.jwt.util.JwtGenerator;
+import com.newbarams.ajaja.global.security.jwt.util.JwtParser;
 import com.newbarams.ajaja.global.security.jwt.util.JwtValidator;
 import com.newbarams.ajaja.module.user.dto.UserResponse;
 
@@ -22,19 +23,24 @@ class ReissueTokenServiceTest extends MockTestSupport {
 	@Mock
 	private JwtValidator jwtValidator;
 
+	@Mock
+	private JwtParser jwtParser;
+
 	@Test
 	void reissue_Success_WithExpectedCall() {
 		// given
 		Long userId = monkey.giveMeOne(Long.class);
 		UserResponse.Token tokens = monkey.giveMeOne(UserResponse.Token.class);
+		given(jwtParser.parseId(anyString())).willReturn(userId);
 		given(jwtGenerator.generate(any())).willReturn(tokens);
 
 		// when
-		UserResponse.Token response = reissueTokenService.reissue(userId, tokens.accessToken(), tokens.refreshToken());
+		UserResponse.Token response = reissueTokenService.reissue(tokens.accessToken(), tokens.refreshToken());
 
 		// then
+		then(jwtParser).should(times(1)).parseId(anyString());
 		then(jwtGenerator).should(times(1)).generate(any());
-		then(jwtValidator).should(times(1)).validate(any(), anyString(), anyString());
+		then(jwtValidator).should(times(1)).validateReissueable(any(), anyString());
 		assertThat(response).usingRecursiveComparison().isEqualTo(tokens);
 	}
 }

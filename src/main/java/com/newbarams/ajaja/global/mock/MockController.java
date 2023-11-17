@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.newbarams.ajaja.global.common.AjajaResponse;
 import com.newbarams.ajaja.global.security.jwt.util.JwtGenerator;
+import com.newbarams.ajaja.global.security.jwt.util.JwtParser;
 import com.newbarams.ajaja.global.security.jwt.util.JwtRemover;
 import com.newbarams.ajaja.global.security.jwt.util.JwtValidator;
 import com.newbarams.ajaja.module.feedback.domain.dto.GetAchieve;
@@ -53,6 +54,7 @@ class MockController {
 
 	private final JwtGenerator jwtGenerator;
 	private final JwtValidator jwtValidator;
+	private final JwtParser jwtParser;
 	private final JwtRemover jwtRemover;
 
 	@Operation(summary = "가짜 로그인 API")
@@ -67,7 +69,7 @@ class MockController {
 	@PostMapping("/reissue")
 	@ResponseStatus(OK)
 	AjajaResponse<UserResponse.Token> reissue(@RequestBody UserRequest.Reissue request) {
-		jwtValidator.validate(1L, request.accessToken(), request.refreshToken());
+		jwtValidator.validateReissueable(1L, request.refreshToken());
 		UserResponse.Token response = jwtGenerator.generate(1L);
 		return AjajaResponse.ok(response);
 	}
@@ -84,7 +86,7 @@ class MockController {
 	@ResponseStatus(OK)
 	Map<String, String> refreshNickname(@RequestHeader(AUTHORIZATION) String accessToken) {
 		String token = extractToken(accessToken);
-		jwtValidator.validate(1L, token, null);
+		jwtParser.parseId(token);
 
 		Collections.shuffle(nicknames);
 		Map<String, String> response = new HashMap<>();
@@ -97,7 +99,7 @@ class MockController {
 	@ResponseStatus(OK)
 	Map<String, String> sendVerification(@RequestHeader(AUTHORIZATION) String accessToken) {
 		String token = extractToken(accessToken);
-		jwtValidator.validate(1L, token, null);
+		jwtParser.parseId(token);
 
 		Map<String, String> response = new HashMap<>();
 		response.put("certification", CERTIFICATION);
@@ -118,7 +120,7 @@ class MockController {
 	@ResponseStatus(OK)
 	void withdraw(@RequestHeader(AUTHORIZATION) String accessToken) {
 		String token = extractToken(accessToken);
-		jwtValidator.validate(1L, token, null);
+		jwtParser.parseId(token);
 	}
 
 	private String extractToken(String token) {

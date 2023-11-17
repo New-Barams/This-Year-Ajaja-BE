@@ -28,29 +28,18 @@ class JwtValidatorTest extends MonkeySupport {
 	private RedisTemplate<String, Object> redisTemplate;
 
 	@Test
-	@DisplayName("토큰을 검증할 때 accessToken만으로도 검증되어야 한다.")
-	void validate_Success_ByAccessToken() {
-		// given
+	@DisplayName("유효한 refresh token을 입력하면 검증에 성공한다.")
+	void validate_Success_ByValidToken() {
 		Long userId = monkey.giveMeOne(Long.class);
 		UserResponse.Token tokens = jwtGenerator.generate(userId);
 
 		// when, then
-		assertThatNoException().isThrownBy(() -> jwtValidator.validate(userId, tokens.accessToken(), null));
+		assertThatNoException().isThrownBy(() -> jwtValidator.validateReissueable(userId, tokens.refreshToken()));
 	}
 
 	@Test
-	@DisplayName("토큰을 검증할 때 refreshToken만으로도 검증되어야 한다.")
-	void validate_Success_ByRefreshToken() {
-		Long userId = monkey.giveMeOne(Long.class);
-		UserResponse.Token tokens = jwtGenerator.generate(userId);
-
-		// when, then
-		assertThatNoException().isThrownBy(() -> jwtValidator.validate(userId, null, tokens.refreshToken()));
-	}
-
-	@Test
-	@DisplayName("서명이 다른 토큰을 넣으면 검증에 실패한다.")
-	void validate_Fail_ByInvalidToken() {
+	@DisplayName("서명이 다른 토큰을 입력하면 검증에 실패한다.")
+	void validate_Fail_ByWrongSignature() {
 		// given
 		Long userId = monkey.giveMeOne(Long.class);
 		String wrongSignatureToken = """
@@ -60,13 +49,12 @@ class JwtValidatorTest extends MonkeySupport {
 			""";
 
 		// when, then
-		assertThatException().isThrownBy(() -> jwtValidator.validate(userId, wrongSignatureToken, null));
-		assertThatException().isThrownBy(() -> jwtValidator.validate(userId, null, wrongSignatureToken));
+		assertThatException().isThrownBy(() -> jwtValidator.validateReissueable(userId, wrongSignatureToken));
 	}
 
 	@Test
-	@DisplayName("Refresh 토큰이 만료된 경우 검증에 실패해야 한다.")
-	void validate_Fail_ByTokenExpired() {
+	@DisplayName("로그인 이력 없이 refresh token을 입력하면 검증에 실패한다.")
+	void validate_Fail_ByNoneLoginHistory() {
 		// given
 		Long userId = monkey.giveMeOne(Long.class);
 		UserResponse.Token tokens = jwtGenerator.generate(userId);
@@ -75,12 +63,12 @@ class JwtValidatorTest extends MonkeySupport {
 
 		// when, then
 		assertThatExceptionOfType(AjajaException.class)
-			.isThrownBy(() -> jwtValidator.validate(userId, null, tokens.refreshToken()))
-			.withMessage(EXPIRED_TOKEN.getMessage());
+			.isThrownBy(() -> jwtValidator.validateReissueable(userId, tokens.refreshToken()))
+			.withMessage(NEVER_LOGIN.getMessage());
 	}
 
 	@Test
-	@DisplayName("관리 중인 Refresh 토큰과 다른 토큰이 입력되면 검증에 실패해야 한다.")
+	@DisplayName("관리 중인 refresh token과 다른 token을 입력하면 검증에 실패해야 한다.")
 	void validate_Fail_ByDifferentRefreshToken() {
 		// given
 		Long userId = monkey.giveMeOne(Long.class);
@@ -96,7 +84,7 @@ class JwtValidatorTest extends MonkeySupport {
 
 		// when, then
 		assertThatExceptionOfType(AjajaException.class)
-			.isThrownBy(() -> jwtValidator.validate(userId, null, oldTokens.refreshToken()))
+			.isThrownBy(() -> jwtValidator.validateReissueable(userId, oldTokens.refreshToken()))
 			.withMessage(TOKEN_NOT_MATCH.getMessage());
 	}
 }
