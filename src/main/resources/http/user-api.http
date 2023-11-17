@@ -1,3 +1,4 @@
+###
 # @name mock 로그인
 POST {{path}}/mock/login?code=authorizationCode
 
@@ -27,4 +28,14 @@ Content-Type: application/json
 
 {
   "email": ""
+}
+
+###
+# @name 인증번호 검증
+POST http://localhost:8080/users/verify
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "certification": ""
 }

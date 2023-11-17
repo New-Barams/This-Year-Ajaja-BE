@@ -2,6 +2,7 @@ package com.newbarams.ajaja.module.user.presentation;
 
 import static org.springframework.http.HttpStatus.*;
 
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -63,11 +64,19 @@ public class UserController {
 		sendVerificationEmailService.sendVerification(id, request.email());
 	}
 
-	@Operation(summary = "[토큰 필요] 이메일 인증 검증 API")
-	@PostMapping("/verify-email")
+	@Operation(summary = "[토큰 필요] 인증 번호 검증 API", description = "발송된 인증 번호를 검증합니다.", responses = {
+		@ApiResponse(responseCode = "200", description = "성공적으로 이메일 인증을 완료하였습니다."),
+		@ApiResponse(responseCode = "400", description = "유효하지 않은 토큰입니다. <br> 상세 정보는 응답을 확인 바랍니다."),
+		@ApiResponse(responseCode = "404", description = "사용자가 존재하지 않습니다."),
+		@ApiResponse(responseCode = "409", description = "인증 번호가 일치하지 않습니다."),
+	})
+	@PostMapping("/verify")
 	@ResponseStatus(OK)
-	public AjajaResponse<Void> verifyCertification(@UserId Long id, String certification) {
-		verifyCertificationService.verify(id, certification); // todo: update
+	public AjajaResponse<Void> verifyCertification(
+		@UserId Long id,
+		@Validated @RequestBody UserRequest.Certification request
+	) {
+		verifyCertificationService.verify(id, request.certification());
 		return AjajaResponse.noData();
 	}
 

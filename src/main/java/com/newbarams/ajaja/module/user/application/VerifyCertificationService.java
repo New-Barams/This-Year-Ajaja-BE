@@ -17,13 +17,12 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 @RequiredArgsConstructor
 public class VerifyCertificationService {
-	// private static final Pattern CERTIFICATION_PATTERN = Pattern.compile("^[0-9]{6}$");
 	private static final String KEY_PREFIX = "AJAJA "; // todo: manage prefix on same point
 
 	private final RetrieveUserService retrieveUserService;
 	private final RedisTemplate<String, Object> redisTemplate;
 
-	public void verify(Long userId, String certification) { // todo: 입력 값 검증은 어디서?
+	public void verify(Long userId, String certification) {
 		User user = retrieveUserService.loadExistUserById(userId);
 		EmailVerification verification = getEmailVerificationFromCache(userId);
 		verifyCertification(verification.certification(), certification);
