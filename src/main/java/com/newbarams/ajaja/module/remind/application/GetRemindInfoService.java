@@ -39,7 +39,7 @@ public class GetRemindInfoService {
 		Plan plan = getPlanService.loadPlanOrElseThrow(planId);
 
 		ZonedDateTime lastRemindTime = getDateTime(sentReminds.get(sentRemindsNumber).getPeriod().getStart());
-		int totalRemindNumber = plan.getInfo().getTotalRemindUmber();
+		int totalRemindNumber = plan.getInfo().getTotalRemindNumber();
 
 		List<GetRemindInfo.FutureRemindResponse> futureRemindResponses
 			= getFutureRemindResponse(plan, totalRemindNumber, lastRemindTime);

@@ -52,7 +52,7 @@ public class RemindInfo extends SelfValidating<RemindInfo> {
 		return this.remindTerm == 1 ? 2 : this.remindTerm;
 	}
 
-	public int getTotalRemindUmber() {
+	public int getTotalRemindNumber() {
 		int totalRemindUmber = this.remindTotalPeriod / this.remindTerm;
 
 		return this.remindTerm == 1 ? totalRemindUmber - 1 : totalRemindUmber;
