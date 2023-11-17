@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class RetrieveUserService {
+class RetrieveUserService {
 	private final UserRepository userRepository;
 
 	public User loadExistUserById(Long id) {
