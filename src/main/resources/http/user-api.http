@@ -1,0 +1,20 @@
+# @name mock 로그인
+POST {{path}}/mock/login?code=authorizationCode
+
+> {% client.global.set("accessToken", response.body.data.accessToken);
+    client.global.set("refreshToken", response.body.data.refreshToken); %}
+
+###
+# @name 토큰 재발급
+POST {{path}}/reissue
+Content-Type: application/json
+
+{
+  "accessToken": "{{accessToken}}",
+  "refreshToken": "{{refreshToken}}"
+}
+
+###
+# @name 닉네임 새로고침
+POST {{path}}/users/refresh
+Authorization: Bearer {{accessToken}}

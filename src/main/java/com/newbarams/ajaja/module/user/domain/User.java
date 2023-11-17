@@ -68,8 +68,9 @@ public class User extends BaseEntity<User> {
 		this.isDeleted = true;
 	}
 
-	public void updateNickname(String nickname) {
+	public String updateNickname(String nickname) {
 		this.nickname = new Nickname(nickname);
+		return nickname;
 	}
 
 	public void updateReceive(String receiveType) {

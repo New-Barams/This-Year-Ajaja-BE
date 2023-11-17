@@ -13,9 +13,9 @@ import lombok.RequiredArgsConstructor;
 public class RenewNicknameService {
 	private final RetrieveUserService retrieveUserService;
 
-	public void renew(Long id) {
+	public String renew(Long id) {
 		User user = retrieveUserService.loadExistUserById(id);
 		String nickname = RandomNicknameGenerator.generate();
-		user.updateNickname(nickname);
+		return user.updateNickname(nickname);
 	}
 }
