@@ -1,7 +1,5 @@
 package com.newbarams.ajaja.module.remind.application;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,9 +20,6 @@ public class LoadRemindInfoService {
 	public GetRemindInfo.CommonResponse loadRemindInfo(Long planId) {
 		Plan plan = loadPlanService.loadPlanOrElseThrow(planId);
 
-		List<GetRemindInfo.FutureRemindResponse> futureRemindResponse
-			= remindMapper.toFutureRemind(plan);
-
-		return new GetRemindInfo.CommonResponse(plan, futureRemindResponse);
+		return remindMapper.toFutureRemind(plan);
 	}
 }

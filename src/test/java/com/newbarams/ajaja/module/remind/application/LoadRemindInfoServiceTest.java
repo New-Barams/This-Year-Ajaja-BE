@@ -14,6 +14,7 @@ import com.newbarams.ajaja.common.MockTestSupport;
 import com.newbarams.ajaja.global.common.exception.AjajaException;
 import com.newbarams.ajaja.module.plan.application.LoadPlanService;
 import com.newbarams.ajaja.module.plan.domain.Plan;
+import com.newbarams.ajaja.module.remind.domain.dto.GetRemindInfo;
 import com.newbarams.ajaja.module.remind.mapper.RemindMapper;
 
 class LoadRemindInfoServiceTest extends MockTestSupport {
@@ -29,10 +30,11 @@ class LoadRemindInfoServiceTest extends MockTestSupport {
 	void getRemindInfo_Success_WithNoException() {
 		// given
 		Plan plan = monkey.giveMeOne(Plan.class);
+		GetRemindInfo.CommonResponse response = new GetRemindInfo.CommonResponse(plan, Collections.emptyList());
 
 		// when
 		given(loadPlanService.loadPlanOrElseThrow(any())).willReturn(plan);
-		given(remindMapper.toFutureRemind(any())).willReturn(Collections.emptyList());
+		given(remindMapper.toFutureRemind(any())).willReturn(response);
 
 		// then
 		Assertions.assertThatNoException().isThrownBy(

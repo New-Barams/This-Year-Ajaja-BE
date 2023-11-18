@@ -12,7 +12,7 @@ import com.newbarams.ajaja.module.remind.domain.dto.GetRemindInfo;
 @Component
 public class RemindMapper {
 
-	public List<GetRemindInfo.FutureRemindResponse> toFutureRemind(
+	public GetRemindInfo.CommonResponse toFutureRemind(
 		Plan plan
 	) {
 		List<GetRemindInfo.FutureRemindResponse> futureRemindResponses = new ArrayList<>();
@@ -32,6 +32,6 @@ public class RemindMapper {
 			remindMonth += remindTerm;
 		}
 
-		return futureRemindResponses;
+		return new GetRemindInfo.CommonResponse(plan, futureRemindResponses);
 	}
 }

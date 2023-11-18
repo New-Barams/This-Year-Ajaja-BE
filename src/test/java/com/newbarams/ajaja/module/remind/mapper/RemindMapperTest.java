@@ -1,7 +1,5 @@
 package com.newbarams.ajaja.module.remind.mapper;
 
-import java.util.List;
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,10 +20,10 @@ class RemindMapperTest extends MockTestSupport {
 		Plan plan = monkey.giveMeOne(Plan.class);
 
 		// when
-		List<GetRemindInfo.FutureRemindResponse> futureRemindResponse
+		GetRemindInfo.CommonResponse futureRemindResponse
 			= remindMapper.toFutureRemind(plan);
 
 		// then
-		Assertions.assertThat(futureRemindResponse.size()).isEqualTo(plan.getMessages().size());
+		Assertions.assertThat(futureRemindResponse.futureRemindResponses().size()).isEqualTo(plan.getMessages().size());
 	}
 }
