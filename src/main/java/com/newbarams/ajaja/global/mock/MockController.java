@@ -34,6 +34,7 @@ import com.newbarams.ajaja.module.feedback.domain.dto.GetAchieve;
 import com.newbarams.ajaja.module.feedback.domain.dto.UpdateFeedback;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
+import com.newbarams.ajaja.module.remind.domain.dto.GetRemindInfo;
 import com.newbarams.ajaja.module.remind.domain.dto.ModifyAlarm;
 import com.newbarams.ajaja.module.user.dto.UserRequest;
 import com.newbarams.ajaja.module.user.dto.UserResponse;
@@ -137,18 +138,118 @@ class MockController {
 		return new AjajaResponse<>(true, response);
 	}
 
-	@Operation(summary = "[테스트] 리마인드 정보 조회 API")
-	@GetMapping("/plans/{planId}/reminds")
+	@Operation(summary = "[테스트] 비시즌일때 리마인드 정보 조회 API")
+	@GetMapping("/reminds/{planId}")
 	@ResponseStatus(OK)
-	public AjajaResponse<MockGetRemindInfo.CommonResponse> getReminds() {
-		List<MockGetRemindInfo.Response> responses = List.of(
-			new MockGetRemindInfo.Response(1, 1L, "화이팅", true, 75, true, Timestamp.valueOf("2023-4-02 23:59:59")),
-			new MockGetRemindInfo.Response(2, 2L, "아좌좌", true, 50, true, Timestamp.valueOf("2023-7-02 23:59:59")),
-			new MockGetRemindInfo.Response(3, 3L, "할수있다", false, 0, false, Timestamp.valueOf("2023-10-02 23:59:59")));
+	public AjajaResponse<GetRemindInfo.CommonResponse> getReminds() {
+		List<GetRemindInfo.SentRemindResponse> sentRemindResponses =
+			List.of(
+				new GetRemindInfo.SentRemindResponse(
+					1L,
+					"화이팅",
+					3,
+					13,
+					50,
+					true,
+					true,
+					true,
+					4,
+					13
+				),
+				new GetRemindInfo.SentRemindResponse(
+					2L,
+					"아좌좌",
+					6,
+					13,
+					100,
+					true,
+					true,
+					true,
+					7,
+					13
+				));
 
-		MockGetRemindInfo.CommonResponse commonResponse = new MockGetRemindInfo.CommonResponse("moring", 2, 3, 1, true,
-			responses);
-		return new AjajaResponse<>(true, commonResponse);
+		List<GetRemindInfo.FutureRemindResponse> futureRemindResponses = List.of(
+			new GetRemindInfo.FutureRemindResponse(
+				0L,
+				"잘하고 있지?",
+				9,
+				13,
+				0,
+				false,
+				false,
+				false,
+				0,
+				0
+			),
+			new GetRemindInfo.FutureRemindResponse(
+				0L,
+				"조금만 더 힘내!",
+				12,
+				13,
+				0,
+				false,
+				false,
+				false,
+				0,
+				0
+			));
+
+		GetRemindInfo.CommonResponse response = new GetRemindInfo.CommonResponse(
+			9,
+			13,
+			3,
+			12,
+			true,
+			sentRemindResponses,
+			futureRemindResponses
+		);
+
+		return new AjajaResponse<>(true, response);
+	}
+
+	@Operation(summary = "[테스트] 시즌일 때 계획 페이지에서 리마인드 메세지들 가져오기")
+	@GetMapping("/reminds/modify/{planId}")
+	@ResponseStatus(OK)
+	public AjajaResponse<GetRemindInfo.CommonResponse> getReminds(@PathVariable Long planId) {
+		List<GetRemindInfo.SentRemindResponse> sentRemindResponses = Collections.emptyList();
+		List<GetRemindInfo.FutureRemindResponse> futureRemindResponses = List.of(
+			new GetRemindInfo.FutureRemindResponse(
+				0L,
+				"화이팅",
+				6,
+				13,
+				0,
+				false,
+				false,
+				false,
+				0,
+				0
+			),
+			new GetRemindInfo.FutureRemindResponse(
+				0L,
+				"아좌좌",
+				12,
+				13,
+				0,
+				false,
+				false,
+				false,
+				0,
+				0
+			));
+
+		GetRemindInfo.CommonResponse response = new GetRemindInfo.CommonResponse(
+			9,
+			13,
+			6,
+			12,
+			true,
+			sentRemindResponses,
+			futureRemindResponses
+		);
+
+		return new AjajaResponse<>(true, response);
 	}
 
 	@Operation(summary = "[테스트] 리마인드 알림 끄기 API")
@@ -298,16 +399,5 @@ class MockController {
 
 		List<MockPlanInfoResponse.GetPlanInfoResponse> getPlanInfo = List.of(getPlanInfo2023, getPlanInfo2022);
 		return new AjajaResponse<>(true, getPlanInfo);
-	}
-
-	@Operation(summary = "[테스트] 시즌일 때 계획 페이지에서 리마인드 메세지들 가져오기")
-	@GetMapping("/plans/{userId}/reminds/messages")
-	@ResponseStatus(OK)
-	public AjajaResponse<List<MockGetReminds.Response>> getReminds(@PathVariable Long userId) {
-		MockGetReminds.Response remind1 = new MockGetReminds.Response(0, "아좌좌");
-		MockGetReminds.Response remind2 = new MockGetReminds.Response(1, "화이팅");
-		MockGetReminds.Response remind3 = new MockGetReminds.Response(2, "할수 있다.");
-
-		return new AjajaResponse<>(true, List.of(remind1, remind2, remind3));
 	}
 }
