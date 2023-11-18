@@ -47,9 +47,8 @@ public class Plan extends BaseEntity<Plan> {
 	@NotNull
 	private Long userId;
 
-	@Getter
 	@NotNull
-	private int achieveRate;
+	private Integer achieveRate;
 
 	@Embedded
 	private Content content;
@@ -152,5 +151,9 @@ public class Plan extends BaseEntity<Plan> {
 			.filter((ajaja -> ajaja.getUserId().equals(userId)))
 			.findFirst()
 			.get();
+  }
+
+	public String getTimeName() {
+		return info.getTimeName();
 	}
 }

@@ -26,54 +26,59 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.newbarams.ajaja.global.common.AjajaResponse;
+import com.newbarams.ajaja.global.security.jwt.util.JwtGenerator;
+import com.newbarams.ajaja.global.security.jwt.util.JwtParser;
+import com.newbarams.ajaja.global.security.jwt.util.JwtRemover;
+import com.newbarams.ajaja.global.security.jwt.util.JwtValidator;
 import com.newbarams.ajaja.module.feedback.domain.dto.GetAchieve;
 import com.newbarams.ajaja.module.feedback.domain.dto.UpdateFeedback;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
-import com.newbarams.ajaja.module.remind.domain.dto.GetReminds;
+import com.newbarams.ajaja.module.remind.domain.dto.GetRemindInfo;
 import com.newbarams.ajaja.module.remind.domain.dto.ModifyAlarm;
+import com.newbarams.ajaja.module.user.dto.UserRequest;
+import com.newbarams.ajaja.module.user.dto.UserResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 
-@Tag(name = "mock", description = "MOCK API")
+@Tag(name = "mock", description = "가짜 API")
 @RestController
 @RequestMapping("/mock")
+@RequiredArgsConstructor
 class MockController {
 	private static final String CERTIFICATION = "123456";
-	private static final String ACCESS_TOKEN = "thisismockkakaoaccesstoken";
-	private static final String REFRESH_TOKEN = "thisismockkakaorefreshtoken";
-	private static final String NEW_ACCESS_TOKEN = "thisisnewmockkakaoaccesstoken";
 	private static final List<String> nicknames = Arrays.asList("노래부르는 다람쥐", "부끄러워하는 코끼리", "춤추는 강아지", "고백하는 고양이 ",
 		"거절하는 거북이 ", "손을 번쩍든 오리");
+
+	private final JwtGenerator jwtGenerator;
+	private final JwtValidator jwtValidator;
+	private final JwtParser jwtParser;
+	private final JwtRemover jwtRemover;
 
 	@Operation(summary = "가짜 로그인 API")
 	@PostMapping("/login")
 	@ResponseStatus(OK)
-	Map<String, String> login(@RequestParam("code") String authorizationCode) {
-		Map<String, String> response = new HashMap<>();
-		response.put("code", authorizationCode);
-		response.put("accessToken", ACCESS_TOKEN);
-		response.put("refreshToken", REFRESH_TOKEN);
-		return response;
+	AjajaResponse<UserResponse.Token> login(@RequestParam("code") String authorizationCode) {
+		UserResponse.Token response = jwtGenerator.generate(1L);
+		return AjajaResponse.ok(response);
 	}
 
 	@Operation(summary = "가짜 Token 재발급 API")
 	@PostMapping("/reissue")
 	@ResponseStatus(OK)
-	Map<String, String> reissue(@RequestHeader(AUTHORIZATION) String refreshToken) {
-		String token = extractToken(refreshToken);
-		validateRefreshToken(token);
-
-		Map<String, String> response = new HashMap<>();
-		response.put("accessToken", NEW_ACCESS_TOKEN);
-		return response;
+	AjajaResponse<UserResponse.Token> reissue(@RequestBody UserRequest.Reissue request) {
+		jwtValidator.validateReissueable(1L, request.refreshToken());
+		UserResponse.Token response = jwtGenerator.generate(1L);
+		return AjajaResponse.ok(response);
 	}
 
 	@Operation(summary = "가짜 로그아웃 API")
-	@PostMapping("/logout")
+	@PostMapping("/users/logout")
 	@ResponseStatus(OK)
 	void logout() {
+		jwtRemover.remove(1L);
 	}
 
 	@Operation(summary = "가짜 닉네임 새고로침 API")
@@ -81,7 +86,7 @@ class MockController {
 	@ResponseStatus(OK)
 	Map<String, String> refreshNickname(@RequestHeader(AUTHORIZATION) String accessToken) {
 		String token = extractToken(accessToken);
-		validateAccessToken(token);
+		jwtParser.parseId(token);
 
 		Collections.shuffle(nicknames);
 		Map<String, String> response = new HashMap<>();
@@ -94,7 +99,7 @@ class MockController {
 	@ResponseStatus(OK)
 	Map<String, String> sendVerification(@RequestHeader(AUTHORIZATION) String accessToken) {
 		String token = extractToken(accessToken);
-		validateAccessToken(token);
+		jwtParser.parseId(token);
 
 		Map<String, String> response = new HashMap<>();
 		response.put("certification", CERTIFICATION);
@@ -115,47 +120,136 @@ class MockController {
 	@ResponseStatus(OK)
 	void withdraw(@RequestHeader(AUTHORIZATION) String accessToken) {
 		String token = extractToken(accessToken);
-		validateAccessToken(token);
+		jwtParser.parseId(token);
 	}
 
 	private String extractToken(String token) {
 		return token.substring("Bearer ".length());
 	}
 
-	private void validateAccessToken(String accessToken) {
-		if (!ACCESS_TOKEN.equals(accessToken)) {
-			throw new IllegalArgumentException("wrong access token");
-		}
-	}
-
-	private void validateRefreshToken(String refreshToken) {
-		if (!ACCESS_TOKEN.equals(refreshToken)) {
-			throw new IllegalArgumentException("wrong refresh token");
-		}
-	}
-
 	@Operation(summary = "[테스트-5초 후 발송] 리마인드 전송 API")
 	@PostMapping("/plans/{planId}/reminds")
 	@ResponseStatus(OK)
-	public AjajaResponse<GetReminds.Response> sendRemind() throws InterruptedException {
+	public AjajaResponse<MockGetRemindInfo.Response> sendRemind() throws InterruptedException {
 		TimeUnit.SECONDS.sleep(5);
-		GetReminds.Response response = new GetReminds.Response(1, 1L, "화이팅", false, 0,
+		MockGetRemindInfo.Response response = new MockGetRemindInfo.Response(1, 1L, "화이팅", false, 0,
 			false, new Timestamp(System.currentTimeMillis()));
 
 		return new AjajaResponse<>(true, response);
 	}
 
-	@Operation(summary = "[테스트] 리마인드 정보 조회 API")
-	@GetMapping("/plans/{planId}/reminds")
+	@Operation(summary = "[테스트] 비시즌일때 리마인드 정보 조회 API")
+	@GetMapping("/reminds/{planId}")
 	@ResponseStatus(OK)
-	public AjajaResponse<GetReminds.CommonResponse> getReminds() {
-		List<GetReminds.Response> responses = List.of(
-			new GetReminds.Response(1, 1L, "화이팅", true, 75, true, Timestamp.valueOf("2023-4-02 23:59:59")),
-			new GetReminds.Response(2, 2L, "아좌좌", true, 50, true, Timestamp.valueOf("2023-7-02 23:59:59")),
-			new GetReminds.Response(3, 3L, "할수있다", false, 0, false, Timestamp.valueOf("2023-10-02 23:59:59")));
+	public AjajaResponse<GetRemindInfo.CommonResponse> getReminds() {
+		List<GetRemindInfo.SentRemindResponse> sentRemindResponses =
+			List.of(
+				new GetRemindInfo.SentRemindResponse(
+					1L,
+					"화이팅",
+					3,
+					13,
+					50,
+					true,
+					true,
+					true,
+					4,
+					13
+				),
+				new GetRemindInfo.SentRemindResponse(
+					2L,
+					"아좌좌",
+					6,
+					13,
+					100,
+					true,
+					true,
+					true,
+					7,
+					13
+				));
 
-		GetReminds.CommonResponse commonResponse = new GetReminds.CommonResponse("moring", 2, 3, 1, true, responses);
-		return new AjajaResponse<>(true, commonResponse);
+		List<GetRemindInfo.FutureRemindResponse> futureRemindResponses = List.of(
+			new GetRemindInfo.FutureRemindResponse(
+				0L,
+				"잘하고 있지?",
+				9,
+				13,
+				0,
+				false,
+				false,
+				false,
+				0,
+				0
+			),
+			new GetRemindInfo.FutureRemindResponse(
+				0L,
+				"조금만 더 힘내!",
+				12,
+				13,
+				0,
+				false,
+				false,
+				false,
+				0,
+				0
+			));
+
+		GetRemindInfo.CommonResponse response = new GetRemindInfo.CommonResponse(
+			9,
+			13,
+			3,
+			12,
+			true,
+			sentRemindResponses,
+			futureRemindResponses
+		);
+
+		return new AjajaResponse<>(true, response);
+	}
+
+	@Operation(summary = "[테스트] 시즌일 때 계획 페이지에서 리마인드 메세지들 가져오기")
+	@GetMapping("/reminds/modify/{planId}")
+	@ResponseStatus(OK)
+	public AjajaResponse<GetRemindInfo.CommonResponse> getReminds(@PathVariable Long planId) {
+		List<GetRemindInfo.SentRemindResponse> sentRemindResponses = Collections.emptyList();
+		List<GetRemindInfo.FutureRemindResponse> futureRemindResponses = List.of(
+			new GetRemindInfo.FutureRemindResponse(
+				0L,
+				"화이팅",
+				6,
+				13,
+				0,
+				false,
+				false,
+				false,
+				0,
+				0
+			),
+			new GetRemindInfo.FutureRemindResponse(
+				0L,
+				"아좌좌",
+				12,
+				13,
+				0,
+				false,
+				false,
+				false,
+				0,
+				0
+			));
+
+		GetRemindInfo.CommonResponse response = new GetRemindInfo.CommonResponse(
+			9,
+			13,
+			6,
+			12,
+			true,
+			sentRemindResponses,
+			futureRemindResponses
+		);
+
+		return new AjajaResponse<>(true, response);
 	}
 
 	@Operation(summary = "[테스트] 리마인드 알림 끄기 API")
@@ -305,16 +399,5 @@ class MockController {
 
 		List<MockPlanInfoResponse.GetPlanInfoResponse> getPlanInfo = List.of(getPlanInfo2023, getPlanInfo2022);
 		return new AjajaResponse<>(true, getPlanInfo);
-	}
-
-	@Operation(summary = "[테스트] 시즌일 때 계획 페이지에서 리마인드 메세지들 가져오기")
-	@GetMapping("/plans/{userId}/reminds/messages")
-	@ResponseStatus(OK)
-	public AjajaResponse<List<MockGetReminds.Response>> getReminds(@PathVariable Long userId) {
-		MockGetReminds.Response remind1 = new MockGetReminds.Response(0, "아좌좌");
-		MockGetReminds.Response remind2 = new MockGetReminds.Response(1, "화이팅");
-		MockGetReminds.Response remind3 = new MockGetReminds.Response(2, "할수 있다.");
-
-		return new AjajaResponse<>(true, List.of(remind1, remind2, remind3));
 	}
 }

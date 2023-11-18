@@ -26,7 +26,6 @@ public class JwtGenerator {
 		String refreshToken = generateRefreshToken(now);
 
 		saveOnCache(userId, refreshToken);
-
 		return new UserResponse.Token(accessToken, refreshToken);
 	}
 

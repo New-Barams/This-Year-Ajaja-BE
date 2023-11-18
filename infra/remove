@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+docker rm mysql redis
+docker rmi mysql:latest redis:latest
+
+docker volume rm infra_config
+docker volume rm infra_data

@@ -19,8 +19,8 @@ import com.newbarams.ajaja.common.MockTestSupport;
 import com.newbarams.ajaja.module.plan.application.CreatePlanService;
 import com.newbarams.ajaja.module.plan.application.DeletePlanService;
 import com.newbarams.ajaja.module.plan.application.GetPlanAchieveService;
-import com.newbarams.ajaja.module.plan.application.GetPlanInfoService;
-import com.newbarams.ajaja.module.plan.application.GetPlanService;
+import com.newbarams.ajaja.module.plan.application.LoadPlanInfoService;
+import com.newbarams.ajaja.module.plan.application.LoadPlanService;
 import com.newbarams.ajaja.module.plan.application.UpdatePlanService;
 
 @AutoConfigureMockMvc
@@ -33,7 +33,7 @@ class PlanControllerTest extends MockTestSupport {
 	@MockBean
 	private GetPlanAchieveService getPlanAchieveService;
 	@MockBean
-	private GetPlanService getPlanService;
+	private LoadPlanService getPlanService;
 	@MockBean
 	private CreatePlanService createPlanService;
 	@MockBean
@@ -41,7 +41,7 @@ class PlanControllerTest extends MockTestSupport {
 	@MockBean
 	private UpdatePlanService updatePlanService;
 	@MockBean
-	private GetPlanInfoService getPlanInfoService;
+	private LoadPlanInfoService loadPlanInfoService;
 
 	@Test
 	@WithMockUser
@@ -57,7 +57,7 @@ class PlanControllerTest extends MockTestSupport {
 	@Test
 	@WithMockUser
 	void getPlanInfo_Success_WithNoException() throws Exception {
-		given(getPlanInfoService.loadPlanInfo(any())).willReturn(null);
+		given(loadPlanInfoService.loadPlanInfo(any())).willReturn(null);
 
 		mockMvc.perform(MockMvcRequestBuilders.get("/plans/main/1")
 				.with(csrf())

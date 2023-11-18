@@ -10,12 +10,11 @@ import lombok.RequiredArgsConstructor;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class RenewNicknameService {
+public class WithdrawService {
 	private final RetrieveUserService retrieveUserService;
 
-	public String renew(Long id) {
-		User user = retrieveUserService.loadExistUserById(id);
-		String nickname = RandomNicknameGenerator.generate();
-		return user.updateNickname(nickname);
+	public void withdraw(Long userId) {
+		User user = retrieveUserService.loadExistUserById(userId);
+		user.delete(); // todo: add oauth separation, delete plans ... etc.
 	}
 }

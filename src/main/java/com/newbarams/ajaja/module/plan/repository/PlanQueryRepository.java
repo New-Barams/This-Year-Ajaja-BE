@@ -143,14 +143,21 @@ public class PlanQueryRepository {
 			.toList();
 	}
 
-	public List<PlanInfoResponse.GetGetPlan> findAllPlanByUserId(Long userId) {
-		return queryFactory.select(Projections.bean(PlanInfoResponse.GetGetPlan.class,
+	public List<PlanInfoResponse.GetPlan> findAllPlanByUserId(Long userId) {
+		return queryFactory.select(Projections.constructor(PlanInfoResponse.GetPlan.class,
+				plan.createdAt.year(),
+				plan.id,
 				plan.content.title,
 				plan.status.canRemind,
 				plan.achieveRate))
 			.from(plan)
-			.where(plan.userId.eq(userId)
-				.and(isCurrentYear()))
+			.groupBy(plan.createdAt.year(),
+				plan.id,
+				plan.content.title,
+				plan.status.canRemind,
+				plan.achieveRate)
+			.where(plan.userId.eq(userId))
+			.orderBy(plan.createdAt.year().desc())
 			.fetch();
 	}
 

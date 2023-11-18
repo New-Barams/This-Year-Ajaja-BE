@@ -44,4 +44,12 @@ public class RemindQueryRepository {
 		Instant instant = Instant.now();
 		return instant.atZone(ZoneId.systemDefault());
 	}
+
+	public List<Remind> findAllRemindByPlanId(Long planId) {
+		return queryFactory
+			.selectFrom(remind)
+			.where(remind.type.eq(Remind.Type.PLAN)
+				.and(remind.planId.eq(planId)))
+			.fetch();
+	}
 }

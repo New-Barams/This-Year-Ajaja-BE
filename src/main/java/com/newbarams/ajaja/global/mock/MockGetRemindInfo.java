@@ -1,9 +1,9 @@
-package com.newbarams.ajaja.module.remind.domain.dto;
+package com.newbarams.ajaja.global.mock;
 
 import java.sql.Timestamp;
 import java.util.List;
 
-public sealed interface GetReminds permits GetReminds.CommonResponse, GetReminds.Response {
+public sealed interface MockGetRemindInfo permits MockGetRemindInfo.CommonResponse, MockGetRemindInfo.Response {
 
 	record CommonResponse(
 		String remindTime,
@@ -11,7 +11,7 @@ public sealed interface GetReminds permits GetReminds.CommonResponse, GetReminds
 		int remindTerm,
 		int remindTotalPeriod,
 		boolean isRemindable,
-		List<Response> responses) implements GetReminds {
+		List<Response> responses) implements MockGetRemindInfo {
 	}
 
 	record Response(
@@ -22,6 +22,6 @@ public sealed interface GetReminds permits GetReminds.CommonResponse, GetReminds
 		int rate,
 		boolean isExpired,
 		Timestamp deadLine
-	) implements GetReminds {
+	) implements MockGetRemindInfo {
 	}
 }
