@@ -17,7 +17,20 @@ public class RemindInfo extends SelfValidating<RemindInfo> {
 	enum RemindTime {
 		MORNING,
 		AFTERNOON,
-		EVENING
+		EVENING;
+
+		public int getRemindTime() {
+			String name = this.name();
+
+			if (name.equals("MORNING")) {
+				return 9;
+			} else if (name.equals("AFTERNOON")) {
+				return 13;
+			} else {
+				return 22;
+			}
+		}
+
 	}
 
 	@Positive
@@ -48,6 +61,10 @@ public class RemindInfo extends SelfValidating<RemindInfo> {
 		this.validateSelf();
 	}
 
+	public int getRemindTime() {
+		return remindTime.getRemindTime();
+	}
+
 	public int getRemindMonth() {
 		return this.remindTerm == 1 ? 2 : this.remindTerm;
 	}
@@ -56,18 +73,6 @@ public class RemindInfo extends SelfValidating<RemindInfo> {
 		int totalRemindNumber = this.remindTotalPeriod / this.remindTerm;
 
 		return this.remindTerm == 1 ? totalRemindNumber - 1 : totalRemindNumber;
-	}
-
-	public int getRemindTime() {
-		String name = this.remindTime.name();
-
-		if (name.equals("MORNING")) {
-			return 9;
-		} else if (name.equals("AFTERNOON")) {
-			return 13;
-		} else {
-			return 22;
-		}
 	}
 
 	public String getTimeName() {
