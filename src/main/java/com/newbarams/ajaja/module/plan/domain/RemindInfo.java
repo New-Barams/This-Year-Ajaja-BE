@@ -68,6 +68,18 @@ public class RemindInfo extends SelfValidating<RemindInfo> {
 		}
 	}
 
+	public int getRemindTime() {
+		String name = this.remindTime.name();
+
+		if (name.equals("MORNING")) {
+			return 9;
+		} else if (name.equals("AFTERNOON")) {
+			return 13;
+		} else {
+			return 22;
+		}
+	}
+
 	public String getTimeName() {
 		return remindTime.name();
 	}

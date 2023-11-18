@@ -142,4 +142,32 @@ public class Plan extends BaseEntity<Plan> {
 	public String getTimeName() {
 		return info.getTimeName();
 	}
+
+	public int getRemindTime() {
+		return info.getRemindTime();
+	}
+
+	public int getRemindMonth() {
+		return info.getRemindMonth();
+	}
+
+	public int getRemindDate() {
+		return info.getRemindDate();
+	}
+
+	public int getRemindTerm() {
+		return info.getRemindTerm();
+	}
+
+	public int getRemindTotalPeriod() {
+		return info.getRemindTotalPeriod();
+	}
+
+	public boolean getIsRemindable() {
+		return status.isCanRemind();
+	}
+
+	public int getTotalRemindNumber() {
+		return info.getTotalRemindNumber();
+	}
 }
