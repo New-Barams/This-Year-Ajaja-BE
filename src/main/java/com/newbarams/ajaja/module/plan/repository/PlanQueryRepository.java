@@ -1,6 +1,7 @@
 package com.newbarams.ajaja.module.plan.repository;
 
 import static com.newbarams.ajaja.global.common.error.ErrorCode.*;
+import static com.newbarams.ajaja.module.ajaja.domain.QAjaja.*;
 import static com.newbarams.ajaja.module.plan.domain.QPlan.*;
 import static com.newbarams.ajaja.module.tag.domain.QPlanTag.*;
 import static com.newbarams.ajaja.module.tag.domain.QTag.*;
@@ -57,8 +58,9 @@ public class PlanQueryRepository {
 		String nickname = tuple.get(user.nickname).getNickname();
 
 		List<String> tags = findTagByPlanId(planFromTuple.getId());
+		Long ajajas = countNotCanceledAjaja(planFromTuple.getId());
 
-		return PlanMapper.toResponse(planFromTuple, nickname, tags);
+		return PlanMapper.toResponse(planFromTuple, nickname, tags, ajajas);
 	}
 
 	private List<String> findTagByPlanId(Long planId) {
@@ -66,6 +68,13 @@ public class PlanQueryRepository {
 			.from(planTag, tag)
 			.where(planTag.tagId.eq(tag.id).and(planTag.planId.eq(planId)))
 			.fetch();
+	}
+
+	private Long countNotCanceledAjaja(Long planId) {
+		return queryFactory.select(ajaja.count())
+			.from(ajaja)
+			.where(ajaja.ajajaId.targetId.eq(planId).and(ajaja.isCanceled.eq(false)))
+			.fetchOne();
 	}
 
 	public List<PlanResponse.GetAll> findAllByCursorAndSorting(PlanRequest.GetAll conditions) {
@@ -127,8 +136,9 @@ public class PlanQueryRepository {
 				Plan planFromTuple = tuple.get(plan);
 				String nickname = tuple.get(user.nickname).getNickname();
 				List<String> tags = findTagByPlanId(planFromTuple.getId());
+				Long ajajas = countNotCanceledAjaja(planFromTuple.getId());
 
-				return PlanMapper.toGetAllResponse(planFromTuple, nickname, tags);
+				return PlanMapper.toGetAllResponse(planFromTuple, nickname, tags, ajajas);
 			})
 			.toList();
 	}
