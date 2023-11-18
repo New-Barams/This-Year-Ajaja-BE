@@ -21,7 +21,7 @@ import com.newbarams.ajaja.global.security.common.UserId;
 import com.newbarams.ajaja.module.plan.application.CreatePlanService;
 import com.newbarams.ajaja.module.plan.application.DeletePlanService;
 import com.newbarams.ajaja.module.plan.application.GetPlanAchieveService;
-import com.newbarams.ajaja.module.plan.application.GetPlanInfoService;
+import com.newbarams.ajaja.module.plan.application.LoadPlanInfoService;
 import com.newbarams.ajaja.module.plan.application.LoadPlanService;
 import com.newbarams.ajaja.module.plan.application.UpdatePlanService;
 import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
@@ -42,7 +42,7 @@ public class PlanController {
 	private final DeletePlanService deletePlanService;
 	private final GetPlanAchieveService getPlanAchieveService;
 	private final UpdatePlanService updatePlanService;
-	private final GetPlanInfoService getPlanInfoService;
+	private final LoadPlanInfoService loadPlanInfoService;
 
 	@Operation(summary = "[토큰 필요] 계획 생성 API")
 	@PostMapping
@@ -132,10 +132,10 @@ public class PlanController {
 	@Operation(description = "[토큰 필요] 메인페이지 목표 조회 API")
 	@GetMapping("/main/{userId}")
 	@ResponseStatus(OK)
-	public AjajaResponse<PlanInfoResponse.GetPlanInfoResponse> getPlanInfo(@PathVariable Long userId) {
-		PlanInfoResponse.GetPlanInfoResponse getPlanInfo = getPlanInfoService.loadPlanInfo(userId);
+	public AjajaResponse<List<PlanInfoResponse.GetPlanInfoResponse>> getPlanInfo(@PathVariable Long userId) {
+		List<PlanInfoResponse.GetPlanInfoResponse> getPlanInfos = loadPlanInfoService.loadPlanInfo(userId);
 
-		return new AjajaResponse<>(true, getPlanInfo);
+		return new AjajaResponse<>(true, getPlanInfos);
 	}
 
 	@Operation(summary = "계획 전체 조회 API")

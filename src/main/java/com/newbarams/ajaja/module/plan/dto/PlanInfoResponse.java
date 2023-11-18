@@ -2,19 +2,19 @@ package com.newbarams.ajaja.module.plan.dto;
 
 import java.util.List;
 
-import lombok.Getter;
-
 public sealed interface PlanInfoResponse permits PlanInfoResponse.GetPlanInfoResponse, PlanInfoResponse.GetPlan {
-	record GetPlanInfoResponse(
-		int totalAchieveRate,
-		List<GetPlan> getPlanList
+	record GetPlanInfoResponse( // todo : dto 다시 분류해보기 , 네이밍 수정
+								int year,
+								int totalAchieveRate,
+								List<GetPlan> getPlanList
 	) implements PlanInfoResponse {
 	}
 
 	record GetPlan(
+		int year,
+		Long planId,
 		String title,
 		boolean isRemindable,
-		@Getter
 		int achieveRate
 	) implements PlanInfoResponse {
 	}
