@@ -31,7 +31,7 @@ public class CreateRemindService {
 
 		while (remindMonth <= totalPeriod) {
 			Info info = new Info(messageIterator.next().getContent());
-			int remindTime = remindInfo.getRemindTime(remindInfo.getTimeName());
+			int remindTime = remindInfo.getRemindTime();
 
 			Instant time = parseInstant(remindInfo.getRemindDate(), remindMonth, remindTime);
 
