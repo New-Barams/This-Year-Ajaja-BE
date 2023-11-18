@@ -19,6 +19,8 @@ import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.domain.RemindInfo;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.repository.PlanRepository;
+import com.newbarams.ajaja.module.user.domain.User;
+import com.newbarams.ajaja.module.user.domain.UserRepository;
 
 @SpringBootTest
 class UpdatePlanServiceTest {
@@ -31,12 +33,18 @@ class UpdatePlanServiceTest {
 	@Autowired
 	private PlanRepository planRepository;
 
+	@Autowired
+	private UserRepository userRepository;
+
 	@Test
 	@DisplayName("planId가 존재하고, 수정가능한 기간일 경우 계획을 수정할 수 있다.")
 	void updatePlan_Success() {
+		User user = new User("nickname", "abcde@naver.com");
+		User savedUser = userRepository.save(user);
+
 		Plan plan = Plan.builder()
 			.date("Thu JAN 09 2023")
-			.userId(1L)
+			.userId(savedUser.getId())
 			.content(new Content("title", "description"))
 			.info(new RemindInfo(12, 3, 15, "MORNING"))
 			.isPublic(true)
@@ -49,7 +57,7 @@ class UpdatePlanServiceTest {
 		Plan saved = planRepository.save(plan);
 
 		assertThatNoException().isThrownBy(
-			() -> updatePlanService.update(saved.getId(), 1L, request, "Thu JAN 09 2023")
+			() -> updatePlanService.update(saved.getId(), savedUser.getId(), request, "Thu JAN 09 2023")
 		);
 	}
 

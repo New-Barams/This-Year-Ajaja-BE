@@ -5,7 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.newbarams.ajaja.module.ajaja.domain.Ajaja;
 import com.newbarams.ajaja.module.ajaja.domain.AjajaRepository;
-import com.newbarams.ajaja.module.plan.application.GetPlanService;
+import com.newbarams.ajaja.module.plan.application.LoadPlanService;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 
 import lombok.RequiredArgsConstructor;
@@ -15,10 +15,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SwitchAjajaService {
 	private final AjajaRepository ajajaRepository;
-	private final GetPlanService getPlanService;
+	private final LoadPlanService loadPlanService;
 
 	public void switchOrAddIfNotExist(Long userId, Long planId) {
-		Plan plan = getPlanService.loadPlanOrElseThrow(planId);
+		Plan plan = loadPlanService.loadPlanOrElseThrow(planId);
 
 		Ajaja ajaja = plan.getAjajaByUserId(userId);
 

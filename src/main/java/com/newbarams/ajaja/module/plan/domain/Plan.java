@@ -151,7 +151,7 @@ public class Plan extends BaseEntity<Plan> {
 			.filter((ajaja -> ajaja.getUserId().equals(userId)))
 			.findFirst()
 			.get();
-  }
+	}
 
 	public String getTimeName() {
 		return info.getTimeName();
