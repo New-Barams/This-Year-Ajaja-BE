@@ -21,7 +21,7 @@ public class GetTotalAchieveService {
 
 		return (int)planList
 			.stream()
-			.mapToInt(PlanInfoResponse.GetPlan::getAchieveRate)
+			.mapToInt(PlanInfoResponse.GetPlan::achieveRate)
 			.average()
 			.orElse(0);
 	}

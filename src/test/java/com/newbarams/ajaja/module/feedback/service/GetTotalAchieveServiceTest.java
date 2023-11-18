@@ -37,11 +37,11 @@ class GetTotalAchieveServiceTest {
 	@DisplayName("그 해 유저의 피드백을 통틀어서 달성률의 평균을 매긴다.")
 	void getTotalAchieve_Success_WithNoException() {
 		// given
-		PlanInfoResponse.GetPlan planInfo1 = new PlanInfoResponse.GetPlan("title", true, 50);
-		PlanInfoResponse.GetPlan planInfo2 = new PlanInfoResponse.GetPlan("title", true, 100);
+		PlanInfoResponse.GetPlan planInfo1 = new PlanInfoResponse.GetPlan(2023, 1L, "title", true, 50);
+		PlanInfoResponse.GetPlan planInfo2 = new PlanInfoResponse.GetPlan(2023, 2L, "title", true, 100);
 
 		int calculatedAchieve =
-			(planInfo1.getAchieveRate() + planInfo2.getAchieveRate()) / 2;
+			(planInfo1.achieveRate() + planInfo2.achieveRate()) / 2;
 
 		// when
 		given(planQueryRepository.findAllPlanByUserId(any())).willReturn(List.of(planInfo1, planInfo2));
