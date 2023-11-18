@@ -118,13 +118,13 @@ public class PlanController {
 	@Operation(summary = "[토큰 필요] 계획 수정 API")
 	@PutMapping("/{id}")
 	@ResponseStatus(OK)
-	public AjajaResponse<PlanResponse.Create> updatePlan(
+	public AjajaResponse<PlanResponse.GetOne> updatePlan(
 		@PathVariable Long id,
 		@UserId Long userId,
 		@RequestBody PlanRequest.Update request,
 		@RequestHeader(name = "Date") String date
 	) {
-		PlanResponse.Create updated = updatePlanService.update(id, userId, request, date);
+		PlanResponse.GetOne updated = updatePlanService.update(id, userId, request, date);
 
 		return new AjajaResponse<>(true, updated);
 	}

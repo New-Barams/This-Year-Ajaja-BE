@@ -234,7 +234,7 @@ class MockController {
 	public AjajaResponse<PlanResponse.GetOne> getOnePlan(@PathVariable Long id) {
 		List<String> tags = List.of("술", "금주", "알코올 중독");
 		PlanResponse.GetOne response = new PlanResponse.GetOne(1L, 1L, "노래하는 다람쥐", "술 줄이기",
-			"술 한 달에 두번만 먹기", true, 15, tags, Instant.parse("2023-01-04T04:14:14Z"));
+			"술 한 달에 두번만 먹기", true, true, true, 15, tags, Instant.parse("2023-01-04T04:14:14Z"));
 
 		return new AjajaResponse<>(true, response);
 	}

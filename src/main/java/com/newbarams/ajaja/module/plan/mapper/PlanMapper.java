@@ -62,7 +62,7 @@ public class PlanMapper {
 			plan.getStatus().isPublic(),
 			plan.getStatus().isCanRemind(),
 			plan.getStatus().isCanAjaja(),
-			plan.getAjajas().size(),
+			0,
 			tags,
 			plan.getCreatedAt()
 		);
@@ -76,6 +76,8 @@ public class PlanMapper {
 			plan.getContent().getTitle(),
 			plan.getContent().getDescription(),
 			plan.getStatus().isPublic(),
+			plan.getStatus().isCanRemind(),
+			plan.getStatus().isCanAjaja(),
 			ajajas,
 			tags,
 			plan.getCreatedAt()
