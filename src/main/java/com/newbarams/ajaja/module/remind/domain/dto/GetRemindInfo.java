@@ -1,6 +1,9 @@
 package com.newbarams.ajaja.module.remind.domain.dto;
 
+import java.util.Collections;
 import java.util.List;
+
+import com.newbarams.ajaja.module.plan.domain.Plan;
 
 public sealed interface GetRemindInfo
 	permits GetRemindInfo.CommonResponse, GetRemindInfo.SentRemindResponse, GetRemindInfo.FutureRemindResponse {
@@ -15,6 +18,17 @@ public sealed interface GetRemindInfo
 		List<FutureRemindResponse> futureRemindResponses
 
 	) implements GetRemindInfo {
+		public CommonResponse(Plan plan, List<FutureRemindResponse> futureRemindResponse) {
+			this(
+				plan.getRemindTime(),
+				plan.getRemindDate(),
+				plan.getRemindTerm(),
+				plan.getRemindTotalPeriod(),
+				plan.getIsRemindable(),
+				Collections.emptyList(),
+				futureRemindResponse
+			);
+		}
 	}
 
 	record SentRemindResponse(
@@ -43,5 +57,19 @@ public sealed interface GetRemindInfo
 		int endMonth,
 		int endDate
 	) implements GetRemindInfo {
+		public FutureRemindResponse(String remindMessage, int remindMonth, int remindDate) {
+			this(
+				0L,
+				remindMessage,
+				remindMonth,
+				remindDate,
+				0,
+				false,
+				false,
+				false,
+				0,
+				0
+			);
+		}
 	}
 }
