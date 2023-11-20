@@ -56,7 +56,7 @@ class FeedbackControllerTest {
 	void getTotalAchieve_Success_WithNoException() throws Exception {
 		given(getTotalAchieveService.calculateTotalAchieve(anyLong())).willReturn(50);
 
-		mockMvc.perform(MockMvcRequestBuilders.get("/feedbacks/1")
+		mockMvc.perform(MockMvcRequestBuilders.get("/feedbacks")
 				.with(csrf())
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk());
