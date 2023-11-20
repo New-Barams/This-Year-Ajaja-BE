@@ -7,6 +7,9 @@ on:
     types:
       - completed
 
+env:
+  DOCKER_IMAGE: gmlwh124/ajaja:latest
+
 jobs:
   rerun-server:
     runs-on: ubuntu-latest
@@ -19,6 +22,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            docker pull gmlwh124/ajaja:latest
-            docker ps -aq | xargs docker stop | xargs docker rm
-            docker run -d -p 8080:8080 gmlwh124/ajaja:latest
+            docker pull ${{ env.DOCKER_IMAGE }}
+            docker images -q --filter dangling=true | xargs docker rmi
+            docker ps -aqf ancestor=${{ env.DOCKER_IMAGE }} | xargs docker stop | xargs docker rm
+            docker run -d --name ajaja-server -p 8080:8080 ${{ env.DOCKER_IMAGE }}

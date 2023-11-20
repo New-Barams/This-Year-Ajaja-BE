@@ -11,7 +11,9 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Configuration
 @EnableRedisRepositories
 @RequiredArgsConstructor
@@ -20,6 +22,7 @@ public class RedisConfig {
 
 	@Bean
 	RedisConnectionFactory redisConnectionFactory() {
+		log.info("host : {}", redisProperties.getHost());
 		return new LettuceConnectionFactory(redisProperties.getHost(), redisProperties.getPort());
 	}
 

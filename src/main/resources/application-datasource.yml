@@ -9,6 +9,10 @@ spring:
     username: ENC(pj2OQDc7CO49Fd/+rLWsjg==)
     password: ENC(SSttdjWt+qKzOLgwTL2cgUtEce9wbS8I)
 
+  data:
+    redis:
+      host: ENC(Fpe9EdTqAL0u47WZ7roulWXaa+g9s42vAcLc830f0Eg=)
+
 ---
 
 spring:
