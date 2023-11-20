@@ -3,11 +3,14 @@ package com.newbarams.ajaja.module.ajaja.domain;
 import com.newbarams.ajaja.global.common.BaseEntity;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,8 +25,17 @@ public class Ajaja extends BaseEntity<Ajaja> {
 		RETROSPECT, // 회고
 	}
 
-	@EmbeddedId
-	private AjajaId ajajaId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ajaja_id")
+	private Long id;
+
+	@NotNull
+	@Column(name = "target_id")
+	private Long targetId;
+
+	@NotNull
+	private Long userId;
 
 	private boolean isCanceled;
 
@@ -32,7 +44,8 @@ public class Ajaja extends BaseEntity<Ajaja> {
 	private Type type;
 
 	private Ajaja(Long targetId, Long userId, Type type) {
-		this.ajajaId = new AjajaId(targetId, userId);
+		this.targetId = targetId;
+		this.userId = userId;
 		this.isCanceled = false;
 		this.type = type;
 		this.validateSelf();
@@ -47,7 +60,7 @@ public class Ajaja extends BaseEntity<Ajaja> {
 	}
 
 	public Long getUserId() {
-		return ajajaId.getUserId();
+		return userId;
 	}
 
 	public void switchStatus() {
