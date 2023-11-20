@@ -73,7 +73,7 @@ public class PlanQueryRepository {
 	private Long countNotCanceledAjaja(Long planId) {
 		return queryFactory.select(ajaja.count())
 			.from(ajaja)
-			.where(ajaja.ajajaId.targetId.eq(planId).and(ajaja.isCanceled.eq(false)))
+			.where(ajaja.targetId.eq(planId).and(ajaja.isCanceled.eq(false)))
 			.fetchOne();
 	}
 
