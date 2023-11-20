@@ -12,8 +12,6 @@ import lombok.RequiredArgsConstructor;
 public enum ErrorCode {
 	// 400
 	BEAN_VALIDATE_FAIL_EXCEPTION(BAD_REQUEST, "올바르지 않은 데이터입니다."),
-	NOT_FOUND_FEEDBACK(BAD_REQUEST, "피드백 정보가 존재하지 않습니다."),
-	NOT_FOUND_PLAN(BAD_REQUEST, "계획 정보가 존재하지 않습니다."),
 	INVALID_BEARER_FORMAT(BAD_REQUEST, "유효한 Bearer 토큰의 형식이 아닙니다."),
 	INVALID_SIGNATURE(BAD_REQUEST, "잘못된 서명입니다."),
 	INVALID_TOKEN(BAD_REQUEST, "잘못된 토큰입니다."),
@@ -29,6 +27,8 @@ public enum ErrorCode {
 	USER_NOT_FOUND(NOT_FOUND, "사용자가 존재하지 않습니다."),
 	CERTIFICATION_NOT_FOUND(NOT_FOUND, "인증 요청 시간이 초과하였거나 인증을 요청한 적이 없습니다."),
 	NEVER_LOGIN(NOT_FOUND, "로그인한 이력을 찾을 수 없습니다. 다시 로그인 해주세요."),
+	NOT_FOUND_PLAN(NOT_FOUND, "계획 정보가 존재하지 않습니다."),
+	NOT_FOUND_FEEDBACK(NOT_FOUND, "피드백 정보가 존재하지 않습니다."),
 
 	// 409
 	EXPIRED_FEEDBACK(CONFLICT, "평가 기간이 지났습니다."),
