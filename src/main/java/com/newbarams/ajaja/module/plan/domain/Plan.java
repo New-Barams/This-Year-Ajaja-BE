@@ -9,17 +9,20 @@ import org.hibernate.annotations.Where;
 
 import com.newbarams.ajaja.global.common.BaseEntity;
 import com.newbarams.ajaja.global.common.exception.AjajaException;
-import com.newbarams.ajaja.module.ajaja.Ajaja;
+import com.newbarams.ajaja.module.ajaja.domain.Ajaja;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderColumn;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
@@ -59,8 +62,8 @@ public class Plan extends BaseEntity<Plan> {
 	private List<Message> messages = new ArrayList<>();
 
 	@Size
-	@ElementCollection
-	@CollectionTable(name = "ajajas", joinColumns = @JoinColumn(name = "target_id"))
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "target_id")
 	private List<Ajaja> ajajas = new ArrayList<>();
 
 	@Builder
@@ -137,6 +140,17 @@ public class Plan extends BaseEntity<Plan> {
 
 	public void updateAchieve(int achieveRate) {
 		this.achieveRate = achieveRate;
+	}
+
+	public void addAjaja(Ajaja ajaja) {
+		this.ajajas.add(ajaja);
+	}
+
+	public Ajaja getAjajaByUserId(Long userId) {
+		return ajajas.stream()
+			.filter((ajaja -> ajaja.getUserId().equals(userId)))
+			.findFirst()
+			.get();
 	}
 
 	public String getTimeName() {

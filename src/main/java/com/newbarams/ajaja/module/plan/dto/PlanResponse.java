@@ -12,7 +12,9 @@ public class PlanResponse {
 		String title,
 		String description,
 		boolean isPublic,
-		int ajajas,
+		boolean canRemind,
+		boolean canAjaja,
+		long ajajas,
 		List<String> tags,
 		Instant createdAt
 	) {
@@ -23,7 +25,7 @@ public class PlanResponse {
 		Long userId,
 		String nickname,
 		String title,
-		int ajajas,
+		long ajajas,
 		List<String> tags,
 		Instant createdAt
 	) {

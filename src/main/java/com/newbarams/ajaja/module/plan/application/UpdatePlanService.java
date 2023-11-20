@@ -1,7 +1,5 @@
 package com.newbarams.ajaja.module.plan.application;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -9,6 +7,7 @@ import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 import com.newbarams.ajaja.module.plan.mapper.PlanMapper;
+import com.newbarams.ajaja.module.plan.repository.PlanQueryRepository;
 import com.newbarams.ajaja.module.tag.application.UpdatePlanTagService;
 
 import lombok.RequiredArgsConstructor;
@@ -19,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 public class UpdatePlanService {
 	private final LoadPlanService getPlanService;
 	private final UpdatePlanTagService updatePlanTagService;
+	private final PlanQueryRepository planQueryRepository;
 
 	public void updatePublicStatus(Long id, Long userId) {
 		Plan plan = getPlanService.loadPlanOrElseThrow(id);
@@ -38,9 +38,9 @@ public class UpdatePlanService {
 		plan.updateAjajaStatus(userId);
 	}
 
-	public PlanResponse.Create update(Long id, Long userId, PlanRequest.Update request, String date) {
+	public PlanResponse.GetOne update(Long id, Long userId, PlanRequest.Update request, String date) {
 		Plan plan = getPlanService.loadPlanOrElseThrow(id);
-		List<String> updatedTags = updatePlanTagService.update(id, request.tags());
+		updatePlanTagService.update(id, request.tags());
 
 		plan.update(
 			userId,
@@ -57,6 +57,6 @@ public class UpdatePlanService {
 			PlanMapper.toMessages(request.messages())
 		);
 
-		return PlanMapper.toResponse(plan, updatedTags);
+		return planQueryRepository.findById(id);
 	}
 }
