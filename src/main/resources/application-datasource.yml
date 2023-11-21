@@ -11,7 +11,7 @@ spring:
 
   data:
     redis:
-      host: ENC(Fpe9EdTqAL0u47WZ7roulWXaa+g9s42vAcLc830f0Eg=)
+      host: ENC(ViAmf82rY15XKPYHcLP0QRYfJYl+TGZv)
 
 ---
 
