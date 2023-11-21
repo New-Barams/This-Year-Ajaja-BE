@@ -4,6 +4,7 @@ import static com.newbarams.ajaja.global.common.error.ErrorCode.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.hibernate.annotations.Where;
 
@@ -148,11 +149,10 @@ public class Plan extends BaseEntity<Plan> {
 		this.ajajas.add(ajaja);
 	}
 
-	public Ajaja getAjajaByUserId(Long userId) {
+	public Optional<Ajaja> getAjajaByUserId(Long userId) {
 		return ajajas.stream()
 			.filter((ajaja -> ajaja.getUserId().equals(userId)))
-			.findFirst()
-			.get();
+			.findFirst();
 	}
 
 	public String getTimeName() {

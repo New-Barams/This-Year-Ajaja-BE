@@ -20,9 +20,10 @@ public class SwitchAjajaService {
 	public void switchOrAddIfNotExist(Long userId, Long planId) {
 		Plan plan = loadPlanService.loadPlanOrElseThrow(planId);
 
-		Ajaja ajaja = plan.getAjajaByUserId(userId);
+		Ajaja ajaja = plan.getAjajaByUserId(userId)
+			.orElseGet(() -> Ajaja.defaultValue());
 
-		if (ajaja == null) {
+		if (ajaja.equals(Ajaja.defaultValue())) {
 			addToPlan(plan, userId);
 			return;
 		}
