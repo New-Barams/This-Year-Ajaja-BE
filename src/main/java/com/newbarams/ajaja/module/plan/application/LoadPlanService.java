@@ -23,8 +23,8 @@ public class LoadPlanService {
 	private final PlanRepository planRepository;
 	private final PlanQueryRepository planQueryRepository;
 
-	public PlanResponse.GetOne loadById(Long id) {
-		return planQueryRepository.findById(id);
+	public PlanResponse.GetOne loadById(Long id, Long userId) {
+		return planQueryRepository.findById(id, userId);
 	}
 
 	public Plan loadPlanOrElseThrow(Long id) {

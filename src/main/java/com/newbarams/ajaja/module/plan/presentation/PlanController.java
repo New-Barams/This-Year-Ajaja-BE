@@ -61,11 +61,11 @@ public class PlanController {
 		return new AjajaResponse<>(true, response);
 	}
 
-	@Operation(summary = "계획 단건 조회 API")
+	@Operation(summary = "[토큰 필요] 계획 단건 조회 API")
 	@GetMapping("/{id}")
 	@ResponseStatus(OK)
-	public AjajaResponse<PlanResponse.GetOne> getPlan(@PathVariable Long id) {
-		PlanResponse.GetOne response = getPlanService.loadById(id);
+	public AjajaResponse<PlanResponse.GetOne> getPlan(@UserId Long userId, @PathVariable Long id) {
+		PlanResponse.GetOne response = getPlanService.loadById(id, userId);
 
 		return new AjajaResponse<>(true, response);
 	}

@@ -15,6 +15,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.newbarams.ajaja.global.common.exception.AjajaException;
+import com.newbarams.ajaja.module.ajaja.domain.Ajaja;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
@@ -37,14 +38,14 @@ public class PlanQueryRepository {
 
 	private final JPAQueryFactory queryFactory;
 
-	public PlanResponse.GetOne findById(Long id) {
+	public PlanResponse.GetOne findById(Long id, Long userId) {
 		List<Tuple> tuples = queryFactory.select(plan, user.nickname)
 			.from(plan, user)
 			.where(plan.userId.eq(user.id).and(plan.id.eq(id)))
 			.fetch();
 
 		validateTuple(tuples);
-		return tupleToResponse(tuples.get(0));
+		return tupleToResponse(tuples.get(0), userId);
 	}
 
 	private void validateTuple(List<Tuple> tuples) {
@@ -53,14 +54,25 @@ public class PlanQueryRepository {
 		}
 	}
 
-	private PlanResponse.GetOne tupleToResponse(Tuple tuple) {
+	private PlanResponse.GetOne tupleToResponse(Tuple tuple, Long userId) {
 		Plan planFromTuple = tuple.get(plan);
 		String nickname = tuple.get(user.nickname).getNickname();
 
 		List<String> tags = findTagByPlanId(planFromTuple.getId());
 		Long ajajas = countNotCanceledAjaja(planFromTuple.getId());
+		boolean isPressAjaja = isPressAjaja(planFromTuple, userId);
 
-		return PlanMapper.toResponse(planFromTuple, nickname, tags, ajajas);
+		return PlanMapper.toResponse(planFromTuple, nickname, tags, ajajas, isPressAjaja);
+	}
+
+	private boolean isPressAjaja(Plan plan, Long userId) {
+		Ajaja ajaja = plan.getAjajaByUserId(userId);
+
+		if (ajaja == null) {
+			return false;
+		}
+
+		return true;
 	}
 
 	private List<String> findTagByPlanId(Long planId) {

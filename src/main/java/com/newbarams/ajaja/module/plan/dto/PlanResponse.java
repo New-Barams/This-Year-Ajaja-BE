@@ -15,6 +15,7 @@ public class PlanResponse {
 		boolean canRemind,
 		boolean canAjaja,
 		long ajajas,
+		boolean isPressAjaja,
 		List<String> tags,
 		Instant createdAt
 	) {
