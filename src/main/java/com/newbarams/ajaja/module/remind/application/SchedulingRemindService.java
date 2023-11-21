@@ -11,7 +11,7 @@ import com.newbarams.ajaja.module.feedback.service.CreateFeedbackService;
 import com.newbarams.ajaja.module.remind.domain.Remind;
 import com.newbarams.ajaja.module.remind.repository.RemindQueryRepository;
 import com.newbarams.ajaja.module.user.domain.User;
-import com.newbarams.ajaja.module.user.domain.UserRepository;
+import com.newbarams.ajaja.module.user.domain.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 

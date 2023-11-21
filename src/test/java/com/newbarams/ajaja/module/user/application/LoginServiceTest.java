@@ -18,7 +18,7 @@ import com.newbarams.ajaja.module.user.auth.model.KakaoAccount;
 import com.newbarams.ajaja.module.user.auth.model.KakaoResponse;
 import com.newbarams.ajaja.module.user.auth.model.Profile;
 import com.newbarams.ajaja.module.user.domain.User;
-import com.newbarams.ajaja.module.user.domain.UserRepository;
+import com.newbarams.ajaja.module.user.domain.repository.UserRepository;
 
 class LoginServiceTest extends MockTestSupport {
 	@InjectMocks
