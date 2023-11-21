@@ -4,6 +4,7 @@ import static org.springframework.http.HttpStatus.*;
 
 import java.util.List;
 
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -30,9 +31,12 @@ import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 
 @Tag(name = "plan")
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/plans")
@@ -50,9 +54,9 @@ public class PlanController {
 	public AjajaResponse<PlanResponse.Create> createPlan(
 		@UserId Long userId,
 		@RequestBody PlanRequest.Create request,
-		@RequestHeader(name = "Date") String date
+		@RequestHeader(name = "Month") @Min(1) @Max(12) int month
 	) {
-		PlanResponse.Create response = createPlanService.create(userId, request, date);
+		PlanResponse.Create response = createPlanService.create(userId, request, month);
 
 		return new AjajaResponse<>(true, response);
 	}
@@ -72,9 +76,9 @@ public class PlanController {
 	public AjajaResponse deletePlan(
 		@PathVariable Long id,
 		@UserId Long userId,
-		@RequestHeader(name = "Date") String date
+		@RequestHeader(name = "Month") @Min(1) @Max(12) int month
 	) {
-		deletePlanService.delete(id, userId, date);
+		deletePlanService.delete(id, userId, month);
 
 		return new AjajaResponse<>(true, null);
 	}
@@ -122,9 +126,9 @@ public class PlanController {
 		@PathVariable Long id,
 		@UserId Long userId,
 		@RequestBody PlanRequest.Update request,
-		@RequestHeader(name = "Date") String date
+		@RequestHeader(name = "Month") @Min(1) @Max(12) int month
 	) {
-		PlanResponse.GetOne updated = updatePlanService.update(id, userId, request, date);
+		PlanResponse.GetOne updated = updatePlanService.update(id, userId, request, month);
 
 		return new AjajaResponse<>(true, updated);
 	}

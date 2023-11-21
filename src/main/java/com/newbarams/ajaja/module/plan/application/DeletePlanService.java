@@ -15,10 +15,10 @@ public class DeletePlanService {
 	private final LoadPlanService getPlanService;
 	private final DeletePlanTagService deletePlanTagService;
 
-	public void delete(Long id, Long userId, String date) {
+	public void delete(Long id, Long userId, int month) {
 		deletePlanTagService.delete(id);
 
 		Plan plan = getPlanService.loadPlanOrElseThrow(id);
-		plan.delete(userId, date);
+		plan.delete(userId, month);
 	}
 }

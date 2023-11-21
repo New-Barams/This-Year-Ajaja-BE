@@ -38,13 +38,13 @@ public class UpdatePlanService {
 		plan.updateAjajaStatus(userId);
 	}
 
-	public PlanResponse.GetOne update(Long id, Long userId, PlanRequest.Update request, String date) {
+	public PlanResponse.GetOne update(Long id, Long userId, PlanRequest.Update request, int month) {
 		Plan plan = getPlanService.loadPlanOrElseThrow(id);
 		updatePlanTagService.update(id, request.tags());
 
 		plan.update(
 			userId,
-			date,
+			month,
 			request.title(),
 			request.description(),
 			request.remindTotalPeriod(),
