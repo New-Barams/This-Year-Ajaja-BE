@@ -31,7 +31,7 @@ class DeletePlanServiceTest {
 	@DisplayName("planId가 존재하고, 삭제가능한 기간일 경우 계획을 삭제할 수 있다.")
 	void deletePlan_Success() {
 		Plan plan = Plan.builder()
-			.date("Thu JAN 09 2023")
+			.month(1)
 			.userId(1L)
 			.content(new Content("title", "description"))
 			.info(new RemindInfo(12, 3, 15, "MORNING"))
@@ -42,7 +42,7 @@ class DeletePlanServiceTest {
 		Plan saved = planRepository.save(plan);
 
 		assertThatNoException().isThrownBy(
-			() -> deletePlanService.delete(saved.getId(), 1L, "Thu JAN 09 2023")
+			() -> deletePlanService.delete(saved.getId(), 1L, 1)
 		);
 	}
 
@@ -51,7 +51,7 @@ class DeletePlanServiceTest {
 	void deletePlan_Fail_By_Not_Found_Plan() {
 		Long planId = Arbitraries.longs().lessOrEqual(-1L).sample();
 
-		assertThatThrownBy(() -> deletePlanService.delete(planId, 1L, "Thu JAN 09 2023"))
+		assertThatThrownBy(() -> deletePlanService.delete(planId, 1L, 1))
 			.isInstanceOf(AjajaException.class)
 			.hasMessage(NOT_FOUND_PLAN.getMessage());
 	}
@@ -60,7 +60,7 @@ class DeletePlanServiceTest {
 	@DisplayName("planId가 존재하지만, 삭제가능한 기간이 아닌 경우 계획을 삭제할 수 업다.")
 	void deletePlan_Fail_By_Date() {
 		Plan plan = Plan.builder()
-			.date("Thu JAN 09 2023")
+			.month(1)
 			.userId(1L)
 			.content(new Content("title", "description"))
 			.info(new RemindInfo(12, 3, 15, "MORNING"))
@@ -70,7 +70,7 @@ class DeletePlanServiceTest {
 
 		Plan saved = planRepository.save(plan);
 
-		assertThatThrownBy(() -> deletePlanService.delete(saved.getId(), 1L, "Thu DEC 09 2023"))
+		assertThatThrownBy(() -> deletePlanService.delete(saved.getId(), 1L, 12))
 			.isInstanceOf(AjajaException.class)
 			.hasMessage(INVALID_UPDATABLE_DATE.getMessage());
 	}

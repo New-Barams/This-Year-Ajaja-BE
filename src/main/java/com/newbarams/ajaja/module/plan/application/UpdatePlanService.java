@@ -57,6 +57,6 @@ public class UpdatePlanService {
 			PlanMapper.toMessages(request.messages())
 		);
 
-		return planQueryRepository.findById(id);
+		return planQueryRepository.findById(id, userId);
 	}
 }
