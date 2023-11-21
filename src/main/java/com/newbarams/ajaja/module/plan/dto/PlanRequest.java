@@ -18,6 +18,8 @@ public class PlanRequest {
 
 		boolean isPublic,
 
+		int iconNumber,
+
 		List<String> tags,
 
 		List<String> messages

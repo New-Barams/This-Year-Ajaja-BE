@@ -52,6 +52,8 @@ public class Plan extends BaseEntity<Plan> {
 	@NotNull
 	private Integer achieveRate;
 
+	private int iconNumber;
+
 	@Embedded
 	private Content content;
 	private RemindInfo info;
@@ -70,12 +72,13 @@ public class Plan extends BaseEntity<Plan> {
 
 	@Builder
 	public Plan(int month, Long userId, Content content, RemindInfo info, boolean isPublic,
-		List<Message> messages) {
+		int iconNumber, List<Message> messages) {
 		validateModifiableMonth(month);
 		this.userId = userId;
 		this.content = content;
 		this.info = info;
 		this.status = new PlanStatus(isPublic);
+		this.iconNumber = iconNumber;
 		this.messages = messages;
 		this.achieveRate = 0;
 		this.validateSelf();

@@ -1,0 +1,2 @@
+ALTER TABLE plans
+    ADD COLUMN icon_number INTEGER NOT NULL;
