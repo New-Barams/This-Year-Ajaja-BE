@@ -3,6 +3,7 @@ package com.newbarams.ajaja.module.user.presentation;
 import static org.springframework.http.HttpStatus.*;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +20,9 @@ import com.newbarams.ajaja.module.user.application.RenewNicknameService;
 import com.newbarams.ajaja.module.user.application.SendVerificationEmailService;
 import com.newbarams.ajaja.module.user.application.VerifyCertificationService;
 import com.newbarams.ajaja.module.user.application.WithdrawService;
+import com.newbarams.ajaja.module.user.domain.repository.UserQueryRepository;
 import com.newbarams.ajaja.module.user.dto.UserRequest;
+import com.newbarams.ajaja.module.user.dto.UserResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -35,10 +38,22 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 	private final LogoutService logoutService;
 	private final WithdrawService withdrawService;
+	private final UserQueryRepository userQueryRepository;
 	private final RenewNicknameService renewNicknameService;
 	private final ChangeReceiveTypeService changeReceiveTypeService;
 	private final VerifyCertificationService verifyCertificationService;
 	private final SendVerificationEmailService sendVerificationEmailService;
+
+	@Operation(summary = "[토큰 필요] 마이페이지 API", description = "사용자의 정보를 불러옵니다.", responses = {
+		@ApiResponse(responseCode = "200", description = "성공적으로 정보를 불러왔습니다."),
+		@ApiResponse(responseCode = "400", description = "유효하지 않은 토큰입니다. <br> 상세 정보는 응답을 확인 바랍니다.")
+	})
+	@GetMapping
+	@ResponseStatus(OK)
+	public AjajaResponse<UserResponse.MyPage> getMyPage(@UserId Long id) {
+		UserResponse.MyPage response = userQueryRepository.findUserInfoById(id);
+		return AjajaResponse.ok(response);
+	}
 
 	@Operation(summary = "[토큰 필요] 닉네임 새로고침 API", description = "새로운 랜덤 닉네임을 생성합니다.", responses = {
 		@ApiResponse(responseCode = "200", description = "성공적으로 새로운 닉네임으로 변경했습니다."),
@@ -77,7 +92,7 @@ public class UserController {
 	@ResponseStatus(OK)
 	public AjajaResponse<Void> verifyCertification(
 		@UserId Long id,
-		@Validated @RequestBody UserRequest.Certification request
+		@Valid @RequestBody UserRequest.Certification request
 	) {
 		verifyCertificationService.verify(id, request.certification());
 		return AjajaResponse.noData();
