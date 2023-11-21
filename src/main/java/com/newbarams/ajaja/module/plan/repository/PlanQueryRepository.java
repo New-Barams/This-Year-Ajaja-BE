@@ -66,10 +66,9 @@ public class PlanQueryRepository {
 	}
 
 	private boolean isPressAjaja(Plan plan, Long userId) {
-		Ajaja ajaja = plan.getAjajaByUserId(userId)
-			.orElseGet(() -> Ajaja.defaultValue());
+		Ajaja ajaja = plan.getAjajaByUserId(userId);
 
-		if (ajaja.equals(Ajaja.defaultValue())) {
+		if (ajaja.isEqualsDefault()) {
 			return false;
 		}
 

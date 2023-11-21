@@ -97,4 +97,8 @@ public class Ajaja extends BaseEntity<Ajaja> {
 	public void switchStatus() {
 		this.isCanceled = !isCanceled;
 	}
+
+	public boolean isEqualsDefault() {
+		return this.equals(Ajaja.defaultValue());
+	}
 }
