@@ -25,4 +25,4 @@ jobs:
             docker pull ${{ env.DOCKER_IMAGE }}
             docker images -q --filter dangling=true | xargs docker rmi
             docker ps -aqf ancestor=${{ env.DOCKER_IMAGE }} | xargs docker stop | xargs docker rm
-            docker run -d --name ajaja-server -p 8080:8080 ${{ env.DOCKER_IMAGE }}
+            docker run -d -p 8080:8080 --network=ajaja-bridge --name ajaja-server ${{ env.DOCKER_IMAGE }}
