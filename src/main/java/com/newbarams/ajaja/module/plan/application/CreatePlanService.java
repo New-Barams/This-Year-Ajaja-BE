@@ -26,7 +26,6 @@ public class CreatePlanService {
 
 	private final PlanRepository planRepository;
 	private final CreatePlanTagService createPlanTagService;
-	private final CreateRemindService createRemindService;
 
 	public PlanResponse.Create create(Long userId, PlanRequest.Create request, int month) {
 		checkNumberOfUserPlans(userId);
@@ -35,8 +34,6 @@ public class CreatePlanService {
 		Plan savedPlan = planRepository.save(plan);
 
 		List<String> tags = createPlanTagService.create(savedPlan.getId(), request.tags());
-
-		createRemindService.createRemind(plan.getUserId(), plan.getId(), plan.getMessages(), plan.getInfo());
 
 		return PlanMapper.toResponse(savedPlan, tags);
 	}
