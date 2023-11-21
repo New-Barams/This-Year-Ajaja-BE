@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.user.domain;
+package com.newbarams.ajaja.module.user.domain.repository;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.newbarams.ajaja.common.JpaTestSupport;
+import com.newbarams.ajaja.module.user.domain.Email;
+import com.newbarams.ajaja.module.user.domain.User;
 
 class UserRepositoryTest extends JpaTestSupport {
 	@Autowired

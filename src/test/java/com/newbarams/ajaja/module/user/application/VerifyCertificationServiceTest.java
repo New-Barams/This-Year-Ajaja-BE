@@ -14,7 +14,7 @@ import com.newbarams.ajaja.common.RedisBasedTest;
 import com.newbarams.ajaja.global.common.exception.AjajaException;
 import com.newbarams.ajaja.module.user.domain.Email;
 import com.newbarams.ajaja.module.user.domain.User;
-import com.newbarams.ajaja.module.user.domain.UserRepository;
+import com.newbarams.ajaja.module.user.domain.repository.UserRepository;
 
 @RedisBasedTest
 class VerifyCertificationServiceTest extends MonkeySupport {
