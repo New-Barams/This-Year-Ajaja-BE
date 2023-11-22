@@ -9,7 +9,7 @@ public sealed interface GetRemindInfo
 	permits GetRemindInfo.CommonResponse, GetRemindInfo.SentRemindResponse, GetRemindInfo.FutureRemindResponse {
 
 	record CommonResponse(
-		int remindTime,
+		String remindTime,
 		int remindDate,
 		int remindTerm,
 		int remindTotalPeriod,
@@ -20,7 +20,7 @@ public sealed interface GetRemindInfo
 	) implements GetRemindInfo {
 		public CommonResponse(Plan plan, List<FutureRemindResponse> futureRemindResponse) {
 			this(
-				plan.getRemindTime(),
+				plan.getRemindTimeName(),
 				plan.getRemindDate(),
 				plan.getRemindTerm(),
 				plan.getRemindTotalPeriod(),

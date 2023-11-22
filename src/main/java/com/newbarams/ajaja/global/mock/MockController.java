@@ -33,6 +33,7 @@ import com.newbarams.ajaja.global.security.jwt.util.JwtRemover;
 import com.newbarams.ajaja.global.security.jwt.util.JwtValidator;
 import com.newbarams.ajaja.module.feedback.domain.dto.GetAchieve;
 import com.newbarams.ajaja.module.feedback.domain.dto.UpdateFeedback;
+import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 import com.newbarams.ajaja.module.remind.domain.dto.GetRemindInfo;
@@ -208,7 +209,7 @@ class MockController {
 			));
 
 		GetRemindInfo.CommonResponse response = new GetRemindInfo.CommonResponse(
-			9,
+			"MORNING",
 			13,
 			3,
 			12,
@@ -260,7 +261,7 @@ class MockController {
 			));
 
 		GetRemindInfo.CommonResponse response = new GetRemindInfo.CommonResponse(
-			9,
+			"MORNING",
 			13,
 			6,
 			12,
@@ -417,15 +418,15 @@ class MockController {
 	@ResponseStatus(OK)
 	public AjajaResponse<List<MockPlanInfoResponse.GetPlanInfoResponse>> getPlanInfo() {
 		List<MockPlanInfoResponse.GetPlan> getPlan2023 = List.of(
-			new MockPlanInfoResponse.GetPlan("매일 운동하기", true, 90, 1),
-			new MockPlanInfoResponse.GetPlan("매일 코딩하기", true, 90, 2),
-			new MockPlanInfoResponse.GetPlan("매일 아침 9시에 일어나기", false, 20, 3)
+			new MockPlanInfoResponse.GetPlan(2023, 1L, "매일 운동하기", true, 90, 1, true),
+			new MockPlanInfoResponse.GetPlan(2023, 2L, "매일 코딩하기", true, 90, 2, true),
+			new MockPlanInfoResponse.GetPlan(2023, 3L, "매일 아침 9시에 일어나기", false, 20, 3, true)
 		);
 
 		List<MockPlanInfoResponse.GetPlan> getPlan2022 = List.of(
-			new MockPlanInfoResponse.GetPlan("졸업 작품 끝내기", true, 90, 1),
-			new MockPlanInfoResponse.GetPlan("매일 아침 먹기", true, 70, 2),
-			new MockPlanInfoResponse.GetPlan("총 학점 4.0 이상 나오기", false, 50, 3)
+			new MockPlanInfoResponse.GetPlan(2022, 4L, "졸업 작품 끝내기", true, 90, 1, true),
+			new MockPlanInfoResponse.GetPlan(2022, 5L, "매일 아침 먹기", true, 70, 2, true),
+			new MockPlanInfoResponse.GetPlan(2022, 6L, "총 학점 4.0 이상 나오기", false, 50, 3, true)
 		);
 
 		MockPlanInfoResponse.GetPlanInfoResponse getPlanInfo2023 = new MockPlanInfoResponse.GetPlanInfoResponse(2023,

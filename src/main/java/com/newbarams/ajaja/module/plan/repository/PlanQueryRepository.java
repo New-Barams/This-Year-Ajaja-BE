@@ -161,8 +161,10 @@ public class PlanQueryRepository {
 				plan.id,
 				plan.content.title,
 				plan.status.canRemind,
-				plan.achieveRate))
-			.from(plan)
+				plan.achieveRate,
+				user.email.isVerified
+			))
+			.from(plan, user)
 			.groupBy(plan.createdAt.year(),
 				plan.id,
 				plan.content.title,
