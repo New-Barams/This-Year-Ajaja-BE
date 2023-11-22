@@ -21,6 +21,13 @@ public class PlanStatus {
 		this.isDeleted = false;
 	}
 
+	private PlanStatus(boolean isPublic, boolean canRemind, boolean canAjaja) {
+		this.isPublic = isPublic;
+		this.canRemind = canRemind;
+		this.canAjaja = canAjaja;
+		this.isDeleted = false;
+	}
+
 	void toDeleted() {
 		this.isDeleted = true;
 	}
@@ -37,9 +44,7 @@ public class PlanStatus {
 		this.canAjaja = !canAjaja;
 	}
 
-	void update(boolean isPublic, boolean canRemind, boolean canAjaja) {
-		this.isPublic = isPublic;
-		this.canRemind = canRemind;
-		this.canAjaja = canAjaja;
+	PlanStatus update(boolean isPublic, boolean canRemind, boolean canAjaja) {
+		return new PlanStatus(isPublic, canRemind, canAjaja);
 	}
 }

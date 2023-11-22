@@ -53,12 +53,8 @@ public class RemindInfo extends SelfValidating<RemindInfo> {
 		this.validateSelf();
 	}
 
-	void update(int remindTotalPeriod, int remindTerm, int remindDate, String remindTime) {
-		this.remindTotalPeriod = remindTotalPeriod;
-		this.remindTerm = remindTerm;
-		this.remindDate = remindDate;
-		this.remindTime = RemindTime.valueOf(remindTime.toUpperCase());
-		this.validateSelf();
+	RemindInfo update(int remindTotalPeriod, int remindTerm, int remindDate, String remindTime) {
+		return new RemindInfo(remindTotalPeriod, remindTerm, remindDate, remindTime);
 	}
 
 	public int getRemindTime() {
