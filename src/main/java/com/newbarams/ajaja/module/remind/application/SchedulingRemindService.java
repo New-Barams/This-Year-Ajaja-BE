@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import com.newbarams.ajaja.global.common.exception.AjajaException;
 import com.newbarams.ajaja.module.feedback.service.CreateFeedbackService;
 import com.newbarams.ajaja.module.plan.domain.Plan;
-import com.newbarams.ajaja.module.plan.repository.PlanQueryRepository;
-import com.newbarams.ajaja.module.plan.repository.PlanRepository;
+import com.newbarams.ajaja.module.plan.domain.repository.PlanQueryRepository;
+import com.newbarams.ajaja.module.plan.domain.repository.PlanRepository;
 import com.newbarams.ajaja.module.remind.domain.dto.Response;
 
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class SchedulingRemindService {
 	private final PlanQueryRepository planQueryRepository;
 	private final PlanRepository planRepository;
 
-	@Scheduled(cron = "0 0 9 * * *")
+	@Scheduled(fixedDelay = 10000)
 	public void scheduleMorningRemind() {
 		String remindTime = "MORNING";
 
