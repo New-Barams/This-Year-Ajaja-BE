@@ -48,7 +48,7 @@ public class GetRemindInfoService {
 		String remindTime = plan.getTimeName(); // todo: 디미터의 법칙
 
 		return new GetRemindInfo.CommonResponse(
-			plan.getInfo().getRemindTime(),
+			plan.getRemindTimeName(),
 			plan.getInfo().getRemindDate(),
 			plan.getInfo().getRemindTerm(),
 			plan.getInfo().getRemindTotalPeriod(),

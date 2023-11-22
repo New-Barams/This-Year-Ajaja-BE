@@ -161,6 +161,10 @@ public class Plan extends BaseEntity<Plan> {
 		return info.getRemindTime();
 	}
 
+	public String getRemindTimeName() {
+		return info.getRemindTimeName();
+	}
+
 	public int getRemindMonth() {
 		return info.getRemindMonth();
 	}

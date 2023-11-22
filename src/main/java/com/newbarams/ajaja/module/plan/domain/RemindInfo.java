@@ -65,6 +65,10 @@ public class RemindInfo extends SelfValidating<RemindInfo> {
 		return remindTime.getRemindTime();
 	}
 
+	public String getRemindTimeName() {
+		return remindTime.name();
+	}
+
 	public int getRemindMonth() {
 		return this.remindTerm == 1 ? 2 : this.remindTerm;
 	}

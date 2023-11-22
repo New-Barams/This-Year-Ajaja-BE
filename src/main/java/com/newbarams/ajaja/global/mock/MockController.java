@@ -209,7 +209,7 @@ class MockController {
 			));
 
 		GetRemindInfo.CommonResponse response = new GetRemindInfo.CommonResponse(
-			9,
+			"MORNING",
 			13,
 			3,
 			12,
@@ -261,7 +261,7 @@ class MockController {
 			));
 
 		GetRemindInfo.CommonResponse response = new GetRemindInfo.CommonResponse(
-			9,
+			"MORNING",
 			13,
 			6,
 			12,
