@@ -13,8 +13,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.newbarams.ajaja.module.plan.domain.repository.PlanQueryRepository;
 import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
-import com.newbarams.ajaja.module.plan.repository.PlanQueryRepository;
 
 import com.navercorp.fixturemonkey.FixtureMonkey;
 import com.navercorp.fixturemonkey.api.introspector.FieldReflectionArbitraryIntrospector;
