@@ -12,10 +12,13 @@ public sealed interface MockPlanInfoResponse permits MockPlanInfoResponse.GetPla
 	}
 
 	record GetPlan(
+		int year,
+		Long planId,
 		String title,
 		boolean isRemindable,
 		int achieveRate,
-		int icon
+		int icon,
+		boolean isVerified
 	) implements MockPlanInfoResponse {
 	}
 }
