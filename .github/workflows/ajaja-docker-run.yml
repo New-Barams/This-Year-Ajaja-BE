@@ -9,6 +9,7 @@ on:
 
 env:
   DOCKER_IMAGE: gmlwh124/ajaja:latest
+  SERVER_NAME: ajaja-server
 
 jobs:
   rerun-server:
@@ -23,6 +24,6 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             docker pull ${{ env.DOCKER_IMAGE }}
+            docker ps -aq --filter name=${{ env.SERVER_NAME }} | xargs docker stop | xargs docker rm
+            docker run --name ${{ env.SERVER_NAME }} --restart=always -dp 8080:8080 --network=ajaja-bridge ${{ env.DOCKER_IMAGE }}
             docker images -q --filter dangling=true | xargs docker rmi
-            docker ps -aqf ancestor=${{ env.DOCKER_IMAGE }} | xargs docker stop | xargs docker rm
-            docker run -d -p 8080:8080 --network=ajaja-bridge --name ajaja-server ${{ env.DOCKER_IMAGE }}
