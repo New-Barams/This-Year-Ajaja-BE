@@ -49,7 +49,7 @@ public class RemindInfo extends SelfValidating<RemindInfo> {
 		this.remindTotalPeriod = remindTotalPeriod;
 		this.remindTerm = remindTerm;
 		this.remindDate = remindDate;
-		this.remindTime = RemindTime.valueOf(remindTime);
+		this.remindTime = RemindTime.valueOf(remindTime.toUpperCase());
 		this.validateSelf();
 	}
 
@@ -57,7 +57,7 @@ public class RemindInfo extends SelfValidating<RemindInfo> {
 		this.remindTotalPeriod = remindTotalPeriod;
 		this.remindTerm = remindTerm;
 		this.remindDate = remindDate;
-		this.remindTime = RemindTime.valueOf(remindTime);
+		this.remindTime = RemindTime.valueOf(remindTime.toUpperCase());
 		this.validateSelf();
 	}
 
