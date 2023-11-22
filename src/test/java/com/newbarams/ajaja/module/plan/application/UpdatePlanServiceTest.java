@@ -43,7 +43,7 @@ class UpdatePlanServiceTest {
 		User savedUser = userRepository.save(user);
 
 		Plan plan = Plan.builder()
-			.date("Thu JAN 09 2023")
+			.month(1)
 			.userId(savedUser.getId())
 			.content(new Content("title", "description"))
 			.info(new RemindInfo(12, 3, 15, "MORNING"))
@@ -57,7 +57,7 @@ class UpdatePlanServiceTest {
 		Plan saved = planRepository.save(plan);
 
 		assertThatNoException().isThrownBy(
-			() -> updatePlanService.update(saved.getId(), savedUser.getId(), request, "Thu JAN 09 2023")
+			() -> updatePlanService.update(saved.getId(), savedUser.getId(), request, 1)
 		);
 	}
 
@@ -69,7 +69,7 @@ class UpdatePlanServiceTest {
 		PlanRequest.Update request = new PlanRequest.Update("title", "des", 12, 1,
 			15, "MORNING", true, true, true, null, List.of("message"));
 
-		assertThatThrownBy(() -> updatePlanService.update(planId, 1L, request, "Thu JAN 09 2023"))
+		assertThatThrownBy(() -> updatePlanService.update(planId, 1L, request, 1))
 			.isInstanceOf(AjajaException.class)
 			.hasMessage(NOT_FOUND_PLAN.getMessage());
 	}
@@ -78,7 +78,7 @@ class UpdatePlanServiceTest {
 	@DisplayName("planId가 존재하지만, 수정가능한 기간이 아닌 경우 계획을 수정할 수 업다.")
 	void updatePlan_Fail_By_Not_Updatable_Date() {
 		Plan plan = Plan.builder()
-			.date("Thu JAN 09 2023")
+			.month(1)
 			.userId(1L)
 			.content(new Content("title", "description"))
 			.info(new RemindInfo(12, 3, 15, "MORNING"))
@@ -91,7 +91,7 @@ class UpdatePlanServiceTest {
 
 		Plan saved = planRepository.save(plan);
 
-		assertThatThrownBy(() -> updatePlanService.update(saved.getId(), 1L, request, "Thu DEC 09 2023"))
+		assertThatThrownBy(() -> updatePlanService.update(saved.getId(), 1L, request, 12))
 			.isInstanceOf(AjajaException.class)
 			.hasMessage(INVALID_UPDATABLE_DATE.getMessage());
 	}

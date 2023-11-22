@@ -23,8 +23,8 @@ public class CreatePlanService {
 	private final CreatePlanTagService createPlanTagService;
 	private final CreateRemindService createRemindService;
 
-	public PlanResponse.Create create(Long userId, PlanRequest.Create request, String date) {
-		Plan plan = PlanMapper.toEntity(request, userId, date);
+	public PlanResponse.Create create(Long userId, PlanRequest.Create request, int month) {
+		Plan plan = PlanMapper.toEntity(request, userId, month);
 		Plan savedPlan = planRepository.save(plan);
 
 		List<String> tags = createPlanTagService.create(savedPlan.getId(), request.tags());

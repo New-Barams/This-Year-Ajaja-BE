@@ -22,7 +22,7 @@ public class SwitchAjajaService {
 
 		Ajaja ajaja = plan.getAjajaByUserId(userId);
 
-		if (ajaja == null) {
+		if (ajaja.isEqualsDefault()) {
 			addToPlan(plan, userId);
 			return;
 		}

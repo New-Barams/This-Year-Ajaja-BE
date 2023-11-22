@@ -35,7 +35,7 @@ class PlanTest {
 			.set("status", planStatus)
 			.sample();
 
-		plan.delete(plan.getUserId(), "Thu JAN 09 2023");
+		plan.delete(plan.getUserId(), 1);
 
 		assertThat(plan.getStatus().isDeleted()).isEqualTo(true);
 	}
@@ -49,7 +49,7 @@ class PlanTest {
 			.set("status", planStatus)
 			.sample();
 
-		assertThatThrownBy(() -> plan.delete(plan.getUserId(), "Thu NOV 09 2023"))
+		assertThatThrownBy(() -> plan.delete(plan.getUserId(), 12))
 			.isInstanceOf(AjajaException.class)
 			.hasMessage(INVALID_UPDATABLE_DATE.getMessage());
 	}
@@ -91,7 +91,7 @@ class PlanTest {
 		List<Message> messages = fixtureMonkey.giveMe(Message.class, 3);
 
 		assertThatNoException().isThrownBy(() ->
-			plan.update(plan.getUserId(), "Thu JAN 09 2023", "title", "des", 12, 3, 1,
+			plan.update(plan.getUserId(), 1, "title", "des", 12, 3, 1,
 				"EVENING", true, true, true, messages)
 		);
 	}
@@ -102,7 +102,7 @@ class PlanTest {
 		Plan plan = fixtureMonkey.giveMeOne(Plan.class);
 		List<Message> messages = fixtureMonkey.giveMe(Message.class, 3);
 
-		assertThatThrownBy(() -> plan.update(plan.getUserId(), "Thu DEC 09 2023", "title", "des", 12, 3,
+		assertThatThrownBy(() -> plan.update(plan.getUserId(), 12, "title", "des", 12, 3,
 			1, "EVENING", true, true, true, messages))
 			.isInstanceOf(AjajaException.class)
 			.hasMessage(INVALID_UPDATABLE_DATE.getMessage());
@@ -114,7 +114,7 @@ class PlanTest {
 		Plan plan = fixtureMonkey.giveMeOne(Plan.class);
 		List<Message> messages = fixtureMonkey.giveMe(Message.class, 3);
 
-		plan.update(plan.getUserId(), "Thu JAN 09 2023", "title", "des", 12, 3, 1,
+		plan.update(plan.getUserId(), 1, "title", "des", 12, 3, 1,
 			"EVENING", true, false, true, messages);
 
 		assertThat(plan.getContent().getTitle()).isEqualTo("title");

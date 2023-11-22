@@ -14,18 +14,19 @@ import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 
 @Component
 public class PlanMapper {
-	public static Plan toEntity(PlanRequest.Create dto, Long userId, String date) {
+	public static Plan toEntity(PlanRequest.Create dto, Long userId, int month) {
 		Content content = toContent(dto.title(), dto.description());
 		RemindInfo info = toRemindInfo(dto.remindTotalPeriod(), dto.remindTerm(), dto.remindDate(),
 			dto.remindTime());
 		List<Message> messages = toMessages(dto.messages());
 
 		return Plan.builder()
-			.date(date)
+			.month(month)
 			.userId(userId)
 			.content(content)
 			.info(info)
 			.isPublic(dto.isPublic())
+			.iconNumber(dto.iconNumber())
 			.messages(messages)
 			.build();
 	}
@@ -68,7 +69,8 @@ public class PlanMapper {
 		);
 	}
 
-	public static PlanResponse.GetOne toResponse(Plan plan, String nickname, List<String> tags, Long ajajas) {
+	public static PlanResponse.GetOne toResponse(Plan plan, String nickname, List<String> tags, Long ajajas,
+		boolean isPressAjaja) {
 		return new PlanResponse.GetOne(
 			plan.getId(),
 			plan.getUserId(),
@@ -79,6 +81,7 @@ public class PlanMapper {
 			plan.getStatus().isCanRemind(),
 			plan.getStatus().isCanAjaja(),
 			ajajas,
+			isPressAjaja,
 			tags,
 			plan.getCreatedAt()
 		);

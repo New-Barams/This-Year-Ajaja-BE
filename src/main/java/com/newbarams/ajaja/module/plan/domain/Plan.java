@@ -39,6 +39,8 @@ import lombok.NoArgsConstructor;
 @Where(clause = "is_deleted = false")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Plan extends BaseEntity<Plan> {
+	private static final int MODIFIABLE_MONTH = 1;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "plan_id")
@@ -49,6 +51,8 @@ public class Plan extends BaseEntity<Plan> {
 
 	@NotNull
 	private Integer achieveRate;
+
+	private int iconNumber;
 
 	@Embedded
 	private Content content;
@@ -67,29 +71,27 @@ public class Plan extends BaseEntity<Plan> {
 	private List<Ajaja> ajajas = new ArrayList<>();
 
 	@Builder
-	public Plan(String date, Long userId, Content content, RemindInfo info, boolean isPublic,
-		List<Message> messages) {
-		validateDate(date);
+	public Plan(int month, Long userId, Content content, RemindInfo info, boolean isPublic,
+		int iconNumber, List<Message> messages) {
+		validateModifiableMonth(month);
 		this.userId = userId;
 		this.content = content;
 		this.info = info;
 		this.status = new PlanStatus(isPublic);
+		this.iconNumber = iconNumber;
 		this.messages = messages;
 		this.achieveRate = 0;
 		this.validateSelf();
 	}
 
-	public void delete(Long userId, String date) {
-		validateDate(date);
+	public void delete(Long userId, int month) {
+		validateModifiableMonth(month);
 		validateUser(userId);
 		this.status.toDeleted();
 	}
 
-	private void validateDate(String date) {
-		String[] dateString = date.split(" ");
-		String month = dateString[1];
-
-		if (!month.equals("JAN")) {
+	private void validateModifiableMonth(int month) {
+		if (month != MODIFIABLE_MONTH) {
 			throw new AjajaException(INVALID_UPDATABLE_DATE);
 		}
 	}
@@ -117,7 +119,7 @@ public class Plan extends BaseEntity<Plan> {
 
 	public void update(
 		Long userId,
-		String date,
+		int month,
 		String title,
 		String description,
 		int remindTotalPeriod,
@@ -129,7 +131,7 @@ public class Plan extends BaseEntity<Plan> {
 		boolean canAjaja,
 		List<Message> messages
 	) {
-		validateDate(date);
+		validateModifiableMonth(month);
 		validateUser(userId);
 		this.content.update(title, description);
 		this.info.update(remindTotalPeriod, remindTerm, remindDate, remindTime);
@@ -150,7 +152,7 @@ public class Plan extends BaseEntity<Plan> {
 		return ajajas.stream()
 			.filter((ajaja -> ajaja.getUserId().equals(userId)))
 			.findFirst()
-			.get();
+			.orElseGet(Ajaja::defaultValue);
 	}
 
 	public String getTimeName() {
