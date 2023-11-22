@@ -22,7 +22,7 @@ import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 import com.newbarams.ajaja.module.plan.mapper.PlanMapper;
-import com.newbarams.ajaja.module.remind.domain.dto.GetRemindablePlan;
+import com.newbarams.ajaja.module.remind.domain.dto.Response;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -186,19 +186,16 @@ public class PlanQueryRepository {
 			.fetch();
 	}
 
-	public List<GetRemindablePlan.Response> findAllRemindablePlan(String remindTime) {
-		return queryFactory.select(Projections.constructor(GetRemindablePlan.Response.class,
+	public List<Response> findAllRemindablePlan(String remindTime) {
+		return queryFactory.select(Projections.constructor(Response.class,
 				user.id,
 				plan.id,
-				user.email,
-				plan.messages.get(
-					new CaseBuilder()
-						.when(plan.info.remindTerm.eq(1))
-						.then(zonedDateTime.getMonthValue() - 1)
-						.otherwise(zonedDateTime.getMonthValue() / Integer.parseInt(String.valueOf(plan.info.remindTerm)
-							)
-						)
-				),
+				user.email.email,
+				new CaseBuilder()
+					.when(plan.info.remindTerm.eq(1))
+					.then(zonedDateTime.getMonthValue() - 1)
+					.otherwise(zonedDateTime.getMonthValue()),
+				plan.info.remindTerm,
 				plan.info
 			))
 			.from(plan)
@@ -207,7 +204,7 @@ public class PlanQueryRepository {
 				.and(isCurrentYear())
 				.and(isRemindMonth())
 				.and(isCurrentDate())
-				.and(plan.info.remindTime.eq(plan.info.remindTime.as(remindTime)))
+				.and(plan.info.remindTime.stringValue().eq(remindTime))
 			)
 			.fetch();
 	}
@@ -231,6 +228,6 @@ public class PlanQueryRepository {
 	}
 
 	private BooleanExpression isCurrentDate() {
-		return plan.createdAt.dayOfMonth().eq(zonedDateTime.getDayOfMonth());
+		return plan.info.remindDate.eq(zonedDateTime.getDayOfMonth());
 	}
 }
