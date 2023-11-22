@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 @Builder
 @RequiredArgsConstructor
 class MailForm {
-	private static final String FROM_AJAJA = "no-reply@ajaja.com";
+	private static final String FROM_AJAJA = "no-reply@ajaja.me";
 
 	private final String to;
 	private final String subject;
