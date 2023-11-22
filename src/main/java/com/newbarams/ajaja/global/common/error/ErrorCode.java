@@ -22,6 +22,7 @@ public enum ErrorCode {
 	INVALID_USER_ACCESS(BAD_REQUEST, "잘못된 유저의 접근입니다."),
 	INVALID_UPDATABLE_DATE(BAD_REQUEST, "변경 가능한 기간이 아닙니다."),
 	NOT_SUPPORT_RECEIVE_TYPE(BAD_REQUEST, "지원하는 리마인드 수신 방법이 아닙니다."),
+	EXCEED_MAX_NUMBER_OF_PLANS(BAD_REQUEST, "유저가 가질 수 있는 최대 계획 개수를 초과하였습니다."),
 
 	// 404
 	USER_NOT_FOUND(NOT_FOUND, "사용자가 존재하지 않습니다."),

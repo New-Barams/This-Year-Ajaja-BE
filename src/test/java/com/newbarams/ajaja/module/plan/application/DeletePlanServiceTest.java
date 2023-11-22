@@ -17,7 +17,7 @@ import com.newbarams.ajaja.module.plan.domain.Content;
 import com.newbarams.ajaja.module.plan.domain.Message;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.domain.RemindInfo;
-import com.newbarams.ajaja.module.plan.repository.PlanRepository;
+import com.newbarams.ajaja.module.plan.domain.repository.PlanRepository;
 
 @SpringBootTest
 class DeletePlanServiceTest {

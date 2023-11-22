@@ -133,9 +133,9 @@ public class Plan extends BaseEntity<Plan> {
 	) {
 		validateModifiableMonth(month);
 		validateUser(userId);
-		this.content.update(title, description);
-		this.info.update(remindTotalPeriod, remindTerm, remindDate, remindTime);
-		this.status.update(isPublic, canRemind, canAjaja);
+		this.content = content.update(title, description);
+		this.info = info.update(remindTotalPeriod, remindTerm, remindDate, remindTime);
+		this.status = status.update(isPublic, canRemind, canAjaja);
 		this.messages = messages;
 		this.validateSelf();
 	}
