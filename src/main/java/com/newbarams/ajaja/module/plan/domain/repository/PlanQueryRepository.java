@@ -162,6 +162,7 @@ public class PlanQueryRepository {
 				plan.content.title,
 				plan.status.canRemind,
 				plan.achieveRate,
+				plan.iconNumber,
 				user.email.isVerified
 			))
 			.from(plan, user)
@@ -169,7 +170,9 @@ public class PlanQueryRepository {
 				plan.id,
 				plan.content.title,
 				plan.status.canRemind,
-				plan.achieveRate)
+				plan.achieveRate,
+				plan.iconNumber,
+				user.email.isVerified)
 			.where(plan.userId.eq(userId))
 			.orderBy(plan.createdAt.year().desc())
 			.fetch();
