@@ -39,11 +39,11 @@ public class GetRemindInfoService {
 		Plan plan = loadPlanService.loadPlanOrElseThrow(planId);
 
 		ZonedDateTime lastRemindTime = getDateTime(
-			sentReminds.get(sentRemindsNumber).getPeriod().getStart()); // todo: 시간에 대한 vo로 빼기
+			sentReminds.get(sentRemindsNumber - 1).getPeriod().getStart()); // todo: 시간에 대한 vo로 빼기
 		int totalRemindNumber = plan.getInfo().getTotalRemindNumber();
 
 		List<GetRemindInfo.FutureRemindResponse> futureRemindResponses
-			= getFutureRemindResponse(plan, totalRemindNumber, lastRemindTime);
+			= getFutureRemindResponse(plan, sentRemindsNumber, totalRemindNumber, lastRemindTime);
 
 		String remindTime = plan.getTimeName(); // todo: 디미터의 법칙
 
@@ -99,18 +99,18 @@ public class GetRemindInfoService {
 		return instant.atZone(ZoneId.systemDefault());
 	}
 
-	private List<GetRemindInfo.FutureRemindResponse> getFutureRemindResponse(Plan plan, int totalRemindNumber,
-		ZonedDateTime lastRemindTime) {
+	private List<GetRemindInfo.FutureRemindResponse> getFutureRemindResponse(Plan plan, int sentRemindNumber,
+		int totalRemindNumber, ZonedDateTime lastRemindTime) {
 		List<GetRemindInfo.FutureRemindResponse> futureRemindResponses = new ArrayList<>();
 
 		int remindTerm = plan.getInfo().getRemindTerm();
-		int remindMonth = lastRemindTime.getDayOfMonth();
+		int remindMonth = lastRemindTime.getMonthValue();
 		int remindDate = plan.getInfo().getRemindDate();
 
-		for (int i = 0; i < totalRemindNumber; i++) {
+		for (int i = sentRemindNumber; i < totalRemindNumber; i++) {
 			remindMonth += remindTerm;
 
-			new GetRemindInfo.FutureRemindResponse(
+			futureRemindResponses.add(new GetRemindInfo.FutureRemindResponse(
 				0L,
 				"",
 				remindMonth,
@@ -121,7 +121,7 @@ public class GetRemindInfoService {
 				false,
 				0,
 				0
-			);
+			));
 		}
 
 		return futureRemindResponses;
