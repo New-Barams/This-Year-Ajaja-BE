@@ -15,7 +15,9 @@ public sealed interface PlanInfoResponse permits PlanInfoResponse.GetPlanInfoRes
 		Long planId,
 		String title,
 		boolean isRemindable,
-		int achieveRate
+		int achieveRate,
+		int icon,
+		boolean isVerified
 	) implements PlanInfoResponse {
 	}
 }
