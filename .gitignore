@@ -9,6 +9,7 @@ src/main/generated/**
 *.jqwik-database
 .env
 .jpb
+log/
 
 ### STS ###
 .apt_generated
@@ -40,6 +41,3 @@ out/
 
 ### VS Code ###
 .vscode/
-
-### Log ###
-log/
