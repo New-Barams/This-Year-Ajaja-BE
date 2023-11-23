@@ -31,7 +31,7 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http
-			.httpBasic(AbstractHttpConfigurer::disable) // todo: check
+			.httpBasic(AbstractHttpConfigurer::disable)
 			.formLogin(AbstractHttpConfigurer::disable)
 			.logout(AbstractHttpConfigurer::disable)
 			.csrf(AbstractHttpConfigurer::disable)

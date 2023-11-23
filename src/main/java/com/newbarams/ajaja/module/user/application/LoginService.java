@@ -21,8 +21,8 @@ public class LoginService {
 	private final UserRepository userRepository;
 	private final JwtGenerator jwtGenerator;
 
-	public UserResponse.Token login(String authorizationCode) {
-		AccessToken accessToken = authorizeService.authorize(authorizationCode);
+	public UserResponse.Token login(String authorizationCode, String redirectUrl) {
+		AccessToken accessToken = authorizeService.authorize(authorizationCode, redirectUrl);
 		Profile profile = getProfileService.getProfile(accessToken.getContent());
 		User user = findUserOrCreateIfNotExists(profile.getEmail());
 		return jwtGenerator.generate(user.getId());

@@ -11,7 +11,7 @@ import feign.Retryer;
 import feign.codec.ErrorDecoder;
 
 @Configuration
-@EnableFeignClients("com.newbarams.ajaja.infra.feign")
+@EnableFeignClients("com.newbarams.ajaja.infra.feign.kakao")
 public class OpenFeignConfig {
 
 	@Bean

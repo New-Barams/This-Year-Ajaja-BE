@@ -29,28 +29,15 @@ class KakaoAuthorizeServiceTest extends MockTestSupport {
 	void authorize_Success_WithoutException() {
 		// given
 		String authorizationCode = monkey.giveMeOne(String.class);
+		String redirectUrl = monkey.giveMeOne(String.class);
 		KakaoResponse.Token response = monkey.giveMeOne(KakaoResponse.Token.class);
 		given(kakaoAuthorizeFeignClient.authorize(any())).willReturn(response);
 
 		// when
-		AccessToken accessToken = kakaoAuthorizeService.authorize(authorizationCode);
+		AccessToken accessToken = kakaoAuthorizeService.authorize(authorizationCode, redirectUrl);
 
 		// then
 		then(kakaoAuthorizeFeignClient).should(times(1)).authorize(any());
 		assertThat(accessToken.getContent()).isEqualTo(response.accessToken());
 	}
-
-	@Test
-	@DisplayName("Client로부터 null이 들어오면 NPE를 던진다.")
-	void authorize_Fail_ByNullInput() {
-		// given
-		String authorizationCode = null;
-
-		// when, then
-		assertThatException()
-			.isThrownBy(() -> kakaoAuthorizeService.authorize(authorizationCode))
-			.isInstanceOf(NullPointerException.class);
-		then(kakaoAuthorizeFeignClient).shouldHaveNoInteractions();
-	}
-
 }

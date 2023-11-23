@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -66,7 +65,7 @@ class MockController {
 	@Operation(summary = "가짜 로그인 API")
 	@PostMapping("/login")
 	@ResponseStatus(OK)
-	AjajaResponse<UserResponse.Token> login(@RequestParam("code") String authorizationCode) {
+	AjajaResponse<UserResponse.Token> login(@RequestBody UserRequest.Login request) {
 		UserResponse.Token response = jwtGenerator.generate(1L);
 		return AjajaResponse.ok(response);
 	}

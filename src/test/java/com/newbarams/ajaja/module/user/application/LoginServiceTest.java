@@ -41,6 +41,7 @@ class LoginServiceTest extends MockTestSupport {
 	class LoginTest {
 		private final String email = "gmlwh124@naver.com";
 		private final String authorizationCode = monkey.giveMeOne(String.class);
+		private final String redirectUrl = monkey.giveMeOne(String.class);
 		private final AccessToken accessToken = monkey.giveMeOne(KakaoResponse.Token.class);
 
 		private final Profile profile = monkey.giveMeBuilder(KakaoResponse.UserInfo.class)
@@ -55,16 +56,16 @@ class LoginServiceTest extends MockTestSupport {
 		@DisplayName("새로운 유저가 로그인하면 새롭게 유저 정보를 생성해야 한다.")
 		void login_Success_WithNewUser() {
 			// given
-			given(authorizeService.authorize(any())).willReturn(accessToken);
+			given(authorizeService.authorize(any(), any())).willReturn(accessToken);
 			given(getProfileService.getProfile(any())).willReturn(profile);
 			given(userRepository.findByEmail(any())).willReturn(Optional.empty());
 			given(userRepository.save(any())).willReturn(user);
 
 			// when
-			loginService.login(authorizationCode);
+			loginService.login(authorizationCode, redirectUrl);
 
 			// then
-			then(authorizeService).should(times(1)).authorize(any());
+			then(authorizeService).should(times(1)).authorize(any(), any());
 			then(getProfileService).should(times(1)).getProfile(any());
 			then(userRepository).should(times(1)).findByEmail(any());
 			then(userRepository).should(times(1)).save(any());
@@ -75,15 +76,15 @@ class LoginServiceTest extends MockTestSupport {
 		@DisplayName("기존에 가입된 고객이 로그인하면 생성하는 로직이 호출되지 않아야 한다.")
 		void login_Success_WithOldUser() {
 			// given
-			given(authorizeService.authorize(any())).willReturn(accessToken);
+			given(authorizeService.authorize(any(), any())).willReturn(accessToken);
 			given(getProfileService.getProfile(any())).willReturn(profile);
 			given(userRepository.findByEmail(any())).willReturn(Optional.of(user));
 
 			// when
-			loginService.login(authorizationCode);
+			loginService.login(authorizationCode, redirectUrl);
 
 			// then
-			then(authorizeService).should(times(1)).authorize(any());
+			then(authorizeService).should(times(1)).authorize(any(), any());
 			then(getProfileService).should(times(1)).getProfile(any());
 			then(userRepository).should(times(1)).findByEmail(any());
 			then(userRepository).shouldHaveNoMoreInteractions();
