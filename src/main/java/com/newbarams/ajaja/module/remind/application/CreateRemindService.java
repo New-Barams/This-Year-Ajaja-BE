@@ -1,6 +1,8 @@
 package com.newbarams.ajaja.module.remind.application;
 
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.ListIterator;
@@ -22,28 +24,24 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CreateRemindService {
 	private final RemindRepository remindRepository;
+	private final Instant instant = Instant.now();
+	private final ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault());
 
-	public void createRemind(Long userId, Long planId, List<Message> messages, RemindInfo remindInfo) {
-		ListIterator<Message> messageIterator = messages.listIterator();
+	public void createRemind(Long userId, Long planId, String message, RemindInfo remindInfo) {
+		int remindMonth = zonedDateTime.getMonthValue();
+		int remindTime = remindInfo.getRemindTime();
 
-		int totalPeriod = remindInfo.getRemindTotalPeriod();
-		int remindMonth = remindInfo.getRemindMonth();
+		Instant time = parseInstant(remindMonth, remindInfo.getRemindDate(), remindTime);
 
-		while (remindMonth <= totalPeriod) {
-			Info info = new Info(messageIterator.next().getContent());
-			int remindTime = remindInfo.getRemindTime();
+		Info info = new Info(message);
 
-			Instant time = parseInstant(remindInfo.getRemindDate(), remindMonth, remindTime);
+		Period period = new Period(time, time.plus(31, ChronoUnit.DAYS));
+		Remind remind = Remind.plan(userId, planId, info, period);
 
-			Period period = new Period(time, time.plus(31, ChronoUnit.DAYS));
-			Remind remind = Remind.plan(userId, planId, info, period);
-
-			remindRepository.save(remind);
-			remindMonth += remindInfo.getRemindTerm();
-		}
+		remindRepository.save(remind);
 	}
 
-	private Instant parseInstant(int remindDate, int remindMonth, int remindTime) {
+	private Instant parseInstant(int remindMonth, int remindDate, int remindTime) {
 		return Instant.parse(
 			"2024-" + String.format("%02d", remindMonth) + "-" + String.format("%02d", remindDate) + "T"
 				+ String.format("%02d", remindTime) + ":00:00Z");

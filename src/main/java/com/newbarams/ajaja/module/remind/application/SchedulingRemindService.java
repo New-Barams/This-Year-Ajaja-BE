@@ -1,66 +1,76 @@
 package com.newbarams.ajaja.module.remind.application;
 
+import static com.newbarams.ajaja.global.common.error.ErrorCode.*;
+
 import java.util.List;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import com.newbarams.ajaja.global.common.error.ErrorCode;
 import com.newbarams.ajaja.global.common.exception.AjajaException;
 import com.newbarams.ajaja.module.feedback.service.CreateFeedbackService;
-import com.newbarams.ajaja.module.remind.domain.Remind;
-import com.newbarams.ajaja.module.remind.repository.RemindQueryRepository;
-import com.newbarams.ajaja.module.user.domain.User;
-import com.newbarams.ajaja.module.user.domain.repository.UserRepository;
+import com.newbarams.ajaja.module.plan.domain.Plan;
+import com.newbarams.ajaja.module.plan.domain.repository.PlanQueryRepository;
+import com.newbarams.ajaja.module.plan.domain.repository.PlanRepository;
+import com.newbarams.ajaja.module.remind.domain.dto.Response;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class SchedulingRemindService {
-	private final RemindQueryRepository remindQueryRepository;
+	private final CreateRemindService createRemindService;
 	private final SendEmailRemindService sendEmailRemindService;
-	private final UserRepository userRepository;
 	private final CreateFeedbackService createFeedbackService;
+	private final PlanQueryRepository planQueryRepository;
+	private final PlanRepository planRepository;
 
-	@Scheduled(cron = "0 0 9 * * *")
+	@Scheduled(fixedDelay = 10000)
 	public void scheduleMorningRemind() {
-		int remindHour = 03;
+		String remindTime = "MORNING";
 
-		executeRemind(remindHour);
+		executeRemindProcess(remindTime);
 	}
 
 	@Scheduled(cron = "0 0 13 * * *")
 	public void scheduleAfternoonRemind() {
-		int remindHour = 13;
+		String remindTime = "AFTERNOON";
 
-		executeRemind(remindHour);
+		executeRemindProcess(remindTime);
 	}
 
 	@Scheduled(cron = "0 0 22 * * *")
 	public void scheduleEveningRemind() {
-		int remindHour = 22;
+		String remindTime = "EVENING";
 
-		executeRemind(remindHour);
+		executeRemindProcess(remindTime);
 	}
 
-	private void executeRemind(int remindHour) {
-		List<Remind> reminds = findReminds(remindHour);
-		sendEmail(reminds);
+	private void executeRemindProcess(String remindTime) {
+		List<Response> remindInfos = loadAllRemindablePlan(remindTime);
+		sendEmail(remindInfos);
 	}
 
-	private List<Remind> findReminds(int remindHour) {
-		return remindQueryRepository.findRemindByHour(remindHour);
+	private List<Response> loadAllRemindablePlan(String remindTime) {
+		return planQueryRepository.findAllRemindablePlan(remindTime);
 	}
 
-	private void sendEmail(List<Remind> reminds) {
-		for (Remind remind : reminds) {
-			User remindUser = userRepository.findById(remind.getUserId()).orElseThrow(
-				() -> new AjajaException(ErrorCode.USER_NOT_FOUND));
+	private void sendEmail(List<Response> remindInfos) {
+		for (Response remindInfo : remindInfos) {
+			if (remindInfo.getRemindTerm() == 1) {
+				remindInfo.setIdx(remindInfo.getIdx() / remindInfo.getRemindTerm());
+			}
 
-			Long feedbackId = createFeedbackService.createFeedback(remind.getUserId(), remind.getPlanId());
+			Plan plan = planRepository.findById(remindInfo.getPlanId()).orElseThrow(
+				() -> new AjajaException(NOT_FOUND_PLAN));
 
-			sendEmailRemindService.send("yamsang2002@naver.com", remind.getInfo().getContent(), feedbackId);
+			String message = plan.getMessages().get(remindInfo.getIdx()).getContent();
+			Long feedbackId = createFeedbackService.createFeedback(remindInfo.getUserId(), remindInfo.getPlanId());
+			// todo : 쿼리dsl 오류로 인한 임시 구현 코드 (나중에 지우기)
+			sendEmailRemindService.send(remindInfo.getEmail(), message, feedbackId);
+
+			createRemindService.createRemind(remindInfo.getUserId(), remindInfo.getPlanId(), message,
+				remindInfo.getInfo());
 		}
 	}
 }

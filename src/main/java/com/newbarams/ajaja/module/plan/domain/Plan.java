@@ -60,7 +60,7 @@ public class Plan extends BaseEntity<Plan> {
 	private PlanStatus status;
 
 	@NotEmpty
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER) // todo:메세지 로딩 오류로 인한 임시 코드 (나중에 지우기)
 	@CollectionTable(name = "remind_messages", joinColumns = @JoinColumn(name = "plan_id"))
 	@OrderColumn(name = "message_idx")
 	private List<Message> messages = new ArrayList<>();
