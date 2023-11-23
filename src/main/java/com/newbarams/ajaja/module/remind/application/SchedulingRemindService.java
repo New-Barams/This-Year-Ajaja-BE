@@ -25,7 +25,7 @@ public class SchedulingRemindService {
 	private final PlanQueryRepository planQueryRepository;
 	private final PlanRepository planRepository;
 
-	@Scheduled(fixedDelay = 10000)
+	@Scheduled(cron = "0 0 9 * * *")
 	public void scheduleMorningRemind() {
 		String remindTime = "MORNING";
 
