@@ -7,7 +7,18 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
-public sealed interface UserRequest permits Certification, EmailVerification, Reissue {
+public sealed interface UserRequest permits Certification, EmailVerification, Login, Reissue {
+	record Login(
+		@NotBlank(message = "인가 코드로 빈 값이 들어올 수 없습니다.")
+		@Schema(description = "인가 코드", example = "3yZ1t-T6P0lmA51PDW0jJkKjyXazFBEKKwyoAAABi_tgGJZAPV-WDrAHcw")
+		String authorizationCode,
+
+		@NotBlank(message = "리다이렉트 URL로 빈 값이 들어올 수 없습니다.")
+		@Schema(description = "리다이렉트 URL", example = "http://localhost:3000/oauth")
+		String redirectUrl
+	) implements UserRequest {
+	}
+
 	record Reissue(
 		@NotBlank(message = "액세스 토큰에 빈 값이 들어올 수 없습니다.")
 		@Schema(description = "Access Token", example = "eyJhbGxMiJ9.eyJzWpvdyJ9.avFKonhbIIhEg8H1dycQkhQ")

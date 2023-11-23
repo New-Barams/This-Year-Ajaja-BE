@@ -6,6 +6,16 @@ POST {{path}}/mock/login?code=authorizationCode
     client.global.set("refreshToken", response.body.data.refreshToken); %}
 
 ###
+# @name 실제 로그인
+POST {{path}}/login
+Content-Type: application/json
+
+{
+  "authorizationCode": "3yZ1t-T6P0lmA51PDW0jJkKj4gJ85zLTijmqmiLiAQN6X8AFSnEhyXazFBEKKwyoAAABi_tgGJZAPV-WDrAHcw",
+  "redirectUrl": "http://localhost:3000/oauth"
+}
+
+###
 # @name 토큰 재발급
 POST {{path}}/reissue
 Content-Type: application/json

@@ -10,6 +10,5 @@ import lombok.RequiredArgsConstructor;
 @ConfigurationProperties(prefix = "secret.kakao")
 public class KakaoProperties {
 	private final String clientId;
-	private final String redirectUri;
 	private final String clientSecret;
 }
