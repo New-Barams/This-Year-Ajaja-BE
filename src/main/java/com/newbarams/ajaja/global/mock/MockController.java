@@ -33,9 +33,9 @@ import com.newbarams.ajaja.global.security.jwt.util.JwtRemover;
 import com.newbarams.ajaja.global.security.jwt.util.JwtValidator;
 import com.newbarams.ajaja.module.feedback.domain.dto.GetAchieve;
 import com.newbarams.ajaja.module.feedback.domain.dto.UpdateFeedback;
-import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
+import com.newbarams.ajaja.module.remind.application.SchedulingRemindService;
 import com.newbarams.ajaja.module.remind.domain.dto.GetRemindInfo;
 import com.newbarams.ajaja.module.remind.domain.dto.ModifyAlarm;
 import com.newbarams.ajaja.module.user.dto.UserRequest;
@@ -61,6 +61,7 @@ class MockController {
 	private final JwtValidator jwtValidator;
 	private final JwtParser jwtParser;
 	private final JwtRemover jwtRemover;
+	private final SchedulingRemindService schedulingRemindService;
 
 	@Operation(summary = "가짜 로그인 API")
 	@PostMapping("/login")
@@ -141,6 +142,37 @@ class MockController {
 			false, new Timestamp(System.currentTimeMillis()));
 
 		return new AjajaResponse<>(true, response);
+	}
+
+	@Operation(summary = "[테스트] 서버 시간 구하기")
+	@GetMapping("/time")
+	@ResponseStatus(OK)
+	public AjajaResponse<Instant> getServerTime() {
+		return new AjajaResponse<>(true, Instant.now());
+	}
+
+	@Operation(summary = "[테스트] 아침 리마인드 즉시 전송")
+	@PostMapping("/reminds/morning")
+	@ResponseStatus(OK)
+	public AjajaResponse<Void> sendMorningReminds() {
+		schedulingRemindService.scheduleMorningRemind();
+		return new AjajaResponse<>(true, null);
+	}
+
+	@Operation(summary = "[테스트] 점심 리마인드 즉시 전송")
+	@PostMapping("/reminds/afternoon")
+	@ResponseStatus(OK)
+	public AjajaResponse<Void> sendAfternoonReminds() {
+		schedulingRemindService.scheduleAfternoonRemind();
+		return new AjajaResponse<>(true, null);
+	}
+
+	@Operation(summary = "[테스트] 저녁 리마인드 즉시 전송")
+	@PostMapping("/reminds/evening")
+	@ResponseStatus(OK)
+	public AjajaResponse<Void> sendEveningReminds() {
+		schedulingRemindService.scheduleEveningRemind();
+		return new AjajaResponse<>(true, null);
 	}
 
 	@Operation(summary = "[토큰 필요] 비시즌일때 리마인드 조회 API", responses = {
