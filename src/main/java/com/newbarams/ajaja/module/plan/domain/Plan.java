@@ -40,6 +40,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Plan extends BaseEntity<Plan> {
 	private static final int MODIFIABLE_MONTH = 1;
+	private static final int ONE_MONTH_TERM = 1;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -198,7 +199,7 @@ public class Plan extends BaseEntity<Plan> {
 	}
 
 	private int getMessageIdx(int remindTerm, int currentMonth) {
-		if (remindTerm == 1) {
+		if (remindTerm == ONE_MONTH_TERM) {
 			return currentMonth - 2;
 		}
 		return currentMonth / remindTerm;
