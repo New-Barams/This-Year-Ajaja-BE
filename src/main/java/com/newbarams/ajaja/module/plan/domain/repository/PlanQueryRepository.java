@@ -18,7 +18,6 @@ import org.springframework.stereotype.Repository;
 import com.newbarams.ajaja.global.common.exception.AjajaException;
 import com.newbarams.ajaja.module.ajaja.domain.Ajaja;
 import com.newbarams.ajaja.module.plan.domain.Plan;
-import com.newbarams.ajaja.module.plan.domain.QPlan;
 import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
@@ -208,13 +207,13 @@ public class PlanQueryRepository {
 
 	private List<RemindMessageInfo> mapRemindMessageInfos(List<Tuple> remindablePlans) {
 		return remindablePlans.stream().map(
-				plan -> new RemindMessageInfo(
-					plan.get(QPlan.plan).getUserId(),
-					plan.get(QPlan.plan).getId(),
-					plan.get(user).getEmail().getEmail(),
-					plan.get(QPlan.plan).getMessage(plan.get(QPlan.plan).getRemindTerm(),
+				p -> new RemindMessageInfo(
+					p.get(plan).getUserId(),
+					p.get(plan).getId(),
+					p.get(user).getEmail().getEmail(),
+					p.get(plan).getMessage(p.get(plan).getRemindTerm(),
 						zonedDateTime.getMonthValue()),
-					plan.get(QPlan.plan).getInfo()
+					p.get(plan).getInfo()
 				)
 			)
 			.toList();
