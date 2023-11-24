@@ -104,10 +104,9 @@ public class UserController {
 		@ApiResponse(responseCode = "404", description = "사용자가 존재하지 않습니다."),
 	})
 	@PostMapping("/logout")
-	@ResponseStatus(OK)
-	public AjajaResponse<Void> logout(@UserId Long id) {
+	@ResponseStatus(NO_CONTENT)
+	public void logout(@UserId Long id) {
 		logoutService.logout(id);
-		return AjajaResponse.noData();
 	}
 
 	@Operation(summary = "[토큰 필요] 수신 종류 변경 API", description = "리마인드를 수신 방법을 변경합니다.", responses = {

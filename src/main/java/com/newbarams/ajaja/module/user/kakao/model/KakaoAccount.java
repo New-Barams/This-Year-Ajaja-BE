@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.user.auth.model;
+package com.newbarams.ajaja.module.user.kakao.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
