@@ -1,6 +1,6 @@
 package com.newbarams.ajaja.module.tag.application;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -26,7 +26,7 @@ public class CreatePlanTagService {
 			return null;
 		}
 
-		Set<String> tagNameSet = new HashSet<>(tagNames);
+		Set<String> tagNameSet = new LinkedHashSet<>(tagNames);
 
 		return tagNameSet.stream()
 			.map(tagName -> savePlanTag(planId, tagName))
