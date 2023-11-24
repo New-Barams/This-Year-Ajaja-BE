@@ -102,6 +102,7 @@ public class PlanQueryRepository {
 			.from(plan, user)
 
 			.where(plan.userId.eq(user.id),
+				plan.status.isPublic.eq(true),
 				isEqualsYear(conditions.isNewYear()),
 				cursorCreatedAtAndId(conditions.cursorCreatedAt(), conditions.cursorId()))
 
