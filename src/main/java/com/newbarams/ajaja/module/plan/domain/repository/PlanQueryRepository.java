@@ -72,7 +72,7 @@ public class PlanQueryRepository {
 	private boolean isPressAjaja(Plan plan, Long userId) {
 		Ajaja ajaja = plan.getAjajaByUserId(userId);
 
-		if (ajaja.isEqualsDefault()) {
+		if (ajaja.isEqualsDefault() || ajaja.isCanceled()) {
 			return false;
 		}
 
