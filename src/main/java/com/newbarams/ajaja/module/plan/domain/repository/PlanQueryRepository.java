@@ -3,6 +3,7 @@ package com.newbarams.ajaja.module.plan.domain.repository;
 import static com.newbarams.ajaja.global.common.error.ErrorCode.*;
 import static com.newbarams.ajaja.module.ajaja.domain.QAjaja.*;
 import static com.newbarams.ajaja.module.plan.domain.QPlan.*;
+import static com.newbarams.ajaja.module.plan.domain.repository.QueryDslUtil.*;
 import static com.newbarams.ajaja.module.tag.domain.QPlanTag.*;
 import static com.newbarams.ajaja.module.tag.domain.QTag.*;
 import static com.newbarams.ajaja.module.user.domain.QUser.*;
@@ -10,7 +11,6 @@ import static com.newbarams.ajaja.module.user.domain.QUser.*;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -22,13 +22,12 @@ import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 import com.newbarams.ajaja.module.plan.mapper.PlanMapper;
-import com.newbarams.ajaja.module.remind.domain.dto.Response;
+import com.newbarams.ajaja.module.remind.domain.dto.RemindMessageInfo;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
@@ -36,11 +35,8 @@ import lombok.RequiredArgsConstructor;
 @Repository
 @RequiredArgsConstructor
 public class PlanQueryRepository {
-	private static final List<Integer> MONTHS_PER_ONE_MONTH = new ArrayList<>(List.of(2, 4, 5, 7, 8, 10, 11));
-	private static final List<Integer> MONTHS_PER_THREE_MONTH = new ArrayList<>(List.of(3, 9));
-	private static final List<Integer> MONTHS_PER_SIX_MONTH = new ArrayList<>(List.of(6));
 	private final Instant instant = Instant.now();
-	private final ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault());
+	private final ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault()); // todo: vo로 빼기
 	private static final String AJAJA = "Ajaja";
 	private static final String CREATED_AT = "CreatedAt";
 
@@ -186,48 +182,40 @@ public class PlanQueryRepository {
 			.fetch();
 	}
 
-	public List<Response> findAllRemindablePlan(String remindTime) {
-		return queryFactory.select(Projections.constructor(Response.class,
-				user.id,
-				plan.id,
-				user.email.email,
-				new CaseBuilder()
-					.when(plan.info.remindTerm.eq(1))
-					.then(zonedDateTime.getMonthValue() - 1)
-					.otherwise(zonedDateTime.getMonthValue()),
-				plan.info.remindTerm,
-				plan.info
-			))
-			.from(plan)
-			.join(user).on(plan.userId.eq(user.id))
+	public List<RemindMessageInfo> findAllRemindablePlan(String remindTime) {
+		List<Tuple> remindablePlans = queryFactory.select(plan, user)
+			.from(plan, user)
 			.where(plan.status.canRemind
 				.and(isCurrentYear())
 				.and(isRemindMonth())
-				.and(isCurrentDate())
-				.and(plan.info.remindTime.stringValue().eq(remindTime))
+				.and(isRemindDate())
+				.and(plan.info.remindTime.stringValue().eq(remindTime)
+					.and(plan.userId.eq(user.id)))
 			)
 			.fetch();
-	}
 
-	private BooleanExpression isRemindMonth() {
-		int month = zonedDateTime.getMonthValue();
-
-		if (MONTHS_PER_ONE_MONTH.contains(month)) {
-			return plan.info.remindTerm.eq(1);
-		} else if (MONTHS_PER_THREE_MONTH.contains(month)) {
-			return plan.info.remindTerm.in(1, 3);
-		} else if (MONTHS_PER_SIX_MONTH.contains(month)) {
-			return plan.info.remindTerm.in(1, 3, 6);
-		}
-
-		return plan.info.remindTerm.in(1, 3, 6, 12);
+		return mapRemindMessageInfos(remindablePlans);
 	}
 
 	private BooleanExpression isCurrentYear() {
 		return plan.createdAt.year().eq(zonedDateTime.getYear());
 	}
 
-	private BooleanExpression isCurrentDate() {
+	private BooleanExpression isRemindDate() {
 		return plan.info.remindDate.eq(zonedDateTime.getDayOfMonth());
+	}
+
+	private List<RemindMessageInfo> mapRemindMessageInfos(List<Tuple> remindablePlans) {
+		return remindablePlans.stream().map(
+				p -> new RemindMessageInfo(
+					p.get(plan).getUserId(),
+					p.get(plan).getId(),
+					p.get(user).getEmail().getEmail(),
+					p.get(plan).getMessage(p.get(plan).getRemindTerm(),
+						zonedDateTime.getMonthValue()),
+					p.get(plan).getInfo()
+				)
+			)
+			.toList();
 	}
 }
