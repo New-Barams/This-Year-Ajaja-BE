@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.newbarams.ajaja.infra.feign.common.FeignErrorDecoder;
+import com.newbarams.ajaja.infra.feign.common.FeignResponseEncoder;
 
 import feign.Logger;
 import feign.Retryer;
@@ -16,7 +17,7 @@ public class OpenFeignConfig {
 
 	@Bean
 	ErrorDecoder errorDecoder() {
-		return new FeignErrorDecoder();
+		return new FeignErrorDecoder(new FeignResponseEncoder());
 	}
 
 	@Bean

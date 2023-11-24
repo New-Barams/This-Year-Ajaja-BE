@@ -22,12 +22,7 @@ class KakaoAuthorizeService implements AuthorizeService {
 		return kakaoAuthorizeFeignClient.authorize(request);
 	}
 
-	private KakaoTokenRequest generateRequest(String authorizationCode, String redirectUrl) {
-		return new KakaoTokenRequest(
-			kakaoProperties.getClientId(),
-			redirectUrl,
-			authorizationCode,
-			kakaoProperties.getClientSecret()
-		);
+	private KakaoTokenRequest generateRequest(String authorizationCode, String redirectUri) {
+		return new KakaoTokenRequest(kakaoProperties.getClientId(), redirectUri, authorizationCode);
 	}
 }

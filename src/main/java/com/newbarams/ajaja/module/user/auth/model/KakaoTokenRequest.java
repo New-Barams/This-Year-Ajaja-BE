@@ -1,26 +1,19 @@
 package com.newbarams.ajaja.module.user.auth.model;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 
-import lombok.Getter;
-
-@Getter
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class KakaoTokenRequest {
 	private static final String KAKAO_GRANT_TYPE = "authorization_code";
 
-	private final String grantType;
-	private final String clientId;
-	private final String redirectUri;
-	private final String code;
-	private final String clientSecret;
+	private String grant_type;
+	private String client_id;
+	private String redirect_uri;
+	private String code;
+	private String client_secret;
 
-	public KakaoTokenRequest(String clientId, String redirectUri, String code, String clientSecret) {
-		this.grantType = KAKAO_GRANT_TYPE;
-		this.clientId = clientId;
-		this.redirectUri = redirectUri;
-		this.code = code;
-		this.clientSecret = clientSecret;
+	public KakaoTokenRequest(String clientId, String redirectUri, String code) {
+		this(KAKAO_GRANT_TYPE, clientId, redirectUri, code, null);
 	}
 }

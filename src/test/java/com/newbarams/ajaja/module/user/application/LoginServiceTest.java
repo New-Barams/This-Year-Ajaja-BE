@@ -58,7 +58,7 @@ class LoginServiceTest extends MockTestSupport {
 			// given
 			given(authorizeService.authorize(any(), any())).willReturn(accessToken);
 			given(getProfileService.getProfile(any())).willReturn(profile);
-			given(userRepository.findByEmail(any())).willReturn(Optional.empty());
+			given(userRepository.findByEmail_Email(any())).willReturn(Optional.empty());
 			given(userRepository.save(any())).willReturn(user);
 
 			// when
@@ -67,7 +67,7 @@ class LoginServiceTest extends MockTestSupport {
 			// then
 			then(authorizeService).should(times(1)).authorize(any(), any());
 			then(getProfileService).should(times(1)).getProfile(any());
-			then(userRepository).should(times(1)).findByEmail(any());
+			then(userRepository).should(times(1)).findByEmail_Email(any());
 			then(userRepository).should(times(1)).save(any());
 			then(jwtGenerator).should(times(1)).generate(any());
 		}
@@ -78,7 +78,7 @@ class LoginServiceTest extends MockTestSupport {
 			// given
 			given(authorizeService.authorize(any(), any())).willReturn(accessToken);
 			given(getProfileService.getProfile(any())).willReturn(profile);
-			given(userRepository.findByEmail(any())).willReturn(Optional.of(user));
+			given(userRepository.findByEmail_Email(any())).willReturn(Optional.of(user));
 
 			// when
 			loginService.login(authorizationCode, redirectUrl);
@@ -86,7 +86,7 @@ class LoginServiceTest extends MockTestSupport {
 			// then
 			then(authorizeService).should(times(1)).authorize(any(), any());
 			then(getProfileService).should(times(1)).getProfile(any());
-			then(userRepository).should(times(1)).findByEmail(any());
+			then(userRepository).should(times(1)).findByEmail_Email(any());
 			then(userRepository).shouldHaveNoMoreInteractions();
 			then(jwtGenerator).should(times(1)).generate(any());
 		}

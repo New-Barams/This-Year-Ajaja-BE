@@ -37,7 +37,8 @@ public enum ErrorCode {
 	CERTIFICATION_NOT_MATCH(CONFLICT, "인증 번호가 일치하지 않습니다."),
 
 	// 500
-	AJAJA_SERVER_ERROR(INTERNAL_SERVER_ERROR, "서버 내부 오류입니다. 관리자에게 문의바랍니다.");
+	AJAJA_SERVER_ERROR(INTERNAL_SERVER_ERROR, "서버 내부 오류입니다. 관리자에게 문의바랍니다."),
+	EXTERNAL_API_FAIL(INTERNAL_SERVER_ERROR, "외부 API 호출에 실패했습니다.");
 
 	private final HttpStatus httpStatus;
 	private final String message;

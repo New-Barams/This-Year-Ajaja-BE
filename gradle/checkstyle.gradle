@@ -10,3 +10,5 @@ checkstyle {
     configProperties = ["suppressionFile": "config/checkstyle/naver-checkstyle-suppressions.xml"]
     toolVersion = "10.12.2"
 }
+
+checkstyleMain.exclude('com/newbarams/ajaja/module/user/auth/model/KakaoTokenRequest.java')

@@ -29,7 +29,7 @@ public class LoginService {
 	}
 
 	private User findUserOrCreateIfNotExists(String email) {
-		return userRepository.findByEmail(email)
+		return userRepository.findByEmail_Email(email)
 			.orElseGet(() -> createUser(email));
 	}
 
