@@ -17,8 +17,8 @@ class KakaoAuthorizeService implements AuthorizeService {
 	private final KakaoProperties kakaoProperties;
 
 	@Override
-	public AccessToken authorize(String authorizationCode, String redirectUrl) {
-		KakaoTokenRequest request = generateRequest(authorizationCode, redirectUrl);
+	public AccessToken authorize(String authorizationCode, String redirectUri) {
+		KakaoTokenRequest request = generateRequest(authorizationCode, redirectUri);
 		return kakaoAuthorizeFeignClient.authorize(request);
 	}
 
