@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
-public sealed interface UserRequest permits Certification, EmailVerification, Login, Reissue {
+public sealed interface UserRequest permits Certification, EmailVerification, Login, Reissue, Withdraw {
 	record Login(
 		@NotBlank(message = "인가 코드로 빈 값이 들어올 수 없습니다.")
 		@Schema(description = "인가 코드", example = "3yZ1t-T6P0lmA51PDW0jJkKjyXazFBEKKwyoAAABi_tgGJZAPV-WDrAHcw")
@@ -41,6 +41,17 @@ public sealed interface UserRequest permits Certification, EmailVerification, Lo
 		@Pattern(regexp = "^\\d{6}$", message = "인증 번호는 6자리 숫자로 이루어져 있습니다.")
 		@Schema(description = "이메일 인증을 위해서 발급된 6자리 인증 번호")
 		String certification
+	) implements UserRequest {
+	}
+
+	record Withdraw(
+		@NotBlank(message = "인가 코드로 빈 값이 들어올 수 없습니다.")
+		@Schema(description = "인가 코드", example = "3yZ1t-T6P0lmA51PDW0jJkKjyXazFBEKKwyoAAABi_tgGJZAPV-WDrAHcw")
+		String authorizationCode,
+
+		@NotBlank(message = "리다이렉트 URL로 빈 값이 들어올 수 없습니다.")
+		@Schema(description = "리다이렉트 URL", example = "http://localhost:3000/oauth")
+		String redirectUri
 	) implements UserRequest {
 	}
 }

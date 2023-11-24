@@ -95,7 +95,7 @@ public class UserController {
 		@Valid @RequestBody UserRequest.Certification request
 	) {
 		verifyCertificationService.verify(id, request.certification());
-		return AjajaResponse.noData();
+		return AjajaResponse.ok();
 	}
 
 	@Operation(summary = "[토큰 필요] 로그아웃 API", description = "발급된 사용자의 토큰을 만료시킵니다.", responses = {
@@ -121,14 +121,20 @@ public class UserController {
 		@Schema(allowableValues = {"kakao", "email", "both"}) @RequestParam String type
 	) {
 		changeReceiveTypeService.change(id, type);
-		return AjajaResponse.noData();
+		return AjajaResponse.ok();
 	}
 
-	@Operation(summary = "[토큰 필요] 회원 탈퇴 API", description = "덜 구현")
+	@Operation(summary = "[토큰 필요] 회원 탈퇴 API", description = "인가 코드를 통해서 회원 탈퇴를 진행합니다.", responses = {
+		@ApiResponse(responseCode = "200", description = "성공적으로 회원 탈퇴를 하였습니다."),
+		@ApiResponse(responseCode = "404", description = "사용자가 존재하지 않습니다."),
+	})
 	@DeleteMapping
 	@ResponseStatus(OK)
-	public AjajaResponse<Void> withdraw(@UserId Long id) {
-		withdrawService.withdraw(id);
-		return AjajaResponse.noData();
+	public AjajaResponse<Void> withdraw(
+		@UserId Long id,
+		@Valid @RequestBody UserRequest.Withdraw request
+	) {
+		withdrawService.withdraw(id, request.authorizationCode(), request.redirectUri());
+		return AjajaResponse.ok();
 	}
 }
