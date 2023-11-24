@@ -32,7 +32,7 @@ public class AuthController {
 	})
 	@PostMapping("/login")
 	@ResponseStatus(OK)
-	public AjajaResponse<UserResponse.Token> login(@RequestBody UserRequest.Login request) {
+	public AjajaResponse<UserResponse.Token> login(@Valid @RequestBody UserRequest.Login request) {
 		UserResponse.Token response = loginService.login(request.authorizationCode(), request.redirectUrl());
 		return AjajaResponse.ok(response);
 	}
