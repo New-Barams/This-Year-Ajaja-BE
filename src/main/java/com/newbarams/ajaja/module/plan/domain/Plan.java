@@ -190,4 +190,17 @@ public class Plan extends BaseEntity<Plan> {
 	public int getTotalRemindNumber() {
 		return info.getTotalRemindNumber();
 	}
+
+	public String getMessage(int remindTerm, int currentMonth) {
+		int messageIdx = getMessageIdx(remindTerm, currentMonth);
+
+		return this.messages.get(messageIdx).getContent();
+	}
+
+	private int getMessageIdx(int remindTerm, int currentMonth) {
+		if (remindTerm == 1) {
+			return currentMonth - 2;
+		}
+		return currentMonth / remindTerm;
+	}
 }

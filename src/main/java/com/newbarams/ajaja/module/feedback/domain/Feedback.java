@@ -82,6 +82,6 @@ public class Feedback extends BaseEntity<Feedback> {
 	}
 
 	public boolean isFeedback() {
-		return this.getCreatedAt() != this.getUpdatedAt();
+		return this.getUpdatedAt().isAfter(this.getCreatedAt());
 	}
 }
