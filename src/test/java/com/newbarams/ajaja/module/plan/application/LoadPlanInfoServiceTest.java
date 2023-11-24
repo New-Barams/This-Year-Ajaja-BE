@@ -50,13 +50,11 @@ class LoadPlanInfoServiceTest extends MockTestSupport {
 	void getNoPlanInfo_Success_WithNoException() {
 		// given
 		given(planQueryRepository.findAllPlanByUserId(any())).willReturn(Collections.emptyList());
-		given(createPlanResponseService.createPlanInfo(anyInt(), any())).willReturn(null);
 
 		//when
 		List<PlanInfoResponse.GetPlanInfoResponse> planInfoResponses = loadPlanInfoService.loadPlanInfo(1L);
 
 		// then
-		then(createPlanResponseService).should(times(1)).createPlanInfo(anyInt(), any());
-		Assertions.assertThat(planInfoResponses.get(0)).isNull();
+		Assertions.assertThat(planInfoResponses).isEmpty();
 	}
 }

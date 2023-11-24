@@ -1,6 +1,7 @@
 package com.newbarams.ajaja.module.plan.application;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class LoadPlanInfoService {
 		List<PlanInfoResponse.GetPlan> planInfos = planQueryRepository.findAllPlanByUserId(userId);
 
 		if (planInfos.isEmpty()) {
-			return loadPlanInfoResponses(0, 0, planInfos);
+			return Collections.EMPTY_LIST;
 		}
 
 		int currentYear = planInfos.get(0).year();
