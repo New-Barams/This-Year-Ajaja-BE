@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ErrorCode {
 	// 400
-	BEAN_VALIDATE_FAIL_EXCEPTION(BAD_REQUEST, "올바르지 않은 데이터입니다."),
+	BEAN_VALIDATION_FAIL_EXCEPTION(BAD_REQUEST, "올바르지 않은 데이터입니다."),
 	INVALID_BEARER_TOKEN(BAD_REQUEST, "유효한 Bearer 토큰의 형식이 아닙니다."),
 	INVALID_SIGNATURE(BAD_REQUEST, "잘못된 서명입니다."),
 	INVALID_TOKEN(BAD_REQUEST, "잘못된 토큰입니다."),
@@ -37,7 +37,8 @@ public enum ErrorCode {
 	CERTIFICATION_NOT_MATCH(CONFLICT, "인증 번호가 일치하지 않습니다."),
 
 	// 500
-	AJAJA_SERVER_ERROR(INTERNAL_SERVER_ERROR, "서버 내부 오류입니다. 관리자에게 문의바랍니다.");
+	AJAJA_SERVER_ERROR(INTERNAL_SERVER_ERROR, "서버 내부 오류입니다. 관리자에게 문의바랍니다."),
+	EXTERNAL_API_FAIL(INTERNAL_SERVER_ERROR, "외부 API 호출에 실패했습니다.");
 
 	private final HttpStatus httpStatus;
 	private final String message;

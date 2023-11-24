@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.newbarams.ajaja.module.user.domain.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-	Optional<User> findByEmail(String email);
+	Optional<User> findByEmail_Email(String email);
 
 	boolean existsById(Long id);
 }

@@ -21,15 +21,15 @@ public class LoginService {
 	private final UserRepository userRepository;
 	private final JwtGenerator jwtGenerator;
 
-	public UserResponse.Token login(String authorizationCode, String redirectUrl) {
-		AccessToken accessToken = authorizeService.authorize(authorizationCode, redirectUrl);
+	public UserResponse.Token login(String authorizationCode, String redirectUri) {
+		AccessToken accessToken = authorizeService.authorize(authorizationCode, redirectUri);
 		Profile profile = getProfileService.getProfile(accessToken.getContent());
 		User user = findUserOrCreateIfNotExists(profile.getEmail());
 		return jwtGenerator.generate(user.getId());
 	}
 
 	private User findUserOrCreateIfNotExists(String email) {
-		return userRepository.findByEmail(email)
+		return userRepository.findByEmail_Email(email)
 			.orElseGet(() -> createUser(email));
 	}
 

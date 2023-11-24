@@ -15,7 +15,7 @@ public sealed interface UserRequest permits Certification, EmailVerification, Lo
 
 		@NotBlank(message = "리다이렉트 URL로 빈 값이 들어올 수 없습니다.")
 		@Schema(description = "리다이렉트 URL", example = "http://localhost:3000/oauth")
-		String redirectUrl
+		String redirectUri
 	) implements UserRequest {
 	}
 
