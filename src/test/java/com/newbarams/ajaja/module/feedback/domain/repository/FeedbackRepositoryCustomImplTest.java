@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,6 +33,7 @@ class FeedbackRepositoryCustomImplTest extends MockTestSupport {
 	}
 
 	@Test
+	@DisplayName("플랜 id에 맞는 피드백 정보를 가져온다.")
 	void findRemindInfoByPlanId_Success_WithNoException() {
 		// given
 		Long planId = 1L;
@@ -44,6 +46,7 @@ class FeedbackRepositoryCustomImplTest extends MockTestSupport {
 	}
 
 	@Test
+	@DisplayName("만약 플랜id에 맞는 피드백 정보가 없으면 빈 리스트를 반환한다.")
 	void findNoRemindInfoByPlanId_Success_WithNoException() {
 		// given
 		Long planId = 2L;
