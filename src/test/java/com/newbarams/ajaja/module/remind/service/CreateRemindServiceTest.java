@@ -2,18 +2,15 @@ package com.newbarams.ajaja.module.remind.service;
 
 import static org.mockito.BDDMockito.*;
 
-import java.util.List;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import com.newbarams.ajaja.common.MockTestSupport;
-import com.newbarams.ajaja.module.plan.domain.Message;
 import com.newbarams.ajaja.module.plan.domain.RemindInfo;
 import com.newbarams.ajaja.module.remind.application.CreateRemindService;
-import com.newbarams.ajaja.module.remind.repository.RemindRepository;
+import com.newbarams.ajaja.module.remind.domain.repository.RemindRepository;
 
 class CreateRemindServiceTest extends MockTestSupport {
 	@InjectMocks

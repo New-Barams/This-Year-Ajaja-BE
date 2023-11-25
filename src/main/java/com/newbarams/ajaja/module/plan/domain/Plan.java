@@ -155,35 +155,43 @@ public class Plan extends BaseEntity<Plan> {
 	}
 
 	public String getTimeName() {
-		return info.getTimeName();
+		return this.info.getTimeName();
 	}
 
 	public int getRemindTime() {
-		return info.getRemindTime();
+		return this.info.getRemindTime();
 	}
 
 	public String getRemindTimeName() {
-		return info.getRemindTimeName();
+		return this.info.getRemindTimeName();
 	}
 
 	public int getRemindMonth() {
-		return info.getRemindMonth();
+		return this.info.getRemindMonth();
 	}
 
 	public int getRemindDate() {
-		return info.getRemindDate();
+		return this.info.getRemindDate();
 	}
 
 	public int getRemindTerm() {
-		return info.getRemindTerm();
+		return this.info.getRemindTerm();
 	}
 
 	public int getRemindTotalPeriod() {
-		return info.getRemindTotalPeriod();
+		return this.info.getRemindTotalPeriod();
 	}
 
 	public boolean getIsRemindable() {
-		return status.isCanRemind();
+		return this.status.isCanRemind();
+	}
+
+	public int getTotalRemindNumber() {
+		return this.info.getTotalRemindNumber();
+	}
+
+	public boolean getRemindStatus() {
+		return this.status.isCanRemind();
 	}
 
 	public String getMessage(int remindTerm, int currentMonth) {

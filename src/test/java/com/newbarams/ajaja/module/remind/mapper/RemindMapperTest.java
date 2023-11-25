@@ -7,7 +7,7 @@ import org.mockito.InjectMocks;
 
 import com.newbarams.ajaja.common.MockTestSupport;
 import com.newbarams.ajaja.module.plan.domain.Plan;
-import com.newbarams.ajaja.module.remind.domain.dto.GetRemindInfo;
+import com.newbarams.ajaja.module.remind.dto.GetRemindInfo;
 
 class RemindMapperTest extends MockTestSupport {
 	@InjectMocks

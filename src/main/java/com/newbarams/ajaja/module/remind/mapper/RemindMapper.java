@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 import com.newbarams.ajaja.module.plan.domain.Message;
 import com.newbarams.ajaja.module.plan.domain.Plan;
-import com.newbarams.ajaja.module.remind.domain.dto.GetRemindInfo;
+import com.newbarams.ajaja.module.remind.dto.GetRemindInfo;
 
 @Component
 public class RemindMapper {

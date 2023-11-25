@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import com.newbarams.ajaja.module.feedback.service.CreateFeedbackService;
-import com.newbarams.ajaja.module.plan.domain.repository.PlanQueryRepository;
-import com.newbarams.ajaja.module.remind.domain.dto.RemindMessageInfo;
+import com.newbarams.ajaja.module.feedback.application.CreateFeedbackService;
+import com.newbarams.ajaja.module.plan.infra.PlanQueryRepository;
+import com.newbarams.ajaja.module.remind.dto.RemindMessageInfo;
 
 import lombok.RequiredArgsConstructor;
 

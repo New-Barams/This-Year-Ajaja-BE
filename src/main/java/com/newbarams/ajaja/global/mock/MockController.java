@@ -30,13 +30,13 @@ import com.newbarams.ajaja.global.security.jwt.util.JwtGenerator;
 import com.newbarams.ajaja.global.security.jwt.util.JwtParser;
 import com.newbarams.ajaja.global.security.jwt.util.JwtRemover;
 import com.newbarams.ajaja.global.security.jwt.util.JwtValidator;
-import com.newbarams.ajaja.module.feedback.domain.dto.GetAchieve;
-import com.newbarams.ajaja.module.feedback.domain.dto.UpdateFeedback;
+import com.newbarams.ajaja.module.feedback.dto.GetAchieve;
+import com.newbarams.ajaja.module.feedback.dto.UpdateFeedback;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 import com.newbarams.ajaja.module.remind.application.SchedulingRemindService;
-import com.newbarams.ajaja.module.remind.domain.dto.GetRemindInfo;
-import com.newbarams.ajaja.module.remind.domain.dto.ModifyAlarm;
+import com.newbarams.ajaja.module.remind.dto.GetRemindInfo;
+import com.newbarams.ajaja.module.remind.dto.ModifyAlarm;
 import com.newbarams.ajaja.module.user.dto.UserRequest;
 import com.newbarams.ajaja.module.user.dto.UserResponse;
 

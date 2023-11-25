@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.remind.domain.dto;
+package com.newbarams.ajaja.module.remind.dto;
 
 import static org.apache.commons.codec.CharEncoding.*;
 

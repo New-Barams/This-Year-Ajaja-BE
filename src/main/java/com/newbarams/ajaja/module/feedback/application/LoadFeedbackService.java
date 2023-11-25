@@ -1,4 +1,6 @@
-package com.newbarams.ajaja.module.feedback.service;
+package com.newbarams.ajaja.module.feedback.application;
+
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,15 +11,12 @@ import com.newbarams.ajaja.module.feedback.domain.repository.FeedbackRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
-@Transactional
-public class CreateFeedbackService {
+public class LoadFeedbackService {
 	private final FeedbackRepository feedbackRepository;
 
-	public Long createFeedback(Long userId, Long planId) {
-		Feedback feedback = Feedback.create(userId, planId);
-		Feedback saved = feedbackRepository.save(feedback);
-
-		return saved.getId();
+	public List<Feedback> loadFeedback(Long planId) {
+		return feedbackRepository.findAllByPlanIdIdAndCreatedYear(planId);
 	}
 }

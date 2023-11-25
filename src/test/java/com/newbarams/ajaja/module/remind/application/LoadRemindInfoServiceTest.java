@@ -14,7 +14,7 @@ import com.newbarams.ajaja.common.MockTestSupport;
 import com.newbarams.ajaja.global.common.exception.AjajaException;
 import com.newbarams.ajaja.module.plan.application.LoadPlanService;
 import com.newbarams.ajaja.module.plan.domain.Plan;
-import com.newbarams.ajaja.module.remind.domain.dto.GetRemindInfo;
+import com.newbarams.ajaja.module.remind.dto.GetRemindInfo;
 import com.newbarams.ajaja.module.remind.mapper.RemindMapper;
 
 class LoadRemindInfoServiceTest extends MockTestSupport {

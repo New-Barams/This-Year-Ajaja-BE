@@ -9,10 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.newbarams.ajaja.global.common.exception.AjajaException;
 import com.newbarams.ajaja.module.plan.domain.Plan;
-import com.newbarams.ajaja.module.plan.domain.repository.PlanQueryRepository;
 import com.newbarams.ajaja.module.plan.domain.repository.PlanRepository;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
+import com.newbarams.ajaja.module.plan.infra.PlanQueryRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,7 +29,7 @@ public class LoadPlanService {
 
 	public Plan loadPlanOrElseThrow(Long id) {
 		return planRepository.findById(id)
-			.orElseThrow(() -> new AjajaException(NOT_FOUND_PLAN));
+			.orElseThrow(() -> AjajaException.withId(id, NOT_FOUND_PLAN));
 	}
 
 	public List<PlanResponse.GetAll> loadAllPlans(PlanRequest.GetAll request) {

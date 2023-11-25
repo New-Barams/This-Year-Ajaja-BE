@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.remind.repository;
+package com.newbarams.ajaja.module.remind.domain.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

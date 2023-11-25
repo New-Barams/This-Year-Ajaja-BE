@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.feedback.controller;
+package com.newbarams.ajaja.module.feedback.presentation;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.newbarams.ajaja.global.common.AjajaResponse;
 import com.newbarams.ajaja.global.common.error.ErrorResponse;
 import com.newbarams.ajaja.global.security.common.UserId;
-import com.newbarams.ajaja.module.feedback.domain.dto.UpdateFeedback;
-import com.newbarams.ajaja.module.feedback.service.GetTotalAchieveService;
-import com.newbarams.ajaja.module.feedback.service.UpdateFeedbackService;
+import com.newbarams.ajaja.module.feedback.application.GetTotalAchieveService;
+import com.newbarams.ajaja.module.feedback.application.UpdateFeedbackService;
+import com.newbarams.ajaja.module.feedback.dto.UpdateFeedback;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

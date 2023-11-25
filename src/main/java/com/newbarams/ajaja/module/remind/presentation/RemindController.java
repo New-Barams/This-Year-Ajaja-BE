@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.remind.controller;
+package com.newbarams.ajaja.module.remind.presentation;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.newbarams.ajaja.global.common.AjajaResponse;
 import com.newbarams.ajaja.global.common.error.ErrorResponse;
-import com.newbarams.ajaja.module.remind.application.GetRemindInfoService;
 import com.newbarams.ajaja.module.remind.application.LoadRemindInfoService;
-import com.newbarams.ajaja.module.remind.domain.dto.GetRemindInfo;
+import com.newbarams.ajaja.module.remind.application.LoadSentRemindInfoService;
+import com.newbarams.ajaja.module.remind.dto.GetRemindInfo;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -25,8 +25,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/reminds")
 public class RemindController {
-	private final GetRemindInfoService getRemindInfoService;
 	private final LoadRemindInfoService loadRemindInfoService;
+	private final LoadSentRemindInfoService loadSentRemindInfoService;
 
 	@Operation(summary = "[토큰 필요] 비시즌일때 리마인드 조회 API", description = "<b>url에 플랜id 값이 필요합니다.</b>",
 		responses = {
@@ -43,7 +43,7 @@ public class RemindController {
 	public AjajaResponse<GetRemindInfo> getRemindResponse(
 		@PathVariable Long planId
 	) {
-		return new AjajaResponse<>(true, getRemindInfoService.getRemindInfo(planId));
+		return new AjajaResponse<>(true, loadSentRemindInfoService.loadSentRemindInfo(planId));
 	}
 
 	@Operation(summary = "[토큰 필요] 시즌일 때 리마인드 조회 API", description = "<b>url에 플랜id 값이 필요합니다.</b>",

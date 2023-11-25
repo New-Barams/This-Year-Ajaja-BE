@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.feedback.service;
+package com.newbarams.ajaja.module.feedback.application;
 
 import static com.newbarams.ajaja.global.common.error.ErrorCode.*;
 
