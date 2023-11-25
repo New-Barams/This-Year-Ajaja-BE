@@ -1,6 +1,5 @@
 package com.newbarams.ajaja.module.plan.domain.repository;
 
-import static com.newbarams.ajaja.global.common.error.ErrorCode.*;
 import static com.newbarams.ajaja.module.ajaja.domain.QAjaja.*;
 import static com.newbarams.ajaja.module.plan.domain.QPlan.*;
 import static com.newbarams.ajaja.module.plan.domain.repository.QueryDslUtil.*;
@@ -12,10 +11,10 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
-import com.newbarams.ajaja.global.common.exception.AjajaException;
 import com.newbarams.ajaja.module.ajaja.domain.Ajaja;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
@@ -42,20 +41,21 @@ public class PlanQueryRepository {
 
 	private final JPAQueryFactory queryFactory;
 
-	public PlanResponse.GetOne findById(Long id, Long userId) {
+	public Optional<PlanResponse.GetOne> findById(Long id, Long userId) {
 		List<Tuple> tuples = queryFactory.select(plan, user.nickname)
 			.from(plan, user)
 			.where(plan.userId.eq(user.id).and(plan.id.eq(id)))
 			.fetch();
 
-		validateTuple(tuples);
-		return tupleToResponse(tuples.get(0), userId);
+		return getResponse(tuples, userId);
 	}
 
-	private void validateTuple(List<Tuple> tuples) {
+	private Optional<PlanResponse.GetOne> getResponse(List<Tuple> tuples, Long userId) {
 		if (tuples.isEmpty()) {
-			throw new AjajaException(NOT_FOUND_PLAN);
+			return Optional.empty();
 		}
+
+		return Optional.of(tupleToResponse(tuples.get(0), userId));
 	}
 
 	private PlanResponse.GetOne tupleToResponse(Tuple tuple, Long userId) {
