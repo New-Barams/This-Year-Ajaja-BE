@@ -1,12 +1,12 @@
-package com.newbarams.ajaja.module.user.auth.application;
+package com.newbarams.ajaja.module.user.kakao.application;
 
 import org.springframework.stereotype.Component;
 
 import com.newbarams.ajaja.infra.feign.kakao.KakaoAuthorizeFeignClient;
 import com.newbarams.ajaja.infra.feign.kakao.KakaoProperties;
 import com.newbarams.ajaja.module.user.application.AuthorizeService;
-import com.newbarams.ajaja.module.user.auth.model.AccessToken;
-import com.newbarams.ajaja.module.user.auth.model.KakaoTokenRequest;
+import com.newbarams.ajaja.module.user.application.model.AccessToken;
+import com.newbarams.ajaja.module.user.kakao.model.KakaoTokenRequest;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,6 +23,11 @@ class KakaoAuthorizeService implements AuthorizeService {
 	}
 
 	private KakaoTokenRequest generateRequest(String authorizationCode, String redirectUri) {
-		return new KakaoTokenRequest(kakaoProperties.getClientId(), redirectUri, authorizationCode);
+		return new KakaoTokenRequest(
+			kakaoProperties.getClientId(),
+			redirectUri,
+			authorizationCode,
+			kakaoProperties.getClientSecret()
+		);
 	}
 }

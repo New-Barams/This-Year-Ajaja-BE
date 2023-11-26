@@ -2,7 +2,7 @@ package com.newbarams.ajaja.module.user.application;
 
 import org.springframework.stereotype.Service;
 
-import com.newbarams.ajaja.module.user.auth.model.Profile;
+import com.newbarams.ajaja.module.user.application.model.Profile;
 
 @Service
 public interface GetProfileService {

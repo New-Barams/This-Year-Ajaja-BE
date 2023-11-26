@@ -13,12 +13,13 @@ import org.mockito.Mock;
 
 import com.newbarams.ajaja.common.MockTestSupport;
 import com.newbarams.ajaja.global.security.jwt.util.JwtGenerator;
-import com.newbarams.ajaja.module.user.auth.model.AccessToken;
-import com.newbarams.ajaja.module.user.auth.model.KakaoAccount;
-import com.newbarams.ajaja.module.user.auth.model.KakaoResponse;
-import com.newbarams.ajaja.module.user.auth.model.Profile;
+import com.newbarams.ajaja.module.user.application.model.AccessToken;
+import com.newbarams.ajaja.module.user.application.model.Profile;
+import com.newbarams.ajaja.module.user.domain.OauthInfo;
 import com.newbarams.ajaja.module.user.domain.User;
 import com.newbarams.ajaja.module.user.domain.repository.UserRepository;
+import com.newbarams.ajaja.module.user.kakao.model.KakaoAccount;
+import com.newbarams.ajaja.module.user.kakao.model.KakaoResponse;
 
 class LoginServiceTest extends MockTestSupport {
 	@InjectMocks
@@ -50,7 +51,7 @@ class LoginServiceTest extends MockTestSupport {
 				.sample())
 			.sample();
 
-		private final User user = new User(RandomNicknameGenerator.generate(), email);
+		private final User user = new User(RandomNicknameGenerator.generate(), email, OauthInfo.kakao(1L));
 
 		@Test
 		@DisplayName("새로운 유저가 로그인하면 새롭게 유저 정보를 생성해야 한다.")

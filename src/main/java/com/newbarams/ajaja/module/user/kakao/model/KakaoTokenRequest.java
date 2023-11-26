@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.user.auth.model;
+package com.newbarams.ajaja.module.user.kakao.model;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -13,7 +13,7 @@ public class KakaoTokenRequest {
 	private String code;
 	private String client_secret;
 
-	public KakaoTokenRequest(String clientId, String redirectUri, String code) {
-		this(KAKAO_GRANT_TYPE, clientId, redirectUri, code, null);
+	public KakaoTokenRequest(String clientId, String redirectUri, String code, String clientSecret) {
+		this(KAKAO_GRANT_TYPE, clientId, redirectUri, code, clientSecret);
 	}
 }

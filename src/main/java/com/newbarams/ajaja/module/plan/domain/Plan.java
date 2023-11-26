@@ -25,7 +25,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderColumn;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
@@ -60,7 +59,6 @@ public class Plan extends BaseEntity<Plan> {
 	private RemindInfo info;
 	private PlanStatus status;
 
-	@NotEmpty
 	@ElementCollection(fetch = FetchType.EAGER) // todo:메세지 로딩 오류로 인한 임시 코드 (나중에 지우기)
 	@CollectionTable(name = "remind_messages", joinColumns = @JoinColumn(name = "plan_id"))
 	@OrderColumn(name = "message_idx")
@@ -188,20 +186,16 @@ public class Plan extends BaseEntity<Plan> {
 		return status.isCanRemind();
 	}
 
-	public int getTotalRemindNumber() {
-		return info.getTotalRemindNumber();
-	}
-
 	public String getMessage(int remindTerm, int currentMonth) {
 		int messageIdx = getMessageIdx(remindTerm, currentMonth);
-
 		return this.messages.get(messageIdx).getContent();
 	}
 
 	private int getMessageIdx(int remindTerm, int currentMonth) {
-		if (remindTerm == ONE_MONTH_TERM) {
-			return currentMonth - 2;
-		}
-		return currentMonth / remindTerm;
+		return remindTerm == ONE_MONTH_TERM ? (currentMonth - 2) : currentMonth / remindTerm;
+	}
+
+	public void disable() {
+		this.status = status.disable();
 	}
 }

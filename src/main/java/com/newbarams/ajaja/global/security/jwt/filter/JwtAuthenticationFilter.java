@@ -1,6 +1,7 @@
 package com.newbarams.ajaja.global.security.jwt.filter;
 
 import static com.newbarams.ajaja.global.common.error.ErrorCode.*;
+import static com.newbarams.ajaja.global.util.BearerTokenUtil.*;
 import static org.springframework.http.HttpHeaders.*;
 import static org.springframework.http.HttpMethod.*;
 
@@ -23,7 +24,6 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-	private static final String BEARER_PREFIX = "Bearer ";
 	private static final String PLAN_URI = "/plans";
 
 	private final List<String> allowList;
@@ -57,7 +57,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	private String resolveJwtFromRequest(HttpServletRequest request) {
 		String token = request.getHeader(AUTHORIZATION);
 		validateBearerToken(token);
-		return resolve(token);
+		return resolveJwt(token);
 	}
 
 	private void validateBearerToken(String bearerToken) {
@@ -67,11 +67,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	}
 
 	private boolean isNotBearerToken(String token) {
-		return !(StringUtils.hasText(token) && token.startsWith(BEARER_PREFIX));
-	}
-
-	private String resolve(String bearerToken) {
-		return bearerToken.substring(BEARER_PREFIX.length());
+		return !(StringUtils.hasText(token) && isBearer(token));
 	}
 
 	private void authenticate(String jwt) {

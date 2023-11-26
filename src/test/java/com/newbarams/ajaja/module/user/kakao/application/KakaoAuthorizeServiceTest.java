@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.user.auth.application;
+package com.newbarams.ajaja.module.user.kakao.application;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
@@ -11,8 +11,8 @@ import org.mockito.Mock;
 import com.newbarams.ajaja.common.MockTestSupport;
 import com.newbarams.ajaja.infra.feign.kakao.KakaoAuthorizeFeignClient;
 import com.newbarams.ajaja.infra.feign.kakao.KakaoProperties;
-import com.newbarams.ajaja.module.user.auth.model.AccessToken;
-import com.newbarams.ajaja.module.user.auth.model.KakaoResponse;
+import com.newbarams.ajaja.module.user.application.model.AccessToken;
+import com.newbarams.ajaja.module.user.kakao.model.KakaoResponse;
 
 class KakaoAuthorizeServiceTest extends MockTestSupport {
 	@InjectMocks
