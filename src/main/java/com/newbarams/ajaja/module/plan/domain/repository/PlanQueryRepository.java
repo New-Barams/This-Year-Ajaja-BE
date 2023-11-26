@@ -138,8 +138,7 @@ public class PlanQueryRepository {
 	}
 
 	private OrderSpecifier<?> sortBy(String condition) {
-		return condition.equalsIgnoreCase(CREATED_AT) ?
-			new OrderSpecifier<>(Order.DESC, plan.createdAt) :
+		return condition.equalsIgnoreCase(CREATED_AT) ? new OrderSpecifier<>(Order.DESC, plan.createdAt) :
 			new OrderSpecifier<>(Order.DESC, plan.ajajas.size());
 	}
 

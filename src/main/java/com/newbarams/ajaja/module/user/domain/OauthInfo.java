@@ -18,11 +18,11 @@ public class OauthInfo extends SelfValidating<OauthInfo> {
 	private Long oauthId;
 
 	@Enumerated(EnumType.STRING)
-	private OauthProvider provider;
+	private OauthProvider oauthProvider;
 
-	public OauthInfo(Long oauthId, OauthProvider provider) {
+	public OauthInfo(Long oauthId, OauthProvider oauthProvider) {
 		this.oauthId = oauthId;
-		this.provider = provider;
+		this.oauthProvider = oauthProvider;
 		this.validateSelf();
 	}
 
