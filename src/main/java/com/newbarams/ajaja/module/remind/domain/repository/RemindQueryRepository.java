@@ -2,6 +2,7 @@ package com.newbarams.ajaja.module.remind.domain.repository;
 
 import static com.newbarams.ajaja.module.remind.domain.QRemind.*;
 
+import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 
@@ -40,7 +41,8 @@ public class RemindQueryRepository {
 
 		List<RemindResponse.SentRemindResponse> sentMessages = responseToSentMessages(reminds, feedbacks);
 
-		int lastRemindMonth = timeValue.getMonthFrom(reminds.get(sentMessages.size() - 1).getPeriod().getStarts());
+		Instant lastRemindTime = reminds.get(sentMessages.size() - 1).getLastRemindTime();
+		int lastRemindMonth = timeValue.getMonthFrom(lastRemindTime);
 
 		List<RemindResponse.FutureRemindResponse> futureMessages
 			= responseToFutureMessages(plan, sentMessages.size(), lastRemindMonth);
