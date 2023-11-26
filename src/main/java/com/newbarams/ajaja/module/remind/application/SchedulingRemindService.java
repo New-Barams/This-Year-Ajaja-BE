@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SchedulingRemindService {
 	private final CreateRemindService createRemindService;
-	private final SendEmailRemindService sendEmailRemindService;
+	private final SendPlanRemindService sendPlanRemindService;
 	private final CreateFeedbackService createFeedbackService;
 	private final PlanQueryRepository planQueryRepository;
 
@@ -49,7 +49,7 @@ public class SchedulingRemindService {
 		for (RemindMessageInfo remindInfo : remindMessageInfos) {
 			Long feedbackId = createFeedbackService.createFeedback(remindInfo.getUserId(), remindInfo.getPlanId());
 
-			sendEmailRemindService.send(remindInfo.getEmail(), remindInfo.getMessage(), feedbackId);
+			sendPlanRemindService.send(remindInfo.getEmail(), remindInfo.getMessage(), feedbackId);
 
 			createRemindService.createRemind(remindInfo.getUserId(), remindInfo.getPlanId(), remindInfo.getMessage(),
 				remindInfo.getInfo());

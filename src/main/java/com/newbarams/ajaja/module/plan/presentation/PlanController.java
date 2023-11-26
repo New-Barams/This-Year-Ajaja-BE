@@ -152,7 +152,7 @@ public class PlanController {
 	public AjajaResponse<List<PlanInfoResponse.GetPlanInfoResponse>> getPlanInfo(
 		@UserId Long userId
 	) {
-		List<PlanInfoResponse.GetPlanInfoResponse> getPlanInfos = loadPlanInfoService.loadPlanInfo(userId);
+		List<PlanInfoResponse.GetPlanInfoResponse> getPlanInfos = loadPlanInfoService.loadPlanInfo(1L);
 
 		return new AjajaResponse<>(true, getPlanInfos);
 	}

@@ -25,7 +25,7 @@ public class Ajaja extends BaseEntity<Ajaja> {
 	private static final Long DEFAULT_TARGET_ID = -1L;
 	private static final Long DEFAULT_USER_ID = -1L;
 
-	enum Type {
+	public enum Type {
 		PLAN,
 		RETROSPECT, // 회고
 		DEFAULT
