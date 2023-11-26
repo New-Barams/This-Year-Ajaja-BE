@@ -21,7 +21,7 @@ class AjajaQueryRepositoryTest extends MockTestSupport {
 
 	@Test
 	@DisplayName("해당 유저가 받은 아자자 개수들을 가져온다.")
-	void findUserInfoById_Success() {
+	void findAjajaByUpdatedAt_Success_WithNpException() {
 		// when
 		List<Tuple> remindableAjaja = ajajaQueryRepository.findRemindableAjaja();
 
