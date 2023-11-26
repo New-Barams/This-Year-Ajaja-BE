@@ -23,7 +23,6 @@ import lombok.RequiredArgsConstructor;
 public class RemindQueryRepository {
 	private final JPAQueryFactory queryFactory;
 	private final RemindInfoMapper remindInfoMapper;
-	TimeValue timeValue = new TimeValue();
 
 	public RemindResponse.CommonResponse findAllRemindByPlanId(Plan plan, List<Feedback> feedbacks) {
 		Long planId = plan.getId();
@@ -39,37 +38,40 @@ public class RemindQueryRepository {
 			return createNoSentResponse(plan);
 		}
 
-		List<RemindResponse.SentRemindResponse> sentMessages = responseToSentMessages(reminds, feedbacks);
+		List<RemindResponse.SentRemindResponse> sentMessages
+			= remindInfoMapper.mapSentMessagesFrom(reminds, feedbacks);
 
-		Instant lastRemindTime = reminds.get(sentMessages.size() - 1).getLastRemindTime();
-		int lastRemindMonth = timeValue.getMonthFrom(lastRemindTime);
+		Instant lastRemindTime = reminds.get(sentMessages.size() - 1).getStart();
+		TimeValue timeValue = new TimeValue(lastRemindTime);
+		int lastRemindMonth = timeValue.getMonth();
 
 		List<RemindResponse.FutureRemindResponse> futureMessages
-			= responseToFutureMessages(plan, sentMessages.size(), lastRemindMonth);
+			= remindInfoMapper.mapFutureMessagesFrom(plan, sentMessages.size(), lastRemindMonth);
 
-		return RemindResponse.CommonResponse.of(plan, sentMessages, futureMessages);
+		return new RemindResponse.CommonResponse(
+			plan.getRemindTimeName(),
+			plan.getRemindDate(),
+			plan.getRemindTerm(),
+			plan.getRemindTotalPeriod(),
+			plan.getIsRemindable(),
+			sentMessages,
+			futureMessages
+		);
 	}
 
 	private RemindResponse.CommonResponse createNoSentResponse(Plan plan) {
 		int lastRemindMonth = plan.getRemindTerm() == 1 ? 1 : 0;
 		List<RemindResponse.FutureRemindResponse> futureRemindResponses
-			= responseToFutureMessages(plan, 0, lastRemindMonth);
+			= remindInfoMapper.mapFutureMessagesFrom(plan, 0, lastRemindMonth);
 
-		return RemindResponse.CommonResponse.of(plan, Collections.EMPTY_LIST, futureRemindResponses);
-	}
-
-	private List<RemindResponse.SentRemindResponse> responseToSentMessages(
-		List<Remind> reminds,
-		List<Feedback> feedbacks
-	) {
-		return remindInfoMapper.mapSentMessagesFrom(reminds, feedbacks, timeValue);
-	}
-
-	private List<RemindResponse.FutureRemindResponse> responseToFutureMessages(
-		Plan plan,
-		int sentRemindNumber,
-		int lastRemindMonth
-	) {
-		return remindInfoMapper.mapFutureMessagesFrom(plan, sentRemindNumber, lastRemindMonth);
+		return new RemindResponse.CommonResponse(
+			plan.getRemindTimeName(),
+			plan.getRemindDate(),
+			plan.getRemindTerm(),
+			plan.getRemindTotalPeriod(),
+			plan.getIsRemindable(),
+			Collections.EMPTY_LIST,
+			futureRemindResponses
+		);
 	}
 }
