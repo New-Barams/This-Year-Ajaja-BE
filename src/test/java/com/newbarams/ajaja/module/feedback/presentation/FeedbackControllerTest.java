@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.feedback.controller;
+package com.newbarams.ajaja.module.feedback.presentation;
 
 import static org.mockito.BDDMockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
@@ -15,9 +15,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.newbarams.ajaja.module.feedback.domain.dto.UpdateFeedback;
-import com.newbarams.ajaja.module.feedback.service.GetTotalAchieveService;
-import com.newbarams.ajaja.module.feedback.service.UpdateFeedbackService;
+import com.newbarams.ajaja.module.feedback.application.GetTotalAchieveService;
+import com.newbarams.ajaja.module.feedback.application.UpdateFeedbackService;
+import com.newbarams.ajaja.module.feedback.dto.UpdateFeedback;
 
 @AutoConfigureMockMvc
 @WebMvcTest(controllers = FeedbackController.class)

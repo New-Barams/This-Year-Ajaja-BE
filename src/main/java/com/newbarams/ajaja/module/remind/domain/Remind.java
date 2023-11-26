@@ -1,5 +1,7 @@
 package com.newbarams.ajaja.module.remind.domain;
 
+import java.time.Instant;
+
 import org.hibernate.annotations.Where;
 
 import com.newbarams.ajaja.global.common.BaseEntity;
@@ -69,5 +71,13 @@ public class Remind extends BaseEntity<Remind> {
 
 	public boolean isExpired() {
 		return this.period.isExpired();
+	}
+
+	public Instant getStart() {
+		return this.period.getStarts();
+	}
+
+	public Instant getEnd() {
+		return this.period.getEnds();
 	}
 }

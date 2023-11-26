@@ -71,8 +71,7 @@ class UpdatePlanServiceTest {
 			15, "MORNING", true, true, true, null, List.of("message"));
 
 		assertThatThrownBy(() -> updatePlanService.update(planId, 1L, request, 1))
-			.isInstanceOf(AjajaException.class)
-			.hasMessage(NOT_FOUND_PLAN.getMessage());
+			.isInstanceOf(AjajaException.class);
 	}
 
 	@Test

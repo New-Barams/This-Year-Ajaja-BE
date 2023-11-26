@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.feedback.service;
+package com.newbarams.ajaja.module.feedback.application;
 
 import static com.newbarams.ajaja.global.common.error.ErrorCode.*;
 
@@ -33,7 +33,7 @@ public class UpdateFeedbackService {
 	}
 
 	private void updatePlanAchieve(Long planId) {
-		int feedbackAverage = (int)feedbackRepository.findAllByPlanIdIdAndCreatedYear(planId)
+		int feedbackAverage = (int)feedbackRepository.findAllFeedbackByPlanId(planId)
 			.stream()
 			.mapToInt(Feedback::getRate)
 			.average()

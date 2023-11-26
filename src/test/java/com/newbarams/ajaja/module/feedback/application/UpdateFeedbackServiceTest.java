@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.feedback.service;
+package com.newbarams.ajaja.module.feedback.application;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
@@ -57,7 +57,7 @@ class UpdateFeedbackServiceTest {
 			// mock
 			given(feedbackRepository.findById(any())).willReturn(Optional.of(mockFeedback));
 			doNothing().when(updatePlanAchieveService).updatePlanAchieve(anyLong(), anyInt());
-			given(feedbackRepository.findAllByPlanIdIdAndCreatedYear(any())).willReturn(feedbacks);
+			given(feedbackRepository.findAllFeedbackByPlanId(any())).willReturn(feedbacks);
 
 			// when,then
 			assertThatNoException().isThrownBy(

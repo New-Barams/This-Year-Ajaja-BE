@@ -7,7 +7,7 @@ import org.mockito.InjectMocks;
 
 import com.newbarams.ajaja.common.MockTestSupport;
 import com.newbarams.ajaja.module.plan.domain.Plan;
-import com.newbarams.ajaja.module.remind.domain.dto.GetRemindInfo;
+import com.newbarams.ajaja.module.remind.dto.RemindResponse;
 
 class RemindMapperTest extends MockTestSupport {
 	@InjectMocks
@@ -20,10 +20,10 @@ class RemindMapperTest extends MockTestSupport {
 		Plan plan = monkey.giveMeOne(Plan.class);
 
 		// when
-		GetRemindInfo.CommonResponse futureRemindResponse
+		RemindResponse.CommonResponse futureRemindResponse
 			= remindMapper.toFutureRemind(plan);
 
 		// then
-		Assertions.assertThat(futureRemindResponse.futureRemindResponses().size()).isEqualTo(plan.getMessages().size());
+		Assertions.assertThat(futureRemindResponse.futureRespons().size()).isEqualTo(plan.getMessages().size());
 	}
 }
