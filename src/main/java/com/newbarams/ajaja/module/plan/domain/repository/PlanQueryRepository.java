@@ -170,7 +170,8 @@ public class PlanQueryRepository {
 				plan.iconNumber,
 				user.email.isVerified
 			))
-			.from(plan, user)
+			.from(plan)
+			.join(user).on(user.id.eq(plan.userId))
 			.groupBy(plan.createdAt.year(),
 				plan.id,
 				plan.content.title,
