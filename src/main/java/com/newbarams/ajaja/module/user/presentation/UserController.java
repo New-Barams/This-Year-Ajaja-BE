@@ -126,15 +126,13 @@ public class UserController {
 
 	@Operation(summary = "[토큰 필요] 회원 탈퇴 API", description = "인가 코드를 통해서 회원 탈퇴를 진행합니다.", responses = {
 		@ApiResponse(responseCode = "200", description = "성공적으로 회원 탈퇴를 하였습니다."),
+		@ApiResponse(responseCode = "400", description = "유효하지 않은 토큰입니다. <br> 상세 정보는 응답을 확인 바랍니다."),
 		@ApiResponse(responseCode = "404", description = "사용자가 존재하지 않습니다."),
 	})
 	@DeleteMapping
 	@ResponseStatus(OK)
-	public AjajaResponse<Void> withdraw(
-		@UserId Long id,
-		@Valid @RequestBody UserRequest.Withdraw request
-	) {
-		withdrawService.withdraw(id, request.authorizationCode(), request.redirectUri());
+	public AjajaResponse<Void> withdraw(@UserId Long id) {
+		withdrawService.withdraw(id);
 		return AjajaResponse.ok();
 	}
 }

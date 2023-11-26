@@ -7,34 +7,30 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import com.newbarams.ajaja.common.MockTestSupport;
+import com.newbarams.ajaja.infra.feign.kakao.KakaoProperties;
 import com.newbarams.ajaja.infra.feign.kakao.KakaoUnlinkFeignClient;
-import com.newbarams.ajaja.module.user.application.model.AccessToken;
-import com.newbarams.ajaja.module.user.kakao.model.KakaoResponse;
 
 class KakaoDisconnectOauthServiceTest extends MockTestSupport {
 	@InjectMocks
 	private KakaoDisconnectOauthService kakaoDisconnectService;
 
 	@Mock
-	private KakaoAuthorizeService kakaoAuthorizeService;
+	private KakaoUnlinkFeignClient kakaoUnlinkFeignClient;
 
 	@Mock
-	private KakaoUnlinkFeignClient kakaoUnlinkFeignClient;
+	private KakaoProperties kakaoProperties;
 
 	@Test
 	void disconnect_Success() {
 		// given
-		String authorizationCode = monkey.giveMeOne(String.class);
-		String redirectUri = monkey.giveMeOne(String.class);
-		AccessToken accessToken = monkey.giveMeOne(KakaoResponse.Token.class);
-
-		given(kakaoAuthorizeService.authorize(anyString(), anyString())).willReturn(accessToken);
+		Long oauthId = monkey.giveMeOne(Long.class);
+		String adminKey = monkey.giveMeOne(String.class);
+		given(kakaoProperties.getAdminKey()).willReturn(adminKey);
 
 		// when
-		kakaoDisconnectService.disconnect(authorizationCode, redirectUri);
+		kakaoDisconnectService.disconnect(oauthId);
 
 		// then
-		then(kakaoAuthorizeService).should(times(1)).authorize(anyString(), anyString());
-		then(kakaoUnlinkFeignClient).should(times(1)).unlink(anyString());
+		then(kakaoUnlinkFeignClient).should(times(1)).unlink(anyString(), any());
 	}
 }

@@ -12,3 +12,4 @@ checkstyle {
 }
 
 checkstyleMain.exclude('com/newbarams/ajaja/module/user/kakao/model/KakaoTokenRequest.java')
+        .exclude('com/newbarams/ajaja/module/user/kakao/model/KakaoUnlinkRequest.java')

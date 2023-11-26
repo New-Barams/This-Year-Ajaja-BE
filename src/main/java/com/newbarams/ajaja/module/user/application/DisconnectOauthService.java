@@ -4,5 +4,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface DisconnectOauthService {
-	void disconnect(String authorizationCode, String redirectUri);
+	void disconnect(Long oauthId);
 }

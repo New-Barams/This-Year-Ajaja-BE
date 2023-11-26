@@ -82,6 +82,10 @@ public class User extends BaseEntity<User> {
 		this.receiveType = toEnum(receiveType);
 	}
 
+	public Long getOauthId() {
+		return oauthInfo.getOauthId();
+	}
+
 	private ReceiveType toEnum(String receiveType) {
 		try {
 			return ReceiveType.valueOf(receiveType.toUpperCase());

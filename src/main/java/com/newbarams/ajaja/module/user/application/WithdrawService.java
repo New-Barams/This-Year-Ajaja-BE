@@ -15,10 +15,10 @@ public class WithdrawService {
 	private final RetrieveUserService retrieveUserService;
 	private final DisconnectOauthService disconnectOauthService;
 
-	public void withdraw(Long userId, String authorizationCode, String redirectUri) {
+	public void withdraw(Long userId) {
 		User user = retrieveUserService.loadExistUserById(userId);
+		disconnectOauthService.disconnect(user.getOauthId());
 		disablePlanService.disable(userId);
-		disconnectOauthService.disconnect(authorizationCode, redirectUri);
 		user.delete();
 	}
 }
