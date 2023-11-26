@@ -16,14 +16,14 @@ public class RemindMapper {
 	public RemindResponse.CommonResponse toFutureRemind(
 		Plan plan
 	) {
-		List<RemindResponse.FutureResponse> futureRespons = new ArrayList<>();
+		List<RemindResponse.FutureResponse> futureResponses = new ArrayList<>();
 
 		int remindTerm = plan.getRemindTerm();
 		int remindMonth = plan.getRemindMonth();
 		List<Message> messages = plan.getMessages();
 
 		for (Message message : messages) {
-			futureRespons.add(
+			futureResponses.add(
 				new RemindResponse.FutureResponse(
 					0L,
 					message.getContent(),
@@ -47,7 +47,7 @@ public class RemindMapper {
 			plan.getRemindTotalPeriod(),
 			plan.getIsRemindable(),
 			Collections.EMPTY_LIST,
-			futureRespons
+			futureResponses
 		);
 	}
 }
