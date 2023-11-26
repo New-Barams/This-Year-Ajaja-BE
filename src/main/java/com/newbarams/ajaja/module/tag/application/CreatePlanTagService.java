@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.newbarams.ajaja.module.tag.domain.PlanTag;
 import com.newbarams.ajaja.module.tag.domain.Tag;
-import com.newbarams.ajaja.module.tag.repository.PlanTagRepository;
-import com.newbarams.ajaja.module.tag.repository.TagRepository;
+import com.newbarams.ajaja.module.tag.domain.repository.PlanTagRepository;
+import com.newbarams.ajaja.module.tag.domain.repository.TagRepository;
 
 import lombok.RequiredArgsConstructor;
 
