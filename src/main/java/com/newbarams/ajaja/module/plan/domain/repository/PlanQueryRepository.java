@@ -37,7 +37,8 @@ public class PlanQueryRepository {
 	private final Instant instant = Instant.now();
 	private final ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault()); // todo: vo로 빼기
 	private static final String AJAJA = "Ajaja";
-	private static final String CREATED_AT = "CreatedAt";
+	private static final String LATEST = "Latest";
+	private static final int PAGE_SIZE = 9;
 
 	private final JPAQueryFactory queryFactory;
 
@@ -99,11 +100,11 @@ public class PlanQueryRepository {
 
 			.where(plan.userId.eq(user.id),
 				plan.status.isPublic.eq(true),
-				isEqualsYear(conditions.isNewYear()),
-				cursorCreatedAtAndId(conditions.cursorCreatedAt(), conditions.cursorId()))
+				isEqualsYear(conditions.current()),
+				cursorCreatedAtAndId(conditions.cursorCreatedAt(), conditions.start()))
 
-			.orderBy(sortBy(conditions.sortCondition()))
-			.limit(conditions.pageSize())
+			.orderBy(sortBy(conditions.sort()))
+			.limit(PAGE_SIZE)
 			.fetch();
 
 		return tupleToResponse(tuples);
@@ -136,7 +137,7 @@ public class PlanQueryRepository {
 			return null;
 		}
 
-		if (sortCondition.equalsIgnoreCase(CREATED_AT)) {
+		if (sortCondition.equalsIgnoreCase(LATEST)) {
 			return new OrderSpecifier(Order.DESC, plan.createdAt);
 		}
 

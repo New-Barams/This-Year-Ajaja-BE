@@ -46,17 +46,16 @@ public class PlanRequest {
 	}
 
 	public record GetAll(
-		@DefaultValue("createdAt")
-		String sortCondition,
+		@DefaultValue("latest")
+		String sort,
 
 		@DefaultValue("true")
-		boolean isNewYear,
+		boolean current,
 
 		Instant cursorCreatedAt,
-		Long cursorId,
+		Integer cursorAjaja,
 
-		@DefaultValue("30")
-		int pageSize
+		Long start
 	) {
 	}
 }
