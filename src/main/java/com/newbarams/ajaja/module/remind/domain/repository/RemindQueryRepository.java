@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.remind.infra;
+package com.newbarams.ajaja.module.remind.domain.repository;
 
 import static com.newbarams.ajaja.module.remind.domain.QRemind.*;
 

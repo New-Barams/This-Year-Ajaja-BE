@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.plan.infra;
+package com.newbarams.ajaja.module.plan.domain.repository;
 
 import static com.newbarams.ajaja.global.common.error.ErrorCode.*;
 import static com.newbarams.ajaja.module.ajaja.domain.QAjaja.*;

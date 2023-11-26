@@ -14,6 +14,7 @@ import com.newbarams.ajaja.common.MockTestSupport;
 import com.newbarams.ajaja.module.feedback.domain.Feedback;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.remind.domain.Remind;
+import com.newbarams.ajaja.module.remind.domain.repository.RemindQueryRepository;
 import com.newbarams.ajaja.module.remind.domain.repository.RemindRepository;
 import com.newbarams.ajaja.module.remind.dto.GetRemindInfo;
 

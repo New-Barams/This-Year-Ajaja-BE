@@ -12,8 +12,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import com.newbarams.ajaja.common.MockTestSupport;
+import com.newbarams.ajaja.module.plan.domain.repository.PlanQueryRepository;
 import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
-import com.newbarams.ajaja.module.plan.infra.PlanQueryRepository;
 
 class LoadPlanInfoServiceTest extends MockTestSupport {
 	@InjectMocks

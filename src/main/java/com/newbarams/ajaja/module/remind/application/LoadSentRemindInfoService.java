@@ -9,8 +9,8 @@ import com.newbarams.ajaja.module.feedback.application.LoadFeedbackService;
 import com.newbarams.ajaja.module.feedback.domain.Feedback;
 import com.newbarams.ajaja.module.plan.application.LoadPlanService;
 import com.newbarams.ajaja.module.plan.domain.Plan;
+import com.newbarams.ajaja.module.remind.domain.repository.RemindQueryRepository;
 import com.newbarams.ajaja.module.remind.dto.GetRemindInfo;
-import com.newbarams.ajaja.module.remind.infra.RemindQueryRepository;
 
 import lombok.RequiredArgsConstructor;
 

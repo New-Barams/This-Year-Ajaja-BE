@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.newbarams.ajaja.module.plan.domain.repository.PlanQueryRepository;
 import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
-import com.newbarams.ajaja.module.plan.infra.PlanQueryRepository;
 
 import lombok.RequiredArgsConstructor;
 
