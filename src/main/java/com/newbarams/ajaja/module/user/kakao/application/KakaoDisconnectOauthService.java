@@ -6,14 +6,14 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import com.newbarams.ajaja.infra.feign.kakao.KakaoUnlinkFeignClient;
-import com.newbarams.ajaja.module.user.application.DisconnectService;
+import com.newbarams.ajaja.module.user.application.DisconnectOauthService;
 import com.newbarams.ajaja.module.user.application.model.AccessToken;
 
 import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-class KakaoDisconnectService implements DisconnectService {
+class KakaoDisconnectOauthService implements DisconnectOauthService {
 	private final KakaoAuthorizeService kakaoAuthorizeService;
 	private final KakaoUnlinkFeignClient kakaoUnlinkFeignClient;
 

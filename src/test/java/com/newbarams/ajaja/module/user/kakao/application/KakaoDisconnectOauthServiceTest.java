@@ -11,9 +11,9 @@ import com.newbarams.ajaja.infra.feign.kakao.KakaoUnlinkFeignClient;
 import com.newbarams.ajaja.module.user.application.model.AccessToken;
 import com.newbarams.ajaja.module.user.kakao.model.KakaoResponse;
 
-class KakaoDisconnectServiceTest extends MockTestSupport {
+class KakaoDisconnectOauthServiceTest extends MockTestSupport {
 	@InjectMocks
-	private KakaoDisconnectService kakaoDisconnectService;
+	private KakaoDisconnectOauthService kakaoDisconnectService;
 
 	@Mock
 	private KakaoAuthorizeService kakaoAuthorizeService;
