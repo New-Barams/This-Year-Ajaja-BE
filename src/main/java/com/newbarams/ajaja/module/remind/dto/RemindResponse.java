@@ -3,7 +3,7 @@ package com.newbarams.ajaja.module.remind.dto;
 import java.util.List;
 
 public sealed interface RemindResponse
-	permits RemindResponse.CommonResponse, RemindResponse.SentRemindResponse, RemindResponse.FutureRemindResponse {
+	permits RemindResponse.CommonResponse, RemindResponse.SentResponse, RemindResponse.FutureResponse {
 
 	record CommonResponse(
 		String remindTime,
@@ -11,13 +11,13 @@ public sealed interface RemindResponse
 		int remindTerm,
 		int remindTotalPeriod,
 		boolean isRemindable,
-		List<SentRemindResponse> sentRemindResponses,
-		List<FutureRemindResponse> futureRemindResponses
+		List<SentResponse> sentRespons,
+		List<FutureResponse> futureRespons
 
 	) implements RemindResponse {
 	}
 
-	record SentRemindResponse(
+	record SentResponse(
 		Long feedbackId,
 		String remindMessage,
 		int remindMonth,
@@ -31,7 +31,7 @@ public sealed interface RemindResponse
 	) implements RemindResponse {
 	}
 
-	record FutureRemindResponse(
+	record FutureResponse(
 		Long feedbackId,
 		String remindMessage,
 		int remindMonth,
@@ -43,19 +43,5 @@ public sealed interface RemindResponse
 		int endMonth,
 		int endDate
 	) implements RemindResponse {
-		public static FutureRemindResponse of(int remindMonth, int remindDate) {
-			return new FutureRemindResponse(
-				0L,
-				"",
-				remindMonth,
-				remindDate,
-				0,
-				false,
-				false,
-				false,
-				0,
-				0
-			);
-		}
 	}
 }
