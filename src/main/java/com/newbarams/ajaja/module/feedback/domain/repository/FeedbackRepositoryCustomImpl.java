@@ -21,9 +21,9 @@ public class FeedbackRepositoryCustomImpl implements FeedbackRepositoryCustom {
 	private final JPAQueryFactory queryFactory;
 
 	@Override
-	public List<Feedback> findAllByPlanIdIdAndCreatedYear(Long planId) {
+	public List<Feedback> findAllFeedbackByPlanId(Long planId) {
 		return queryFactory.selectFrom(feedback)
-			.where(feedback.planId.eq(planId).and(isCurrentYear()))
+			.where(feedback.planId.eq(planId))
 			.orderBy(feedback.createdAt.asc())
 			.fetch();
 	}

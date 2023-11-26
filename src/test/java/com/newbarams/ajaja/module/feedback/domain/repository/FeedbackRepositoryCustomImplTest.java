@@ -39,7 +39,7 @@ class FeedbackRepositoryCustomImplTest extends MockTestSupport {
 		Long planId = 1L;
 
 		// when
-		List<Feedback> feedbacks = feedbackRepositoryCustom.findAllByPlanIdIdAndCreatedYear(planId);
+		List<Feedback> feedbacks = feedbackRepositoryCustom.findAllFeedbackByPlanId(planId);
 
 		// then
 		Assertions.assertThat(feedbacks.size()).isEqualTo(1);
@@ -52,7 +52,7 @@ class FeedbackRepositoryCustomImplTest extends MockTestSupport {
 		Long planId = 2L;
 
 		// when
-		List<Feedback> feedbacks = feedbackRepositoryCustom.findAllByPlanIdIdAndCreatedYear(planId);
+		List<Feedback> feedbacks = feedbackRepositoryCustom.findAllFeedbackByPlanId(planId);
 
 		// then
 		Assertions.assertThat(feedbacks.size()).isZero();
