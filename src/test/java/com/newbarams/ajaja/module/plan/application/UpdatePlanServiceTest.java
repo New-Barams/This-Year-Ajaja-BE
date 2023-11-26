@@ -19,6 +19,7 @@ import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.domain.RemindInfo;
 import com.newbarams.ajaja.module.plan.domain.repository.PlanRepository;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
+import com.newbarams.ajaja.module.user.domain.OauthInfo;
 import com.newbarams.ajaja.module.user.domain.User;
 import com.newbarams.ajaja.module.user.domain.repository.UserRepository;
 
@@ -39,7 +40,7 @@ class UpdatePlanServiceTest {
 	@Test
 	@DisplayName("planId가 존재하고, 수정가능한 기간일 경우 계획을 수정할 수 있다.")
 	void updatePlan_Success() {
-		User user = new User("nickname", "abcde@naver.com");
+		User user = new User("nickname", "abcde@naver.com", OauthInfo.kakao(1L));
 		User savedUser = userRepository.save(user);
 
 		Plan plan = Plan.builder()

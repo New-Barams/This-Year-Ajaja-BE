@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import net.jqwik.api.Arbitraries;
 
+import com.newbarams.ajaja.module.plan.domain.Content;
 import com.newbarams.ajaja.module.plan.domain.Message;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.domain.PlanStatus;
@@ -31,6 +32,8 @@ class PlanQueryRepositoryTest {
 			.set("messages", List.of(new Message("test")))
 			.set("ajajas", Collections.EMPTY_LIST)
 		)
+		.register(Content.class, fixture -> fixture.giveMeBuilder(Content.class)
+			.set("description", Arbitraries.strings().ofMaxLength(255)))
 		.plugin(new JakartaValidationPlugin())
 		.defaultNotNull(true)
 		.useExpressionStrictMode()

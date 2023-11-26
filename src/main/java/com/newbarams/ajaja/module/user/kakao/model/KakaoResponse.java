@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.newbarams.ajaja.module.user.application.model.AccessToken;
 import com.newbarams.ajaja.module.user.application.model.Profile;
+import com.newbarams.ajaja.module.user.domain.OauthInfo;
 
 public sealed interface KakaoResponse permits Token, UserInfo {
 	@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -30,6 +31,11 @@ public sealed interface KakaoResponse permits Token, UserInfo {
 		Long id,
 		KakaoAccount kakaoAccount
 	) implements KakaoResponse, Profile {
+		@Override
+		public OauthInfo getInfo() {
+			return OauthInfo.kakao(id);
+		}
+
 		@Override
 		public String getEmail() {
 			return kakaoAccount().email();

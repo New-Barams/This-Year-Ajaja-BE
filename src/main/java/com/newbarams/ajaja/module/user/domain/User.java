@@ -38,15 +38,17 @@ public class User extends BaseEntity<User> {
 	@Embedded
 	private Nickname nickname;
 	private Email email;
+	private OauthInfo oauthInfo;
 
 	@Enumerated(EnumType.STRING)
 	private ReceiveType receiveType;
 
 	private boolean isDeleted;
 
-	public User(String nickname, String email) {
+	public User(String nickname, String email, OauthInfo oauthInfo) {
 		this.nickname = new Nickname(nickname);
 		this.email = new Email(email);
+		this.oauthInfo = oauthInfo;
 		this.receiveType = ReceiveType.EMAIL;
 		this.isDeleted = false;
 	}
