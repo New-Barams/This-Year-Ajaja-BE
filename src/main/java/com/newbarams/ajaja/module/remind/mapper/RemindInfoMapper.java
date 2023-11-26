@@ -1,6 +1,5 @@
 package com.newbarams.ajaja.module.remind.mapper;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,29 +13,28 @@ import com.newbarams.ajaja.module.remind.dto.RemindResponse;
 
 @Component
 public class RemindInfoMapper {
-	public List<RemindResponse.SentRemindResponse> mapSentMessagesFrom(
+	public List<RemindResponse.SentResponse> mapSentMessagesFrom(
 		List<Remind> reminds,
-		List<Feedback> feedbacks,
-		TimeValue timeValue
+		List<Feedback> feedbacks
 	) {
-		List<RemindResponse.SentRemindResponse> sentRemindResponses = new ArrayList<>();
+		List<RemindResponse.SentResponse> sentResponses = new ArrayList<>();
 
 		for (int i = 0; i < reminds.size(); i++) {
 			Remind remind = reminds.get(i);
 			Feedback feedback = feedbacks.get(i);
 
-			Instant starts = remind.getPeriod().getStarts();
-			int remindMonth = timeValue.getMonthFrom(starts);
-			int remindDate = timeValue.getDateFrom(starts);
+			TimeValue startTimeValue = new TimeValue(remind.getStart());
+			int remindMonth = startTimeValue.getMonth();
+			int remindDate = startTimeValue.getDate();
 
-			Instant ends = remind.getPeriod().getEnds();
-			int endMonth = timeValue.getMonthFrom(ends);
-			int endDate = timeValue.getDateFrom(ends);
+			TimeValue endTimeValue = new TimeValue(remind.getEnd());
+			int endMonth = endTimeValue.getMonth();
+			int endDate = endTimeValue.getDate();
 
 			boolean isFeedback = feedback.isFeedback();
 			boolean isExpired = remind.isExpired();
 
-			sentRemindResponses.add((new RemindResponse.SentRemindResponse(
+			sentResponses.add((new RemindResponse.SentResponse(
 				feedback.getId(),
 				remind.getInfo().getContent(),
 				remindMonth,
@@ -50,15 +48,15 @@ public class RemindInfoMapper {
 			)));
 		}
 
-		return sentRemindResponses;
+		return sentResponses;
 	}
 
-	public List<RemindResponse.FutureRemindResponse> mapFutureMessagesFrom(
+	public List<RemindResponse.FutureResponse> mapFutureMessagesFrom(
 		Plan plan,
 		int sentRemindNumber,
 		int lastRemindMonth
 	) {
-		List<RemindResponse.FutureRemindResponse> futureRemindResponses = new ArrayList<>();
+		List<RemindResponse.FutureResponse> futureResponses = new ArrayList<>();
 
 		int remindTerm = plan.getInfo().getRemindTerm();
 		int remindMonth = lastRemindMonth;
@@ -67,12 +65,20 @@ public class RemindInfoMapper {
 		for (int i = sentRemindNumber; i < plan.getTotalRemindNumber(); i++) {
 			remindMonth += remindTerm;
 
-			futureRemindResponses.add(RemindResponse.FutureRemindResponse.of(
+			futureResponses.add(new RemindResponse.FutureResponse(
+				0L,
+				"",
 				remindMonth,
-				remindDate
+				remindDate,
+				0,
+				false,
+				false,
+				false,
+				0,
+				0
 			));
 		}
 
-		return futureRemindResponses;
+		return futureResponses;
 	}
 }

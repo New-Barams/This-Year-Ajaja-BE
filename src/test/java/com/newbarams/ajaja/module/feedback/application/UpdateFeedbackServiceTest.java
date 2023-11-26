@@ -57,7 +57,7 @@ class UpdateFeedbackServiceTest {
 			// mock
 			given(feedbackRepository.findById(any())).willReturn(Optional.of(mockFeedback));
 			doNothing().when(updatePlanAchieveService).updatePlanAchieve(anyLong(), anyInt());
-			given(feedbackRepository.findAllByPlanIdIdAndCreatedYear(any())).willReturn(feedbacks);
+			given(feedbackRepository.findAllFeedbackByPlanId(any())).willReturn(feedbacks);
 
 			// when,then
 			assertThatNoException().isThrownBy(

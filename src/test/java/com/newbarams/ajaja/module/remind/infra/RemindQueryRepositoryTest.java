@@ -16,7 +16,7 @@ import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.remind.domain.Remind;
 import com.newbarams.ajaja.module.remind.domain.repository.RemindQueryRepository;
 import com.newbarams.ajaja.module.remind.domain.repository.RemindRepository;
-import com.newbarams.ajaja.module.remind.dto.GetRemindInfo;
+import com.newbarams.ajaja.module.remind.dto.RemindResponse;
 
 @SpringBootTest
 @Transactional
@@ -65,9 +65,9 @@ class RemindQueryRepositoryTest extends MockTestSupport {
 			.sample();
 
 		// when
-		GetRemindInfo.CommonResponse reminds = remindQueryRepository.findAllRemindByPlanId(plan, List.of(feedback));
+		RemindResponse.CommonResponse reminds = remindQueryRepository.findAllRemindByPlanId(plan, List.of(feedback));
 
 		// then
-		Assertions.assertThat(reminds.sentRemindResponses().size()).isZero();
+		Assertions.assertThat(reminds.sentRespons().size()).isZero();
 	}
 }

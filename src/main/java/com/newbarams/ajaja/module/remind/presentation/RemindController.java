@@ -11,7 +11,7 @@ import com.newbarams.ajaja.global.common.AjajaResponse;
 import com.newbarams.ajaja.global.common.error.ErrorResponse;
 import com.newbarams.ajaja.module.remind.application.LoadRemindInfoService;
 import com.newbarams.ajaja.module.remind.application.LoadSentRemindInfoService;
-import com.newbarams.ajaja.module.remind.dto.GetRemindInfo;
+import com.newbarams.ajaja.module.remind.dto.RemindResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -40,7 +40,7 @@ public class RemindController {
 		})
 	@GetMapping("/{planId}")
 	@ResponseStatus(HttpStatus.OK)
-	public AjajaResponse<GetRemindInfo> getRemindResponse(
+	public AjajaResponse<RemindResponse> getRemindResponse(
 		@PathVariable Long planId
 	) {
 		return new AjajaResponse<>(true, loadSentRemindInfoService.loadSentRemindInfo(planId));
@@ -55,7 +55,7 @@ public class RemindController {
 		})
 	@GetMapping("/modify/{planId}")
 	@ResponseStatus(HttpStatus.OK)
-	public AjajaResponse<GetRemindInfo> getRemindInfoResponse(
+	public AjajaResponse<RemindResponse> getRemindInfoResponse(
 		@PathVariable Long planId
 	) {
 		return new AjajaResponse<>(true, loadRemindInfoService.loadRemindInfo(planId));

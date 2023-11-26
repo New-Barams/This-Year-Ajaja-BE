@@ -33,7 +33,7 @@ public class UpdateFeedbackService {
 	}
 
 	private void updatePlanAchieve(Long planId) {
-		int feedbackAverage = (int)feedbackRepository.findAllByPlanIdIdAndCreatedYear(planId)
+		int feedbackAverage = (int)feedbackRepository.findAllFeedbackByPlanId(planId)
 			.stream()
 			.mapToInt(Feedback::getRate)
 			.average()

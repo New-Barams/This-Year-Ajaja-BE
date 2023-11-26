@@ -10,7 +10,7 @@ import com.newbarams.ajaja.module.feedback.domain.Feedback;
 import com.newbarams.ajaja.module.plan.application.LoadPlanService;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.remind.domain.repository.RemindQueryRepository;
-import com.newbarams.ajaja.module.remind.dto.GetRemindInfo;
+import com.newbarams.ajaja.module.remind.dto.RemindResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,7 +22,7 @@ public class LoadSentRemindInfoService {
 	private final LoadFeedbackService loadFeedbackService;
 	private final RemindQueryRepository remindQueryRepository;
 
-	public GetRemindInfo.CommonResponse loadSentRemindInfo(Long planId) {
+	public RemindResponse.CommonResponse loadSentRemindInfo(Long planId) {
 		Plan plan = loadPlanService.loadPlanOrElseThrow(planId);
 		List<Feedback> feedbacks = loadFeedbackService.loadFeedback(planId);
 

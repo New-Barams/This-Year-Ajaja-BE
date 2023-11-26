@@ -38,14 +38,14 @@ public class RemindQueryRepository {
 			return createNoSentResponse(plan);
 		}
 
-		List<RemindResponse.SentRemindResponse> sentMessages
+		List<RemindResponse.SentResponse> sentMessages
 			= remindInfoMapper.mapSentMessagesFrom(reminds, feedbacks);
 
 		Instant lastRemindTime = reminds.get(sentMessages.size() - 1).getStart();
 		TimeValue timeValue = new TimeValue(lastRemindTime);
 		int lastRemindMonth = timeValue.getMonth();
 
-		List<RemindResponse.FutureRemindResponse> futureMessages
+		List<RemindResponse.FutureResponse> futureMessages
 			= remindInfoMapper.mapFutureMessagesFrom(plan, sentMessages.size(), lastRemindMonth);
 
 		return new RemindResponse.CommonResponse(
@@ -61,7 +61,7 @@ public class RemindQueryRepository {
 
 	private RemindResponse.CommonResponse createNoSentResponse(Plan plan) {
 		int lastRemindMonth = plan.getRemindTerm() == 1 ? 1 : 0;
-		List<RemindResponse.FutureRemindResponse> futureRemindResponses
+		List<RemindResponse.FutureResponse> futureResponses
 			= remindInfoMapper.mapFutureMessagesFrom(plan, 0, lastRemindMonth);
 
 		return new RemindResponse.CommonResponse(
@@ -71,7 +71,7 @@ public class RemindQueryRepository {
 			plan.getRemindTotalPeriod(),
 			plan.getIsRemindable(),
 			Collections.EMPTY_LIST,
-			futureRemindResponses
+			futureResponses
 		);
 	}
 }
