@@ -22,8 +22,8 @@ import io.jsonwebtoken.security.SecurityException;
 
 @Component
 public class JwtParser {
-	private final JwtSecretProvider jwtSecretProvider;
 	private final CustomUserDetailService userDetailService;
+	private final JwtSecretProvider jwtSecretProvider;
 	private final io.jsonwebtoken.JwtParser parser;
 
 	JwtParser(JwtSecretProvider jwtSecretProvider, CustomUserDetailService userDetailService) {

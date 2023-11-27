@@ -23,4 +23,8 @@ class JwtSecretProvider {
 		this.secretKey = Keys.hmacShaKeyFor(keyBytes);
 		this.signature = signature;
 	}
+
+	public String cacheKey(Long userId) {
+		return signature + userId;
+	}
 }

@@ -39,4 +39,16 @@ public class CacheUtil {
 	private Object getSaveByDefaultKey(Long userId) {
 		return redisTemplate.opsForValue().get(DEFAULT_KEY + userId);
 	}
+
+	public void saveRefreshToken(String key, String refreshToken, long expireIn) {
+		redisTemplate.opsForValue().set(key, refreshToken, Duration.ofMillis(expireIn));
+	}
+
+	public Object getRefreshToken(String key) {
+		return redisTemplate.opsForValue().get(key);
+	}
+
+	public boolean deleteRefreshToken(String key) {
+		return Boolean.TRUE.equals(redisTemplate.delete(key));
+	}
 }
