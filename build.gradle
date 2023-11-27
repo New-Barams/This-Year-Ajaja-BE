@@ -67,9 +67,6 @@ dependencies {
 
     // Embedded Redis
     testImplementation 'it.ozimov:embedded-redis:0.7.2'
-
-    // Json
-    implementation group: 'org.json', name: 'json', version: '20160810'
 }
 
 configurations {
