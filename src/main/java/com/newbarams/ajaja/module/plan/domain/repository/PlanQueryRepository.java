@@ -132,13 +132,13 @@ public class PlanQueryRepository {
 
 	private BooleanExpression getCursorCondition(String sort, Long start, Integer cursorAjaja) {
 		if (sort.equalsIgnoreCase(LATEST)) {
-			return cursorCreatedAtAndId(start);
+			return cursorId(start);
 		}
 
 		return cursorAjajaAndId(cursorAjaja, start);
 	}
 
-	private BooleanExpression cursorCreatedAtAndId(Long cursorId) {
+	private BooleanExpression cursorId(Long cursorId) {
 		return plan.id.lt(cursorId);
 	}
 
