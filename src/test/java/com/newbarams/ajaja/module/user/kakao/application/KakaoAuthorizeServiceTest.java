@@ -38,6 +38,6 @@ class KakaoAuthorizeServiceTest extends MockTestSupport {
 
 		// then
 		then(kakaoAuthorizeFeignClient).should(times(1)).authorize(any());
-		assertThat(accessToken.getContent()).isEqualTo(response.accessToken());
+		assertThat(accessToken.getContent()).isEqualTo(response.getAccessToken());
 	}
 }

@@ -34,7 +34,7 @@ class JwtValidatorTest extends MonkeySupport {
 		UserResponse.Token tokens = jwtGenerator.generate(userId);
 
 		// when, then
-		assertThatNoException().isThrownBy(() -> jwtValidator.validateReissueable(userId, tokens.refreshToken()));
+		assertThatNoException().isThrownBy(() -> jwtValidator.validateReissueable(userId, tokens.getRefreshToken()));
 	}
 
 	@Test
@@ -63,7 +63,7 @@ class JwtValidatorTest extends MonkeySupport {
 
 		// when, then
 		assertThatExceptionOfType(AjajaException.class)
-			.isThrownBy(() -> jwtValidator.validateReissueable(userId, tokens.refreshToken()))
+			.isThrownBy(() -> jwtValidator.validateReissueable(userId, tokens.getRefreshToken()))
 			.withMessage(NEVER_LOGIN.getMessage());
 	}
 
@@ -84,7 +84,7 @@ class JwtValidatorTest extends MonkeySupport {
 
 		// when, then
 		assertThatExceptionOfType(AjajaException.class)
-			.isThrownBy(() -> jwtValidator.validateReissueable(userId, oldTokens.refreshToken()))
+			.isThrownBy(() -> jwtValidator.validateReissueable(userId, oldTokens.getRefreshToken()))
 			.withMessage(TOKEN_NOT_MATCH.getMessage());
 	}
 }

@@ -74,7 +74,7 @@ class MockController {
 	@PostMapping("/reissue")
 	@ResponseStatus(OK)
 	AjajaResponse<UserResponse.Token> reissue(@RequestBody UserRequest.Reissue request) {
-		jwtValidator.validateReissueable(1L, request.refreshToken());
+		jwtValidator.validateReissueable(1L, request.getRefreshToken());
 		UserResponse.Token response = jwtGenerator.generate(1L);
 		return AjajaResponse.ok(response);
 	}

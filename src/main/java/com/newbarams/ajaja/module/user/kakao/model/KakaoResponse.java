@@ -1,7 +1,5 @@
 package com.newbarams.ajaja.module.user.kakao.model;
 
-import static com.newbarams.ajaja.module.user.kakao.model.KakaoResponse.*;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -9,28 +7,32 @@ import com.newbarams.ajaja.module.user.application.model.AccessToken;
 import com.newbarams.ajaja.module.user.application.model.Profile;
 import com.newbarams.ajaja.module.user.domain.OauthInfo;
 
-public sealed interface KakaoResponse permits Token, UserInfo {
+import lombok.Data;
+
+public final class KakaoResponse {
+	@Data
 	@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-	record Token(
-		String accessToken,
-		String tokenType,
-		String refreshToken,
-		int expiresIn,
-		String scope,
-		String refreshTokenExpiresIn
-	) implements KakaoResponse, AccessToken {
+	public static class Token implements AccessToken {
+		private final String accessToken;
+		private final String tokenType;
+		private final String refreshToken;
+		private final int expiresIn;
+		private final String scope;
+		private final String refreshTokenExpiresIn;
+
 		@Override
 		public String getContent() {
 			return accessToken;
 		}
 	}
 
+	@Data
 	@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 	@JsonIgnoreProperties(ignoreUnknown = true)
-	record UserInfo(
-		Long id,
-		KakaoAccount kakaoAccount
-	) implements KakaoResponse, Profile {
+	public static class UserInfo implements Profile {
+		private final Long id;
+		private final KakaoAccount kakaoAccount;
+
 		@Override
 		public OauthInfo getInfo() {
 			return OauthInfo.kakao(id);
@@ -38,7 +40,7 @@ public sealed interface KakaoResponse permits Token, UserInfo {
 
 		@Override
 		public String getEmail() {
-			return kakaoAccount().email();
+			return kakaoAccount.email();
 		}
 	}
 }
