@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.tag.repository;
+package com.newbarams.ajaja.module.tag.domain.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
