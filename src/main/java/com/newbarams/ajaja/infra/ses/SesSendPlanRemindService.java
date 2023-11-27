@@ -11,12 +11,13 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class SesSendPlanRemindService implements SendPlanRemindService {
+	private static final String FEEDBACK_LINK = "https://api.ajaja.me/feedbacks/";
 	private final AmazonSimpleEmailService amazonSimpleEmailService;
 
 	@Async
 	@Override
 	public void send(String email, String message, Long feedbackId) {
-		String feedbackLink = "http://feedbacks/" + feedbackId;
+		String feedbackLink = FEEDBACK_LINK + feedbackId;
 
 		MailForm remindMailForm = createMail(email, message, feedbackLink);
 		amazonSimpleEmailService.sendEmail(remindMailForm.toSesForm());
