@@ -23,11 +23,11 @@ public class TimeValue {
 		return zonedDateTime.getDayOfMonth();
 	}
 
-	public Timestamp toTimeStampOf() {
+	public Timestamp toTimeStamp() {
 		return Timestamp.valueOf(instant.toString());
 	}
 
-	public LocalDateTime toLocalDateTimeOf() {
+	public LocalDateTime toLocalDateTime() {
 		return zonedDateTime.toLocalDateTime();
 	}
 }
