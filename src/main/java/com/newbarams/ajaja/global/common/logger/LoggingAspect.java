@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.infra.logger;
+package com.newbarams.ajaja.global.common.logger;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -33,8 +33,9 @@ public class LoggingAspect {
 			= (ServletRequestAttributes)RequestContextHolder.getRequestAttributes();
 		HttpServletRequest request = (requestAttributes).getRequest();
 
-		String controllerLog = "[API] Called : " + request.getMethod() + " " + request.getRequestURI() +
-			",Processed : " + stopWatch.getTotalTimeMillis() + "ms";
+		String controllerLog =
+			"[API] Called : " + request.getMethod() + " " + request.getRequestURI()
+				+ ",Processed : " + stopWatch.getTotalTimeMillis() + "ms";
 
 		log.info(controllerLog);
 
