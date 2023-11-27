@@ -30,7 +30,7 @@ public class LoadPlanService {
 
 	public Plan loadPlanOrElseThrow(Long id) {
 		return planRepository.findById(id)
-			.orElseThrow(() -> new AjajaException(NOT_FOUND_PLAN));
+			.orElseThrow(() -> AjajaException.withId(id, NOT_FOUND_PLAN));
 	}
 
 	public List<PlanResponse.GetAll> loadAllPlans(PlanRequest.GetAll request) {

@@ -52,8 +52,7 @@ class DeletePlanServiceTest {
 		Long planId = Arbitraries.longs().lessOrEqual(-1L).sample();
 
 		assertThatThrownBy(() -> deletePlanService.delete(planId, 1L, 1))
-			.isInstanceOf(AjajaException.class)
-			.hasMessage(NOT_FOUND_PLAN.getMessage());
+			.isInstanceOf(AjajaException.class);
 	}
 
 	@Test

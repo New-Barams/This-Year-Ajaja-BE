@@ -21,7 +21,7 @@ import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 import com.newbarams.ajaja.module.plan.mapper.PlanMapper;
-import com.newbarams.ajaja.module.remind.domain.dto.RemindMessageInfo;
+import com.newbarams.ajaja.module.remind.dto.RemindMessageInfo;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -36,11 +36,17 @@ import lombok.RequiredArgsConstructor;
 public class PlanQueryRepository {
 	private final Instant instant = Instant.now();
 	private final ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault()); // todo: vo로 빼기
-	private static final String AJAJA = "Ajaja";
 	private static final String LATEST = "Latest";
 	private static final int PAGE_SIZE = 9;
 
 	private final JPAQueryFactory queryFactory;
+
+	public List<Plan> findAllCurrentPlansByUserId(Long userId) {
+		return queryFactory.selectFrom(plan)
+			.where(plan.userId.eq(userId)
+				.and(isCurrentYear()))
+			.fetch();
+	}
 
 	public Optional<PlanResponse.GetOne> findById(Long id, Long userId) {
 		List<Tuple> tuples = queryFactory.select(plan, user.nickname)
@@ -152,20 +158,9 @@ public class PlanQueryRepository {
 			.or(plan.ajajas.size().lt(cursorAjaja));
 	}
 
-	private OrderSpecifier<?> sortBy(String sortCondition) {
-		if (sortCondition == null) {
-			return null;
-		}
-
-		if (sortCondition.equalsIgnoreCase(LATEST)) {
-			return new OrderSpecifier(Order.DESC, plan.createdAt);
-		}
-
-		if (sortCondition.equalsIgnoreCase(AJAJA)) {
-			return new OrderSpecifier(Order.DESC, plan.ajajas.size());
-		}
-
-		return null;
+	private OrderSpecifier<?> sortBy(String condition) {
+		return condition.equalsIgnoreCase(LATEST) ? new OrderSpecifier<>(Order.DESC, plan.createdAt) :
+			new OrderSpecifier<>(Order.DESC, plan.ajajas.size());
 	}
 
 	private List<PlanResponse.GetAll> tupleToResponse(List<Tuple> tuples) {
@@ -191,7 +186,8 @@ public class PlanQueryRepository {
 				plan.iconNumber,
 				user.email.isVerified
 			))
-			.from(plan, user)
+			.from(plan)
+			.join(user).on(user.id.eq(plan.userId))
 			.groupBy(plan.createdAt.year(),
 				plan.id,
 				plan.content.title,

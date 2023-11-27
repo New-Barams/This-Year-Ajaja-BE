@@ -11,4 +11,5 @@ checkstyle {
     toolVersion = "10.12.2"
 }
 
-checkstyleMain.exclude('com/newbarams/ajaja/module/user/auth/model/KakaoTokenRequest.java')
+checkstyleMain.exclude('com/newbarams/ajaja/module/user/kakao/model/KakaoTokenRequest.java')
+        .exclude('com/newbarams/ajaja/module/user/kakao/model/KakaoUnlinkRequest.java')

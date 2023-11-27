@@ -21,7 +21,7 @@ class UserTest extends MonkeySupport {
 		// given
 
 		// when, then
-		assertThatNoException().isThrownBy(() -> new User(nickname, input));
+		assertThatNoException().isThrownBy(() -> new User(nickname, input, OauthInfo.kakao(1L)));
 	}
 
 	@Test
@@ -70,7 +70,7 @@ class UserTest extends MonkeySupport {
 	void getEmail_Success() {
 		// given
 		String email = "gmlwh124@naver.com";
-		User user = new User(nickname, email);
+		User user = new User(nickname, email, OauthInfo.kakao(1L));
 
 		// when, then
 		assertThat(user.defaultEmail()).isEqualTo(email);
@@ -83,7 +83,7 @@ class UserTest extends MonkeySupport {
 	void updateReceive_Success_WithSupportType(String type) {
 		// given
 		String email = "gmlwh124@naver.com";
-		User user = new User(nickname, email);
+		User user = new User(nickname, email, OauthInfo.kakao(1L));
 
 		// when, then
 		assertThatNoException().isThrownBy(() -> user.updateReceive(type));
@@ -95,7 +95,7 @@ class UserTest extends MonkeySupport {
 	void updateReceive_Fail_ByNotSupportType(String type) {
 		// given
 		String email = "gmlwh124@naver.com";
-		User user = new User(nickname, email);
+		User user = new User(nickname, email, OauthInfo.kakao(1L));
 
 		// when, then
 		assertThatExceptionOfType(AjajaException.class)

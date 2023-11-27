@@ -4,7 +4,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
-import com.newbarams.ajaja.module.remind.domain.dto.RemindMailForm;
+import com.newbarams.ajaja.module.remind.dto.RemindMailForm;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

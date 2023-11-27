@@ -11,10 +11,14 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 @RequiredArgsConstructor
 public class WithdrawService {
+	private final DisablePlanService disablePlanService;
 	private final RetrieveUserService retrieveUserService;
+	private final DisconnectOauthService disconnectOauthService;
 
 	public void withdraw(Long userId) {
 		User user = retrieveUserService.loadExistUserById(userId);
-		user.delete(); // todo: add oauth separation, delete plans ... etc.
+		disconnectOauthService.disconnect(user.getOauthId());
+		disablePlanService.disable(userId);
+		user.delete();
 	}
 }

@@ -13,16 +13,16 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Period extends SelfValidating<Period> {
-	private Instant start;
-	private Instant end;
+	private Instant starts;
+	private Instant ends;
 
-	public Period(Instant start, Instant end) {
-		this.start = start;
-		this.end = end;
+	public Period(Instant starts, Instant ends) {
+		this.starts = starts;
+		this.ends = ends;
 		this.validateSelf();
 	}
 
 	public boolean isExpired() {
-		return Instant.now().isAfter(this.end);
+		return Instant.now().isAfter(this.ends);
 	}
 }

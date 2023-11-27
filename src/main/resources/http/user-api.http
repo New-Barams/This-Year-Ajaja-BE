@@ -11,8 +11,8 @@ POST {{path}}/login
 Content-Type: application/json
 
 {
-  "authorizationCode": "3yZ1t-T6P0lmA51PDW0jJkKj4gJ85zLTijmqmiLiAQN6X8AFSnEhyXazFBEKKwyoAAABi_tgGJZAPV-WDrAHcw",
-  "redirectUrl": "http://localhost:3000/oauth"
+  "authorizationCode": "WXx4mr0d7vn-7k60QnQnK_ZWUdMNCjOGf-APGZnAp5twPUT9eVvOX_ypwPUKKcleAAABjABcxpLokopMIboAuA",
+  "redirectUri": "http://localhost:3000/oauth"
 }
 
 ###

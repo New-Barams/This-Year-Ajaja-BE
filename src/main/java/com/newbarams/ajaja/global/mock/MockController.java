@@ -30,13 +30,13 @@ import com.newbarams.ajaja.global.security.jwt.util.JwtGenerator;
 import com.newbarams.ajaja.global.security.jwt.util.JwtParser;
 import com.newbarams.ajaja.global.security.jwt.util.JwtRemover;
 import com.newbarams.ajaja.global.security.jwt.util.JwtValidator;
-import com.newbarams.ajaja.module.feedback.domain.dto.GetAchieve;
-import com.newbarams.ajaja.module.feedback.domain.dto.UpdateFeedback;
+import com.newbarams.ajaja.module.feedback.dto.GetAchieve;
+import com.newbarams.ajaja.module.feedback.dto.UpdateFeedback;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 import com.newbarams.ajaja.module.remind.application.SchedulingRemindService;
-import com.newbarams.ajaja.module.remind.domain.dto.GetRemindInfo;
-import com.newbarams.ajaja.module.remind.domain.dto.ModifyAlarm;
+import com.newbarams.ajaja.module.remind.dto.ModifyAlarm;
+import com.newbarams.ajaja.module.remind.dto.RemindResponse;
 import com.newbarams.ajaja.module.user.dto.UserRequest;
 import com.newbarams.ajaja.module.user.dto.UserResponse;
 
@@ -185,10 +185,10 @@ class MockController {
 	})
 	@GetMapping("/reminds/{planId}")
 	@ResponseStatus(OK)
-	public AjajaResponse<GetRemindInfo.CommonResponse> getReminds(@PathVariable Long planId) {
-		List<GetRemindInfo.SentRemindResponse> sentRemindResponses =
+	public AjajaResponse<RemindResponse.CommonResponse> getReminds(@PathVariable Long planId) {
+		List<RemindResponse.SentResponse> sentRespons =
 			List.of(
-				new GetRemindInfo.SentRemindResponse(
+				new RemindResponse.SentResponse(
 					1L,
 					"화이팅",
 					3,
@@ -200,7 +200,7 @@ class MockController {
 					4,
 					13
 				),
-				new GetRemindInfo.SentRemindResponse(
+				new RemindResponse.SentResponse(
 					2L,
 					"아좌좌",
 					6,
@@ -213,8 +213,8 @@ class MockController {
 					13
 				));
 
-		List<GetRemindInfo.FutureRemindResponse> futureRemindResponses = List.of(
-			new GetRemindInfo.FutureRemindResponse(
+		List<RemindResponse.FutureResponse> futureRespons = List.of(
+			new RemindResponse.FutureResponse(
 				0L,
 				"잘하고 있지?",
 				9,
@@ -226,7 +226,7 @@ class MockController {
 				0,
 				0
 			),
-			new GetRemindInfo.FutureRemindResponse(
+			new RemindResponse.FutureResponse(
 				0L,
 				"조금만 더 힘내!",
 				12,
@@ -239,14 +239,14 @@ class MockController {
 				0
 			));
 
-		GetRemindInfo.CommonResponse response = new GetRemindInfo.CommonResponse(
+		RemindResponse.CommonResponse response = new RemindResponse.CommonResponse(
 			"MORNING",
 			13,
 			3,
 			12,
 			true,
-			sentRemindResponses,
-			futureRemindResponses
+			sentRespons,
+			futureRespons
 		);
 
 		return new AjajaResponse<>(true, response);
@@ -263,10 +263,10 @@ class MockController {
 	})
 	@GetMapping("/reminds/modify/{planId}")
 	@ResponseStatus(OK)
-	public AjajaResponse<GetRemindInfo.CommonResponse> getRemindsInfo(@PathVariable Long planId) {
-		List<GetRemindInfo.SentRemindResponse> sentRemindResponses = Collections.emptyList();
-		List<GetRemindInfo.FutureRemindResponse> futureRemindResponses = List.of(
-			new GetRemindInfo.FutureRemindResponse(
+	public AjajaResponse<RemindResponse.CommonResponse> getRemindsInfo(@PathVariable Long planId) {
+		List<RemindResponse.SentResponse> sentRespons = Collections.emptyList();
+		List<RemindResponse.FutureResponse> futureRespons = List.of(
+			new RemindResponse.FutureResponse(
 				0L,
 				"화이팅",
 				6,
@@ -278,7 +278,7 @@ class MockController {
 				0,
 				0
 			),
-			new GetRemindInfo.FutureRemindResponse(
+			new RemindResponse.FutureResponse(
 				0L,
 				"아좌좌",
 				12,
@@ -291,14 +291,14 @@ class MockController {
 				0
 			));
 
-		GetRemindInfo.CommonResponse response = new GetRemindInfo.CommonResponse(
+		RemindResponse.CommonResponse response = new RemindResponse.CommonResponse(
 			"MORNING",
 			13,
 			6,
 			12,
 			true,
-			sentRemindResponses,
-			futureRemindResponses
+			sentRespons,
+			futureRespons
 		);
 
 		return new AjajaResponse<>(true, response);

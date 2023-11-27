@@ -25,7 +25,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderColumn;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
@@ -60,7 +59,6 @@ public class Plan extends BaseEntity<Plan> {
 	private RemindInfo info;
 	private PlanStatus status;
 
-	@NotEmpty
 	@ElementCollection(fetch = FetchType.EAGER) // todo:메세지 로딩 오류로 인한 임시 코드 (나중에 지우기)
 	@CollectionTable(name = "remind_messages", joinColumns = @JoinColumn(name = "plan_id"))
 	@OrderColumn(name = "message_idx")
@@ -157,51 +155,55 @@ public class Plan extends BaseEntity<Plan> {
 	}
 
 	public String getTimeName() {
-		return info.getTimeName();
+		return this.info.getTimeName();
 	}
 
 	public int getRemindTime() {
-		return info.getRemindTime();
+		return this.info.getRemindTime();
 	}
 
 	public String getRemindTimeName() {
-		return info.getRemindTimeName();
+		return this.info.getRemindTimeName();
 	}
 
 	public int getRemindMonth() {
-		return info.getRemindMonth();
+		return this.info.getRemindMonth();
 	}
 
 	public int getRemindDate() {
-		return info.getRemindDate();
+		return this.info.getRemindDate();
 	}
 
 	public int getRemindTerm() {
-		return info.getRemindTerm();
+		return this.info.getRemindTerm();
 	}
 
 	public int getRemindTotalPeriod() {
-		return info.getRemindTotalPeriod();
+		return this.info.getRemindTotalPeriod();
 	}
 
 	public boolean getIsRemindable() {
-		return status.isCanRemind();
+		return this.status.isCanRemind();
 	}
 
 	public int getTotalRemindNumber() {
-		return info.getTotalRemindNumber();
+		return this.info.getTotalRemindNumber();
+	}
+
+	public boolean getRemindStatus() {
+		return this.status.isCanRemind();
 	}
 
 	public String getMessage(int remindTerm, int currentMonth) {
 		int messageIdx = getMessageIdx(remindTerm, currentMonth);
-
 		return this.messages.get(messageIdx).getContent();
 	}
 
 	private int getMessageIdx(int remindTerm, int currentMonth) {
-		if (remindTerm == ONE_MONTH_TERM) {
-			return currentMonth - 2;
-		}
-		return currentMonth / remindTerm;
+		return remindTerm == ONE_MONTH_TERM ? (currentMonth - 2) : currentMonth / remindTerm;
+	}
+
+	public void disable() {
+		this.status = status.disable();
 	}
 }

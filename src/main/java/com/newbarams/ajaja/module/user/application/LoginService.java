@@ -4,8 +4,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.newbarams.ajaja.global.security.jwt.util.JwtGenerator;
-import com.newbarams.ajaja.module.user.auth.model.AccessToken;
-import com.newbarams.ajaja.module.user.auth.model.Profile;
+import com.newbarams.ajaja.module.user.application.model.AccessToken;
+import com.newbarams.ajaja.module.user.application.model.Profile;
+import com.newbarams.ajaja.module.user.domain.OauthInfo;
 import com.newbarams.ajaja.module.user.domain.User;
 import com.newbarams.ajaja.module.user.domain.repository.UserRepository;
 import com.newbarams.ajaja.module.user.dto.UserResponse;
@@ -24,17 +25,17 @@ public class LoginService {
 	public UserResponse.Token login(String authorizationCode, String redirectUri) {
 		AccessToken accessToken = authorizeService.authorize(authorizationCode, redirectUri);
 		Profile profile = getProfileService.getProfile(accessToken.getContent());
-		User user = findUserOrCreateIfNotExists(profile.getEmail());
+		User user = findUserOrCreateIfNotExists(profile.getEmail(), profile.getInfo());
 		return jwtGenerator.generate(user.getId());
 	}
 
-	private User findUserOrCreateIfNotExists(String email) {
+	private User findUserOrCreateIfNotExists(String email, OauthInfo oauthInfo) {
 		return userRepository.findByEmail_Email(email)
-			.orElseGet(() -> createUser(email));
+			.orElseGet(() -> createUser(email, oauthInfo));
 	}
 
-	private User createUser(String email) {
-		User user = new User(RandomNicknameGenerator.generate(), email);
+	private User createUser(String email, OauthInfo oauthInfo) {
+		User user = new User(RandomNicknameGenerator.generate(), email, oauthInfo);
 		return userRepository.save(user);
 	}
 }
