@@ -1,6 +1,6 @@
 package com.newbarams.ajaja.global.security.jwt.util;
 
-import static com.newbarams.ajaja.global.common.error.ErrorCode.*;
+import static com.newbarams.ajaja.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
@@ -10,7 +10,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 import com.newbarams.ajaja.common.MonkeySupport;
 import com.newbarams.ajaja.common.RedisBasedTest;
-import com.newbarams.ajaja.global.common.exception.AjajaException;
+import com.newbarams.ajaja.global.exception.AjajaException;
 import com.newbarams.ajaja.module.user.dto.UserResponse;
 
 @RedisBasedTest

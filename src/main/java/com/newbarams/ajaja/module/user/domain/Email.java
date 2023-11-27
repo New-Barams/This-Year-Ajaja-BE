@@ -1,9 +1,9 @@
 package com.newbarams.ajaja.module.user.domain;
 
-import static com.newbarams.ajaja.global.common.error.ErrorCode.*;
+import static com.newbarams.ajaja.global.exception.ErrorCode.*;
 
 import com.newbarams.ajaja.global.common.SelfValidating;
-import com.newbarams.ajaja.global.common.exception.AjajaException;
+import com.newbarams.ajaja.global.exception.AjajaException;
 
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotBlank;

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.newbarams.ajaja.global.common.AjajaResponse;
-import com.newbarams.ajaja.global.common.error.ErrorResponse;
+import com.newbarams.ajaja.global.exception.ErrorResponse;
 import com.newbarams.ajaja.module.remind.application.LoadRemindInfoService;
 import com.newbarams.ajaja.module.remind.application.LoadSentRemindInfoService;
 import com.newbarams.ajaja.module.remind.dto.RemindResponse;

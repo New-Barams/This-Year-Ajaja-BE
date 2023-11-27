@@ -1,10 +1,10 @@
 package com.newbarams.ajaja.infra.feign.common;
 
-import static com.newbarams.ajaja.global.common.error.ErrorCode.*;
+import static com.newbarams.ajaja.global.exception.ErrorCode.*;
 
 import java.util.Date;
 
-import com.newbarams.ajaja.global.common.exception.AjajaException;
+import com.newbarams.ajaja.global.exception.AjajaException;
 
 import feign.Response;
 import feign.RetryableException;

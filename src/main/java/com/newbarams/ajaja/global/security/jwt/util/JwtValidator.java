@@ -1,11 +1,11 @@
 package com.newbarams.ajaja.global.security.jwt.util;
 
-import static com.newbarams.ajaja.global.common.error.ErrorCode.*;
+import static com.newbarams.ajaja.global.exception.ErrorCode.*;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
-import com.newbarams.ajaja.global.common.exception.AjajaException;
+import com.newbarams.ajaja.global.exception.AjajaException;
 
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.JwtParser;
