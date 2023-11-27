@@ -51,7 +51,7 @@ public class PlanRequest {
 		@DefaultValue("true")
 		boolean current,
 
-		Integer cursorAjaja,
+		Integer ajaja,
 		Long start
 	) {
 	}

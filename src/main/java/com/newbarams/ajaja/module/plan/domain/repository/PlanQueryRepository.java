@@ -133,7 +133,7 @@ public class PlanQueryRepository {
 			return null;
 		}
 
-		return getCursorCondition(conditions.sort(), conditions.start(), conditions.cursorAjaja());
+		return getCursorCondition(conditions.sort(), conditions.start(), conditions.ajaja());
 	}
 
 	private BooleanExpression getCursorCondition(String sort, Long start, Integer cursorAjaja) {
