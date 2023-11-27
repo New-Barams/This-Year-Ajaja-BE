@@ -10,9 +10,14 @@ public class TimeValue {
 	private final Instant instant;
 	private final ZonedDateTime zonedDateTime;
 
+	public TimeValue() {
+		this.instant = Instant.now();
+		zonedDateTime = ZonedDateTime.ofInstant(instant, ZoneId.of("Asia/Seoul"));
+	}
+
 	public TimeValue(Instant instant) {
 		this.instant = instant;
-		zonedDateTime = instant.atZone(ZoneId.of("Asia/Seoul"));
+		zonedDateTime = ZonedDateTime.ofInstant(instant, ZoneId.of("Asia/Seoul"));
 	}
 
 	public int getMonth() {
@@ -23,11 +28,11 @@ public class TimeValue {
 		return zonedDateTime.getDayOfMonth();
 	}
 
-	public Timestamp toTimeStampOf() {
+	public Timestamp toTimeStamp() {
 		return Timestamp.valueOf(instant.toString());
 	}
 
-	public LocalDateTime toLocalDateTimeOf() {
+	public LocalDateTime toLocalDateTime() {
 		return zonedDateTime.toLocalDateTime();
 	}
 }

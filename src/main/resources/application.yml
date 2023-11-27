@@ -27,3 +27,4 @@ logging:
   level:
     com.newbarams.ajaja: DEBUG
     org.springframework.core.LocalVariableTableParameterNameDiscoverer: error
+  config: src/main/resources/logger/logback-spring.xml
