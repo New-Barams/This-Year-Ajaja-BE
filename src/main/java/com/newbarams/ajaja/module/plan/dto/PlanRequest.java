@@ -1,6 +1,5 @@
 package com.newbarams.ajaja.module.plan.dto;
 
-import java.time.Instant;
 import java.util.List;
 
 import org.springframework.boot.context.properties.bind.DefaultValue;
@@ -52,9 +51,7 @@ public class PlanRequest {
 		@DefaultValue("true")
 		boolean current,
 
-		Instant cursorCreatedAt,
 		Integer cursorAjaja,
-
 		Long start
 	) {
 	}
