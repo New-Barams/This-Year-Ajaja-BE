@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.plan.domain.repository;
+package com.newbarams.ajaja.global.util;
 
 import static com.newbarams.ajaja.module.plan.domain.QPlan.*;
 

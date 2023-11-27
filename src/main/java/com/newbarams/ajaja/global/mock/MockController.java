@@ -30,6 +30,7 @@ import com.newbarams.ajaja.global.security.jwt.util.JwtGenerator;
 import com.newbarams.ajaja.global.security.jwt.util.JwtParser;
 import com.newbarams.ajaja.global.security.jwt.util.JwtRemover;
 import com.newbarams.ajaja.global.security.jwt.util.JwtValidator;
+import com.newbarams.ajaja.module.ajaja.application.SchedulingAjajaRemindService;
 import com.newbarams.ajaja.module.feedback.dto.GetAchieve;
 import com.newbarams.ajaja.module.feedback.dto.UpdateFeedback;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
@@ -61,6 +62,7 @@ class MockController {
 	private final JwtParser jwtParser;
 	private final JwtRemover jwtRemover;
 	private final SchedulingRemindService schedulingRemindService;
+	private final SchedulingAjajaRemindService schedulingAjajaRemindService;
 
 	@Operation(summary = "가짜 로그인 API")
 	@PostMapping("/login")
@@ -141,6 +143,15 @@ class MockController {
 			false, new Timestamp(System.currentTimeMillis()));
 
 		return new AjajaResponse<>(true, response);
+	}
+
+	@Operation(summary = "[QA용] 아자자 즉시 전송")
+	@PostMapping("/reminds/ajaja")
+	@ResponseStatus(OK)
+	public AjajaResponse<Void> sendAjajaRemind() {
+		schedulingAjajaRemindService.scheduleMorningRemind();
+
+		return AjajaResponse.ok();
 	}
 
 	@Operation(summary = "[테스트] 서버 시간 구하기")

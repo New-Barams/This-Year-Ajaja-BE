@@ -1,8 +1,9 @@
 package com.newbarams.ajaja.module.plan.domain.repository;
 
+import static com.newbarams.ajaja.global.common.error.ErrorCode.*;
+import static com.newbarams.ajaja.global.util.QueryDslUtil.*;
 import static com.newbarams.ajaja.module.ajaja.domain.QAjaja.*;
 import static com.newbarams.ajaja.module.plan.domain.QPlan.*;
-import static com.newbarams.ajaja.module.plan.domain.repository.QueryDslUtil.*;
 import static com.newbarams.ajaja.module.tag.domain.QPlanTag.*;
 import static com.newbarams.ajaja.module.tag.domain.QTag.*;
 import static com.newbarams.ajaja.module.user.domain.QUser.*;
