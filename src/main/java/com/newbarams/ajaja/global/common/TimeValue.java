@@ -10,6 +10,11 @@ public class TimeValue {
 	private final Instant instant;
 	private final ZonedDateTime zonedDateTime;
 
+	public TimeValue() {
+		this.instant = Instant.now();
+		zonedDateTime = instant.atZone(ZoneId.of("Asia/Seoul"));
+	}
+
 	public TimeValue(Instant instant) {
 		this.instant = instant;
 		zonedDateTime = instant.atZone(ZoneId.of("Asia/Seoul"));
