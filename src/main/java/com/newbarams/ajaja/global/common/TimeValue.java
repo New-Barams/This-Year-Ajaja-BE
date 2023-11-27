@@ -12,12 +12,12 @@ public class TimeValue {
 
 	public TimeValue() {
 		this.instant = Instant.now();
-		zonedDateTime = instant.atZone(ZoneId.of("Asia/Seoul"));
+		zonedDateTime = ZonedDateTime.ofInstant(instant, ZoneId.of("Asia/Seoul"));
 	}
 
 	public TimeValue(Instant instant) {
 		this.instant = instant;
-		zonedDateTime = instant.atZone(ZoneId.of("Asia/Seoul"));
+		zonedDateTime = ZonedDateTime.ofInstant(instant, ZoneId.of("Asia/Seoul"));
 	}
 
 	public int getMonth() {
