@@ -7,20 +7,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 
 import com.newbarams.ajaja.common.MonkeySupport;
 import com.newbarams.ajaja.common.RedisBasedTest;
+import com.newbarams.ajaja.global.cache.CacheUtil;
 import com.newbarams.ajaja.global.exception.AjajaException;
-import com.newbarams.ajaja.module.user.application.model.EmailVerification;
 import com.newbarams.ajaja.module.user.domain.Email;
 import com.newbarams.ajaja.module.user.domain.User;
 import com.newbarams.ajaja.module.user.domain.repository.UserRepository;
 
 @RedisBasedTest
 class VerifyCertificationServiceTest extends MonkeySupport {
-	private static final String KEY_PREFIX = "AJAJA ";
-
 	@Autowired
 	private VerifyCertificationService verifyCertificationService;
 
@@ -28,7 +25,7 @@ class VerifyCertificationServiceTest extends MonkeySupport {
 	private UserRepository userRepository;
 
 	@Autowired
-	private RedisTemplate<String, Object> redisTemplate;
+	private CacheUtil cacheUtil;
 
 	private User user;
 	private final String mail = "gmlwh124@naver.com";
@@ -47,7 +44,7 @@ class VerifyCertificationServiceTest extends MonkeySupport {
 	void verify_Success_WithUpdatedVerificationStatus() {
 		// given
 		String certification = RandomCertificationGenerator.generate();
-		redisTemplate.opsForValue().set(KEY_PREFIX + user.getId(), new EmailVerification(mail, certification));
+		cacheUtil.saveEmailVerification(user.getId(), mail, certification);
 
 		// when
 		verifyCertificationService.verify(user.getId(), certification);
@@ -74,7 +71,7 @@ class VerifyCertificationServiceTest extends MonkeySupport {
 	void verify_Fail_ByWrongCertification() {
 		// given
 		String certification = RandomCertificationGenerator.generate();
-		redisTemplate.opsForValue().set(KEY_PREFIX + user.getId(), new EmailVerification(mail, certification));
+		cacheUtil.saveEmailVerification(user.getId(), mail, certification);
 
 		// when, then
 		assertThatExceptionOfType(AjajaException.class)
