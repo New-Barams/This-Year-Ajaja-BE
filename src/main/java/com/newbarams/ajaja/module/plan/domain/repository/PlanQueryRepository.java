@@ -38,7 +38,7 @@ public class PlanQueryRepository {
 	private final Instant instant = Instant.now();
 	private final ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault()); // todo: vo로 빼기
 	private static final String LATEST = "Latest";
-	private static final int PAGE_SIZE = 9;
+	private static final int PAGE_SIZE = 3;
 
 	private final JPAQueryFactory queryFactory;
 
