@@ -10,20 +10,20 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.newbarams.ajaja.common.MockTestSupport;
-import com.newbarams.ajaja.module.ajaja.domain.repository.AjajaQueryRepository;
-import com.querydsl.core.Tuple;
+import com.newbarams.ajaja.module.ajaja.domain.repository.AjajaRepository;
+import com.newbarams.ajaja.module.remind.application.model.RemindableAjaja;
 
 @SpringBootTest
 @Transactional
-class AjajaQueryRepositoryTest extends MockTestSupport {
+class AjajaQueryRepositoryImplTest extends MockTestSupport {
 	@Autowired
-	private AjajaQueryRepository ajajaQueryRepository;
+	private AjajaRepository ajajaRepository;
 
 	@Test
 	@DisplayName("해당 유저가 받은 아자자 개수들을 가져온다.")
 	void findAjajaByUpdatedAt_Success_WithNpException() {
 		// when
-		List<Tuple> remindableAjaja = ajajaQueryRepository.findRemindableAjaja();
+		List<RemindableAjaja> remindableAjaja = ajajaRepository.findRemindableAjaja();
 
 		// then
 		Assertions.assertThat(remindableAjaja.size()).isZero();

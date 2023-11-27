@@ -4,5 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.newbarams.ajaja.module.ajaja.domain.Ajaja;
 
-public interface AjajaRepository extends JpaRepository<Ajaja, Long> {
+public interface AjajaRepository extends JpaRepository<Ajaja, Long>, AjajaQueryRepository {
 }
