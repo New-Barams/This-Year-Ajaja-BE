@@ -11,8 +11,8 @@ public sealed interface RemindResponse
 		int remindTerm,
 		int remindTotalPeriod,
 		boolean isRemindable,
-		List<SentResponse> sentRespons,
-		List<FutureResponse> futureRespons
+		List<SentResponse> sentRemindResponses,
+		List<FutureResponse> futureRemindResponses
 
 	) implements RemindResponse {
 	}

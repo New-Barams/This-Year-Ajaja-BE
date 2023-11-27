@@ -12,10 +12,10 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
-import com.newbarams.ajaja.global.common.exception.AjajaException;
 import com.newbarams.ajaja.module.ajaja.domain.Ajaja;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
@@ -37,7 +37,8 @@ import lombok.RequiredArgsConstructor;
 public class PlanQueryRepository {
 	private final Instant instant = Instant.now();
 	private final ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault()); // todo: vo로 빼기
-	private static final String CREATED_AT = "CreatedAt";
+	private static final String LATEST = "Latest";
+	private static final int PAGE_SIZE = 9;
 
 	private final JPAQueryFactory queryFactory;
 
@@ -48,20 +49,21 @@ public class PlanQueryRepository {
 			.fetch();
 	}
 
-	public PlanResponse.GetOne findById(Long id, Long userId) {
+	public Optional<PlanResponse.GetOne> findById(Long id, Long userId) {
 		List<Tuple> tuples = queryFactory.select(plan, user.nickname)
 			.from(plan, user)
 			.where(plan.userId.eq(user.id).and(plan.id.eq(id)))
 			.fetch();
 
-		validateTuple(tuples);
-		return tupleToResponse(tuples.get(0), userId);
+		return getResponse(tuples, userId);
 	}
 
-	private void validateTuple(List<Tuple> tuples) {
+	private Optional<PlanResponse.GetOne> getResponse(List<Tuple> tuples, Long userId) {
 		if (tuples.isEmpty()) {
-			throw new AjajaException(NOT_FOUND_PLAN);
+			return Optional.empty();
 		}
+
+		return Optional.of(tupleToResponse(tuples.get(0), userId));
 	}
 
 	private PlanResponse.GetOne tupleToResponse(Tuple tuple, Long userId) {
@@ -105,11 +107,11 @@ public class PlanQueryRepository {
 
 			.where(plan.userId.eq(user.id),
 				plan.status.isPublic.eq(true),
-				isEqualsYear(conditions.isNewYear()),
-				cursorCreatedAtAndId(conditions.cursorCreatedAt(), conditions.cursorId()))
+				isEqualsYear(conditions.current()),
+				cursorPagination(conditions))
 
-			.orderBy(sortBy(conditions.sortCondition()))
-			.limit(conditions.pageSize())
+			.orderBy(sortBy(conditions.sort()))
+			.limit(PAGE_SIZE)
 			.fetch();
 
 		return tupleToResponse(tuples);
@@ -127,18 +129,38 @@ public class PlanQueryRepository {
 		return plan.createdAt.year().eq(currentYear).not();
 	}
 
-	private BooleanExpression cursorCreatedAtAndId(Instant cursorCreatedAt, Long cursorId) {
-		if (cursorCreatedAt == null || cursorId == null) {
+	private BooleanExpression cursorPagination(PlanRequest.GetAll conditions) {
+		if (conditions.start() == null) {
 			return null;
 		}
 
-		return plan.createdAt.eq(cursorCreatedAt)
+		return getCursorCondition(conditions.sort(), conditions.start(), conditions.ajaja());
+	}
+
+	private BooleanExpression getCursorCondition(String sort, Long start, Integer cursorAjaja) {
+		if (sort.equalsIgnoreCase(LATEST)) {
+			return cursorId(start);
+		}
+
+		return cursorAjajaAndId(cursorAjaja, start);
+	}
+
+	private BooleanExpression cursorId(Long cursorId) {
+		return plan.id.lt(cursorId);
+	}
+
+	private BooleanExpression cursorAjajaAndId(Integer cursorAjaja, Long cursorId) {
+		if (cursorAjaja == null) {
+			return null;
+		}
+
+		return plan.ajajas.size().eq(cursorAjaja)
 			.and(plan.id.lt(cursorId))
-			.or(plan.createdAt.lt(cursorCreatedAt));
+			.or(plan.ajajas.size().lt(cursorAjaja));
 	}
 
 	private OrderSpecifier<?> sortBy(String condition) {
-		return condition.equalsIgnoreCase(CREATED_AT) ? new OrderSpecifier<>(Order.DESC, plan.createdAt) :
+		return condition.equalsIgnoreCase(LATEST) ? new OrderSpecifier<>(Order.DESC, plan.createdAt) :
 			new OrderSpecifier<>(Order.DESC, plan.ajajas.size());
 	}
 

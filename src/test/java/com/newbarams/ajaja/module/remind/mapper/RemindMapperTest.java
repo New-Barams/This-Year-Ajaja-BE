@@ -24,6 +24,6 @@ class RemindMapperTest extends MockTestSupport {
 			= remindMapper.toFutureRemind(plan);
 
 		// then
-		Assertions.assertThat(futureRemindResponse.futureRespons().size()).isEqualTo(plan.getMessages().size());
+		Assertions.assertThat(futureRemindResponse.futureRemindResponses().size()).isEqualTo(plan.getMessages().size());
 	}
 }
