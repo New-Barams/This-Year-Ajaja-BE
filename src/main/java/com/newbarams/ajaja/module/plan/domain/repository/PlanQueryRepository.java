@@ -101,7 +101,7 @@ public class PlanQueryRepository {
 			.where(plan.userId.eq(user.id),
 				plan.status.isPublic.eq(true),
 				isEqualsYear(conditions.current()),
-				cursorCreatedAtAndId(conditions.cursorCreatedAt(), conditions.start()))
+				cursorPagination(conditions))
 
 			.orderBy(sortBy(conditions.sort()))
 			.limit(PAGE_SIZE)
@@ -122,14 +122,34 @@ public class PlanQueryRepository {
 		return plan.createdAt.year().eq(currentYear).not();
 	}
 
-	private BooleanExpression cursorCreatedAtAndId(Instant cursorCreatedAt, Long cursorId) {
-		if (cursorCreatedAt == null || cursorId == null) {
+	private BooleanExpression cursorPagination(PlanRequest.GetAll conditions) {
+		if (conditions.start() == null) {
 			return null;
 		}
 
-		return plan.createdAt.eq(cursorCreatedAt)
+		return getCursorCondition(conditions.sort(), conditions.start(), conditions.cursorAjaja());
+	}
+
+	private BooleanExpression getCursorCondition(String sort, Long start, Integer cursorAjaja) {
+		if (sort.equalsIgnoreCase(LATEST)) {
+			return cursorCreatedAtAndId(start);
+		}
+
+		return cursorAjajaAndId(cursorAjaja, start);
+	}
+
+	private BooleanExpression cursorCreatedAtAndId(Long cursorId) {
+		return plan.id.lt(cursorId);
+	}
+
+	private BooleanExpression cursorAjajaAndId(Integer cursorAjaja, Long cursorId) {
+		if (cursorAjaja == null) {
+			return null;
+		}
+
+		return plan.ajajas.size().eq(cursorAjaja)
 			.and(plan.id.lt(cursorId))
-			.or(plan.createdAt.lt(cursorCreatedAt));
+			.or(plan.ajajas.size().lt(cursorAjaja));
 	}
 
 	private OrderSpecifier<?> sortBy(String sortCondition) {
