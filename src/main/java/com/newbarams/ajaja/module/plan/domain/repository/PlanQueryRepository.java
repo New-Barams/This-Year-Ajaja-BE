@@ -1,7 +1,7 @@
 package com.newbarams.ajaja.module.plan.domain.repository;
 
-import static com.newbarams.ajaja.global.common.error.ErrorCode.*;
 import static com.newbarams.ajaja.global.util.QueryDslUtil.*;
+import static com.newbarams.ajaja.module.ajaja.domain.Ajaja.Type.*;
 import static com.newbarams.ajaja.module.ajaja.domain.QAjaja.*;
 import static com.newbarams.ajaja.module.plan.domain.QPlan.*;
 import static com.newbarams.ajaja.module.tag.domain.QPlanTag.*;
@@ -11,7 +11,9 @@ import static com.newbarams.ajaja.module.user.domain.QUser.*;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
@@ -37,7 +39,8 @@ import lombok.RequiredArgsConstructor;
 public class PlanQueryRepository {
 	private final Instant instant = Instant.now();
 	private final ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault()); // todo: vo로 빼기
-	private static final String LATEST = "Latest";
+	private static final String LATEST = "latest";
+	private static final String AJAJA = "ajaja";
 	private static final int PAGE_SIZE = 3;
 
 	private final JPAQueryFactory queryFactory;
@@ -71,16 +74,20 @@ public class PlanQueryRepository {
 		String nickname = tuple.get(user.nickname).getNickname();
 
 		List<String> tags = findTagByPlanId(planFromTuple.getId());
-		Long ajajas = countNotCanceledAjaja(planFromTuple.getId());
-		boolean isPressAjaja = isPressAjaja(planFromTuple, userId);
+		boolean isPressAjaja = isPressAjaja(planFromTuple.getId(), userId);
 
-		return PlanMapper.toResponse(planFromTuple, nickname, tags, ajajas, isPressAjaja);
+		return PlanMapper.toResponse(planFromTuple, nickname, tags, isPressAjaja);
 	}
 
-	private boolean isPressAjaja(Plan plan, Long userId) {
-		Ajaja ajaja = plan.getAjajaByUserId(userId);
+	private boolean isPressAjaja(Long planId, Long userId) {
+		List<Ajaja> ajajas = queryFactory.selectFrom(ajaja)
+			.where(ajaja.targetId.eq(planId)
+				.and(ajaja.userId.eq(userId))
+				.and(ajaja.type.eq(PLAN))
+				.and(ajaja.isCanceled.eq(false)))
+			.fetch();
 
-		if (ajaja.isEqualsDefault() || ajaja.isCanceled()) {
+		if (ajajas.isEmpty()) {
 			return false;
 		}
 
@@ -92,13 +99,6 @@ public class PlanQueryRepository {
 			.from(planTag, tag)
 			.where(planTag.tagId.eq(tag.id).and(planTag.planId.eq(planId)))
 			.fetch();
-	}
-
-	private Long countNotCanceledAjaja(Long planId) {
-		return queryFactory.select(ajaja.count())
-			.from(ajaja)
-			.where(ajaja.targetId.eq(planId).and(ajaja.isCanceled.eq(false)))
-			.fetchOne();
 	}
 
 	public List<PlanResponse.GetAll> findAllByCursorAndSorting(PlanRequest.GetAll conditions) {
@@ -159,9 +159,18 @@ public class PlanQueryRepository {
 			.or(plan.ajajas.size().lt(cursorAjaja));
 	}
 
-	private OrderSpecifier<?> sortBy(String condition) {
-		return condition.equalsIgnoreCase(LATEST) ? new OrderSpecifier<>(Order.DESC, plan.createdAt) :
-			new OrderSpecifier<>(Order.DESC, plan.ajajas.size());
+	private OrderSpecifier[] sortBy(String condition) {
+		List<OrderSpecifier> orders = new ArrayList<>();
+
+		switch (condition.toLowerCase(Locale.ROOT)) {
+			case LATEST -> orders.add(new OrderSpecifier<>(Order.DESC, plan.createdAt));
+			case AJAJA -> {
+				orders.add(new OrderSpecifier<>(Order.DESC, plan.ajajas.size()));
+				orders.add(new OrderSpecifier<>(Order.DESC, plan.id));
+			}
+		}
+
+		return orders.toArray(new OrderSpecifier[orders.size()]);
 	}
 
 	private List<PlanResponse.GetAll> tupleToResponse(List<Tuple> tuples) {
@@ -170,9 +179,8 @@ public class PlanQueryRepository {
 				Plan planFromTuple = tuple.get(plan);
 				String nickname = tuple.get(user.nickname).getNickname();
 				List<String> tags = findTagByPlanId(planFromTuple.getId());
-				Long ajajas = countNotCanceledAjaja(planFromTuple.getId());
 
-				return PlanMapper.toGetAllResponse(planFromTuple, nickname, tags, ajajas);
+				return PlanMapper.toGetAllResponse(planFromTuple, nickname, tags);
 			})
 			.toList();
 	}

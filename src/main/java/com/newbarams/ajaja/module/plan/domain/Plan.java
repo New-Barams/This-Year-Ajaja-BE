@@ -65,6 +65,7 @@ public class Plan extends BaseEntity<Plan> {
 	private List<Message> messages = new ArrayList<>();
 
 	@Size
+	@Where(clause = "is_canceled = false")
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "target_id")
 	private List<Ajaja> ajajas = new ArrayList<>();
@@ -145,13 +146,6 @@ public class Plan extends BaseEntity<Plan> {
 
 	public void addAjaja(Ajaja ajaja) {
 		this.ajajas.add(ajaja);
-	}
-
-	public Ajaja getAjajaByUserId(Long userId) {
-		return ajajas.stream()
-			.filter((ajaja -> ajaja.getUserId().equals(userId)))
-			.findFirst()
-			.orElseGet(Ajaja::defaultValue);
 	}
 
 	public String getTimeName() {
