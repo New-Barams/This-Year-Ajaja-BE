@@ -33,7 +33,7 @@ public class AuthController {
 	@PostMapping("/login")
 	@ResponseStatus(OK)
 	public AjajaResponse<UserResponse.Token> login(@Valid @RequestBody UserRequest.Login request) {
-		UserResponse.Token response = loginService.login(request.authorizationCode(), request.redirectUri());
+		UserResponse.Token response = loginService.login(request.getAuthorizationCode(), request.getRedirectUri());
 		return AjajaResponse.ok(response);
 	}
 
@@ -45,7 +45,7 @@ public class AuthController {
 	@PostMapping("/reissue")
 	@ResponseStatus(OK)
 	public AjajaResponse<UserResponse.Token> reissue(@Valid @RequestBody UserRequest.Reissue request) {
-		UserResponse.Token response = reissueTokenService.reissue(request.accessToken(), request.refreshToken());
+		UserResponse.Token response = reissueTokenService.reissue(request.getAccessToken(), request.getRefreshToken());
 		return AjajaResponse.ok(response);
 	}
 }

@@ -1,6 +1,4 @@
-package com.newbarams.ajaja.global.common.exception;
-
-import com.newbarams.ajaja.global.common.error.ErrorCode;
+package com.newbarams.ajaja.global.exception;
 
 import lombok.Getter;
 
@@ -13,13 +11,13 @@ public class AjajaException extends RuntimeException {
 		this.errorCode = errorCode;
 	}
 
-	private AjajaException(String message, ErrorCode errorCode) {
-		super(message);
+	public AjajaException(Throwable cause, ErrorCode errorCode) {
+		super(errorCode.getMessage(), cause);
 		this.errorCode = errorCode;
 	}
 
-	public AjajaException(Throwable cause, ErrorCode errorCode) {
-		super(errorCode.getMessage(), cause);
+	private AjajaException(String message, ErrorCode errorCode) {
+		super(message);
 		this.errorCode = errorCode;
 	}
 

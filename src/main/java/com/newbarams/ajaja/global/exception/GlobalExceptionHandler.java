@@ -1,6 +1,6 @@
-package com.newbarams.ajaja.global.common.exception;
+package com.newbarams.ajaja.global.exception;
 
-import static com.newbarams.ajaja.global.common.error.ErrorCode.*;
+import static com.newbarams.ajaja.global.exception.ErrorCode.*;
 import static org.springframework.http.HttpStatus.*;
 
 import org.springframework.http.ResponseEntity;
@@ -8,9 +8,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import com.newbarams.ajaja.global.common.error.ErrorCode;
-import com.newbarams.ajaja.global.common.error.ErrorResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;

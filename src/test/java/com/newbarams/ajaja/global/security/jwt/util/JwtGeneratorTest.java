@@ -32,12 +32,12 @@ class JwtGeneratorTest extends MonkeySupport {
 		UserResponse.Token response = jwtGenerator.generate(userId);
 
 		// then
-		assertThat(response.accessToken()).isNotNull();
-		assertThat(response.refreshToken()).isNotNull();
+		assertThat(response.getAccessToken()).isNotNull();
+		assertThat(response.getRefreshToken()).isNotNull();
 
 		Object savedToken = redisTemplate.opsForValue().get(jwtSecretProvider.getSignature() + userId);
 		assertThat(savedToken).isNotNull();
 		assertThat(savedToken).isInstanceOf(String.class);
-		assertThat(response.refreshToken()).isEqualTo((String)savedToken);
+		assertThat(response.getRefreshToken()).isEqualTo((String)savedToken);
 	}
 }

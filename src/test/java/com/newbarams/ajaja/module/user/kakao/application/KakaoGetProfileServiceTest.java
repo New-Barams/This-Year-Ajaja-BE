@@ -33,7 +33,7 @@ class KakaoGetProfileServiceTest extends MockTestSupport {
 
 		// then
 		then(kakaoProfileFeignClient).should(times(1)).getKakaoProfile(any());
-		assertThat(kakaoProfile.kakaoAccount().email()).isEqualTo(profile.getEmail());
+		assertThat(kakaoProfile.getKakaoAccount().email()).isEqualTo(profile.getEmail());
 	}
 
 	@Test

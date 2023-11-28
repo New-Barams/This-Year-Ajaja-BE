@@ -79,7 +79,7 @@ public class UserController {
 		@UserId Long id,
 		@Valid @RequestBody UserRequest.EmailVerification request
 	) {
-		sendVerificationEmailService.sendVerification(id, request.email());
+		sendVerificationEmailService.sendVerification(id, request.getEmail());
 	}
 
 	@Operation(summary = "[토큰 필요] 인증 번호 검증 API", description = "발송된 인증 번호를 검증합니다.", responses = {
@@ -94,7 +94,7 @@ public class UserController {
 		@UserId Long id,
 		@Valid @RequestBody UserRequest.Certification request
 	) {
-		verifyCertificationService.verify(id, request.certification());
+		verifyCertificationService.verify(id, request.getCertification());
 		return AjajaResponse.ok();
 	}
 

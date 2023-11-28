@@ -1,6 +1,6 @@
 package com.newbarams.ajaja.module.user.domain;
 
-import static com.newbarams.ajaja.global.common.error.ErrorCode.*;
+import static com.newbarams.ajaja.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
@@ -9,7 +9,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import com.newbarams.ajaja.common.MonkeySupport;
-import com.newbarams.ajaja.global.common.exception.AjajaException;
+import com.newbarams.ajaja.global.exception.AjajaException;
 
 class UserTest extends MonkeySupport {
 	private final String nickname = "imhejow";

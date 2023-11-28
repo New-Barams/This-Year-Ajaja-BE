@@ -1,6 +1,6 @@
 package com.newbarams.ajaja.global.security.jwt.filter;
 
-import static com.newbarams.ajaja.global.common.error.ErrorCode.*;
+import static com.newbarams.ajaja.global.exception.ErrorCode.*;
 import static com.newbarams.ajaja.global.util.BearerTokenUtil.*;
 import static org.springframework.http.HttpHeaders.*;
 import static org.springframework.http.HttpMethod.*;
@@ -13,7 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.newbarams.ajaja.global.common.exception.AjajaException;
+import com.newbarams.ajaja.global.exception.AjajaException;
 import com.newbarams.ajaja.global.security.jwt.util.JwtParser;
 
 import jakarta.servlet.FilterChain;

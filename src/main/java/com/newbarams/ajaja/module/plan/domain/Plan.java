@@ -1,6 +1,6 @@
 package com.newbarams.ajaja.module.plan.domain;
 
-import static com.newbarams.ajaja.global.common.error.ErrorCode.*;
+import static com.newbarams.ajaja.global.exception.ErrorCode.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.List;
 import org.hibernate.annotations.Where;
 
 import com.newbarams.ajaja.global.common.BaseEntity;
-import com.newbarams.ajaja.global.common.exception.AjajaException;
+import com.newbarams.ajaja.global.exception.AjajaException;
 import com.newbarams.ajaja.module.ajaja.domain.Ajaja;
 
 import jakarta.persistence.CascadeType;

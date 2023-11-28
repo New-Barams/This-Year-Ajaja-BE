@@ -43,7 +43,7 @@ class JwtParserTest extends MonkeySupport {
 	void setup() {
 		userId = monkey.giveMeOne(Long.class);
 		UserResponse.Token response = jwtGenerator.generate(userId);
-		accessToken = response.accessToken();
+		accessToken = response.getAccessToken();
 	}
 
 	@AfterEach

@@ -35,7 +35,7 @@ class ReissueTokenServiceTest extends MockTestSupport {
 		given(jwtGenerator.generate(any())).willReturn(tokens);
 
 		// when
-		UserResponse.Token response = reissueTokenService.reissue(tokens.accessToken(), tokens.refreshToken());
+		UserResponse.Token response = reissueTokenService.reissue(tokens.getAccessToken(), tokens.getRefreshToken());
 
 		// then
 		then(jwtParser).should(times(1)).parseId(anyString());

@@ -1,6 +1,6 @@
 package com.newbarams.ajaja.global.security.jwt.util;
 
-import static com.newbarams.ajaja.global.common.error.ErrorCode.*;
+import static com.newbarams.ajaja.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
@@ -10,7 +10,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 import com.newbarams.ajaja.common.MonkeySupport;
 import com.newbarams.ajaja.common.RedisBasedTest;
-import com.newbarams.ajaja.global.common.exception.AjajaException;
+import com.newbarams.ajaja.global.exception.AjajaException;
 import com.newbarams.ajaja.module.user.dto.UserResponse;
 
 @RedisBasedTest
@@ -34,7 +34,7 @@ class JwtValidatorTest extends MonkeySupport {
 		UserResponse.Token tokens = jwtGenerator.generate(userId);
 
 		// when, then
-		assertThatNoException().isThrownBy(() -> jwtValidator.validateReissueable(userId, tokens.refreshToken()));
+		assertThatNoException().isThrownBy(() -> jwtValidator.validateReissueable(userId, tokens.getRefreshToken()));
 	}
 
 	@Test
@@ -63,7 +63,7 @@ class JwtValidatorTest extends MonkeySupport {
 
 		// when, then
 		assertThatExceptionOfType(AjajaException.class)
-			.isThrownBy(() -> jwtValidator.validateReissueable(userId, tokens.refreshToken()))
+			.isThrownBy(() -> jwtValidator.validateReissueable(userId, tokens.getRefreshToken()))
 			.withMessage(NEVER_LOGIN.getMessage());
 	}
 
@@ -84,7 +84,7 @@ class JwtValidatorTest extends MonkeySupport {
 
 		// when, then
 		assertThatExceptionOfType(AjajaException.class)
-			.isThrownBy(() -> jwtValidator.validateReissueable(userId, oldTokens.refreshToken()))
+			.isThrownBy(() -> jwtValidator.validateReissueable(userId, oldTokens.getRefreshToken()))
 			.withMessage(TOKEN_NOT_MATCH.getMessage());
 	}
 }

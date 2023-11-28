@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.global.common.error;
+package com.newbarams.ajaja.global.exception;
 
 import static org.springframework.http.HttpStatus.*;
 

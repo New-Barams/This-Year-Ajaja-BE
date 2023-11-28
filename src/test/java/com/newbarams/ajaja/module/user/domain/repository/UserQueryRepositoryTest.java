@@ -45,10 +45,10 @@ class UserQueryRepositoryTest extends MockTestSupport {
 
 		// then
 		assertThat(result).isNotNull();
-		assertThat(result.defaultEmail()).isEqualTo(user.getEmail().getEmail());
-		assertThat(result.remindEmail()).isEqualTo(user.getEmail().getRemindEmail());
+		assertThat(result.getDefaultEmail()).isEqualTo(user.getEmail().getEmail());
+		assertThat(result.getRemindEmail()).isEqualTo(user.getEmail().getRemindEmail());
 		assertThat(result.isEmailVerified()).isEqualTo(user.getEmail().isVerified());
-		assertThat(result.receiveType()).isLowerCase();
+		assertThat(result.getReceiveType()).isLowerCase();
 	}
 
 	@Test

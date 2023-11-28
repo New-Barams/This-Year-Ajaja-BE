@@ -1,6 +1,6 @@
 package com.newbarams.ajaja.module.plan.application;
 
-import static com.newbarams.ajaja.global.common.error.ErrorCode.*;
+import static com.newbarams.ajaja.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
@@ -12,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import net.jqwik.api.Arbitraries;
 
-import com.newbarams.ajaja.global.common.exception.AjajaException;
+import com.newbarams.ajaja.global.exception.AjajaException;
 import com.newbarams.ajaja.module.plan.domain.Content;
 import com.newbarams.ajaja.module.plan.domain.Message;
 import com.newbarams.ajaja.module.plan.domain.Plan;

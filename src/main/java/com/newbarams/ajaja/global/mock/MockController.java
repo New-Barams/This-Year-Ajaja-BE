@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.newbarams.ajaja.global.common.AjajaResponse;
-import com.newbarams.ajaja.global.common.error.ErrorResponse;
+import com.newbarams.ajaja.global.exception.ErrorResponse;
 import com.newbarams.ajaja.global.security.jwt.util.JwtGenerator;
 import com.newbarams.ajaja.global.security.jwt.util.JwtParser;
 import com.newbarams.ajaja.global.security.jwt.util.JwtRemover;
@@ -76,7 +76,7 @@ class MockController {
 	@PostMapping("/reissue")
 	@ResponseStatus(OK)
 	AjajaResponse<UserResponse.Token> reissue(@RequestBody UserRequest.Reissue request) {
-		jwtValidator.validateReissueable(1L, request.refreshToken());
+		jwtValidator.validateReissueable(1L, request.getRefreshToken());
 		UserResponse.Token response = jwtGenerator.generate(1L);
 		return AjajaResponse.ok(response);
 	}

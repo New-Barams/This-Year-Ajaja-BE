@@ -1,2 +1,0 @@
-ALTER TABLE plans
-    ADD COLUMN remind_time VARCHAR(20) NOT NULL;

@@ -1,2 +1,0 @@
-ALTER TABLE users
-    ADD COLUMN remind_email VARCHAR(50) NOT NULL;

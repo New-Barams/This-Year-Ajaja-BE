@@ -1,2 +1,0 @@
-ALTER TABLE users
-    ADD COLUMN receive_type VARCHAR(20) NOT NULL;
