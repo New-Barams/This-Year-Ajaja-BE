@@ -1,5 +1,7 @@
 package com.newbarams.ajaja.module.user.dto;
 
+import com.querydsl.core.annotations.QueryProjection;
+
 import lombok.Data;
 
 public final class UserResponse {
@@ -16,5 +18,15 @@ public final class UserResponse {
 		private final String remindEmail;
 		private final boolean isEmailVerified;
 		private final String receiveType;
+
+		@QueryProjection
+		public MyPage(String nickname, String defaultEmail, String remindEmail, boolean isEmailVerified,
+			String receiveType) {
+			this.nickname = nickname;
+			this.defaultEmail = defaultEmail;
+			this.remindEmail = remindEmail;
+			this.isEmailVerified = isEmailVerified;
+			this.receiveType = receiveType;
+		}
 	}
 }
