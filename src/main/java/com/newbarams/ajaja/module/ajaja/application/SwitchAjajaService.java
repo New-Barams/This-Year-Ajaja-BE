@@ -1,5 +1,7 @@
 package com.newbarams.ajaja.module.ajaja.application;
 
+import static com.newbarams.ajaja.module.ajaja.domain.Ajaja.Type.*;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +22,8 @@ public class SwitchAjajaService {
 	public void switchOrAddIfNotExist(Long userId, Long planId) {
 		Plan plan = loadPlanService.loadPlanOrElseThrow(planId);
 
-		Ajaja ajaja = plan.getAjajaByUserId(userId);
+		Ajaja ajaja = ajajaRepository.findByTargetIdAndUserIdAndType(planId, userId, PLAN)
+			.orElseGet(Ajaja::defaultValue);
 
 		if (ajaja.isEqualsDefault()) {
 			addToPlan(plan, userId);

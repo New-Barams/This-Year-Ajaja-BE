@@ -69,8 +69,7 @@ public class PlanMapper {
 		);
 	}
 
-	public static PlanResponse.GetOne toResponse(Plan plan, String nickname, List<String> tags, Long ajajas,
-		boolean isPressAjaja) {
+	public static PlanResponse.GetOne toResponse(Plan plan, String nickname, List<String> tags, boolean isPressAjaja) {
 		return new PlanResponse.GetOne(
 			plan.getId(),
 			plan.getUserId(),
@@ -80,20 +79,20 @@ public class PlanMapper {
 			plan.getStatus().isPublic(),
 			plan.getStatus().isCanRemind(),
 			plan.getStatus().isCanAjaja(),
-			ajajas,
+			plan.getAjajas().size(),
 			isPressAjaja,
 			tags,
 			plan.getCreatedAt()
 		);
 	}
 
-	public static PlanResponse.GetAll toGetAllResponse(Plan plan, String nickname, List<String> tags, Long ajajas) {
+	public static PlanResponse.GetAll toGetAllResponse(Plan plan, String nickname, List<String> tags) {
 		return new PlanResponse.GetAll(
 			plan.getId(),
 			plan.getUserId(),
 			nickname,
 			plan.getContent().getTitle(),
-			ajajas,
+			plan.getAjajas().size(),
 			tags,
 			plan.getCreatedAt()
 		);
