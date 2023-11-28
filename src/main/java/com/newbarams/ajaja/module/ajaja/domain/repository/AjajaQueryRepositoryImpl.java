@@ -24,18 +24,23 @@ public class AjajaQueryRepositoryImpl implements AjajaQueryRepository {
 
 	public List<RemindableAjaja> findRemindableAjaja() {
 		return queryFactory.select(Projections.constructor(RemindableAjaja.class,
+				plan.content.title,
+				plan.id,
 				user.email.email.count(),
 				user.email.email
 			)).from(ajaja)
 			.join(plan).on(ajaja.targetId.eq(plan.id))
 			.join(user).on(plan.userId.eq(user.id))
-			.where(ajaja.updatedAt.after(Instant.now().minus(7, ChronoUnit.DAYS))
+			.where(plan.status.canAjaja.eq(true)
+				.and(ajaja.updatedAt.after(Instant.now().minus(7, ChronoUnit.DAYS)))
 				.and(ajaja.updatedAt.before(Instant.now()))
 				.and(ajaja.type.eq(Ajaja.Type.PLAN))
 				.and(ajaja.isCanceled.eq(false))
 				.and(plan.status.isDeleted.eq(false))
 			)
 			.groupBy(
+				plan.content.title,
+				plan.id,
 				user.email.email
 			)
 			.fetch();

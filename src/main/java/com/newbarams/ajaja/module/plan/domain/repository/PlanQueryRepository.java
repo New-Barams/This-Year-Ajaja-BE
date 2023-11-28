@@ -237,6 +237,7 @@ public class PlanQueryRepository {
 				p -> new RemindMessageInfo(
 					p.get(plan).getUserId(),
 					p.get(plan).getId(),
+					p.get(plan).getContent().getTitle(),
 					p.get(user).getEmail().getEmail(),
 					p.get(plan).getMessage(p.get(plan).getRemindTerm(),
 						zonedDateTime.getMonthValue()),

@@ -49,7 +49,12 @@ public class SchedulingRemindService {
 		for (RemindMessageInfo remindInfo : remindMessageInfos) {
 			Long feedbackId = createFeedbackService.createFeedback(remindInfo.getUserId(), remindInfo.getPlanId());
 
-			sendPlanRemindService.send(remindInfo.getEmail(), remindInfo.getMessage(), feedbackId);
+			sendPlanRemindService.send(
+				remindInfo.getEmail(),
+				remindInfo.getTitle(),
+				remindInfo.getMessage(),
+				feedbackId
+			);
 
 			createRemindService.createRemind(remindInfo.getUserId(), remindInfo.getPlanId(), remindInfo.getMessage(),
 				remindInfo.getInfo());
