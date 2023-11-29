@@ -42,7 +42,7 @@ public class SchedulingRemindService {
 
 	private void sendRemindsOnScheduledTime(String remindTime) {
 		List<RemindMessageInfo> remindablePlans = planQueryRepository.findAllRemindablePlan(remindTime);
-		sendEmail(remindablePlans);
+		sendEmail(remindablePlans); // todo : method 수정
 	}
 
 	private void sendEmail(List<RemindMessageInfo> remindMessageInfos) {
