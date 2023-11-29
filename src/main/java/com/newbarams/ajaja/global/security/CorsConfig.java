@@ -10,7 +10,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 public class CorsConfig {
-	private static final String FRONT_PROD_ENV = "https://ajaja.me";
+	private static final String FRONT_VERCEL_APP = "https://this-year-ajaja-fe.vercel.app";
+	private static final String DOMAIN = "https://ajaja.me";
+	private static final String DOMAIN2 = "https://www.ajaja.me";
 	private static final String FRONT_LOCAL_ENV = "http://localhost:3000";
 
 	private final List<String> allowedMethods = List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH");
@@ -25,7 +27,7 @@ public class CorsConfig {
 
 	private CorsConfiguration defaultCorsConfig() {
 		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.setAllowedOrigins(List.of(FRONT_PROD_ENV, FRONT_LOCAL_ENV));
+		configuration.setAllowedOrigins(List.of(DOMAIN, DOMAIN2, FRONT_VERCEL_APP, FRONT_LOCAL_ENV));
 		configuration.setAllowedMethods(allowedMethods);
 		configuration.addAllowedHeader("*");
 		configuration.setAllowCredentials(true);
