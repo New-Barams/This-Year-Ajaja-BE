@@ -25,8 +25,11 @@ public class SchedulingAjajaRemindService {
 
 		for (RemindableAjaja remindableAjaja : remindableAjajas) {
 			String email = remindableAjaja.email();
+			String title = remindableAjaja.title();
+			Long planId = remindableAjaja.planId();
 			Long ajajaCount = remindableAjaja.count();
-			sendAjajaRemindService.send(email, ajajaCount);
+
+			sendAjajaRemindService.send(email, title, ajajaCount, planId);
 		}
 	}
 }

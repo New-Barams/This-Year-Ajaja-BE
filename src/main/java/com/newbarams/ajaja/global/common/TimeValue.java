@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 
 public class TimeValue {
 	private final Instant instant;
@@ -26,6 +27,10 @@ public class TimeValue {
 
 	public int getDate() {
 		return zonedDateTime.getDayOfMonth();
+	}
+
+	public ZonedDateTime getOneMonthLater() {
+		return ZonedDateTime.ofInstant(instant.plus(31, ChronoUnit.DAYS), ZoneId.of("Asia/Seoul"));
 	}
 
 	public Timestamp toTimeStamp() {
