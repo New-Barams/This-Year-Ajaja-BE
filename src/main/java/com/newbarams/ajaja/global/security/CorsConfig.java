@@ -10,8 +10,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 public class CorsConfig {
-	private static final String FRONT_PROD_ENV = "https://this-year-ajaja-fe.vercel.app/";
-	private static final String FRONT_LOCAL_ENV = "http://localhost:3000/";
+	private static final String FRONT_PROD_ENV = "https://ajaja.me";
+	private static final String FRONT_LOCAL_ENV = "http://localhost:3000";
 
 	private final List<String> allowedMethods = List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH");
 
