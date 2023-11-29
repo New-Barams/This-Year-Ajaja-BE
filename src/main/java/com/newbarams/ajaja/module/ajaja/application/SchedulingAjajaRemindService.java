@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 public class SchedulingAjajaRemindService {
 	private static final String WEEKLY_REMIND_TIME = "0 0 18 * * 2";
+
 	private final AjajaRepository ajajaRepository;
 	private final SendAjajaRemindService sendAjajaRemindService;
 

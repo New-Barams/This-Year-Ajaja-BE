@@ -13,5 +13,4 @@ checkstyle {
 
 checkstyleMain.exclude('com/newbarams/ajaja/module/user/kakao/model/KakaoTokenRequest.java')
         .exclude('com/newbarams/ajaja/module/user/kakao/model/KakaoUnlinkRequest.java')
-        .exclude('com/newbarams/ajaja/infra/ses/template/PlanRemindTemplate.java')
-        .exclude('com/newbarams/ajaja/infra/ses/template/AjajaRemindTemplate.java')
+        .exclude('com/newbarams/ajaja/infra/ses/HtmlEmailTemplate.java')

@@ -29,7 +29,7 @@ public class TimeValue {
 		return zonedDateTime.getDayOfMonth();
 	}
 
-	public ZonedDateTime getOneMonthLater() {
+	public ZonedDateTime oneMonthLater() {
 		return ZonedDateTime.ofInstant(instant.plus(31, ChronoUnit.DAYS), ZoneId.of("Asia/Seoul"));
 	}
 
