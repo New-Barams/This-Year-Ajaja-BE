@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class SesSendAjajaRemindService implements SendAjajaRemindService {
+class SesSendAjajaRemindService implements SendAjajaRemindService {
 	private final AmazonSimpleEmailService amazonSimpleEmailService;
 
 	@Async

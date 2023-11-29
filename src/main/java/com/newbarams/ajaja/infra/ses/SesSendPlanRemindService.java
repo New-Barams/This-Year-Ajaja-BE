@@ -17,14 +17,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class SesSendPlanRemindService implements SendPlanRemindService {
-	private static final String FEEDBACK_LINK = "https://api.ajaja.me/feedbacks/";
+class SesSendPlanRemindService implements SendPlanRemindService {
+	private static final String FEEDBACK_LINK = "https://this-year-ajaja-fe.vercel.app/plans/";
 	private final AmazonSimpleEmailService amazonSimpleEmailService;
 
 	@Async
 	@Override
-	public void send(String email, String title, String message, Long feedbackId) {
-		String feedbackLink = FEEDBACK_LINK + feedbackId;
+	public void send(String email, String title, String message, Long planId) {
+		String feedbackLink = FEEDBACK_LINK + planId;
 
 		MailForm remindMailForm = createMail(email, title, message, feedbackLink);
 		amazonSimpleEmailService.sendEmail(remindMailForm.toSesForm());

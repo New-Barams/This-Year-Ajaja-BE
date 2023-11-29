@@ -47,13 +47,13 @@ public class SchedulingRemindService {
 
 	private void sendEmail(List<RemindMessageInfo> remindMessageInfos) {
 		for (RemindMessageInfo remindInfo : remindMessageInfos) {
-			Long feedbackId = createFeedbackService.createFeedback(remindInfo.getUserId(), remindInfo.getPlanId());
+			createFeedbackService.createFeedback(remindInfo.getUserId(), remindInfo.getPlanId());
 
 			sendPlanRemindService.send(
 				remindInfo.getEmail(),
 				remindInfo.getTitle(),
 				remindInfo.getMessage(),
-				feedbackId
+				remindInfo.getPlanId()
 			);
 
 			createRemindService.createRemind(remindInfo.getUserId(), remindInfo.getPlanId(), remindInfo.getMessage(),
