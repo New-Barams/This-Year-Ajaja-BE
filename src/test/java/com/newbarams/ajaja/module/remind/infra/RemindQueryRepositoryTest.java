@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.newbarams.ajaja.common.MockTestSupport;
+import com.newbarams.ajaja.common.MonkeySupport;
 import com.newbarams.ajaja.module.feedback.domain.Feedback;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.remind.domain.Remind;
@@ -20,7 +20,7 @@ import com.newbarams.ajaja.module.remind.dto.RemindResponse;
 
 @SpringBootTest
 @Transactional
-class RemindQueryRepositoryTest extends MockTestSupport {
+class RemindQueryRepositoryTest extends MonkeySupport {
 	@Autowired
 	private RemindQueryRepository remindQueryRepository;
 	@Autowired
@@ -31,29 +31,17 @@ class RemindQueryRepositoryTest extends MockTestSupport {
 
 	@BeforeEach
 	void setUp() {
+		plan = monkey.giveMeBuilder(Plan.class)
+			.set("id", 1L)
+			.sample();
 		remind = remindRepository.save(monkey.giveMeBuilder(Remind.class)
-			.set("planId", 1L)
+			.set("planId", plan.getId())
 			.set("remindType", Remind.Type.PLAN)
 			.set("isDeleted", false)
 			.sample());
 		feedback = monkey.giveMeBuilder(Feedback.class)
 			.set("planId", 1L)
 			.sample();
-	}
-
-	@Test
-	@DisplayName("플랜 id에 맞는 리마인드 정보를 가져온다.")
-	void findRemindInfoByPlanId_Success_WithNoException() {
-		// // given
-		// plan = monkey.giveMeBuilder(Plan.class)
-		// 	.set("id", 1L)
-		// 	.sample();
-		//
-		// // when
-		// GetRemindInfo.CommonResponse reminds = remindQueryRepository.findAllRemindByPlanId(plan, List.of(feedback));
-		//
-		// // then
-		// Assertions.assertThat(reminds.sentRemindResponses().size()).isEqualTo(1); // todo: 테스트 오류로 인한 임시 주석 처리
 	}
 
 	@Test
