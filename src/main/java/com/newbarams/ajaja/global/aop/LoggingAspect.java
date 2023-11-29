@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.global.common.logger;
+package com.newbarams.ajaja.global.aop;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
