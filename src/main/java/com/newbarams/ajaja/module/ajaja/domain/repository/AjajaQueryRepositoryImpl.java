@@ -26,8 +26,8 @@ public class AjajaQueryRepositoryImpl implements AjajaQueryRepository {
 		return queryFactory.select(Projections.constructor(RemindableAjaja.class,
 				plan.content.title,
 				plan.id,
-				user.email.email.count(),
-				user.email.email
+				user.email.remindEmail.count(),
+				user.email.remindEmail
 			)).from(ajaja)
 			.join(plan).on(ajaja.targetId.eq(plan.id))
 			.join(user).on(plan.userId.eq(user.id))
