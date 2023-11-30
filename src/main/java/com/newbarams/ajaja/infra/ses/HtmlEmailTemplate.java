@@ -99,18 +99,18 @@ class HtmlEmailTemplate {
 			         </tr>
 			         <tr>
 			         	<td style="box-sizing: border-box; padding-top: 20px; border: none">
-			         		지난 주에 나의 <font color="#f76c5e" style="font-weight: 600">%s</font>계획을 %d명이나 응원했어요 👏👏</br>
+			         		지난 주에 나의 <font color="#f76c5e" style="font-weight: 600">%s</font> 계획을 %d명이나 응원했어요 👏👏</br>
 			         		<div style="padding-top: 8px; font-size: 14px">이 기세를 몰아 다음 리마인드까지 열심히 노력해볼까요??</div>
 			         	</td>
 			         </tr>
 			         <tr>
 			         	<td style="border: none; padding-top: 12px; font-size: 14px">
-			         		<font> 👉 </font><a href="https://ajaja.me/plans/%d" target="_blank" style="color: #f76c5e"><font color="#f76c5e" style="font-weight: 600">내 계획 확인하기</font></a>
+			         		<font> 👉 </font><a href="https://www.ajaja.me/plans/%d" target="_blank" style="color: #f76c5e"><font color="#f76c5e" style="font-weight: 600">내 계획 확인하기</font></a>
 						</td>
 			         </tr>
 			         <tr>
 			         	<td style="border: none; padding-top: 8px; font-size: 14px">
-			         		<font> 👉 </font><a href="https://ajaja.me/explore" target="_blank" style="color: #f76c5e"><font color="#f76c5e" style="font-weight: 600">다른 사람 계획 보러가기</font></a>
+			         		<font> 👉 </font><a href="https://www.ajaja.me/explore" target="_blank" style="color: #f76c5e"><font color="#f76c5e" style="font-weight: 600">다른 사람 계획 보러가기</font></a>
 			         	</td>
 			         </tr>
 			""");

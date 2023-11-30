@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @RequiredArgsConstructor
 class SesSendPlanRemindService implements SendPlanRemindService {
-	private static final String FEEDBACK_URL = "https://this-year-ajaja-fe.vercel.app/plans/";
+	private static final String FEEDBACK_URL = "https://www.ajaja.me/plans/";
 
 	private final AmazonSimpleEmailService amazonSimpleEmailService;
 
