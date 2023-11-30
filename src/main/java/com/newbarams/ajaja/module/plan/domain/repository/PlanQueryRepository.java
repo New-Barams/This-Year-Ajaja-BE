@@ -238,7 +238,7 @@ public class PlanQueryRepository {
 					p.get(plan).getUserId(),
 					p.get(plan).getId(),
 					p.get(plan).getContent().getTitle(),
-					p.get(user).getEmail().getEmail(),
+					p.get(user).getEmail().getRemindEmail(),
 					p.get(plan).getMessage(p.get(plan).getRemindTerm(),
 						zonedDateTime.getMonthValue()),
 					p.get(plan).getInfo()
