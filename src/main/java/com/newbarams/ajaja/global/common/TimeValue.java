@@ -21,6 +21,10 @@ public class TimeValue {
 		zonedDateTime = ZonedDateTime.ofInstant(instant, ZoneId.of("Asia/Seoul"));
 	}
 
+	public int getYear() {
+		return zonedDateTime.getYear();
+	}
+
 	public int getMonth() {
 		return zonedDateTime.getMonthValue();
 	}
