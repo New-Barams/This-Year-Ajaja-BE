@@ -10,7 +10,6 @@ import static com.newbarams.ajaja.module.user.domain.QUser.*;
 
 import java.time.Instant;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -18,6 +17,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
+import com.newbarams.ajaja.global.common.TimeValue;
 import com.newbarams.ajaja.module.ajaja.domain.Ajaja;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
@@ -37,8 +37,6 @@ import lombok.RequiredArgsConstructor;
 @Repository
 @RequiredArgsConstructor
 public class PlanQueryRepository {
-	private final Instant instant = Instant.now();
-	private final ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault()); // todo: vo로 빼기
 	private static final String LATEST = "latest";
 	private static final String AJAJA = "ajaja";
 	private static final int PAGE_SIZE = 3;
@@ -225,11 +223,11 @@ public class PlanQueryRepository {
 	}
 
 	private BooleanExpression isCurrentYear() {
-		return plan.createdAt.year().eq(zonedDateTime.getYear());
+		return plan.createdAt.year().eq(new TimeValue().getYear());
 	}
 
 	private BooleanExpression isRemindDate() {
-		return plan.info.remindDate.eq(zonedDateTime.getDayOfMonth());
+		return plan.info.remindDate.eq(new TimeValue().getDate());
 	}
 
 	private List<RemindMessageInfo> mapRemindMessageInfos(List<Tuple> remindablePlans) {
@@ -240,7 +238,7 @@ public class PlanQueryRepository {
 					p.get(plan).getContent().getTitle(),
 					p.get(user).getEmail().getRemindEmail(),
 					p.get(plan).getMessage(p.get(plan).getRemindTerm(),
-						zonedDateTime.getMonthValue()),
+						new TimeValue().getMonth()),
 					p.get(plan).getInfo()
 				)
 			)

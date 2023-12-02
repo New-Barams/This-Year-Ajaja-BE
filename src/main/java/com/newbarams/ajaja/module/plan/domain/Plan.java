@@ -194,7 +194,7 @@ public class Plan extends BaseEntity<Plan> {
 	}
 
 	private int getMessageIdx(int remindTerm, int currentMonth) {
-		return remindTerm == ONE_MONTH_TERM ? (currentMonth - 2) : currentMonth / remindTerm;
+		return remindTerm == ONE_MONTH_TERM ? (currentMonth - 2) : currentMonth / remindTerm - 1;
 	}
 
 	public void disable() {
