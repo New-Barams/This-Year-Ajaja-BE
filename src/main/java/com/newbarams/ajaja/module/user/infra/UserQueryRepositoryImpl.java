@@ -1,9 +1,10 @@
-package com.newbarams.ajaja.module.user.domain.repository;
+package com.newbarams.ajaja.module.user.infra;
 
-import static com.newbarams.ajaja.module.user.domain.QUser.*;
+import static com.newbarams.ajaja.module.user.infra.QUserEntity.*;
 
 import org.springframework.stereotype.Repository;
 
+import com.newbarams.ajaja.module.user.domain.UserQueryRepository;
 import com.newbarams.ajaja.module.user.dto.QUserResponse_MyPage;
 import com.newbarams.ajaja.module.user.dto.UserResponse;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -12,18 +13,19 @@ import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class UserQueryRepository {
+class UserQueryRepositoryImpl implements UserQueryRepository {
 	private final JPAQueryFactory queryFactory;
 
+	@Override
 	public UserResponse.MyPage findUserInfoById(Long userId) {
 		return queryFactory.select(new QUserResponse_MyPage(
-				user.nickname.nickname,
-				user.email.email,
-				user.email.remindEmail,
-				user.email.isVerified,
-				user.receiveType.stringValue().toLowerCase()))
-			.from(user)
-			.where(user.id.eq(userId))
+				userEntity.nickname,
+				userEntity.signUpEmail,
+				userEntity.remindEmail,
+				userEntity.verified,
+				userEntity.receiveType.stringValue().toLowerCase()))
+			.from(userEntity)
+			.where(userEntity.id.eq(userId))
 			.fetchOne();
 	}
 }

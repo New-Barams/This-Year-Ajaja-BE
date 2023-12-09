@@ -1,56 +1,23 @@
 package com.newbarams.ajaja.module.user.domain;
 
-import static com.newbarams.ajaja.global.exception.ErrorCode.*;
-
-import org.hibernate.annotations.Where;
-
-import com.newbarams.ajaja.global.common.BaseEntity;
-import com.newbarams.ajaja.global.exception.AjajaException;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@Entity
-@Table(name = "users")
-@Where(clause = "is_deleted = false")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User extends BaseEntity<User> {
-	enum ReceiveType {
+@AllArgsConstructor
+public class User {
+	public enum ReceiveType {
 		KAKAO, EMAIL, BOTH
 	}
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "user_id")
-	private Long id;
-
-	@Embedded
+	private final UserId userId;
 	private Nickname nickname;
 	private Email email;
-	private OauthInfo oauthInfo;
-
-	@Enumerated(EnumType.STRING)
 	private ReceiveType receiveType;
+	private boolean deleted;
 
-	private boolean isDeleted;
-
-	public User(String nickname, String email, OauthInfo oauthInfo) {
-		this.nickname = new Nickname(nickname);
-		this.email = new Email(email);
-		this.oauthInfo = oauthInfo;
-		this.receiveType = ReceiveType.EMAIL;
-		this.isDeleted = false;
+	public static User init(String email, Long oauthId) {
+		return new User(UserId.from(oauthId), Nickname.renew(), new Email(email), ReceiveType.EMAIL, false);
 	}
 
 	public void validateEmail(String requestEmail) {
@@ -61,36 +28,36 @@ public class User extends BaseEntity<User> {
 		this.email = email.verified(validatedEmail);
 	}
 
-	public String defaultEmail() {
-		return email.getEmail();
+	public void delete() {
+		this.deleted = true;
+	}
+
+	public String updateNickname() {
+		this.nickname = Nickname.renew();
+		return nickname.getNickname();
+	}
+
+	public void updateReceive(ReceiveType receiveType) {
+		this.receiveType = receiveType;
+	}
+
+	public Long getId() {
+		return userId.getId();
+	}
+
+	public Long getOauthId() {
+		return userId.getOauthId();
+	}
+
+	public String getEmail() {
+		return email.getSignUpEmail();
 	}
 
 	public String getRemindEmail() {
 		return email.getRemindEmail();
 	}
 
-	public void delete() {
-		this.isDeleted = true;
-	}
-
-	public String updateNickname(String nickname) {
-		this.nickname = new Nickname(nickname);
-		return nickname;
-	}
-
-	public void updateReceive(String receiveType) {
-		this.receiveType = toEnum(receiveType);
-	}
-
-	public Long getOauthId() {
-		return oauthInfo.getOauthId();
-	}
-
-	private ReceiveType toEnum(String receiveType) {
-		try {
-			return ReceiveType.valueOf(receiveType.toUpperCase());
-		} catch (IllegalArgumentException e) {
-			throw new AjajaException(e, NOT_SUPPORT_RECEIVE_TYPE);
-		}
+	public boolean isVerified() {
+		return email.isVerified();
 	}
 }

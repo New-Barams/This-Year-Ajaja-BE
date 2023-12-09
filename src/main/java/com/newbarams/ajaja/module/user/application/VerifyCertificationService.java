@@ -11,6 +11,7 @@ import com.newbarams.ajaja.global.cache.CacheUtil;
 import com.newbarams.ajaja.global.exception.AjajaException;
 import com.newbarams.ajaja.module.user.application.model.Verification;
 import com.newbarams.ajaja.module.user.domain.User;
+import com.newbarams.ajaja.module.user.domain.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class VerifyCertificationService {
 	private final RetrieveUserService retrieveUserService;
+	private final UserRepository userRepository;
 	private final CacheUtil cacheUtil;
 
 	public void verify(Long userId, String certification) {
@@ -26,6 +28,7 @@ public class VerifyCertificationService {
 		Verification verification = cacheUtil.getEmailVerification(userId);
 		verifyCertification(verification.getCertification(), certification);
 		user.verified(verification.getTarget());
+		userRepository.save(user);
 	}
 
 	private void verifyCertification(String saved, String input) {

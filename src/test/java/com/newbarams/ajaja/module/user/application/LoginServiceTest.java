@@ -15,9 +15,8 @@ import com.newbarams.ajaja.common.MockTestSupport;
 import com.newbarams.ajaja.global.security.jwt.util.JwtGenerator;
 import com.newbarams.ajaja.module.user.application.model.AccessToken;
 import com.newbarams.ajaja.module.user.application.model.Profile;
-import com.newbarams.ajaja.module.user.domain.OauthInfo;
 import com.newbarams.ajaja.module.user.domain.User;
-import com.newbarams.ajaja.module.user.domain.repository.UserRepository;
+import com.newbarams.ajaja.module.user.domain.UserRepository;
 import com.newbarams.ajaja.module.user.kakao.model.KakaoAccount;
 import com.newbarams.ajaja.module.user.kakao.model.KakaoResponse;
 
@@ -51,7 +50,7 @@ class LoginServiceTest extends MockTestSupport {
 				.sample())
 			.sample();
 
-		private final User user = new User(RandomNicknameGenerator.generate(), email, OauthInfo.kakao(1L));
+		private final User user = User.init(email, 1L);
 
 		@Test
 		@DisplayName("새로운 유저가 로그인하면 새롭게 유저 정보를 생성해야 한다.")
@@ -59,7 +58,7 @@ class LoginServiceTest extends MockTestSupport {
 			// given
 			given(authorizeService.authorize(any(), any())).willReturn(accessToken);
 			given(getProfileService.getProfile(any())).willReturn(profile);
-			given(userRepository.findByEmail_Email(any())).willReturn(Optional.empty());
+			given(userRepository.findByEmail(any())).willReturn(Optional.empty());
 			given(userRepository.save(any())).willReturn(user);
 
 			// when
@@ -68,7 +67,7 @@ class LoginServiceTest extends MockTestSupport {
 			// then
 			then(authorizeService).should(times(1)).authorize(any(), any());
 			then(getProfileService).should(times(1)).getProfile(any());
-			then(userRepository).should(times(1)).findByEmail_Email(any());
+			then(userRepository).should(times(1)).findByEmail(any());
 			then(userRepository).should(times(1)).save(any());
 			then(jwtGenerator).should(times(1)).generate(any());
 		}
@@ -79,7 +78,7 @@ class LoginServiceTest extends MockTestSupport {
 			// given
 			given(authorizeService.authorize(any(), any())).willReturn(accessToken);
 			given(getProfileService.getProfile(any())).willReturn(profile);
-			given(userRepository.findByEmail_Email(any())).willReturn(Optional.of(user));
+			given(userRepository.findByEmail(any())).willReturn(Optional.of(user));
 
 			// when
 			loginService.login(authorizationCode, redirectUrl);
@@ -87,7 +86,7 @@ class LoginServiceTest extends MockTestSupport {
 			// then
 			then(authorizeService).should(times(1)).authorize(any(), any());
 			then(getProfileService).should(times(1)).getProfile(any());
-			then(userRepository).should(times(1)).findByEmail_Email(any());
+			then(userRepository).should(times(1)).findByEmail(any());
 			then(userRepository).shouldHaveNoMoreInteractions();
 			then(jwtGenerator).should(times(1)).generate(any());
 		}

@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.user.domain.repository;
+package com.newbarams.ajaja.module.user.infra;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -9,16 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.newbarams.ajaja.common.MockTestSupport;
-import com.newbarams.ajaja.module.user.domain.Email;
 import com.newbarams.ajaja.module.user.domain.User;
+import com.newbarams.ajaja.module.user.domain.UserRepository;
 import com.newbarams.ajaja.module.user.dto.UserResponse;
 
 @SpringBootTest
 @Transactional
-class UserQueryRepositoryTest extends MockTestSupport {
+class UserQueryRepositoryImplTest {
 	@Autowired
-	private UserQueryRepository userQueryRepository;
+	private UserQueryRepositoryImpl userQueryRepositoryImpl;
 
 	@Autowired
 	private UserRepository userRepository;
@@ -27,11 +26,7 @@ class UserQueryRepositoryTest extends MockTestSupport {
 
 	@BeforeEach
 	void setup() {
-		Email email = new Email("gmlwh124@naver.com");
-		user = userRepository.save(monkey.giveMeBuilder(User.class)
-			.set("email", email)
-			.set("isDeleted", false)
-			.sample());
+		user = userRepository.save(User.init("gmlwh124@naver.com", 1L));
 	}
 
 	@Test
@@ -41,13 +36,13 @@ class UserQueryRepositoryTest extends MockTestSupport {
 		Long id = user.getId();
 
 		// when
-		UserResponse.MyPage result = userQueryRepository.findUserInfoById(id);
+		UserResponse.MyPage result = userQueryRepositoryImpl.findUserInfoById(id);
 
 		// then
 		assertThat(result).isNotNull();
-		assertThat(result.getDefaultEmail()).isEqualTo(user.getEmail().getEmail());
-		assertThat(result.getRemindEmail()).isEqualTo(user.getEmail().getRemindEmail());
-		assertThat(result.isEmailVerified()).isEqualTo(user.getEmail().isVerified());
+		assertThat(result.getDefaultEmail()).isEqualTo(user.getEmail());
+		assertThat(result.getRemindEmail()).isEqualTo(user.getRemindEmail());
+		assertThat(result.isEmailVerified()).isEqualTo(user.isVerified());
 		assertThat(result.getReceiveType()).isLowerCase();
 	}
 
@@ -58,7 +53,7 @@ class UserQueryRepositoryTest extends MockTestSupport {
 		Long userId = -1L;
 
 		// when
-		UserResponse.MyPage result = userQueryRepository.findUserInfoById(userId);
+		UserResponse.MyPage result = userQueryRepositoryImpl.findUserInfoById(userId);
 
 		// then
 		assertThat(result).isNull();

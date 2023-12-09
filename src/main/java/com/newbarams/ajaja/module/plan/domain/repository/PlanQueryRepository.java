@@ -6,7 +6,7 @@ import static com.newbarams.ajaja.module.ajaja.domain.QAjaja.*;
 import static com.newbarams.ajaja.module.plan.domain.QPlan.*;
 import static com.newbarams.ajaja.module.tag.domain.QPlanTag.*;
 import static com.newbarams.ajaja.module.tag.domain.QTag.*;
-import static com.newbarams.ajaja.module.user.domain.QUser.*;
+import static com.newbarams.ajaja.module.user.infra.QUserEntity.*;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -51,9 +51,9 @@ public class PlanQueryRepository {
 	}
 
 	public Optional<PlanResponse.GetOne> findById(Long id, Long userId) {
-		List<Tuple> tuples = queryFactory.select(plan, user.nickname)
-			.from(plan, user)
-			.where(plan.userId.eq(user.id).and(plan.id.eq(id)))
+		List<Tuple> tuples = queryFactory.select(plan, userEntity.nickname)
+			.from(plan, userEntity)
+			.where(plan.userId.eq(userEntity.id).and(plan.id.eq(id)))
 			.fetch();
 
 		return getResponse(tuples, userId);
@@ -69,7 +69,7 @@ public class PlanQueryRepository {
 
 	private PlanResponse.GetOne tupleToResponse(Tuple tuple, Long userId) {
 		Plan planFromTuple = tuple.get(plan);
-		String nickname = tuple.get(user.nickname).getNickname();
+		String nickname = tuple.get(userEntity.nickname);
 
 		List<String> tags = findTagByPlanId(planFromTuple.getId());
 		boolean isPressAjaja = isPressAjaja(planFromTuple.getId(), userId);
@@ -100,10 +100,10 @@ public class PlanQueryRepository {
 	}
 
 	public List<PlanResponse.GetAll> findAllByCursorAndSorting(PlanRequest.GetAll conditions) {
-		List<Tuple> tuples = queryFactory.select(plan, user.nickname)
-			.from(plan, user)
+		List<Tuple> tuples = queryFactory.select(plan, userEntity.nickname)
+			.from(plan, userEntity)
 
-			.where(plan.userId.eq(user.id),
+			.where(plan.userId.eq(userEntity.id),
 				plan.status.isPublic.eq(true),
 				isEqualsYear(conditions.current()),
 				cursorPagination(conditions))
@@ -175,7 +175,7 @@ public class PlanQueryRepository {
 		return tuples.stream()
 			.map(tuple -> {
 				Plan planFromTuple = tuple.get(plan);
-				String nickname = tuple.get(user.nickname).getNickname();
+				String nickname = tuple.get(userEntity.nickname);
 				List<String> tags = findTagByPlanId(planFromTuple.getId());
 
 				return PlanMapper.toGetAllResponse(planFromTuple, nickname, tags);
@@ -191,31 +191,31 @@ public class PlanQueryRepository {
 				plan.status.canRemind,
 				plan.achieveRate,
 				plan.iconNumber,
-				user.email.isVerified
+				userEntity.verified
 			))
 			.from(plan)
-			.join(user).on(user.id.eq(plan.userId))
+			.join(userEntity).on(userEntity.id.eq(plan.userId))
 			.groupBy(plan.createdAt.year(),
 				plan.id,
 				plan.content.title,
 				plan.status.canRemind,
 				plan.achieveRate,
 				plan.iconNumber,
-				user.email.isVerified)
+				userEntity.verified)
 			.where(plan.userId.eq(userId))
 			.orderBy(plan.createdAt.year().desc())
 			.fetch();
 	}
 
 	public List<RemindMessageInfo> findAllRemindablePlan(String remindTime) {
-		List<Tuple> remindablePlans = queryFactory.select(plan, user)
-			.from(plan, user)
+		List<Tuple> remindablePlans = queryFactory.select(plan, userEntity)
+			.from(plan, userEntity)
 			.where(plan.status.canRemind
 				.and(isCurrentYear())
 				.and(isRemindMonth())
 				.and(isRemindDate())
 				.and(plan.info.remindTime.stringValue().eq(remindTime)
-					.and(plan.userId.eq(user.id)))
+					.and(plan.userId.eq(userEntity.id)))
 			)
 			.fetch();
 
@@ -236,7 +236,7 @@ public class PlanQueryRepository {
 					p.get(plan).getUserId(),
 					p.get(plan).getId(),
 					p.get(plan).getContent().getTitle(),
-					p.get(user).getEmail().getRemindEmail(),
+					p.get(userEntity.remindEmail),
 					p.get(plan).getMessage(p.get(plan).getRemindTerm(),
 						new TimeValue().getMonth()),
 					p.get(plan).getInfo()

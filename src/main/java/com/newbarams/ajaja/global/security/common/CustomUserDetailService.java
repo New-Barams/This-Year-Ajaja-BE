@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import com.newbarams.ajaja.global.exception.AjajaException;
 import com.newbarams.ajaja.global.exception.ErrorCode;
 import com.newbarams.ajaja.module.user.domain.User;
-import com.newbarams.ajaja.module.user.domain.repository.UserRepository;
+import com.newbarams.ajaja.module.user.domain.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,6 +24,6 @@ public class CustomUserDetailService implements UserDetailsService {
 	}
 
 	private UserAdapter toAdapter(User user) {
-		return new UserAdapter(user.getId(), user.defaultEmail());
+		return new UserAdapter(user.getId(), user.getEmail());
 	}
 }

@@ -21,10 +21,8 @@ import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.domain.PlanStatus;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
-import com.newbarams.ajaja.module.user.domain.OauthInfo;
-import com.newbarams.ajaja.module.user.domain.OauthProvider;
 import com.newbarams.ajaja.module.user.domain.User;
-import com.newbarams.ajaja.module.user.domain.repository.UserRepository;
+import com.newbarams.ajaja.module.user.domain.UserRepository;
 
 import com.navercorp.fixturemonkey.FixtureMonkey;
 import com.navercorp.fixturemonkey.api.introspector.FieldReflectionArbitraryIntrospector;
@@ -56,9 +54,11 @@ class PlanQueryRepositoryTest {
 	@Autowired
 	private UserRepository userRepository;
 
+	private User user;
+
 	@BeforeEach
 	void deleteAll() {
-		planRepository.deleteAll();
+		user = User.init("email@naver.com", 1L);
 	}
 
 	@Test
@@ -85,9 +85,6 @@ class PlanQueryRepositoryTest {
 	@Test
 	@DisplayName("계획의 ID를 이용해 하나의 계획을 가져올 수 있다.")
 	void findById_Success() {
-		User user = new User("nickname", "email@naver.com",
-			new OauthInfo(Arbitraries.longs().greaterOrEqual(0).sample(), OauthProvider.KAKAO));
-
 		User saved = userRepository.save(user);
 
 		Plan plan = monkey.giveMeBuilder(Plan.class)
@@ -104,9 +101,6 @@ class PlanQueryRepositoryTest {
 	@Test
 	@DisplayName("계획 id가 존재하지 않으면 가져올 수 없다.")
 	void findById_Fail_By_Not_Exist_PlanId() {
-		User user = new User("nickname", "email@naver.com",
-			new OauthInfo(Arbitraries.longs().greaterOrEqual(0).sample(), OauthProvider.KAKAO));
-
 		User saved = userRepository.save(user);
 
 		Plan plan = monkey.giveMeBuilder(Plan.class)
@@ -124,9 +118,6 @@ class PlanQueryRepositoryTest {
 	@DisplayName("최신순 or 인기순 정렬 시 지정된 개수만큼의 계획을 받는다.")
 	void findAllByCursorAndSorting_Default_Success() {
 		int pageSize = 3;
-
-		User user = new User("nickname", "email@naver.com",
-			new OauthInfo(Arbitraries.longs().greaterOrEqual(0).sample(), OauthProvider.KAKAO));
 
 		User saved = userRepository.save(user);
 
@@ -151,9 +142,6 @@ class PlanQueryRepositoryTest {
 	@DisplayName("최신순 정렬 시 아이디 순으로 정렬된 계획들을 반환한다.")
 	void findAllByCursorAndSorting_With_Latest_Condition_Success() {
 		int pageSize = 3;
-
-		User user = new User("nickname", "email@naver.com",
-			new OauthInfo(Arbitraries.longs().greaterOrEqual(0).sample(), OauthProvider.KAKAO));
 
 		User saved = userRepository.save(user);
 

@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.user.application;
+package com.newbarams.ajaja.module.user.domain;
 
 import java.util.Random;
 

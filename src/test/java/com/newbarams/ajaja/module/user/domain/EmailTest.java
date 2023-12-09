@@ -47,7 +47,7 @@ class EmailTest extends MonkeySupport {
 		Email verifiedEmail = email.verified(input);
 
 		// then
-		assertThat(verifiedEmail.getEmail()).isEqualTo(email.getEmail());
+		assertThat(verifiedEmail.getSignUpEmail()).isEqualTo(email.getSignUpEmail());
 		assertThat(verifiedEmail.getRemindEmail()).isEqualTo(email.getRemindEmail());
 		assertThat(verifiedEmail.isVerified()).isTrue();
 	}
@@ -65,7 +65,7 @@ class EmailTest extends MonkeySupport {
 
 		// then
 		assertThat(verifiedWithNewRemind).isNotEqualTo(email);
-		assertThat(verifiedWithNewRemind.getEmail()).isEqualTo(email.getEmail());
+		assertThat(verifiedWithNewRemind.getSignUpEmail()).isEqualTo(email.getSignUpEmail());
 		assertThat(verifiedWithNewRemind.getRemindEmail()).isEqualTo(young);
 		assertThat(verifiedWithNewRemind.isVerified()).isTrue();
 	}
@@ -97,12 +97,7 @@ class EmailTest extends MonkeySupport {
 	@DisplayName("인증 상태라면 다른 리마인드 이메일일 때 검증을 진행할 수 있다.")
 	void validateVerifiable_Success_WithDifferentEmail() {
 		// given
-		Email email = monkey.giveMeBuilder(Email.class)
-			.set("email", "gmlwh124@naver.com")
-			.set("remindEmail", "gmlwh124@naver.com")
-			.set("isVerified", true)
-			.sample();
-
+		Email email = new Email("gmlwh124@naver.com", "gmlwh124@naver.com", true);
 		String newRemindEmail = "hejow124@naver.com";
 
 		// when, then
@@ -114,11 +109,7 @@ class EmailTest extends MonkeySupport {
 	void validateVerifiable_Fail_ByVerifiedAndSameEmail() {
 		// given
 		String mail = "gmlwh124@naver.com";
-		Email email = monkey.giveMeBuilder(Email.class)
-			.set("email", mail)
-			.set("remindEmail", mail)
-			.set("isVerified", true)
-			.sample();
+		Email email = new Email(mail, mail, true);
 
 		// when, then
 		assertThatException().isThrownBy(() -> email.validateVerifiable(mail));

@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.newbarams.ajaja.module.user.domain.User;
+import com.newbarams.ajaja.module.user.domain.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -12,10 +13,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class RenewNicknameService {
 	private final RetrieveUserService retrieveUserService;
+	private final UserRepository userRepository;
 
 	public String renew(Long id) {
 		User user = retrieveUserService.loadExistUserById(id);
-		String nickname = RandomNicknameGenerator.generate();
-		return user.updateNickname(nickname);
+		String newNickname = user.updateNickname();
+		userRepository.save(user);
+		return newNickname;
 	}
 }
