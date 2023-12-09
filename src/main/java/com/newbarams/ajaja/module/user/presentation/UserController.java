@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.newbarams.ajaja.global.annotation.EnumInput;
 import com.newbarams.ajaja.global.common.AjajaResponse;
 import com.newbarams.ajaja.global.security.common.UserId;
 import com.newbarams.ajaja.module.user.application.ChangeReceiveTypeService;
@@ -20,7 +21,8 @@ import com.newbarams.ajaja.module.user.application.RenewNicknameService;
 import com.newbarams.ajaja.module.user.application.SendVerificationEmailService;
 import com.newbarams.ajaja.module.user.application.VerifyCertificationService;
 import com.newbarams.ajaja.module.user.application.WithdrawService;
-import com.newbarams.ajaja.module.user.domain.repository.UserQueryRepository;
+import com.newbarams.ajaja.module.user.domain.User;
+import com.newbarams.ajaja.module.user.domain.UserQueryRepository;
 import com.newbarams.ajaja.module.user.dto.UserRequest;
 import com.newbarams.ajaja.module.user.dto.UserResponse;
 
@@ -118,7 +120,8 @@ public class UserController {
 	@ResponseStatus(OK)
 	public AjajaResponse<Void> changeReceiveType(
 		@UserId Long id,
-		@Schema(allowableValues = {"kakao", "email", "both"}) @RequestParam String type
+		@EnumInput(enumClass = User.ReceiveType.class) @RequestParam // todo: separate domain dependency
+		@Schema(allowableValues = {"kakao", "email", "both"}) User.ReceiveType type
 	) {
 		changeReceiveTypeService.change(id, type);
 		return AjajaResponse.ok();
