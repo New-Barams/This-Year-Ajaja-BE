@@ -1,8 +1,10 @@
 package com.newbarams.ajaja.module.user.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class User {
 	public enum ReceiveType {
 		KAKAO, EMAIL, BOTH
@@ -13,14 +15,6 @@ public class User {
 	private Email email;
 	private ReceiveType receiveType;
 	private boolean deleted;
-
-	public User(UserId userId, Nickname nickname, Email email, ReceiveType receiveType, boolean deleted) {
-		this.userId = userId;
-		this.nickname = nickname;
-		this.email = email;
-		this.receiveType = receiveType;
-		this.deleted = deleted;
-	}
 
 	public static User init(String email, Long oauthId) {
 		return new User(UserId.from(oauthId), Nickname.renew(), new Email(email), ReceiveType.EMAIL, false);

@@ -9,15 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.newbarams.ajaja.common.MonkeySupport;
-import com.newbarams.ajaja.module.user.domain.Email;
 import com.newbarams.ajaja.module.user.domain.User;
 import com.newbarams.ajaja.module.user.domain.UserRepository;
 import com.newbarams.ajaja.module.user.dto.UserResponse;
 
 @SpringBootTest
 @Transactional
-class UserQueryRepositoryImplTest extends MonkeySupport {
+class UserQueryRepositoryImplTest {
 	@Autowired
 	private UserQueryRepositoryImpl userQueryRepositoryImpl;
 
@@ -28,11 +26,7 @@ class UserQueryRepositoryImplTest extends MonkeySupport {
 
 	@BeforeEach
 	void setup() {
-		Email email = new Email("gmlwh124@naver.com");
-		user = userRepository.save(monkey.giveMeBuilder(User.class)
-			.set("email", email)
-			.set("isDeleted", false)
-			.sample());
+		user = userRepository.save(User.init("gmlwh124@naver.com", 1L));
 	}
 
 	@Test
