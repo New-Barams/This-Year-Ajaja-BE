@@ -1,0 +1,51 @@
+package com.newbarams.ajaja.module.user.infra;
+
+import org.hibernate.annotations.Where;
+
+import com.newbarams.ajaja.global.common.BaseEntity;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@Entity
+@Table(name = "users")
+@Where(clause = "deleted = false")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+public class UserEntity extends BaseEntity<UserEntity> {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "user_id")
+	private Long id;
+
+	@Column(nullable = false, length = 20)
+	private String nickname;
+
+	@Column(nullable = false, name = "email", length = 50, unique = true)
+	private String signUpEmail;
+
+	@Column(nullable = false, length = 50)
+	private String remindEmail;
+
+	@Column(nullable = false)
+	private boolean verified;
+
+	@Column(nullable = false, length = 20)
+	private String receiveType;
+
+	@Embedded
+	private OauthInfo oauthInfo;
+
+	@Column(nullable = false)
+	private boolean deleted;
+}

@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.user.domain.repository;
+package com.newbarams.ajaja.module.user.infra;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -6,24 +6,23 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.newbarams.ajaja.common.JpaTestSupport;
-import com.newbarams.ajaja.module.user.domain.Email;
+import com.newbarams.ajaja.common.MonkeySupport;
 import com.newbarams.ajaja.module.user.domain.User;
 
-class UserRepositoryTest extends JpaTestSupport {
+@SpringBootTest
+@Transactional
+class UserRepositoryImplTest extends MonkeySupport {
 	@Autowired
-	private UserRepository userRepository;
+	private UserRepositoryImpl userRepository;
 
 	private User user;
 
 	@BeforeEach
 	void setup() {
-		Email email = new Email("gmlwh124@naver.com");
-		user = monkey.giveMeBuilder(User.class)
-			.set("email", email)
-			.set("isDeleted", false)
-			.sample();
+		user = User.init("gmlwh124@naver.com", 1L);
 	}
 
 	@Test

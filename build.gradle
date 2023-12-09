@@ -52,7 +52,7 @@ dependencies {
 
     // Mapstruct
     implementation 'org.mapstruct:mapstruct:1.5.5.Final'
-    implementation 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 
     // Jasypt
     implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'

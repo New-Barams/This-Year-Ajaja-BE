@@ -9,9 +9,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import com.newbarams.ajaja.common.MockTestSupport;
-import com.newbarams.ajaja.module.user.domain.Email;
 import com.newbarams.ajaja.module.user.domain.Nickname;
 import com.newbarams.ajaja.module.user.domain.User;
+import com.newbarams.ajaja.module.user.domain.UserRepository;
 
 class RenewNicknameServiceTest extends MockTestSupport {
 	@InjectMocks
@@ -20,22 +20,24 @@ class RenewNicknameServiceTest extends MockTestSupport {
 	@Mock
 	private RetrieveUserService retrieveUserService;
 
+	@Mock
+	private UserRepository userRepository;
+
 	@Test
 	@DisplayName("닉네임 갱신을 요청하면 새로운 이름으로 변경되어야 한다.")
 	void renew_Success_WithNewNickname() {
 		// given
-		String mail = "gmlwh124@Naver.com";
-		User user = monkey.giveMeBuilder(User.class)
-			.set("email", new Email(mail))
-			.sample();
+		User user = User.init("gmlwh124@naver.com", 1L);
 
 		Nickname oldNickname = user.getNickname();
 		given(retrieveUserService.loadExistUserById(any())).willReturn(user);
+		given(userRepository.save(any())).willReturn(user);
 
 		// when
 		String newNickname = renewNicknameService.renew(user.getId());
 
 		// then
 		assertThat(oldNickname.getNickname()).isNotEqualTo(newNickname);
+		then(userRepository).should(times(1)).save(any());
 	}
 }

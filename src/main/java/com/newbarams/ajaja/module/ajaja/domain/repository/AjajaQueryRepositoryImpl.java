@@ -2,7 +2,7 @@ package com.newbarams.ajaja.module.ajaja.domain.repository;
 
 import static com.newbarams.ajaja.module.ajaja.domain.QAjaja.*;
 import static com.newbarams.ajaja.module.plan.domain.QPlan.*;
-import static com.newbarams.ajaja.module.user.domain.QUser.*;
+import static com.newbarams.ajaja.module.user.infra.QUserEntity.*;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -26,11 +26,11 @@ public class AjajaQueryRepositoryImpl implements AjajaQueryRepository {
 		return queryFactory.select(Projections.constructor(RemindableAjaja.class,
 				plan.content.title,
 				plan.id,
-				user.email.remindEmail.count(),
-				user.email.remindEmail
+				userEntity.remindEmail.count(),
+				userEntity.remindEmail
 			)).from(ajaja)
 			.join(plan).on(ajaja.targetId.eq(plan.id))
-			.join(user).on(plan.userId.eq(user.id))
+			.join(userEntity).on(plan.userId.eq(userEntity.id))
 			.where(plan.status.canAjaja.eq(true)
 				.and(ajaja.updatedAt.after(Instant.now().minus(7, ChronoUnit.DAYS)))
 				.and(ajaja.updatedAt.before(Instant.now()))
@@ -41,7 +41,7 @@ public class AjajaQueryRepositoryImpl implements AjajaQueryRepository {
 			.groupBy(
 				plan.content.title,
 				plan.id,
-				user.email.email
+				userEntity.signUpEmail
 			)
 			.fetch();
 	}

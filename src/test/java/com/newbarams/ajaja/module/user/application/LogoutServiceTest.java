@@ -11,7 +11,7 @@ import org.mockito.Mock;
 import com.newbarams.ajaja.common.MockTestSupport;
 import com.newbarams.ajaja.global.exception.AjajaException;
 import com.newbarams.ajaja.global.security.jwt.util.JwtRemover;
-import com.newbarams.ajaja.module.user.domain.repository.UserRepository;
+import com.newbarams.ajaja.module.user.domain.UserRepository;
 
 class LogoutServiceTest extends MockTestSupport {
 	@InjectMocks
