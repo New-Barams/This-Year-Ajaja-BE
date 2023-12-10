@@ -6,7 +6,6 @@ import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 
-import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Repository;
 
 import com.newbarams.ajaja.global.common.TimeValue;
@@ -23,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class RemindQueryRepositoryImpl implements RemindQueryRepository {
 	private final JPAQueryFactory queryFactory;
-	RemindInfoMapper remindInfoMapper = Mappers.getMapper(RemindInfoMapper.class);
+	private final RemindInfoMapper remindInfoMapper;
 
 	public RemindResponse.CommonResponse findAllRemindByPlanId(Plan plan, List<Feedback> feedbacks) {
 		Long planId = plan.getId();

@@ -5,7 +5,6 @@ import static com.newbarams.ajaja.module.feedback.infra.QFeedbackEntity.*;
 import java.util.List;
 import java.util.Optional;
 
-import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Repository;
 
 import com.newbarams.ajaja.global.common.TimeValue;
@@ -20,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FeedbackQueryRepositoryImpl implements FeedbackQueryRepository {
 	private final JPAQueryFactory queryFactory;
-	FeedbackEntityMapper mapper = Mappers.getMapper(FeedbackEntityMapper.class);
+	private final FeedbackEntityMapper mapper;
 
 	@Override
 	public List<Feedback> findAllFeedbackByPlanId(Long planId) {
