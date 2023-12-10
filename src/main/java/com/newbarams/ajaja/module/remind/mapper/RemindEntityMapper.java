@@ -6,9 +6,7 @@ import org.mapstruct.Mapping;
 import com.newbarams.ajaja.module.remind.domain.Remind;
 import com.newbarams.ajaja.module.remind.infra.RemindEntity;
 
-@Mapper(
-	componentModel = "spring"
-)
+@Mapper(componentModel = "spring")
 public interface RemindEntityMapper {
 	@Mapping(source = "entity.content", target = "info.content")
 	@Mapping(source = "entity.starts", target = "period.starts")

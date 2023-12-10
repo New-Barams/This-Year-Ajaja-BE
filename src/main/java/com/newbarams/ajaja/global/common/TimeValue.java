@@ -51,7 +51,7 @@ public class TimeValue {
 
 	public Instant parseInstant(int remindMonth, int remindDate, int remindTime) {
 		return Instant.parse(
-			"2024-" + String.format("%02d", remindMonth) + "-" + String.format("%02d", remindDate) + "T"
+			getYear() + "-" + String.format("%02d", remindMonth) + "-" + String.format("%02d", remindDate) + "T"
 				+ String.format("%02d", remindTime) + ":00:00Z");
 	}
 }
