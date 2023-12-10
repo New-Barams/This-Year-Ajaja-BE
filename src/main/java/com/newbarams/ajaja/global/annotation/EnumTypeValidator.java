@@ -6,11 +6,11 @@ import java.util.List;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class EnumInputValidator implements ConstraintValidator<EnumInput, Enum> {
+public class EnumTypeValidator implements ConstraintValidator<EnumType, Enum> {
 	private List<? extends Enum> enumValues;
 
 	@Override
-	public void initialize(EnumInput constraintAnnotation) {
+	public void initialize(EnumType constraintAnnotation) {
 		Class<? extends Enum> enumClass = constraintAnnotation.enumClass();
 		enumValues = Arrays.stream(enumClass.getEnumConstants()).toList();
 	}
