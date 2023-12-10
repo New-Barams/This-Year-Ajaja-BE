@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.newbarams.ajaja.module.feedback.domain.Feedback;
-import com.newbarams.ajaja.module.feedback.domain.repository.FeedbackRepository;
+import com.newbarams.ajaja.module.feedback.domain.FeedbackQueryRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -14,9 +14,9 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class LoadFeedbackService {
-	private final FeedbackRepository feedbackRepository;
+	private final FeedbackQueryRepository feedbackQueryRepository;
 
 	public List<Feedback> loadFeedback(Long planId) {
-		return feedbackRepository.findAllFeedbackByPlanId(planId);
+		return feedbackQueryRepository.findAllFeedbackByPlanId(planId);
 	}
 }

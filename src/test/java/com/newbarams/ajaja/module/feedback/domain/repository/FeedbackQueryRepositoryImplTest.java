@@ -13,19 +13,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.newbarams.ajaja.common.MockTestSupport;
 import com.newbarams.ajaja.module.feedback.domain.Feedback;
+import com.newbarams.ajaja.module.feedback.domain.FeedbackRepository;
+import com.newbarams.ajaja.module.feedback.infra.FeedbackQueryRepositoryImpl;
 
 @SpringBootTest
 @Transactional
-class FeedbackRepositoryCustomImplTest extends MockTestSupport {
+class FeedbackQueryRepositoryImplTest extends MockTestSupport {
 	@Autowired
-	private FeedbackRepositoryCustomImpl feedbackRepositoryCustom;
+	private FeedbackQueryRepositoryImpl feedbackRepositoryCustom;
 	@Autowired
 	private FeedbackRepository feedbackRepository;
 	private Feedback feedback;
 
 	@BeforeEach
 	void setUp() {
-		feedback = feedbackRepository.save(monkey.giveMeBuilder(Feedback.class)
+		feedbackRepository.save(monkey.giveMeBuilder(Feedback.class)
 			.set("isDeleted", false)
 			.set("planId", 1L)
 			.set("createdAt", Instant.now())

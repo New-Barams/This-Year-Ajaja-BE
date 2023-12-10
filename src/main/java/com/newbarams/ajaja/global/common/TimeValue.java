@@ -21,6 +21,10 @@ public class TimeValue {
 		zonedDateTime = ZonedDateTime.ofInstant(instant, ZoneId.of("Asia/Seoul"));
 	}
 
+	public Instant now() {
+		return instant;
+	}
+
 	public int getYear() {
 		return zonedDateTime.getYear();
 	}
@@ -43,5 +47,11 @@ public class TimeValue {
 
 	public LocalDateTime toLocalDateTime() {
 		return zonedDateTime.toLocalDateTime();
+	}
+
+	public Instant parseInstant(int remindMonth, int remindDate, int remindTime) {
+		return Instant.parse(
+			"2024-" + String.format("%02d", remindMonth) + "-" + String.format("%02d", remindDate) + "T"
+				+ String.format("%02d", remindTime) + ":00:00Z");
 	}
 }

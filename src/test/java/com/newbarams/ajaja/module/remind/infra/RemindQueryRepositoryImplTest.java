@@ -13,27 +13,25 @@ import org.springframework.transaction.annotation.Transactional;
 import com.newbarams.ajaja.common.MockTestSupport;
 import com.newbarams.ajaja.module.feedback.domain.Feedback;
 import com.newbarams.ajaja.module.plan.domain.Plan;
-import com.newbarams.ajaja.module.remind.domain.Remind;
-import com.newbarams.ajaja.module.remind.domain.repository.RemindQueryRepository;
-import com.newbarams.ajaja.module.remind.domain.repository.RemindRepository;
+import com.newbarams.ajaja.module.remind.domain.RemindRepository;
 import com.newbarams.ajaja.module.remind.dto.RemindResponse;
 
 @SpringBootTest
 @Transactional
-class RemindQueryRepositoryTest extends MockTestSupport {
+class RemindQueryRepositoryImplTest extends MockTestSupport {
 	@Autowired
-	private RemindQueryRepository remindQueryRepository;
+	private RemindQueryRepositoryImpl remindQueryRepositoryImpl;
 	@Autowired
 	private RemindRepository remindRepository;
-	private Remind remind;
+	private RemindEntity remind;
 	private Plan plan;
 	private Feedback feedback;
 
 	@BeforeEach
 	void setUp() {
-		remind = remindRepository.save(monkey.giveMeBuilder(Remind.class)
+		remind = remindRepository.save(monkey.giveMeBuilder(RemindEntity.class)
 			.set("planId", 1L)
-			.set("remindType", Remind.Type.PLAN)
+			.set("remindType", RemindEntity.Type.PLAN)
 			.set("isDeleted", false)
 			.sample());
 		feedback = monkey.giveMeBuilder(Feedback.class)
@@ -65,7 +63,8 @@ class RemindQueryRepositoryTest extends MockTestSupport {
 			.sample();
 
 		// when
-		RemindResponse.CommonResponse reminds = remindQueryRepository.findAllRemindByPlanId(plan, List.of(feedback));
+		RemindResponse.CommonResponse reminds = remindQueryRepositoryImpl.findAllRemindByPlanId(plan,
+			List.of(feedback));
 
 		// then
 		Assertions.assertThat(reminds.sentRemindResponses().size()).isZero();

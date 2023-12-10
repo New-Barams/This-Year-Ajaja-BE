@@ -9,33 +9,23 @@ import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.newbarams.ajaja.common.MockTestSupport;
 import com.newbarams.ajaja.module.feedback.domain.Achieve;
 import com.newbarams.ajaja.module.feedback.domain.Feedback;
-import com.newbarams.ajaja.module.feedback.domain.repository.FeedbackRepository;
+import com.newbarams.ajaja.module.feedback.domain.FeedbackQueryRepository;
 import com.newbarams.ajaja.module.plan.application.UpdatePlanAchieveService;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 
-import com.navercorp.fixturemonkey.FixtureMonkey;
-import com.navercorp.fixturemonkey.api.introspector.FieldReflectionArbitraryIntrospector;
-import com.navercorp.fixturemonkey.jakarta.validation.plugin.JakartaValidationPlugin;
-
-@ExtendWith(MockitoExtension.class)
-class UpdateFeedbackServiceTest {
-	private final FixtureMonkey sut = FixtureMonkey.builder()
-		.objectIntrospector(FieldReflectionArbitraryIntrospector.INSTANCE)
-		.plugin(new JakartaValidationPlugin())
-		.build();
+class UpdateFeedbackServiceTest extends MockTestSupport {
 
 	@InjectMocks
 	private UpdateFeedbackService updateFeedbackService;
 
 	@Mock
-	private FeedbackRepository feedbackRepository;
+	private FeedbackQueryRepository feedbackQueryRepository;
 
 	@Mock
 	private UpdatePlanAchieveService updatePlanAchieveService;
@@ -50,14 +40,14 @@ class UpdateFeedbackServiceTest {
 		@DisplayName("기간 내에 피드백을 시행할 경우 성공한다.")
 		void updateTest_Success_WithNoException() {
 			// given
-			List<Feedback> feedbacks = sut.giveMe(Feedback.class, 2);
+			List<Feedback> feedbacks = monkey.giveMe(Feedback.class, 2);
 
-			Plan plan = sut.giveMeOne(Plan.class);
+			Plan plan = monkey.giveMeOne(Plan.class);
 
 			// mock
-			given(feedbackRepository.findById(any())).willReturn(Optional.of(mockFeedback));
+			given(feedbackQueryRepository.findByFeedbackId(any())).willReturn(Optional.of(mockFeedback));
 			doNothing().when(updatePlanAchieveService).updatePlanAchieve(anyLong(), anyInt());
-			given(feedbackRepository.findAllFeedbackByPlanId(any())).willReturn(feedbacks);
+			given(feedbackQueryRepository.findAllFeedbackByPlanId(any())).willReturn(feedbacks);
 
 			// when,then
 			assertThatNoException().isThrownBy(
@@ -70,7 +60,7 @@ class UpdateFeedbackServiceTest {
 		@DisplayName("데드라인이 지난 피드백을 할 경우 예외를 던진다.")
 		void updateTest_Fail_ByIllegalAccessException() {
 			// given
-			given(feedbackRepository.findById(any())).willReturn(Optional.of(mockFeedback));
+			given(feedbackQueryRepository.findByFeedbackId(any())).willReturn(Optional.of(mockFeedback));
 
 			// when,then
 			assertThatNoException().isThrownBy(
