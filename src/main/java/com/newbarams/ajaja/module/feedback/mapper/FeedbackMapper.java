@@ -9,14 +9,14 @@ import com.newbarams.ajaja.module.feedback.domain.Feedback;
 import com.newbarams.ajaja.module.feedback.infra.FeedbackEntity;
 
 @Mapper(componentModel = "spring")
-public interface FeedbackEntityMapper {
+public interface FeedbackMapper {
 	@Mapping(source = "entity.id", target = "id")
 	@Mapping(target = "createdAt", expression = "java(entity.getCreatedAt())")
 	@Mapping(target = "updatedAt", expression = "java(entity.getUpdatedAt())")
-	Feedback mapDomainFrom(FeedbackEntity entity);
+	Feedback toDomain(FeedbackEntity entity);
 
-	List<Feedback> mapDomainFrom(List<FeedbackEntity> entities);
+	List<Feedback> toDomain(List<FeedbackEntity> entities);
 
 	@Mapping(target = "deleted", expression = "java(false)")
-	FeedbackEntity mapEntityFrom(Feedback feedback);
+	FeedbackEntity toEntity(Feedback feedback);
 }
