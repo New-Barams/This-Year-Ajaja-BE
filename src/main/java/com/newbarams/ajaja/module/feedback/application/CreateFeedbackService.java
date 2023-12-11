@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 public class CreateFeedbackService {
 	private final FeedbackRepository feedbackRepository;
 
-	public void createFeedback(Long userId, Long planId) {
+	public void create(Long userId, Long planId) {
 		Feedback feedback = Feedback.create(userId, planId);
 
 		feedbackRepository.save(feedback);
