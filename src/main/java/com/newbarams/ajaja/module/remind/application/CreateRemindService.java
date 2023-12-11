@@ -22,12 +22,9 @@ public class CreateRemindService {
 	private final RemindRepository remindRepository;
 
 	public void createRemind(Long userId, Long planId, String message, RemindInfo remindInfo) {
-		int remindMonth = new TimeValue().getMonth();
-		int remindTime = remindInfo.getRemindTime();
-
-		Instant time = new TimeValue().parseInstant(remindMonth, remindInfo.getRemindDate(), remindTime);
-
 		Info info = new Info(message);
+
+		Instant time = new TimeValue().now();
 		Period period = new Period(time, time.plus(31, ChronoUnit.DAYS));
 		Remind remind = Remind.plan(userId, planId, info, period);
 
