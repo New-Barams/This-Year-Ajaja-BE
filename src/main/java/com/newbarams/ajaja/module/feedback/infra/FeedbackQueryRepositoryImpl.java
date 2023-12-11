@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.newbarams.ajaja.global.common.TimeValue;
 import com.newbarams.ajaja.module.feedback.domain.Feedback;
 import com.newbarams.ajaja.module.feedback.domain.FeedbackQueryRepository;
-import com.newbarams.ajaja.module.feedback.mapper.FeedbackEntityMapper;
+import com.newbarams.ajaja.module.feedback.mapper.FeedbackMapper;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FeedbackQueryRepositoryImpl implements FeedbackQueryRepository {
 	private final JPAQueryFactory queryFactory;
-	private final FeedbackEntityMapper mapper;
+	private final FeedbackMapper mapper;
 
 	@Override
 	public List<Feedback> findAllFeedbackByPlanId(Long planId) {
@@ -28,7 +28,7 @@ public class FeedbackQueryRepositoryImpl implements FeedbackQueryRepository {
 			.orderBy(feedbackEntity.createdAt.asc())
 			.fetch();
 
-		return mapper.mapDomainFrom(entities);
+		return mapper.toDomain(entities);
 	}
 
 	@Override
@@ -37,7 +37,7 @@ public class FeedbackQueryRepositoryImpl implements FeedbackQueryRepository {
 			.where(feedbackEntity.id.eq(feedbackId))
 			.fetchOne();
 
-		return Optional.of(mapper.mapDomainFrom(entity));
+		return Optional.of(mapper.toDomain(entity));
 	}
 
 	@Override
