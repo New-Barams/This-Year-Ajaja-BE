@@ -1,7 +1,6 @@
 package com.newbarams.ajaja.module.feedback.domain;
 
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 
 import com.newbarams.ajaja.global.common.SelfValidating;
 import com.newbarams.ajaja.global.common.TimeValue;
@@ -60,9 +59,7 @@ public class Feedback extends SelfValidating<Feedback> {
 	}
 
 	public void checkDeadline() {
-		Instant deadLine = createdAt.plus(31, ChronoUnit.DAYS);
-
-		if (new TimeValue().now().isAfter(deadLine)) {
+		if (TimeValue.check(this.createdAt)) {
 			throw new AjajaException(ErrorCode.EXPIRED_FEEDBACK);
 		}
 	}

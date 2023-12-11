@@ -54,4 +54,8 @@ public class TimeValue {
 			getYear() + "-" + String.format("%02d", remindMonth) + "-" + String.format("%02d", remindDate) + "T"
 				+ String.format("%02d", remindTime) + ":00:00Z");
 	}
+
+	public static boolean check(Instant createdAt) {
+		return Instant.now().isAfter(createdAt.plus(31, ChronoUnit.DAYS));
+	}
 }
