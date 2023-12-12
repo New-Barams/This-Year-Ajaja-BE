@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,20 +24,13 @@ import com.newbarams.ajaja.module.plan.application.LoadPlanService;
 import com.newbarams.ajaja.module.plan.application.UpdatePlanService;
 import com.newbarams.ajaja.module.remind.application.LoadRemindInfoService;
 import com.newbarams.ajaja.module.remind.application.LoadSentRemindInfoService;
-import com.newbarams.ajaja.module.user.application.ChangeReceiveTypeService;
-import com.newbarams.ajaja.module.user.application.LoginService;
-import com.newbarams.ajaja.module.user.application.LogoutService;
-import com.newbarams.ajaja.module.user.application.ReissueTokenService;
-import com.newbarams.ajaja.module.user.application.RenewNicknameService;
-import com.newbarams.ajaja.module.user.application.SendVerificationEmailService;
-import com.newbarams.ajaja.module.user.application.VerifyCertificationService;
-import com.newbarams.ajaja.module.user.application.WithdrawService;
+import com.newbarams.ajaja.module.user.application.service.UserMockBeans;
 import com.newbarams.ajaja.module.user.domain.UserQueryRepository;
 
 /**
  * Supports Cached Context On WebMvcTest with Monkey <br>
- * Scan Controllers By Annotation and Manage MockBeans <br>
- * To Avoid Authentication Errors Better Use With @ApiTest
+ * Scan All Controllers By Annotation and Manage MockBeans <br>
+ * When Authentication is required USE @ApiTest
  * @see ApiTest
  * @author hejow
  */
@@ -44,33 +38,18 @@ import com.newbarams.ajaja.module.user.domain.UserQueryRepository;
 	includeFilters = @Filter(type = FilterType.ANNOTATION, classes = RestController.class),
 	excludeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, classes = MockController.class)
 )
+@Import(UserMockBeans.class)
 public abstract class WebMvcTestSupport extends MonkeySupport {
+	protected static final String USER_END_POINT = "/users";
+
 	@Autowired
 	protected MockMvc mockMvc;
 	@Autowired
 	protected ObjectMapper objectMapper;
 
-	// Auth
-	@MockBean
-	protected LoginService loginService;
-	@MockBean
-	protected ReissueTokenService reissueTokenService;
-
 	// User
 	@MockBean
-	protected LogoutService logoutService;
-	@MockBean
-	protected WithdrawService withdrawService;
-	@MockBean
 	protected UserQueryRepository userQueryRepository;
-	@MockBean
-	protected RenewNicknameService renewNicknameService;
-	@MockBean
-	protected ChangeReceiveTypeService changeReceiveTypeService;
-	@MockBean
-	protected VerifyCertificationService verifyCertificationService;
-	@MockBean
-	protected SendVerificationEmailService sendVerificationEmailService;
 
 	// Plan
 	@MockBean
