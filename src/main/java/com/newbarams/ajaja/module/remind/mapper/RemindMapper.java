@@ -1,53 +1,21 @@
 package com.newbarams.ajaja.module.remind.mapper;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-import org.springframework.stereotype.Component;
+import com.newbarams.ajaja.module.remind.domain.Remind;
+import com.newbarams.ajaja.module.remind.infra.RemindEntity;
 
-import com.newbarams.ajaja.module.plan.domain.Message;
-import com.newbarams.ajaja.module.plan.domain.Plan;
-import com.newbarams.ajaja.module.remind.dto.RemindResponse;
+@Mapper(componentModel = "spring")
+public interface RemindMapper {
+	@Mapping(source = "entity.content", target = "info.content")
+	@Mapping(source = "entity.starts", target = "period.starts")
+	@Mapping(source = "entity.ends", target = "period.ends")
+	Remind toDomain(RemindEntity entity);
 
-@Component
-public class RemindMapper {
-
-	public RemindResponse.CommonResponse toFutureRemind(
-		Plan plan
-	) {
-		List<RemindResponse.FutureResponse> futureResponses = new ArrayList<>();
-
-		int remindTerm = plan.getRemindTerm();
-		int remindMonth = plan.getRemindMonth();
-		List<Message> messages = plan.getMessages();
-
-		for (Message message : messages) {
-			futureResponses.add(
-				new RemindResponse.FutureResponse(
-					0L,
-					message.getContent(),
-					remindMonth,
-					plan.getRemindDate(),
-					0,
-					false,
-					false,
-					false,
-					0,
-					0
-				));
-
-			remindMonth += remindTerm;
-		}
-
-		return new RemindResponse.CommonResponse(
-			plan.getRemindTimeName(),
-			plan.getRemindDate(),
-			plan.getRemindTerm(),
-			plan.getRemindTotalPeriod(),
-			plan.getIsRemindable(),
-			Collections.EMPTY_LIST,
-			futureResponses
-		);
-	}
+	@Mapping(source = "remind.info.content", target = "content")
+	@Mapping(source = "remind.period.starts", target = "starts")
+	@Mapping(source = "remind.period.ends", target = "ends")
+	@Mapping(target = "deleted", expression = "java(false)")
+	RemindEntity toEntity(Remind remind);
 }
