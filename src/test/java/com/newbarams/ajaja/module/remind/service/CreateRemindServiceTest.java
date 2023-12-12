@@ -10,7 +10,6 @@ import org.mockito.Mock;
 import com.newbarams.ajaja.common.MockTestSupport;
 import com.newbarams.ajaja.module.plan.domain.RemindInfo;
 import com.newbarams.ajaja.module.remind.application.CreateRemindService;
-import com.newbarams.ajaja.module.remind.domain.Remind;
 import com.newbarams.ajaja.module.remind.domain.RemindRepository;
 
 class CreateRemindServiceTest extends MockTestSupport {
@@ -31,6 +30,6 @@ class CreateRemindServiceTest extends MockTestSupport {
 		createRemindService.createRemind(1L, 1L, message, info);
 
 		// then
-		then(remindRepository).should(times(1)).save((Remind)any());
+		then(remindRepository).should(times(1)).save(any());
 	}
 }
