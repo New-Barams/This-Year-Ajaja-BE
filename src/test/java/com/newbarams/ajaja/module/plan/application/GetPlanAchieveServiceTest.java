@@ -9,31 +9,21 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.newbarams.ajaja.common.support.MockTestSupport;
+import com.newbarams.ajaja.global.exception.AjajaException;
 import com.newbarams.ajaja.module.feedback.domain.Feedback;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.domain.repository.PlanRepository;
 
-import com.navercorp.fixturemonkey.FixtureMonkey;
-import com.navercorp.fixturemonkey.api.introspector.FieldReflectionArbitraryIntrospector;
-import com.navercorp.fixturemonkey.jakarta.validation.plugin.JakartaValidationPlugin;
-
-@ExtendWith(MockitoExtension.class)
-class GetPlanAchieveServiceTest {
+class GetPlanAchieveServiceTest extends MockTestSupport {
 	@InjectMocks
 	private GetPlanAchieveService getPlanAchieveService;
 
 	@Mock
 	private PlanRepository planRepository;
-
-	private final FixtureMonkey sut = FixtureMonkey.builder()
-		.objectIntrospector(FieldReflectionArbitraryIntrospector.INSTANCE)
-		.plugin(new JakartaValidationPlugin())
-		.build();
 
 	@Test
 	@DisplayName("조회하고 싶은 계획의 피드백을 통틀어서 달성률의 평균을 매긴다.")
@@ -63,7 +53,7 @@ class GetPlanAchieveServiceTest {
 		given(planRepository.findById(any())).willReturn(Optional.empty());
 
 		// then
-		assertThatThrownBy(() ->
-			getPlanAchieveService.calculatePlanAchieve(1L));
+		assertThatExceptionOfType(AjajaException.class)
+			.isThrownBy(() -> getPlanAchieveService.calculatePlanAchieve(1L));
 	}
 }

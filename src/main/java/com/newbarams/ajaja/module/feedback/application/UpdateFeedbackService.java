@@ -7,33 +7,31 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.newbarams.ajaja.global.exception.AjajaException;
 import com.newbarams.ajaja.module.feedback.domain.Feedback;
-import com.newbarams.ajaja.module.feedback.domain.repository.FeedbackRepository;
+import com.newbarams.ajaja.module.feedback.domain.FeedbackQueryRepository;
 import com.newbarams.ajaja.module.plan.application.UpdatePlanAchieveService;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class UpdateFeedbackService {
-	private final FeedbackRepository feedbackRepository;
+	private final FeedbackQueryRepository feedbackQueryRepository;
 	private final UpdatePlanAchieveService updatePlanAchieveService;
 
-	@Transactional
 	public void updateFeedback(Long feedbackId, int rate) {
-		Feedback feedback = feedbackRepository.findById(feedbackId)
+		Feedback feedback = feedbackQueryRepository.findByFeedbackId(feedbackId)
 			.orElseThrow(() -> AjajaException.withId(feedbackId, NOT_FOUND_FEEDBACK));
 
-		// feedback.checkDeadline();
-		feedback.updateAchieve(rate);
+		feedback.checkDeadline();
+		feedbackQueryRepository.update(feedbackId, feedback.getAchieveName(rate));
 
 		Long planId = feedback.getPlanId();
-
 		updatePlanAchieve(planId);
 	}
 
 	private void updatePlanAchieve(Long planId) {
-		int feedbackAverage = (int)feedbackRepository.findAllFeedbackByPlanId(planId)
+		int feedbackAverage = (int)feedbackQueryRepository.findAllFeedbackByPlanId(planId)
 			.stream()
 			.mapToInt(Feedback::getRate)
 			.average()

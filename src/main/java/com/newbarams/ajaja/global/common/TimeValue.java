@@ -1,24 +1,27 @@
 package com.newbarams.ajaja.global.common;
 
-import java.sql.Timestamp;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 
 public class TimeValue {
+	private static final String DEFAULT_TIME_ZONE = "Asia/Seoul";
+
 	private final Instant instant;
 	private final ZonedDateTime zonedDateTime;
 
-	public TimeValue() {
-		this.instant = Instant.now();
-		zonedDateTime = ZonedDateTime.ofInstant(instant, ZoneId.of("Asia/Seoul"));
-	}
-
 	public TimeValue(Instant instant) {
 		this.instant = instant;
-		zonedDateTime = ZonedDateTime.ofInstant(instant, ZoneId.of("Asia/Seoul"));
+		zonedDateTime = ZonedDateTime.ofInstant(instant, ZoneId.of(DEFAULT_TIME_ZONE));
+	}
+
+	public TimeValue() {
+		this(Instant.now());
+	}
+
+	public Instant now() {
+		return instant;
 	}
 
 	public int getYear() {
@@ -34,14 +37,10 @@ public class TimeValue {
 	}
 
 	public ZonedDateTime oneMonthLater() {
-		return ZonedDateTime.ofInstant(instant.plus(31, ChronoUnit.DAYS), ZoneId.of("Asia/Seoul"));
+		return ZonedDateTime.ofInstant(instant.plus(31, ChronoUnit.DAYS), ZoneId.of(DEFAULT_TIME_ZONE));
 	}
 
-	public Timestamp toTimeStamp() {
-		return Timestamp.valueOf(instant.toString());
-	}
-
-	public LocalDateTime toLocalDateTime() {
-		return zonedDateTime.toLocalDateTime();
+	public static boolean check(Instant createdAt) {
+		return Instant.now().isAfter(createdAt.plus(31, ChronoUnit.DAYS));
 	}
 }

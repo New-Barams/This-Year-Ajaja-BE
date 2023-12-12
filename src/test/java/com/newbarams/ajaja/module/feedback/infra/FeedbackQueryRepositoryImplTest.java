@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.feedback.domain.repository;
+package com.newbarams.ajaja.module.feedback.infra;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -14,12 +14,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.newbarams.ajaja.common.support.MockTestSupport;
 import com.newbarams.ajaja.module.feedback.domain.Feedback;
+import com.newbarams.ajaja.module.feedback.domain.FeedbackRepository;
 
 @SpringBootTest
 @Transactional
-class FeedbackRepositoryCustomImplTest extends MockTestSupport {
+class FeedbackQueryRepositoryImplTest extends MockTestSupport {
 	@Autowired
-	private FeedbackRepositoryCustomImpl feedbackRepositoryCustom;
+	private FeedbackQueryRepositoryImpl feedbackRepositoryCustom;
 	@Autowired
 	private FeedbackRepository feedbackRepository;
 
@@ -28,7 +29,6 @@ class FeedbackRepositoryCustomImplTest extends MockTestSupport {
 	@BeforeEach
 	void setUp() {
 		feedback = feedbackRepository.save(sut.giveMeBuilder(Feedback.class)
-			.set("isDeleted", false)
 			.set("planId", 1L)
 			.set("createdAt", Instant.now())
 			.sample());

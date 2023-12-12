@@ -3,24 +3,28 @@ package com.newbarams.ajaja.module.remind.mapper;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
 import com.newbarams.ajaja.global.common.TimeValue;
 import com.newbarams.ajaja.module.feedback.domain.Feedback;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.remind.domain.Remind;
 import com.newbarams.ajaja.module.remind.dto.RemindResponse;
+import com.newbarams.ajaja.module.remind.infra.RemindEntity;
 
-@Component
-public class RemindInfoMapper {
-	public List<RemindResponse.SentResponse> mapSentMessagesFrom(
-		List<Remind> reminds,
+@Mapper(componentModel = "spring")
+public interface RemindInfoMapper {
+	RemindMapper mapper = Mappers.getMapper(RemindMapper.class);
+
+	default List<RemindResponse.SentResponse> mapSentMessagesFrom(
+		List<RemindEntity> reminds,
 		List<Feedback> feedbacks
 	) {
 		List<RemindResponse.SentResponse> sentResponses = new ArrayList<>();
 
 		for (int i = 0; i < reminds.size(); i++) {
-			Remind remind = reminds.get(i);
+			Remind remind = mapper.toDomain(reminds.get(i));
 			Feedback feedback = feedbacks.get(i);
 
 			TimeValue startTimeValue = new TimeValue(remind.getStart());
@@ -51,7 +55,7 @@ public class RemindInfoMapper {
 		return sentResponses;
 	}
 
-	public List<RemindResponse.FutureResponse> mapFutureMessagesFrom(
+	default List<RemindResponse.FutureResponse> mapFutureMessagesFrom(
 		Plan plan,
 		int sentRemindNumber,
 		int lastRemindMonth
