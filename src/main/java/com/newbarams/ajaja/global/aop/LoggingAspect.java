@@ -31,8 +31,8 @@ public class LoggingAspect {
 	}
 
 	private HttpServletRequest extractRequest() {
-		ServletRequestAttributes requestAttributes = (ServletRequestAttributes)RequestContextHolder.getRequestAttributes();
-		return Objects.requireNonNull(requestAttributes).getRequest();
+		ServletRequestAttributes attributes = (ServletRequestAttributes)RequestContextHolder.getRequestAttributes();
+		return Objects.requireNonNull(attributes).getRequest();
 	}
 
 	private long countProceedTime(ProceedingJoinPoint joinPoint) throws Throwable {

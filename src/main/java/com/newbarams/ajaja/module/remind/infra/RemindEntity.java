@@ -31,7 +31,7 @@ public class RemindEntity extends BaseEntity<RemindEntity> {
 
 	@Column(nullable = false)
 	private Long userId;
-	
+
 	@Column(nullable = false)
 	private Long planId;
 
