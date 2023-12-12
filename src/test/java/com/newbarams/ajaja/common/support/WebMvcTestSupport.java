@@ -41,6 +41,8 @@ import com.newbarams.ajaja.module.user.domain.UserQueryRepository;
 @Import(UserMockBeans.class)
 public abstract class WebMvcTestSupport extends MonkeySupport {
 	protected static final String USER_END_POINT = "/users";
+	protected static final String PLAN_END_POINT = "/plans";
+	protected static final String FEEDBACK_END_POINT = "/feedbacks";
 
 	@Autowired
 	protected MockMvc mockMvc;
