@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.feedback.domain.repository;
+package com.newbarams.ajaja.module.feedback.infra;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -21,6 +21,10 @@ public class TimeValue {
 		zonedDateTime = ZonedDateTime.ofInstant(instant, ZoneId.of("Asia/Seoul"));
 	}
 
+	public Instant now() {
+		return instant;
+	}
+
 	public int getYear() {
 		return zonedDateTime.getYear();
 	}
@@ -43,5 +47,9 @@ public class TimeValue {
 
 	public LocalDateTime toLocalDateTime() {
 		return zonedDateTime.toLocalDateTime();
+	}
+
+	public static boolean check(Instant createdAt) {
+		return Instant.now().isAfter(createdAt.plus(31, ChronoUnit.DAYS));
 	}
 }

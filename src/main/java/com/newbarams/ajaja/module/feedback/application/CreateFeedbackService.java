@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.newbarams.ajaja.module.feedback.domain.Feedback;
-import com.newbarams.ajaja.module.feedback.domain.repository.FeedbackRepository;
+import com.newbarams.ajaja.module.feedback.domain.FeedbackRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -14,10 +14,9 @@ import lombok.RequiredArgsConstructor;
 public class CreateFeedbackService {
 	private final FeedbackRepository feedbackRepository;
 
-	public Long createFeedback(Long userId, Long planId) {
+	public void create(Long userId, Long planId) {
 		Feedback feedback = Feedback.create(userId, planId);
-		Feedback saved = feedbackRepository.save(feedback);
 
-		return saved.getId();
+		feedbackRepository.save(feedback);
 	}
 }

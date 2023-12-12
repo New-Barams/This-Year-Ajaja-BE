@@ -1,6 +1,6 @@
-package com.newbarams.ajaja.module.remind.domain.repository;
+package com.newbarams.ajaja.module.remind.infra;
 
-import static com.newbarams.ajaja.module.remind.domain.QRemind.*;
+import static com.newbarams.ajaja.module.remind.infra.QRemindEntity.*;
 
 import java.time.Instant;
 import java.util.Collections;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.newbarams.ajaja.global.common.TimeValue;
 import com.newbarams.ajaja.module.feedback.domain.Feedback;
 import com.newbarams.ajaja.module.plan.domain.Plan;
-import com.newbarams.ajaja.module.remind.domain.Remind;
+import com.newbarams.ajaja.module.remind.domain.RemindQueryRepository;
 import com.newbarams.ajaja.module.remind.dto.RemindResponse;
 import com.newbarams.ajaja.module.remind.mapper.RemindInfoMapper;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -20,18 +20,18 @@ import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class RemindQueryRepository {
+public class RemindQueryRepositoryImpl implements RemindQueryRepository {
 	private final JPAQueryFactory queryFactory;
 	private final RemindInfoMapper remindInfoMapper;
 
 	public RemindResponse.CommonResponse findAllRemindByPlanId(Plan plan, List<Feedback> feedbacks) {
 		Long planId = plan.getId();
 
-		List<Remind> reminds = queryFactory
-			.selectFrom(remind)
-			.where(remind.planId.eq(planId)
-				.and(remind.type.eq(Remind.Type.PLAN)))
-			.orderBy(remind.createdAt.asc())
+		List<RemindEntity> reminds = queryFactory
+			.selectFrom(remindEntity)
+			.where(remindEntity.planId.eq(planId)
+				.and(remindEntity.type.eq("PLAN")))
+			.orderBy(remindEntity.createdAt.asc())
 			.fetch();
 
 		if (reminds.isEmpty()) {
@@ -41,7 +41,7 @@ public class RemindQueryRepository {
 		List<RemindResponse.SentResponse> sentMessages
 			= remindInfoMapper.mapSentMessagesFrom(reminds, feedbacks);
 
-		Instant lastRemindTime = reminds.get(sentMessages.size() - 1).getStart();
+		Instant lastRemindTime = reminds.get(sentMessages.size() - 1).getStarts();
 		TimeValue timeValue = new TimeValue(lastRemindTime);
 		int lastRemindMonth = timeValue.getMonth();
 
