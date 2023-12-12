@@ -32,7 +32,7 @@ class RenewNicknameServiceTest extends MockTestSupport {
 			.sample();
 
 		Nickname oldNickname = user.getNickname();
-		given(retrieveUserService.loadExistUserById(any())).willReturn(user);
+		given(retrieveUserService.loadExistById(any())).willReturn(user);
 		given(userRepository.save(any())).willReturn(user);
 
 		// when

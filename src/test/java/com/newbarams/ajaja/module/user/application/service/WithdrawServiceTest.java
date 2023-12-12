@@ -34,7 +34,7 @@ class WithdrawServiceTest extends MockTestSupport {
 			.set("deleted", false)
 			.sample();
 
-		given(retrieveUserService.loadExistUserById(any())).willReturn(user);
+		given(retrieveUserService.loadExistById(any())).willReturn(user);
 		willDoNothing().given(disconnectOauthService).disconnect(any());
 		willDoNothing().given(disablePlanService).disable(any());
 
@@ -42,7 +42,7 @@ class WithdrawServiceTest extends MockTestSupport {
 		withdrawService.withdraw(user.getId());
 
 		// then
-		then(retrieveUserService).should(times(1)).loadExistUserById(any());
+		then(retrieveUserService).should(times(1)).loadExistById(any());
 		then(disconnectOauthService).should(times(1)).disconnect(any());
 		then(disablePlanService).should(times(1)).disable(any());
 		then(userRepository).should(times(1)).save(any());

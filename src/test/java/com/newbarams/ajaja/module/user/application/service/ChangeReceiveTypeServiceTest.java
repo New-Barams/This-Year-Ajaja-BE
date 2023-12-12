@@ -31,14 +31,14 @@ class ChangeReceiveTypeServiceTest extends MockTestSupport {
 			.set("email", new Email("Ajaja@me.com"))
 			.sample();
 
-		given(retrieveUserService.loadExistUserById(anyLong())).willReturn(user);
+		given(retrieveUserService.loadExistById(anyLong())).willReturn(user);
 		given(userRepository.save(any())).willReturn(user);
 
 		// when
 		changeReceiveTypeService.change(user.getId(), type);
 
 		// then
-		then(retrieveUserService).should(times(1)).loadExistUserById(anyLong());
+		then(retrieveUserService).should(times(1)).loadExistById(anyLong());
 		then(userRepository).should(times(1)).save(any());
 	}
 }

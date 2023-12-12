@@ -26,7 +26,7 @@ class SendVerificationEmailService implements SendVerificationEmailUseCase {
 	}
 
 	private void validateEmail(Long id, String email) {
-		User user = retrieveUserService.loadExistUserById(id);
+		User user = retrieveUserService.loadExistById(id);
 		user.validateEmail(email);
 	}
 }

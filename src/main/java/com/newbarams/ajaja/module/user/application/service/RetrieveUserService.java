@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 class RetrieveUserService {
 	private final UserRepository userRepository;
 
-	public User loadExistUserById(Long id) {
+	public User loadExistById(Long id) {
 		return userRepository.findById(id)
 			.orElseThrow(() -> new AjajaException(USER_NOT_FOUND));
 	}

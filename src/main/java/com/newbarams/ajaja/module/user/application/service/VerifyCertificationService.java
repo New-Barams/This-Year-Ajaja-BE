@@ -26,7 +26,7 @@ class VerifyCertificationService implements VerifyCertificationUseCase {
 
 	@Override
 	public void verify(Long userId, String certification) {
-		User user = retrieveUserService.loadExistUserById(userId);
+		User user = retrieveUserService.loadExistById(userId);
 		Verification verification = cacheUtil.getEmailVerification(userId);
 		verifyCertification(verification.getCertification(), certification);
 		user.verified(verification.getTarget());

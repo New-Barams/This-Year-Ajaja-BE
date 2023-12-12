@@ -20,7 +20,7 @@ class WithdrawService implements WithdrawUseCase {
 
 	@Override
 	public void withdraw(Long userId) {
-		User user = retrieveUserService.loadExistUserById(userId);
+		User user = retrieveUserService.loadExistById(userId);
 		disconnectOauthService.disconnect(user.getOauthId());
 		disablePlanService.disable(userId);
 		user.delete();

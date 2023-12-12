@@ -18,7 +18,7 @@ class RenewNicknameService implements RenewNicknameUseCase {
 
 	@Override
 	public String renew(Long id) {
-		User user = retrieveUserService.loadExistUserById(id);
+		User user = retrieveUserService.loadExistById(id);
 		String newNickname = user.updateNickname();
 		userRepository.save(user);
 		return newNickname;

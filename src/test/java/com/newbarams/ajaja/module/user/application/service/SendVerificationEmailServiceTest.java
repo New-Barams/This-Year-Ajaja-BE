@@ -33,17 +33,18 @@ class SendVerificationEmailServiceTest extends MonkeySupport {
 		// given
 		Long userId = sut.giveMeOne(Long.class);
 		String email = "Ajaja@me.com";
+
 		User user = sut.giveMeBuilder(User.class)
 			.set("email", new Email(email))
 			.sample();
 
-		given(retrieveUserService.loadExistUserById(any())).willReturn(user);
+		given(retrieveUserService.loadExistById(any())).willReturn(user);
 
 		// when
 		sendVerificationEmailService.sendVerification(userId, email);
 
 		// then
-		then(retrieveUserService).should(times(1)).loadExistUserById(any());
+		then(retrieveUserService).should(times(1)).loadExistById(any());
 		then(sendCertificationService).should(times(1)).send(any(), any());
 
 		Verification verification = cacheUtil.getEmailVerification(userId);

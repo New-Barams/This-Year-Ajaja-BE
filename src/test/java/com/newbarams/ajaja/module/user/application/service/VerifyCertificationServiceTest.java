@@ -38,6 +38,7 @@ class VerifyCertificationServiceTest extends MockTestSupport {
 	void setup() {
 		user = sut.giveMeBuilder(User.class)
 			.set("email", new Email(DEFAULT_EMAIL))
+			.set("deleted", false)
 			.sample();
 	}
 
@@ -48,14 +49,14 @@ class VerifyCertificationServiceTest extends MockTestSupport {
 		String certification = RandomCertificationGenerator.generate();
 		cacheUtil.saveEmailVerification(user.getId(), DEFAULT_EMAIL, certification);
 
-		given(retrieveUserService.loadExistUserById(anyLong())).willReturn(user);
+		given(retrieveUserService.loadExistById(anyLong())).willReturn(user);
 		given(userRepository.save(any())).willReturn(user);
 
 		// when
 		verifyCertificationService.verify(user.getId(), certification);
 
 		// then
-		then(retrieveUserService).should(times(1)).loadExistUserById(anyLong());
+		then(retrieveUserService).should(times(1)).loadExistById(anyLong());
 		then(userRepository).should(times(1)).save(any());
 		assertThat(user.getRemindEmail()).isEqualTo(DEFAULT_EMAIL);
 		assertThat(user.isVerified()).isTrue();

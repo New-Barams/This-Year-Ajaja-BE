@@ -18,7 +18,7 @@ class ChangeReceiveTypeService implements ChangeReceiveTypeUseCase {
 
 	@Override
 	public void change(Long userId, User.ReceiveType receiveType) {
-		User user = retrieveUserService.loadExistUserById(userId);
+		User user = retrieveUserService.loadExistById(userId);
 		user.updateReceive(receiveType);
 		userRepository.save(user);
 	}
