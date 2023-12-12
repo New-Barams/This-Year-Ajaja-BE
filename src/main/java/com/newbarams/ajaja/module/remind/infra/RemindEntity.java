@@ -8,8 +8,6 @@ import com.newbarams.ajaja.global.common.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -26,10 +24,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RemindEntity extends BaseEntity<RemindEntity> {
-	public enum Type {
-		PLAN,
-		AJAJA
-	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,9 +35,8 @@ public class RemindEntity extends BaseEntity<RemindEntity> {
 	@Column(nullable = false)
 	private Long planId;
 
-	@Enumerated(value = EnumType.STRING)
 	@Column(nullable = false, name = "remind_type", length = 20)
-	private Type type;
+	private String type;
 
 	@Column(nullable = false)
 	private boolean deleted;

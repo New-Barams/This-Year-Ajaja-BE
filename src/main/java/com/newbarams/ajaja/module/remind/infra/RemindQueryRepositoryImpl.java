@@ -30,7 +30,7 @@ public class RemindQueryRepositoryImpl implements RemindQueryRepository {
 		List<RemindEntity> reminds = queryFactory
 			.selectFrom(remindEntity)
 			.where(remindEntity.planId.eq(planId)
-				.and(remindEntity.type.eq(RemindEntity.Type.PLAN)))
+				.and(remindEntity.type.eq("PLAN")))
 			.orderBy(remindEntity.createdAt.asc())
 			.fetch();
 
