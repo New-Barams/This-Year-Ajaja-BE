@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.newbarams.ajaja.global.common.AjajaResponse;
-import com.newbarams.ajaja.module.user.application.port.in.LoginUseCase;
 import com.newbarams.ajaja.module.user.application.port.in.ReissueTokenUseCase;
 import com.newbarams.ajaja.module.user.dto.UserRequest;
 import com.newbarams.ajaja.module.user.dto.UserResponse;
@@ -22,20 +21,8 @@ import lombok.RequiredArgsConstructor;
 @Tag(name = "auth", description = "인증 API")
 @RestController
 @RequiredArgsConstructor
-public class AuthController {
-	private final LoginUseCase loginUseCase;
+class ReissueController {
 	private final ReissueTokenUseCase reissueTokenUseCase;
-
-	@Operation(summary = "로그인 API", description = "인증 서버로부터 발급 받은 인가 코드로 로그인을 시도합니다.", responses = {
-		@ApiResponse(responseCode = "200", description = "성공적으로 로그인하였습니다."),
-		@ApiResponse(responseCode = "400", description = "유효하지 않은 인가 코드입니다."),
-	})
-	@PostMapping("/login")
-	@ResponseStatus(OK)
-	public AjajaResponse<UserResponse.Token> login(@Valid @RequestBody UserRequest.Login request) {
-		UserResponse.Token response = loginUseCase.login(request.getAuthorizationCode(), request.getRedirectUri());
-		return AjajaResponse.ok(response);
-	}
 
 	@Operation(summary = "토큰 재발급 API", description = "기존에 발급받은 토큰으로 새로운 토큰을 재발급할 수 있습니다.", responses = {
 		@ApiResponse(responseCode = "200", description = "성공적으로 토큰을 재발급하였습니다."),

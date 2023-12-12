@@ -22,7 +22,7 @@ class FeedbackRepositoryCustomImplTest extends MockTestSupport {
 	private FeedbackRepositoryCustomImpl feedbackRepositoryCustom;
 	@Autowired
 	private FeedbackRepository feedbackRepository;
-	
+
 	private Feedback feedback;
 
 	@BeforeEach
