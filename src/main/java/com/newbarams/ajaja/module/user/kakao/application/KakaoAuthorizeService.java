@@ -4,8 +4,8 @@ import org.springframework.stereotype.Component;
 
 import com.newbarams.ajaja.infra.feign.kakao.KakaoAuthorizeFeignClient;
 import com.newbarams.ajaja.infra.feign.kakao.KakaoProperties;
-import com.newbarams.ajaja.module.user.application.AuthorizeService;
 import com.newbarams.ajaja.module.user.application.model.AccessToken;
+import com.newbarams.ajaja.module.user.application.service.AuthorizeService;
 import com.newbarams.ajaja.module.user.kakao.model.KakaoTokenRequest;
 
 import lombok.RequiredArgsConstructor;

@@ -4,7 +4,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
-import com.newbarams.ajaja.module.user.application.SendCertificationService;
+import com.newbarams.ajaja.module.user.application.service.SendCertificationService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

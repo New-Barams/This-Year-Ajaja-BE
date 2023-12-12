@@ -5,8 +5,8 @@ import static com.newbarams.ajaja.global.util.BearerTokenUtil.*;
 import org.springframework.stereotype.Component;
 
 import com.newbarams.ajaja.infra.feign.kakao.KakaoProfileFeignClient;
-import com.newbarams.ajaja.module.user.application.GetProfileService;
 import com.newbarams.ajaja.module.user.application.model.Profile;
+import com.newbarams.ajaja.module.user.application.service.GetProfileService;
 
 import lombok.RequiredArgsConstructor;
 
