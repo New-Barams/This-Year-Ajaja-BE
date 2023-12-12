@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.common;
+package com.newbarams.ajaja.common.config;
 
 import java.io.BufferedReader;
 import java.io.IOException;

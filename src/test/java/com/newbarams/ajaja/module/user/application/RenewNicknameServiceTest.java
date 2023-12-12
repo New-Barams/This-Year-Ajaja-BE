@@ -8,7 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import com.newbarams.ajaja.common.MockTestSupport;
+import com.newbarams.ajaja.common.support.MockTestSupport;
+import com.newbarams.ajaja.module.user.domain.Email;
 import com.newbarams.ajaja.module.user.domain.Nickname;
 import com.newbarams.ajaja.module.user.domain.User;
 import com.newbarams.ajaja.module.user.domain.UserRepository;
@@ -27,7 +28,9 @@ class RenewNicknameServiceTest extends MockTestSupport {
 	@DisplayName("닉네임 갱신을 요청하면 새로운 이름으로 변경되어야 한다.")
 	void renew_Success_WithNewNickname() {
 		// given
-		User user = User.init("gmlwh124@naver.com", 1L);
+		User user = sut.giveMeBuilder(User.class)
+			.set("email", new Email("Ajaja@me.com"))
+			.sample();
 
 		Nickname oldNickname = user.getNickname();
 		given(retrieveUserService.loadExistUserById(any())).willReturn(user);

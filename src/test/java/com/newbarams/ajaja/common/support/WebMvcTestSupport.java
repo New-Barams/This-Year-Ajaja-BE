@@ -10,6 +10,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.newbarams.ajaja.common.annotation.ApiTest;
 import com.newbarams.ajaja.global.mock.MockController;
 import com.newbarams.ajaja.module.ajaja.application.SwitchAjajaService;
 import com.newbarams.ajaja.module.feedback.application.GetTotalAchieveService;
@@ -35,12 +36,13 @@ import com.newbarams.ajaja.module.user.domain.UserQueryRepository;
 /**
  * Supports Cached Context On WebMvcTest with Monkey <br>
  * Scan Controllers By Annotation and Manage MockBeans <br>
+ * To Avoid Authentication Errors Better Use With @ApiTest
  * @see ApiTest
  * @author hejow
  */
 @WebMvcTest(
 	includeFilters = @Filter(type = FilterType.ANNOTATION, classes = RestController.class),
-	excludeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {MockController.class})
+	excludeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, classes = MockController.class)
 )
 public abstract class WebMvcTestSupport extends MonkeySupport {
 	@Autowired

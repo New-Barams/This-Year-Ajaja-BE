@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import com.newbarams.ajaja.common.MockTestSupport;
+import com.newbarams.ajaja.common.support.MockTestSupport;
 import com.newbarams.ajaja.infra.feign.kakao.KakaoProperties;
 import com.newbarams.ajaja.infra.feign.kakao.KakaoUnlinkFeignClient;
 
@@ -23,8 +23,8 @@ class KakaoDisconnectOauthServiceTest extends MockTestSupport {
 	@Test
 	void disconnect_Success() {
 		// given
-		Long oauthId = monkey.giveMeOne(Long.class);
-		String adminKey = monkey.giveMeOne(String.class);
+		Long oauthId = sut.giveMeOne(Long.class);
+		String adminKey = sut.giveMeOne(String.class);
 		given(kakaoProperties.getAdminKey()).willReturn(adminKey);
 
 		// when

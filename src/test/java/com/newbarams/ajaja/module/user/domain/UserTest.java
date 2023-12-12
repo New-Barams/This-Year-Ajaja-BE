@@ -8,15 +8,18 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.newbarams.ajaja.common.MonkeySupport;
+import com.newbarams.ajaja.common.support.MonkeySupport;
 
 class UserTest extends MonkeySupport {
-	private static final String DEFAULT_EMAIL = "gmlwh124@naver.com";
+	private static final String DEFAULT_EMAIL = "Ajaja@me.com";
+
 	private User user;
 
 	@BeforeEach
 	void init() {
-		user = User.init(DEFAULT_EMAIL, 1L);
+		user = sut.giveMeBuilder(User.class)
+			.set("email", new Email(DEFAULT_EMAIL))
+			.sample();
 	}
 
 	@ParameterizedTest

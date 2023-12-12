@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import com.newbarams.ajaja.common.MockTestSupport;
+import com.newbarams.ajaja.common.support.MockTestSupport;
 import com.newbarams.ajaja.global.security.jwt.util.JwtGenerator;
 import com.newbarams.ajaja.module.user.application.model.AccessToken;
 import com.newbarams.ajaja.module.user.application.model.Profile;
@@ -39,13 +39,13 @@ class LoginServiceTest extends MockTestSupport {
 	@Nested
 	@DisplayName("로그인 테스트")
 	class LoginTest {
-		private final String email = "gmlwh124@naver.com";
-		private final String authorizationCode = monkey.giveMeOne(String.class);
-		private final String redirectUrl = monkey.giveMeOne(String.class);
-		private final AccessToken accessToken = monkey.giveMeOne(KakaoResponse.Token.class);
+		private final String email = "Ajaja@me.com";
+		private final String authorizationCode = sut.giveMeOne(String.class);
+		private final String redirectUrl = sut.giveMeOne(String.class);
+		private final AccessToken accessToken = sut.giveMeOne(KakaoResponse.Token.class);
 
-		private final Profile profile = monkey.giveMeBuilder(KakaoResponse.UserInfo.class)
-			.set("kakaoAccount", monkey.giveMeBuilder(KakaoAccount.class)
+		private final Profile profile = sut.giveMeBuilder(KakaoResponse.UserInfo.class)
+			.set("kakaoAccount", sut.giveMeBuilder(KakaoAccount.class)
 				.set("email", email)
 				.sample())
 			.sample();

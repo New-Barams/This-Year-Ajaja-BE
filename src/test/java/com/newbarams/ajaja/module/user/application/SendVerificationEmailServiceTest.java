@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import com.newbarams.ajaja.common.MonkeySupport;
-import com.newbarams.ajaja.common.RedisBasedTest;
+import com.newbarams.ajaja.common.annotation.RedisBasedTest;
+import com.newbarams.ajaja.common.support.MonkeySupport;
 import com.newbarams.ajaja.global.cache.CacheUtil;
 import com.newbarams.ajaja.module.user.application.model.Verification;
 import com.newbarams.ajaja.module.user.domain.Email;
@@ -33,9 +33,9 @@ class SendVerificationEmailServiceTest extends MonkeySupport {
 	@DisplayName("이메일 인증 메일을 전송하면 인증 전용 객체가 cache에 잘 저장되어야 한다.")
 	void sendVerification_Success_SavedOnRedis() {
 		// given
-		Long userId = monkey.giveMeOne(Long.class);
-		String email = "gmlwh124@Naver.com";
-		User user = monkey.giveMeBuilder(User.class)
+		Long userId = sut.giveMeOne(Long.class);
+		String email = "Ajaja@me.com";
+		User user = sut.giveMeBuilder(User.class)
 			.set("email", new Email(email))
 			.sample();
 

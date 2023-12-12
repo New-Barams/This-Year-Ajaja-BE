@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import com.newbarams.ajaja.common.MonkeySupport;
-import com.newbarams.ajaja.common.RedisBasedTest;
+import com.newbarams.ajaja.common.annotation.RedisBasedTest;
+import com.newbarams.ajaja.common.support.MonkeySupport;
 
 @RedisBasedTest
 class JwtRemoverTest extends MonkeySupport {
@@ -28,7 +28,7 @@ class JwtRemoverTest extends MonkeySupport {
 	@DisplayName("JWT를 제거하면 캐시에 아무것도 조회되지 않아야 한다.")
 	void remove_Success() {
 		// given
-		Long userId = monkey.giveMeOne(Long.class);
+		Long userId = sut.giveMeOne(Long.class);
 		jwtGenerator.generate(userId);
 
 		// when

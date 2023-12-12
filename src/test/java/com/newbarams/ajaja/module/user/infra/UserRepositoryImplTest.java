@@ -9,7 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.newbarams.ajaja.common.MonkeySupport;
+import com.newbarams.ajaja.common.support.MonkeySupport;
+import com.newbarams.ajaja.module.user.domain.Email;
 import com.newbarams.ajaja.module.user.domain.User;
 
 @SpringBootTest
@@ -22,7 +23,10 @@ class UserRepositoryImplTest extends MonkeySupport {
 
 	@BeforeEach
 	void setup() {
-		user = User.init("gmlwh124@naver.com", 1L);
+		user = sut.giveMeBuilder(User.class)
+			.set("email", new Email("Ajaja@me.com"))
+			.set("deleted", false)
+			.sample();
 	}
 
 	@Test

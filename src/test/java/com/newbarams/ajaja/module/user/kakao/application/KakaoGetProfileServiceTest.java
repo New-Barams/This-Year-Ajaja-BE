@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import com.newbarams.ajaja.common.MockTestSupport;
+import com.newbarams.ajaja.common.support.MockTestSupport;
 import com.newbarams.ajaja.infra.feign.kakao.KakaoProfileFeignClient;
 import com.newbarams.ajaja.module.user.application.model.Profile;
 import com.newbarams.ajaja.module.user.kakao.model.KakaoResponse;
@@ -24,8 +24,8 @@ class KakaoGetProfileServiceTest extends MockTestSupport {
 	@DisplayName("프로필 정보를 요청하면 예상한 이메일과 일치하고 예외가 발생하지 않아야 한다.")
 	void getProfile_Success_WithoutException() {
 		// given
-		String accessToken = monkey.giveMeOne(String.class);
-		KakaoResponse.UserInfo kakaoProfile = monkey.giveMeOne(KakaoResponse.UserInfo.class);
+		String accessToken = sut.giveMeOne(String.class);
+		KakaoResponse.UserInfo kakaoProfile = sut.giveMeOne(KakaoResponse.UserInfo.class);
 		given(kakaoProfileFeignClient.getKakaoProfile(any())).willReturn(kakaoProfile);
 
 		// when

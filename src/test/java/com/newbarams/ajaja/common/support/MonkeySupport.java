@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.common;
+package com.newbarams.ajaja.common.support;
 
 import java.util.List;
 
@@ -9,10 +9,12 @@ import com.navercorp.fixturemonkey.api.introspector.FieldReflectionArbitraryIntr
 import com.navercorp.fixturemonkey.jakarta.validation.plugin.JakartaValidationPlugin;
 
 /**
- * Supporting Monkey Which is based on ConstructorProperties and NEVER return null.
+ * Supports Monkey Which is based on ConstructorProperties and Reflection <br>
+ * NEVER return null.
+ * @author hejow
  */
 public abstract class MonkeySupport {
-	protected final FixtureMonkey monkey = FixtureMonkey.builder()
+	protected final FixtureMonkey sut = FixtureMonkey.builder()
 		.objectIntrospector(new FailoverIntrospector(
 			List.of(
 				FieldReflectionArbitraryIntrospector.INSTANCE,

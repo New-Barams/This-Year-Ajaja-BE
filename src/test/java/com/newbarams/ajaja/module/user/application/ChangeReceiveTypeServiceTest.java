@@ -8,7 +8,7 @@ import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import com.newbarams.ajaja.common.MockTestSupport;
+import com.newbarams.ajaja.common.support.MockTestSupport;
 import com.newbarams.ajaja.module.user.domain.Email;
 import com.newbarams.ajaja.module.user.domain.User;
 import com.newbarams.ajaja.module.user.domain.UserRepository;
@@ -24,19 +24,19 @@ class ChangeReceiveTypeServiceTest extends MockTestSupport {
 	private UserRepository userRepository;
 
 	@ParameterizedTest
-	@EnumSource
-	@DisplayName("유효한 리마인드 타입이 들어오면 예외가 발생하지 않고 수정되어야 한다.")
-	void change_Success_WithoutException(User.ReceiveType receiveType) {
+	@EnumSource(User.ReceiveType.class)
+	@DisplayName("리마인드를 지원하는 종류로 변경할 수 있어야한다.")
+	void change_Success(User.ReceiveType type) {
 		// given
-		User user = monkey.giveMeBuilder(User.class)
-			.set("email", new Email("gmlwh124@Naver.com"))
+		User user = sut.giveMeBuilder(User.class)
+			.set("email", new Email("Ajaja@me.com"))
 			.sample();
 
 		given(retrieveUserService.loadExistUserById(anyLong())).willReturn(user);
 		given(userRepository.save(any())).willReturn(user);
 
 		// when
-		changeReceiveTypeService.change(user.getId(), receiveType);
+		changeReceiveTypeService.change(user.getId(), type);
 
 		// then
 		then(retrieveUserService).should(times(1)).loadExistUserById(anyLong());

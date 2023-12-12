@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.common;
+package com.newbarams.ajaja.common.support;
 
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Import;
 import com.newbarams.ajaja.global.config.QuerydslConfig;
 
 /**
- * Supporting Jpa Slice Test With Monkey And Querydsl
+ * Supports JPA Slice Test with Monkey
  * @author hejow
  */
 @DataJpaTest

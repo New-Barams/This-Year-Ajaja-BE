@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import com.newbarams.ajaja.common.MockTestSupport;
+import com.newbarams.ajaja.common.support.MockTestSupport;
 import com.newbarams.ajaja.global.security.jwt.util.JwtGenerator;
 import com.newbarams.ajaja.global.security.jwt.util.JwtParser;
 import com.newbarams.ajaja.global.security.jwt.util.JwtValidator;
@@ -29,8 +29,8 @@ class ReissueTokenServiceTest extends MockTestSupport {
 	@Test
 	void reissue_Success_WithExpectedCall() {
 		// given
-		Long userId = monkey.giveMeOne(Long.class);
-		UserResponse.Token tokens = monkey.giveMeOne(UserResponse.Token.class);
+		Long userId = sut.giveMeOne(Long.class);
+		UserResponse.Token tokens = sut.giveMeOne(UserResponse.Token.class);
 		given(jwtParser.parseId(anyString())).willReturn(userId);
 		given(jwtGenerator.generate(any())).willReturn(tokens);
 

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import com.newbarams.ajaja.common.MockTestSupport;
+import com.newbarams.ajaja.common.support.MockTestSupport;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.domain.repository.PlanQueryRepository;
 
@@ -24,8 +24,8 @@ class DisablePlanServiceImplTest extends MockTestSupport {
 	@Test
 	void disable_Success() {
 		// given
-		Long userId = monkey.giveMeOne(Long.class);
-		List<Plan> plans = monkey.giveMe(Plan.class, 4);
+		Long userId = sut.giveMeOne(Long.class);
+		List<Plan> plans = sut.giveMe(Plan.class, 4);
 		given(planQueryRepository.findAllCurrentPlansByUserId(any())).willReturn(plans);
 
 		// when

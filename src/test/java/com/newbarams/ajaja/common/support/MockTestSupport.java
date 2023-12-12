@@ -1,11 +1,11 @@
-package com.newbarams.ajaja.common;
+package com.newbarams.ajaja.common.support;
 
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
- * Supporting Mock test with Fixture-Monkey.
- * Monkey is based on ConstructorProperties and NEVER return null.
+ * Supports Mock Test with Monkey.
+ * @author hejow
  */
 @ExtendWith(MockitoExtension.class)
 public abstract class MockTestSupport extends MonkeySupport {
