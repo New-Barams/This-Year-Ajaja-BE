@@ -1,9 +1,9 @@
 package com.newbarams.ajaja.module.user.application.service;
 
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Configuration;
 
-@Configuration
+@TestConfiguration
 @MockBean({
 	ChangeReceiveTypeService.class,
 	LoginService.class,
