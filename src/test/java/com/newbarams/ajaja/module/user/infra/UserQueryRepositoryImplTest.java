@@ -30,6 +30,7 @@ class UserQueryRepositoryImplTest extends MonkeySupport {
 	void setup() {
 		user = userRepository.save(sut.giveMeBuilder(User.class)
 			.set("email", new Email("Ajaja@me.com"))
+			.set("deleted", false)
 			.sample());
 	}
 
