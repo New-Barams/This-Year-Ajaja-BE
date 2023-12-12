@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
-public class ChangeReceiveController {
+class ChangeReceiveController {
 	private final ChangeReceiveTypeUseCase changeReceiveTypeUseCase;
 
 	@Operation(summary = "[토큰 필요] 수신 종류 변경 API", description = "리마인드를 수신 방법을 변경합니다.", responses = {
