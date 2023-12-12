@@ -15,7 +15,7 @@ import com.newbarams.ajaja.global.exception.AjajaException;
 import com.newbarams.ajaja.module.plan.application.LoadPlanService;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.remind.dto.RemindResponse;
-import com.newbarams.ajaja.module.remind.mapper.RemindMapper;
+import com.newbarams.ajaja.module.remind.mapper.FutureRemindMapper;
 
 class LoadRemindInfoServiceTest extends MockTestSupport {
 	@InjectMocks
@@ -23,7 +23,7 @@ class LoadRemindInfoServiceTest extends MockTestSupport {
 	@Mock
 	private LoadPlanService loadPlanService;
 	@Mock
-	private RemindMapper remindMapper;
+	private FutureRemindMapper futureRemindMapper;
 
 	@Test
 	@DisplayName("계획id로 조회하면 해당 계획에 맞는 리마인드 응답을 받는다.")
@@ -42,7 +42,7 @@ class LoadRemindInfoServiceTest extends MockTestSupport {
 
 		// when
 		given(loadPlanService.loadPlanOrElseThrow(any())).willReturn(plan);
-		given(remindMapper.toFutureRemind(any())).willReturn(response);
+		given(futureRemindMapper.toFutureRemind(any())).willReturn(response);
 
 		// then
 		Assertions.assertThatNoException().isThrownBy(

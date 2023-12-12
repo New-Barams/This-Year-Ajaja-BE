@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.feedback.domain.repository;
+package com.newbarams.ajaja.module.feedback.infra;
 
 import java.time.Instant;
 import java.util.List;
@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.newbarams.ajaja.common.MockTestSupport;
 import com.newbarams.ajaja.module.feedback.domain.Feedback;
 import com.newbarams.ajaja.module.feedback.domain.FeedbackRepository;
-import com.newbarams.ajaja.module.feedback.infra.FeedbackQueryRepositoryImpl;
 
 @SpringBootTest
 @Transactional

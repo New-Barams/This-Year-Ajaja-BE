@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.newbarams.ajaja.common.MockTestSupport;
 import com.newbarams.ajaja.module.feedback.domain.Feedback;
 import com.newbarams.ajaja.module.plan.domain.Plan;
+import com.newbarams.ajaja.module.remind.domain.Remind;
 import com.newbarams.ajaja.module.remind.domain.RemindRepository;
 import com.newbarams.ajaja.module.remind.dto.RemindResponse;
 
@@ -23,16 +24,16 @@ class RemindQueryRepositoryImplTest extends MockTestSupport {
 	private RemindQueryRepositoryImpl remindQueryRepositoryImpl;
 	@Autowired
 	private RemindRepository remindRepository;
-	private RemindEntity remind;
+	private Remind remind;
 	private Plan plan;
 	private Feedback feedback;
 
 	@BeforeEach
 	void setUp() {
-		remind = remindRepository.save(monkey.giveMeBuilder(RemindEntity.class)
+		remind = remindRepository.save(monkey.giveMeBuilder(Remind.class)
 			.set("planId", 1L)
-			.set("remindType", RemindEntity.Type.PLAN)
-			.set("isDeleted", false)
+			.set("remindType", "PLAN")
+			.set("deleted", false)
 			.sample());
 		feedback = monkey.giveMeBuilder(Feedback.class)
 			.set("planId", 1L)
