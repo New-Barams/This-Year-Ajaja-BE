@@ -15,7 +15,7 @@ import com.newbarams.ajaja.module.remind.infra.RemindEntity;
 
 @Mapper(componentModel = "spring")
 public interface RemindInfoMapper {
-	RemindEntityMapper mapper = Mappers.getMapper(RemindEntityMapper.class);
+	RemindMapper mapper = Mappers.getMapper(RemindMapper.class);
 
 	default List<RemindResponse.SentResponse> mapSentMessagesFrom(
 		List<RemindEntity> reminds,
@@ -24,7 +24,7 @@ public interface RemindInfoMapper {
 		List<RemindResponse.SentResponse> sentResponses = new ArrayList<>();
 
 		for (int i = 0; i < reminds.size(); i++) {
-			Remind remind = mapper.mapDomainFrom(reminds.get(i));
+			Remind remind = mapper.toDomain(reminds.get(i));
 			Feedback feedback = feedbacks.get(i);
 
 			TimeValue startTimeValue = new TimeValue(remind.getStart());

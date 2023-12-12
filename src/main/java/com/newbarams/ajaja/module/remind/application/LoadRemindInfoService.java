@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.newbarams.ajaja.module.plan.application.LoadPlanService;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.remind.dto.RemindResponse;
-import com.newbarams.ajaja.module.remind.mapper.RemindMapper;
+import com.newbarams.ajaja.module.remind.mapper.FutureRemindMapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,11 +15,11 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 public class LoadRemindInfoService {
 	private final LoadPlanService loadPlanService;
-	private final RemindMapper remindMapper;
+	private final FutureRemindMapper futureRemindMapper;
 
 	public RemindResponse.CommonResponse loadRemindInfo(Long planId) {
 		Plan plan = loadPlanService.loadPlanOrElseThrow(planId);
 
-		return remindMapper.toFutureRemind(plan);
+		return futureRemindMapper.toFutureRemind(plan);
 	}
 }
