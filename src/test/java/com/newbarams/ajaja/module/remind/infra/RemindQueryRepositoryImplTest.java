@@ -50,7 +50,10 @@ class RemindQueryRepositoryImplTest extends MockTestSupport {
 	@DisplayName("플랜 id에 맞는 리마인드 정보를 가져온다.")
 	void findRemindInfoByPlanId_Success_WithNoException() {
 		// given
-		RemindInfo info = sut.giveMeOne(RemindInfo.class);
+		RemindInfo info = sut.giveMeBuilder(RemindInfo.class)
+			.set("remindTerm", 12)
+			.set("remindTotalPeriod", 12)
+			.sample();
 		List<Message> messages = sut.giveMe(Message.class, 5);
 		plan = sut.giveMeBuilder(Plan.class)
 			.set("id", 1L)
