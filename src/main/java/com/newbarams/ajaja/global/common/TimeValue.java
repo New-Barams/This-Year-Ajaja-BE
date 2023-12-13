@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Date;
 
 public class TimeValue {
 	private static final String DEFAULT_TIME_ZONE = "Asia/Seoul";
@@ -34,6 +35,14 @@ public class TimeValue {
 
 	public int getDate() {
 		return zonedDateTime.getDayOfMonth();
+	}
+
+	public Date expireIn(long validTime) {
+		return new Date(instant.toEpochMilli() + validTime);
+	}
+
+	public long getTimeMillis() {
+		return instant.toEpochMilli();
 	}
 
 	public ZonedDateTime oneMonthLater() {
