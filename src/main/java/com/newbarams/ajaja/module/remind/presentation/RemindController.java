@@ -43,7 +43,7 @@ public class RemindController {
 	public AjajaResponse<RemindResponse> getRemindResponse(
 		@PathVariable Long planId
 	) {
-		return new AjajaResponse<>(true, loadSentRemindInfoService.loadSentRemindInfo(planId));
+		return new AjajaResponse<>(true, loadSentRemindInfoService.loadRemindResponse(planId));
 	}
 
 	@Operation(summary = "[토큰 필요] 시즌일 때 리마인드 조회 API", description = "<b>url에 플랜id 값이 필요합니다.</b>",

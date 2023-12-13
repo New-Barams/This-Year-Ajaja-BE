@@ -198,9 +198,9 @@ public class MockController {
 	@GetMapping("/reminds/{planId}")
 	@ResponseStatus(OK)
 	public AjajaResponse<RemindResponse.CommonResponse> getReminds(@PathVariable Long planId) {
-		List<RemindResponse.SentResponse> sentRespons =
+		List<RemindResponse.Response> sentRespons =
 			List.of(
-				new RemindResponse.SentResponse(
+				new RemindResponse.Response(
 					1L,
 					"화이팅",
 					3,
@@ -212,7 +212,7 @@ public class MockController {
 					4,
 					13
 				),
-				new RemindResponse.SentResponse(
+				new RemindResponse.Response(
 					2L,
 					"아좌좌",
 					6,
@@ -225,8 +225,8 @@ public class MockController {
 					13
 				));
 
-		List<RemindResponse.FutureResponse> futureRespons = List.of(
-			new RemindResponse.FutureResponse(
+		List<RemindResponse.Response> responses = List.of(
+			new RemindResponse.Response(
 				0L,
 				"잘하고 있지?",
 				9,
@@ -238,7 +238,7 @@ public class MockController {
 				0,
 				0
 			),
-			new RemindResponse.FutureResponse(
+			new RemindResponse.Response(
 				0L,
 				"조금만 더 힘내!",
 				12,
@@ -257,8 +257,7 @@ public class MockController {
 			3,
 			12,
 			true,
-			sentRespons,
-			futureRespons
+			responses
 		);
 
 		return new AjajaResponse<>(true, response);
@@ -276,9 +275,8 @@ public class MockController {
 	@GetMapping("/reminds/modify/{planId}")
 	@ResponseStatus(OK)
 	public AjajaResponse<RemindResponse.CommonResponse> getRemindsInfo(@PathVariable Long planId) {
-		List<RemindResponse.SentResponse> sentRespons = Collections.emptyList();
-		List<RemindResponse.FutureResponse> futureRespons = List.of(
-			new RemindResponse.FutureResponse(
+		List<RemindResponse.Response> responses = List.of(
+			new RemindResponse.Response(
 				0L,
 				"화이팅",
 				6,
@@ -290,7 +288,7 @@ public class MockController {
 				0,
 				0
 			),
-			new RemindResponse.FutureResponse(
+			new RemindResponse.Response(
 				0L,
 				"아좌좌",
 				12,
@@ -309,8 +307,7 @@ public class MockController {
 			6,
 			12,
 			true,
-			sentRespons,
-			futureRespons
+			responses
 		);
 
 		return new AjajaResponse<>(true, response);

@@ -22,7 +22,7 @@ public class LoadSentRemindInfoService {
 	private final LoadFeedbackService loadFeedbackService;
 	private final RemindQueryRepository remindQueryRepository;
 
-	public RemindResponse.CommonResponse loadSentRemindInfo(Long planId) {
+	public RemindResponse.CommonResponse loadRemindResponse(Long planId) {
 		Plan plan = loadPlanService.loadPlanOrElseThrow(planId);
 		List<Feedback> feedbacks = loadFeedbackService.loadFeedback(planId);
 		return remindQueryRepository.findAllRemindByPlanId(plan, feedbacks);

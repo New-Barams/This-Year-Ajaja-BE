@@ -1,7 +1,5 @@
 package com.newbarams.ajaja.module.remind.infra;
 
-import java.time.Instant;
-
 import org.hibernate.annotations.Where;
 
 import com.newbarams.ajaja.global.common.BaseEntity;
@@ -43,10 +41,4 @@ public class RemindEntity extends BaseEntity<RemindEntity> {
 
 	@Column(nullable = false, length = 255)
 	private String content;
-
-	@Column(nullable = false)
-	private Instant starts;
-
-	@Column(nullable = false)
-	private Instant ends;
 }

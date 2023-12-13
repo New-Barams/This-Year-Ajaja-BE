@@ -1,88 +1,51 @@
 package com.newbarams.ajaja.module.remind.mapper;
 
-import java.util.ArrayList;
+import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
+import org.mapstruct.Mapping;
+import org.mapstruct.NullValueMappingStrategy;
 
 import com.newbarams.ajaja.global.common.TimeValue;
 import com.newbarams.ajaja.module.feedback.domain.Feedback;
-import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.remind.domain.Remind;
 import com.newbarams.ajaja.module.remind.dto.RemindResponse;
-import com.newbarams.ajaja.module.remind.infra.RemindEntity;
 
-@Mapper(componentModel = "spring")
+@Mapper(
+	componentModel = "spring",
+	nullValueIterableMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT
+)
 public interface RemindInfoMapper {
-	RemindMapper mapper = Mappers.getMapper(RemindMapper.class);
-
-	default List<RemindResponse.SentResponse> mapSentMessagesFrom(
-		List<RemindEntity> reminds,
+	default List<RemindResponse.Response> toSentMessages(
+		List<Remind> reminds,
 		List<Feedback> feedbacks
 	) {
-		List<RemindResponse.SentResponse> sentResponses = new ArrayList<>();
-
-		for (int i = 0; i < reminds.size(); i++) {
-			Remind remind = mapper.toDomain(reminds.get(i));
+		return IntStream.range(0, reminds.size()).mapToObj(i -> {
+			Remind remind = reminds.get(i);
 			Feedback feedback = feedbacks.get(i);
+			TimeValue remindTime = new TimeValue(remind.getRemindDate());
+			ZonedDateTime deadline = remindTime.oneMonthLater();
 
-			TimeValue startTimeValue = new TimeValue(remind.getStart());
-			int remindMonth = startTimeValue.getMonth();
-			int remindDate = startTimeValue.getDate();
-
-			TimeValue endTimeValue = new TimeValue(remind.getEnd());
-			int endMonth = endTimeValue.getMonth();
-			int endDate = endTimeValue.getDate();
-
-			boolean isFeedback = feedback.isFeedback();
-			boolean isExpired = remind.isExpired();
-
-			sentResponses.add((new RemindResponse.SentResponse(
+			return new RemindResponse.Response(
 				feedback.getId(),
-				remind.getInfo().getContent(),
-				remindMonth,
-				remindDate,
+				remind.getContent(),
+				remindTime.getMonth(),
+				remindTime.getDate(),
 				feedback.getRate(),
-				isFeedback,
-				isExpired,
+				feedback.isFeedback(),
+				feedback.checkDeadline(),
 				true,
-				endMonth,
-				endDate
-			)));
-		}
-
-		return sentResponses;
+				deadline.getMonthValue(),
+				deadline.getDayOfMonth());
+		}).toList();
 	}
 
-	default List<RemindResponse.FutureResponse> mapFutureMessagesFrom(
-		Plan plan,
-		int sentRemindNumber,
-		int lastRemindMonth
-	) {
-		List<RemindResponse.FutureResponse> futureResponses = new ArrayList<>();
+	@Mapping(target = "remindMessage", expression = "java(\"\")")
+	@Mapping(target = "feedbackId", expression = "java(0L)")
+	RemindResponse.Response toFutureMessages(Integer remindMonth, Integer remindDate);
 
-		int remindTerm = plan.getInfo().getRemindTerm();
-		int remindMonth = lastRemindMonth;
-		int remindDate = plan.getInfo().getRemindDate();
-
-		for (int i = sentRemindNumber; i < plan.getTotalRemindNumber(); i++) {
-			remindMonth += remindTerm;
-
-			futureResponses.add(new RemindResponse.FutureResponse(
-				0L,
-				"",
-				remindMonth,
-				remindDate,
-				0,
-				false,
-				false,
-				false,
-				0,
-				0
-			));
-		}
-
-		return futureResponses;
-	}
+	@Mapping(target = "feedbackId", expression = "java(0L)")
+	RemindResponse.Response toFutureMessages(Integer remindMonth, Integer remindDate, String remindMessage);
 }
