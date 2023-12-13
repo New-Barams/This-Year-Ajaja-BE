@@ -21,7 +21,14 @@ public class PlanRequest {
 
 		List<String> tags,
 
-		List<String> messages
+		List<CreateMessage> messages
+	) {
+	}
+
+	public record CreateMessage(
+		String content,
+		int remindMonth,
+		int remindDate
 	) {
 	}
 

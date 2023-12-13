@@ -1,10 +1,14 @@
 package com.newbarams.ajaja.module.plan.mapper;
 
+import static com.newbarams.ajaja.global.exception.ErrorCode.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
 
+import com.newbarams.ajaja.global.exception.AjajaException;
 import com.newbarams.ajaja.module.plan.domain.Content;
 import com.newbarams.ajaja.module.plan.domain.Message;
 import com.newbarams.ajaja.module.plan.domain.Plan;
@@ -40,15 +44,17 @@ public class PlanMapper {
 		return new RemindInfo(remindTotalPeriod, remindTerm, remindDate, remindTime);
 	}
 
-	public static List<Message> toMessages(List<String> messageList) {
+	public static List<Message> toMessages(List<PlanRequest.CreateMessage> messageList) {
+		MessageMapper mapper = Mappers.getMapper(MessageMapper.class);
+
 		if (messageList == null) {
-			return null;
+			throw new AjajaException(EMPTY_MESSAGES_LIST);
 		}
 
 		List<Message> messages = new ArrayList<>(messageList.size());
 
-		for (String message : messageList) {
-			messages.add(new Message(message));
+		for (PlanRequest.CreateMessage message : messageList) {
+			messages.add(mapper.toDomain(message));
 		}
 
 		return messages;

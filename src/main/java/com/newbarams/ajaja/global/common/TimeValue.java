@@ -50,6 +50,6 @@ public class TimeValue {
 	}
 
 	public static boolean check(Instant createdAt) {
-		return Instant.now().isAfter(createdAt.plus(31, ChronoUnit.DAYS));
+		return Instant.now().isBefore(createdAt.plus(31, ChronoUnit.DAYS));
 	}
 }

@@ -35,7 +35,7 @@ class PlanQueryRepositoryTest {
 		.objectIntrospector(FieldReflectionArbitraryIntrospector.INSTANCE)
 		.register(Plan.class, fixture -> fixture.giveMeBuilder(Plan.class)
 			.set("id", Arbitraries.longs().greaterOrEqual(0))
-			.set("messages", List.of(new Message("test")))
+			.set("messages", List.of(new Message("test", 3, 15)))
 			.set("ajajas", Collections.EMPTY_LIST)
 		)
 		.register(Content.class, fixture -> fixture.giveMeBuilder(Content.class)
@@ -54,11 +54,19 @@ class PlanQueryRepositoryTest {
 	@Autowired
 	private UserRepository userRepository;
 
-	private User user;
+	private User saved;
+	private Plan plan;
 
 	@BeforeEach
 	void deleteAll() {
-		user = User.init("email@naver.com", 1L);
+		User user = User.init("email@naver.com", 1L);
+
+		saved = userRepository.save(user);
+
+		plan = monkey.giveMeBuilder(Plan.class)
+			.set("userId", saved.getId())
+			.set("status", new PlanStatus(true))
+			.sample();
 	}
 
 	@Test
@@ -85,13 +93,6 @@ class PlanQueryRepositoryTest {
 	@Test
 	@DisplayName("계획의 ID를 이용해 하나의 계획을 가져올 수 있다.")
 	void findById_Success() {
-		User saved = userRepository.save(user);
-
-		Plan plan = monkey.giveMeBuilder(Plan.class)
-			.set("userId", saved.getId())
-			.set("status", new PlanStatus(true))
-			.sample();
-
 		Plan savedPlan = planRepository.save(plan);
 
 		Optional<PlanResponse.GetOne> response = planQueryRepository.findById(savedPlan.getId(), saved.getId());
@@ -101,13 +102,6 @@ class PlanQueryRepositoryTest {
 	@Test
 	@DisplayName("계획 id가 존재하지 않으면 가져올 수 없다.")
 	void findById_Fail_By_Not_Exist_PlanId() {
-		User saved = userRepository.save(user);
-
-		Plan plan = monkey.giveMeBuilder(Plan.class)
-			.set("userId", saved.getId())
-			.set("status", new PlanStatus(true))
-			.sample();
-
 		planRepository.save(plan);
 
 		Optional<PlanResponse.GetOne> response = planQueryRepository.findById(-1L, saved.getId());
@@ -118,8 +112,6 @@ class PlanQueryRepositoryTest {
 	@DisplayName("최신순 or 인기순 정렬 시 지정된 개수만큼의 계획을 받는다.")
 	void findAllByCursorAndSorting_Default_Success() {
 		int pageSize = 3;
-
-		User saved = userRepository.save(user);
 
 		List<Plan> plans = monkey.giveMeBuilder(Plan.class)
 			.set("userId", saved.getId())
@@ -142,8 +134,6 @@ class PlanQueryRepositoryTest {
 	@DisplayName("최신순 정렬 시 아이디 순으로 정렬된 계획들을 반환한다.")
 	void findAllByCursorAndSorting_With_Latest_Condition_Success() {
 		int pageSize = 3;
-
-		User saved = userRepository.save(user);
 
 		for (int i = 0; i < pageSize; i++) {
 			Plan plan = monkey.giveMeBuilder(Plan.class)

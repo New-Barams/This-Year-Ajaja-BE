@@ -23,7 +23,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OrderColumn;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -61,7 +61,7 @@ public class Plan extends BaseEntity<Plan> {
 
 	@ElementCollection(fetch = FetchType.EAGER) // todo:메세지 로딩 오류로 인한 임시 코드 (나중에 지우기)
 	@CollectionTable(name = "remind_messages", joinColumns = @JoinColumn(name = "plan_id"))
-	@OrderColumn(name = "message_idx")
+	@OrderBy("remindMonth ASC")
 	private List<Message> messages = new ArrayList<>();
 
 	@Size
@@ -128,15 +128,13 @@ public class Plan extends BaseEntity<Plan> {
 		String remindTime,
 		boolean isPublic,
 		boolean canRemind,
-		boolean canAjaja,
-		List<Message> messages
+		boolean canAjaja
 	) {
 		validateModifiableMonth(month);
 		validateUser(userId);
 		this.content = content.update(title, description);
 		this.info = info.update(remindTotalPeriod, remindTerm, remindDate, remindTime);
 		this.status = status.update(isPublic, canRemind, canAjaja);
-		this.messages = messages;
 		this.validateSelf();
 	}
 

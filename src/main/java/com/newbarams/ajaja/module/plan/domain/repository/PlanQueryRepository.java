@@ -213,7 +213,7 @@ public class PlanQueryRepository {
 				.and(plan.info.remindTime.stringValue().eq(remindTime)
 					.and(plan.userId.eq(userEntity.id)))
 			)
-			.fetch();
+			.fetch(); // todo: 리마인드 메세지 날짜에 맞게 쿼리 수정
 
 		return mapRemindMessageInfos(remindablePlans);
 	}
@@ -235,7 +235,9 @@ public class PlanQueryRepository {
 					p.get(userEntity).getRemindEmail(),
 					p.get(plan).getMessage(p.get(plan).getRemindTerm(),
 						new TimeValue().getMonth()),
-					p.get(plan).getInfo()
+					p.get(plan).getInfo(),
+					p.get(plan).getRemindMonth(),
+					p.get(plan).getRemindDate()
 				)
 			)
 			.toList();

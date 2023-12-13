@@ -1,9 +1,10 @@
 package com.newbarams.ajaja.module.remind.application;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
 
-import java.util.Collections;
+import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,41 +14,39 @@ import org.mockito.Mock;
 import com.newbarams.ajaja.common.support.MockTestSupport;
 import com.newbarams.ajaja.global.exception.AjajaException;
 import com.newbarams.ajaja.module.plan.application.LoadPlanService;
+import com.newbarams.ajaja.module.plan.domain.Message;
 import com.newbarams.ajaja.module.plan.domain.Plan;
+import com.newbarams.ajaja.module.remind.domain.RemindQueryRepository;
 import com.newbarams.ajaja.module.remind.dto.RemindResponse;
-import com.newbarams.ajaja.module.remind.mapper.FutureRemindMapper;
 
-class LoadRemindInfoServiceTest extends MockTestSupport {
+class LoadSentRemindInfoServiceTest extends MockTestSupport {
 	@InjectMocks
-	private LoadRemindInfoService loadRemindInfoService;
-
+	private LoadSentRemindInfoService loadSentRemindInfoService;
 	@Mock
 	private LoadPlanService loadPlanService;
 	@Mock
-	private FutureRemindMapper futureRemindMapper;
+	private RemindQueryRepository remindQueryRepository;
 
 	@Test
 	@DisplayName("계획id로 조회하면 해당 계획에 맞는 리마인드 응답을 받는다.")
 	void getRemindInfo_Success_WithNoException() {
 		// given
-		Plan plan = sut.giveMeOne(Plan.class);
-		RemindResponse.CommonResponse response = new RemindResponse.CommonResponse(
-			plan.getRemindTimeName(),
-			plan.getRemindDate(),
-			plan.getRemindTerm(),
-			plan.getRemindTotalPeriod(),
-			plan.getIsRemindable(),
-			Collections.EMPTY_LIST,
-			Collections.EMPTY_LIST
-		);
+		List<Message> messages = sut.giveMe(Message.class, 5);
+
+		Plan plan = sut.giveMeBuilder(Plan.class)
+			.set("deleted", false)
+			.set("messages", messages)
+			.sample();
+
+		RemindResponse.CommonResponse response = sut.giveMeOne(RemindResponse.CommonResponse.class);
 
 		// when
 		given(loadPlanService.loadPlanOrElseThrow(any())).willReturn(plan);
-		given(futureRemindMapper.toFutureRemind(any())).willReturn(response);
+		given(remindQueryRepository.findAllRemindByPlanId(any())).willReturn(response);
 
 		// then
-		assertThatNoException().isThrownBy(
-			() -> loadRemindInfoService.loadRemindInfo(1L)
+		assertThatNoException().isThrownBy(() ->
+			loadSentRemindInfoService.loadRemindResponse(plan.getId())
 		);
 	}
 
@@ -61,7 +60,7 @@ class LoadRemindInfoServiceTest extends MockTestSupport {
 
 		// then
 		assertThatException().isThrownBy(
-			() -> loadRemindInfoService.loadRemindInfo(1L)
+			() -> loadSentRemindInfoService.loadRemindResponse(1L)
 		);
 
 	}

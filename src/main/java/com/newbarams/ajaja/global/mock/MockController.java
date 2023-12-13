@@ -198,67 +198,40 @@ public class MockController {
 	@GetMapping("/reminds/{planId}")
 	@ResponseStatus(OK)
 	public AjajaResponse<RemindResponse.CommonResponse> getReminds(@PathVariable Long planId) {
-		List<RemindResponse.SentResponse> sentRespons =
+		List<RemindResponse.Response> sentRespons =
 			List.of(
-				new RemindResponse.SentResponse(
-					1L,
+				new RemindResponse.Response(
 					"화이팅",
 					3,
 					13,
-					50,
-					true,
-					true,
-					true,
-					4,
-					13
+					true
 				),
-				new RemindResponse.SentResponse(
-					2L,
+				new RemindResponse.Response(
 					"아좌좌",
 					6,
 					13,
-					100,
-					true,
-					true,
-					true,
-					7,
-					13
+					true
 				));
 
-		List<RemindResponse.FutureResponse> futureRespons = List.of(
-			new RemindResponse.FutureResponse(
-				0L,
+		List<RemindResponse.Response> responses = List.of(
+			new RemindResponse.Response(
 				"잘하고 있지?",
 				9,
 				13,
-				0,
-				false,
-				false,
-				false,
-				0,
-				0
+				false
 			),
-			new RemindResponse.FutureResponse(
-				0L,
+			new RemindResponse.Response(
 				"조금만 더 힘내!",
 				12,
 				13,
-				0,
-				false,
-				false,
-				false,
-				0,
-				0
+				false
+
 			));
 
 		RemindResponse.CommonResponse response = new RemindResponse.CommonResponse(
 			"MORNING",
-			13,
-			3,
-			12,
 			true,
-			sentRespons,
-			futureRespons
+			responses
 		);
 
 		return new AjajaResponse<>(true, response);
@@ -276,41 +249,24 @@ public class MockController {
 	@GetMapping("/reminds/modify/{planId}")
 	@ResponseStatus(OK)
 	public AjajaResponse<RemindResponse.CommonResponse> getRemindsInfo(@PathVariable Long planId) {
-		List<RemindResponse.SentResponse> sentRespons = Collections.emptyList();
-		List<RemindResponse.FutureResponse> futureRespons = List.of(
-			new RemindResponse.FutureResponse(
-				0L,
+		List<RemindResponse.Response> responses = List.of(
+			new RemindResponse.Response(
 				"화이팅",
 				6,
 				13,
-				0,
-				false,
-				false,
-				false,
-				0,
-				0
+				false
 			),
-			new RemindResponse.FutureResponse(
-				0L,
+			new RemindResponse.Response(
 				"아좌좌",
 				12,
 				13,
-				0,
-				false,
-				false,
-				false,
-				0,
-				0
+				false
 			));
 
 		RemindResponse.CommonResponse response = new RemindResponse.CommonResponse(
 			"MORNING",
-			13,
-			6,
-			12,
 			true,
-			sentRespons,
-			futureRespons
+			responses
 		);
 
 		return new AjajaResponse<>(true, response);
