@@ -17,7 +17,6 @@ public class FeedbackRepositoryImpl implements FeedbackRepository {
 	@Override
 	public Feedback save(Feedback feedback) {
 		FeedbackEntity entity = feedbackJpaRepository.save(mapper.toEntity(feedback));
-
 		return mapper.toDomain(entity);
 	}
 }

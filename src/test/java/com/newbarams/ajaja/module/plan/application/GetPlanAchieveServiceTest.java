@@ -12,14 +12,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import com.newbarams.ajaja.common.MockTestSupport;
+import com.newbarams.ajaja.common.support.MockTestSupport;
+import com.newbarams.ajaja.global.exception.AjajaException;
 import com.newbarams.ajaja.module.feedback.domain.Feedback;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.domain.repository.PlanRepository;
-
-import com.navercorp.fixturemonkey.FixtureMonkey;
-import com.navercorp.fixturemonkey.api.introspector.FieldReflectionArbitraryIntrospector;
-import com.navercorp.fixturemonkey.jakarta.validation.plugin.JakartaValidationPlugin;
 
 class GetPlanAchieveServiceTest extends MockTestSupport {
 	@InjectMocks
@@ -28,21 +25,16 @@ class GetPlanAchieveServiceTest extends MockTestSupport {
 	@Mock
 	private PlanRepository planRepository;
 
-	private final FixtureMonkey sut = FixtureMonkey.builder()
-		.objectIntrospector(FieldReflectionArbitraryIntrospector.INSTANCE)
-		.plugin(new JakartaValidationPlugin())
-		.build();
-
 	@Test
 	@DisplayName("조회하고 싶은 계획의 피드백을 통틀어서 달성률의 평균을 매긴다.")
 	void getTotalAchieve_Success_WithNoException() {
 		// given
-		List<Feedback> feedbackList = monkey.giveMe(Feedback.class, 2);
+		List<Feedback> feedbackList = sut.giveMe(Feedback.class, 2);
 
 		int calculatedAchieve =
 			(feedbackList.get(0).getAchieve().getRate() + feedbackList.get(1).getAchieve().getRate()) / 2;
 
-		Plan plan = monkey.giveMeOne(Plan.class);
+		Plan plan = sut.giveMeOne(Plan.class);
 		plan.updateAchieve(calculatedAchieve);
 
 		// when
@@ -61,7 +53,7 @@ class GetPlanAchieveServiceTest extends MockTestSupport {
 		given(planRepository.findById(any())).willReturn(Optional.empty());
 
 		// then
-		assertThatThrownBy(() ->
-			getPlanAchieveService.calculatePlanAchieve(1L));
+		assertThatExceptionOfType(AjajaException.class)
+			.isThrownBy(() -> getPlanAchieveService.calculatePlanAchieve(1L));
 	}
 }

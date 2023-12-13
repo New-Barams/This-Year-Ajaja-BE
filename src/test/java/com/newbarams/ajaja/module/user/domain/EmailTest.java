@@ -10,11 +10,13 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.newbarams.ajaja.common.MonkeySupport;
+import com.newbarams.ajaja.common.support.MonkeySupport;
 
 import jakarta.validation.ConstraintViolationException;
 
 class EmailTest extends MonkeySupport {
+	private static final String DEFAULT_EMAIL = "ajaja@me.com";
+
 	@ParameterizedTest
 	@ValueSource(strings = {"gmlwh124@naver.com", "ajaja.net@gamil.com", "123123@kakao.net"})
 	@DisplayName("유효한 이메일로 생성하면 예외가 발생하지 않아야 한다.")
@@ -40,11 +42,10 @@ class EmailTest extends MonkeySupport {
 	@DisplayName("같은 이메일로 검증 완료하면 검증 상태만 변경된 새로운 객체를 생성해야 한다.")
 	void verified_Success_WithNewInstanceAndOnlyVerifiedChange() {
 		// given
-		String input = "gmlwh124@naver.com";
-		Email email = new Email(input);
+		Email email = new Email(DEFAULT_EMAIL);
 
 		// when
-		Email verifiedEmail = email.verified(input);
+		Email verifiedEmail = email.verified(DEFAULT_EMAIL);
 
 		// then
 		assertThat(verifiedEmail.getSignUpEmail()).isEqualTo(email.getSignUpEmail());
@@ -75,7 +76,7 @@ class EmailTest extends MonkeySupport {
 	@DisplayName("유효하지 않은 이메일로 인증을 완료하려고 하면 예외를 던져야 한다.")
 	void verified_Fail_ByBadEmails(String requestEmail) {
 		// given
-		Email email = new Email("gmlwh124@naver.com");
+		Email email = new Email(DEFAULT_EMAIL);
 
 		// when, then
 		assertThatThrownBy(() -> email.verified(requestEmail))
@@ -86,18 +87,17 @@ class EmailTest extends MonkeySupport {
 	@DisplayName("같은 리마인드 이메일이지만 미인증 상태라면 검증을 진행할 수 있다.")
 	void validateVerifiable_Success_WithSameRemindEmail() {
 		// given
-		String mail = "gmlwh124@naver.com";
-		Email email = new Email(mail);
+		Email email = new Email(DEFAULT_EMAIL);
 
 		// when, then
-		assertThatNoException().isThrownBy(() -> email.validateVerifiable(mail));
+		assertThatNoException().isThrownBy(() -> email.validateVerifiable(DEFAULT_EMAIL));
 	}
 
 	@Test
 	@DisplayName("인증 상태라면 다른 리마인드 이메일일 때 검증을 진행할 수 있다.")
 	void validateVerifiable_Success_WithDifferentEmail() {
 		// given
-		Email email = new Email("gmlwh124@naver.com", "gmlwh124@naver.com", true);
+		Email email = new Email(DEFAULT_EMAIL, DEFAULT_EMAIL, true);
 		String newRemindEmail = "hejow124@naver.com";
 
 		// when, then
@@ -108,15 +108,15 @@ class EmailTest extends MonkeySupport {
 	@DisplayName("인증 완료 상태인데 같은 이메일이라면 예외를 던진다.")
 	void validateVerifiable_Fail_ByVerifiedAndSameEmail() {
 		// given
-		String mail = "gmlwh124@naver.com";
-		Email email = new Email(mail, mail, true);
+		Email email = new Email(DEFAULT_EMAIL, DEFAULT_EMAIL, true);
 
 		// when, then
-		assertThatException().isThrownBy(() -> email.validateVerifiable(mail));
+		assertThatException().isThrownBy(() -> email.validateVerifiable(DEFAULT_EMAIL));
 	}
 
 	private static Stream<String> badEmails() {
-		return Stream.of("gmlwh124@", "hejow@kakao", "john@.com", "gmlwh@naver.", "@gmail", "@.", "@gmail.",
-			"@.com");
+		return Stream.of(
+			"gmlwh124@", "hejow@kakao", "john@.com", "gmlwh@naver.", "@gmail", "@.", "@gmail.", "@.com"
+		);
 	}
 }

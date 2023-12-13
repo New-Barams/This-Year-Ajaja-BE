@@ -56,8 +56,7 @@ public class SchedulingRemindService {
 				remindInfo.getPlanId()
 			);
 
-			createRemindService.createRemind(remindInfo.getUserId(), remindInfo.getPlanId(), remindInfo.getMessage(),
-				remindInfo.getInfo());
+			createRemindService.createRemind(remindInfo.getUserId(), remindInfo.getPlanId(), remindInfo.getMessage());
 		}
 	}
 }

@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class RemindRepositoryImpl implements RemindRepository {
+class RemindRepositoryImpl implements RemindRepository {
 	private final RemindJpaRepository remindJpaRepository;
 	private final RemindMapper mapper;
 

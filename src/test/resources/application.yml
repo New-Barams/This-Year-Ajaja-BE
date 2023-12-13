@@ -18,6 +18,12 @@ spring:
   flyway:
     enabled: false
 
+logging:
+  level:
+    org:
+      springframework:
+        test.context.cache: debug
+
 jasypt:
   encryptor:
     password: thisisfortest

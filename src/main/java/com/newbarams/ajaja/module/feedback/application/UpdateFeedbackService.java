@@ -13,8 +13,8 @@ import com.newbarams.ajaja.module.plan.application.UpdatePlanAchieveService;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
+@RequiredArgsConstructor
 public class UpdateFeedbackService {
 	private final FeedbackQueryRepository feedbackQueryRepository;
 	private final UpdatePlanAchieveService updatePlanAchieveService;

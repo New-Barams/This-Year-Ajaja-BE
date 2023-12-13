@@ -13,8 +13,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
-import com.newbarams.ajaja.common.MonkeySupport;
-import com.newbarams.ajaja.common.RedisBasedTest;
+import com.newbarams.ajaja.common.annotation.RedisBasedTest;
+import com.newbarams.ajaja.common.support.MonkeySupport;
 import com.newbarams.ajaja.global.security.common.CustomUserDetailService;
 import com.newbarams.ajaja.global.security.common.UserAdapter;
 import com.newbarams.ajaja.module.user.dto.UserResponse;
@@ -41,7 +41,7 @@ class JwtParserTest extends MonkeySupport {
 
 	@BeforeEach
 	void setup() {
-		userId = monkey.giveMeOne(Long.class);
+		userId = sut.giveMeOne(Long.class);
 		UserResponse.Token response = jwtGenerator.generate(userId);
 		accessToken = response.getAccessToken();
 	}
@@ -67,7 +67,7 @@ class JwtParserTest extends MonkeySupport {
 	@DisplayName("JWT에서 Authentication를 파싱하면 UsernamePasswordAuthenticationToken으로 생성되어야 한다.")
 	void parseAuthentication_Success_WithSameUserAdapter() {
 		// given
-		UserAdapter adapter = monkey.giveMeOne(UserAdapter.class);
+		UserAdapter adapter = sut.giveMeOne(UserAdapter.class);
 		given(customUserDetailService.loadUserByUsername(anyString())).willReturn(adapter);
 
 		// when

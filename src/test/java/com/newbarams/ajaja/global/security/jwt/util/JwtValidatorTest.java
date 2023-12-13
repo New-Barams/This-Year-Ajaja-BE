@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import com.newbarams.ajaja.common.MonkeySupport;
-import com.newbarams.ajaja.common.RedisBasedTest;
+import com.newbarams.ajaja.common.annotation.RedisBasedTest;
+import com.newbarams.ajaja.common.support.MonkeySupport;
 import com.newbarams.ajaja.global.exception.AjajaException;
 import com.newbarams.ajaja.module.user.dto.UserResponse;
 
@@ -30,7 +30,7 @@ class JwtValidatorTest extends MonkeySupport {
 	@Test
 	@DisplayName("유효한 refresh token을 입력하면 검증에 성공한다.")
 	void validate_Success_ByValidToken() {
-		Long userId = monkey.giveMeOne(Long.class);
+		Long userId = sut.giveMeOne(Long.class);
 		UserResponse.Token tokens = jwtGenerator.generate(userId);
 
 		// when, then
@@ -41,7 +41,7 @@ class JwtValidatorTest extends MonkeySupport {
 	@DisplayName("서명이 다른 토큰을 입력하면 검증에 실패한다.")
 	void validate_Fail_ByWrongSignature() {
 		// given
-		Long userId = monkey.giveMeOne(Long.class);
+		Long userId = sut.giveMeOne(Long.class);
 		String wrongSignatureToken = """
 			eyJhbGciOiJIUzI1NiJ9.
 			eyJuYW1lIjoiSGVqb3cifQ.
@@ -56,7 +56,7 @@ class JwtValidatorTest extends MonkeySupport {
 	@DisplayName("로그인 이력 없이 refresh token을 입력하면 검증에 실패한다.")
 	void validate_Fail_ByNoneLoginHistory() {
 		// given
-		Long userId = monkey.giveMeOne(Long.class);
+		Long userId = sut.giveMeOne(Long.class);
 		UserResponse.Token tokens = jwtGenerator.generate(userId);
 
 		redisTemplate.delete(jwtSecretProvider.getSignature() + userId);
@@ -71,7 +71,7 @@ class JwtValidatorTest extends MonkeySupport {
 	@DisplayName("관리 중인 refresh token과 다른 token을 입력하면 검증에 실패해야 한다.")
 	void validate_Fail_ByDifferentRefreshToken() {
 		// given
-		Long userId = monkey.giveMeOne(Long.class);
+		Long userId = sut.giveMeOne(Long.class);
 		UserResponse.Token oldTokens = jwtGenerator.generate(userId);
 
 		String newToken = """

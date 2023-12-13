@@ -1,5 +1,7 @@
 package com.newbarams.ajaja.module.user.domain;
 
+import java.beans.ConstructorProperties;
+
 import com.newbarams.ajaja.global.common.SelfValidating;
 
 import jakarta.validation.constraints.NotBlank;
@@ -12,6 +14,7 @@ public class Nickname extends SelfValidating<Nickname> {
 	@Size(max = 20)
 	private final String nickname;
 
+	@ConstructorProperties("nickname")
 	public Nickname(String nickname) {
 		this.nickname = nickname;
 		this.validateSelf();

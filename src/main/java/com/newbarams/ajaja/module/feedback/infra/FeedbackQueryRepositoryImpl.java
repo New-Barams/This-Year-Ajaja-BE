@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class FeedbackQueryRepositoryImpl implements FeedbackQueryRepository {
+class FeedbackQueryRepositoryImpl implements FeedbackQueryRepository {
 	private final JPAQueryFactory queryFactory;
 	private final FeedbackMapper mapper;
 

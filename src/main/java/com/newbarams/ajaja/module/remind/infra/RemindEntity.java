@@ -21,10 +21,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "reminds")
 @Where(clause = "deleted = false")
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class RemindEntity extends BaseEntity<RemindEntity> {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable = false, name = "remind_id")
@@ -32,6 +31,7 @@ public class RemindEntity extends BaseEntity<RemindEntity> {
 
 	@Column(nullable = false)
 	private Long userId;
+
 	@Column(nullable = false)
 	private Long planId;
 
@@ -46,6 +46,7 @@ public class RemindEntity extends BaseEntity<RemindEntity> {
 
 	@Column(nullable = false)
 	private Instant starts;
+
 	@Column(nullable = false)
 	private Instant ends;
 }

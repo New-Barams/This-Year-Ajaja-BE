@@ -2,6 +2,8 @@ package com.newbarams.ajaja.module.user.domain;
 
 import static com.newbarams.ajaja.global.exception.ErrorCode.*;
 
+import java.beans.ConstructorProperties;
+
 import com.newbarams.ajaja.global.common.SelfValidating;
 import com.newbarams.ajaja.global.exception.AjajaException;
 
@@ -20,6 +22,7 @@ public class Email extends SelfValidating<Email> {
 
 	private final boolean verified;
 
+	@ConstructorProperties({"signUpEmail", "remindEmail", "verified"})
 	public Email(String signUpEmail, String remindEmail, boolean verified) {
 		this.signUpEmail = signUpEmail;
 		this.remindEmail = remindEmail;

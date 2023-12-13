@@ -13,9 +13,7 @@ import com.newbarams.ajaja.module.remind.dto.RemindResponse;
 @Component
 public class FutureRemindMapper {
 
-	public RemindResponse.CommonResponse toFutureRemind(
-		Plan plan
-	) {
+	public RemindResponse.CommonResponse toFutureRemind(Plan plan) {
 		List<RemindResponse.FutureResponse> futureResponses = new ArrayList<>();
 
 		int remindTerm = plan.getRemindTerm();
@@ -46,7 +44,7 @@ public class FutureRemindMapper {
 			plan.getRemindTerm(),
 			plan.getRemindTotalPeriod(),
 			plan.getIsRemindable(),
-			Collections.EMPTY_LIST,
+			Collections.emptyList(),
 			futureResponses
 		);
 	}

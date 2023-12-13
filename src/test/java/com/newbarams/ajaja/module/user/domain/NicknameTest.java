@@ -7,24 +7,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.newbarams.ajaja.common.MonkeySupport;
+import com.newbarams.ajaja.common.support.MonkeySupport;
 
 import jakarta.validation.ConstraintViolationException;
 
 class NicknameTest extends MonkeySupport {
-	@Test
-	@DisplayName("자동 생성된 닉네임은 20자 이내의 문자를 가지고 있어야 한다.")
-	void createWithMonkey_Success_WithLessThanOrEqualTo20letters() {
-		// given
-		int givenSize = 20;
-
-		// when, then
-		assertThatNoException().isThrownBy(() -> {
-			Nickname nickname = monkey.giveMeOne(Nickname.class);
-			assertThat(nickname.getNickname()).hasSizeLessThanOrEqualTo(givenSize);
-		});
-	}
-
 	@Test
 	@DisplayName("20자를 초과하면 닉네임으로 생성하면 ConstraintViolationException을 던져야 한다.")
 	void create_Fail_ByOver20letters() {
@@ -38,7 +25,7 @@ class NicknameTest extends MonkeySupport {
 
 	@ParameterizedTest
 	@ValueSource(strings = {"hejow", "hejowmoon", "john", "gangster"})
-	@DisplayName("20자 이내의 닉네임으로 생성하면 예외가 발생하지 않아야 한다.")
+	@DisplayName("닉네임이 20자 이내라면 예외가 발생하지 않아야 한다.")
 	void create_Success_WithLessThan20letters(String nickname) {
 		// given
 

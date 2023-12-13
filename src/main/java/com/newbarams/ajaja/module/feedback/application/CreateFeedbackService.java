@@ -16,7 +16,6 @@ public class CreateFeedbackService {
 
 	public void create(Long userId, Long planId) {
 		Feedback feedback = Feedback.create(userId, planId);
-
 		feedbackRepository.save(feedback);
 	}
 }

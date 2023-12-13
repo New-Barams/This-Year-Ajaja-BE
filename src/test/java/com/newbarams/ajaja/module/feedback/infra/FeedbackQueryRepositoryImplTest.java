@@ -1,9 +1,10 @@
 package com.newbarams.ajaja.module.feedback.infra;
 
+import static org.assertj.core.api.Assertions.*;
+
 import java.time.Instant;
 import java.util.List;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.newbarams.ajaja.common.MockTestSupport;
+import com.newbarams.ajaja.common.support.MockTestSupport;
 import com.newbarams.ajaja.module.feedback.domain.Feedback;
 import com.newbarams.ajaja.module.feedback.domain.FeedbackRepository;
 
@@ -22,12 +23,12 @@ class FeedbackQueryRepositoryImplTest extends MockTestSupport {
 	private FeedbackQueryRepositoryImpl feedbackRepositoryCustom;
 	@Autowired
 	private FeedbackRepository feedbackRepository;
+
 	private Feedback feedback;
 
 	@BeforeEach
 	void setUp() {
-		feedbackRepository.save(monkey.giveMeBuilder(Feedback.class)
-			.set("isDeleted", false)
+		feedback = feedbackRepository.save(sut.giveMeBuilder(Feedback.class)
 			.set("planId", 1L)
 			.set("createdAt", Instant.now())
 			.sample());
@@ -43,7 +44,7 @@ class FeedbackQueryRepositoryImplTest extends MockTestSupport {
 		List<Feedback> feedbacks = feedbackRepositoryCustom.findAllFeedbackByPlanId(planId);
 
 		// then
-		Assertions.assertThat(feedbacks.size()).isEqualTo(1);
+		assertThat(feedbacks).hasSize(1);
 	}
 
 	@Test
@@ -56,6 +57,6 @@ class FeedbackQueryRepositoryImplTest extends MockTestSupport {
 		List<Feedback> feedbacks = feedbackRepositoryCustom.findAllFeedbackByPlanId(planId);
 
 		// then
-		Assertions.assertThat(feedbacks.size()).isZero();
+		assertThat(feedbacks).isEmpty();
 	}
 }

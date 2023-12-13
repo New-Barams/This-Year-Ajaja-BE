@@ -7,8 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import com.newbarams.ajaja.common.MockTestSupport;
-import com.newbarams.ajaja.module.plan.domain.RemindInfo;
+import com.newbarams.ajaja.common.support.MockTestSupport;
 import com.newbarams.ajaja.module.remind.application.CreateRemindService;
 import com.newbarams.ajaja.module.remind.domain.RemindRepository;
 
@@ -24,10 +23,9 @@ class CreateRemindServiceTest extends MockTestSupport {
 	void sendRemindPerMonth_Success_WithNoException() {
 		// given
 		String message = "화이팅";
-		RemindInfo info = new RemindInfo(6, 1, 1, "MORNING");
 
 		// when
-		createRemindService.createRemind(1L, 1L, message, info);
+		createRemindService.createRemind(1L, 1L, message);
 
 		// then
 		then(remindRepository).should(times(1)).save(any());

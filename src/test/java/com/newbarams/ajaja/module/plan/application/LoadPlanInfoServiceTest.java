@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import com.newbarams.ajaja.common.MockTestSupport;
+import com.newbarams.ajaja.common.support.MockTestSupport;
 import com.newbarams.ajaja.module.plan.domain.repository.PlanQueryRepository;
 import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
 
@@ -27,10 +27,10 @@ class LoadPlanInfoServiceTest extends MockTestSupport {
 	@DisplayName("처음 계획을 작성한 년도부터 현재 년도까지의 계획들을 조회한다.")
 	void getPlanInfo_Success_WithNoException() {
 		// given
-		PlanInfoResponse.GetPlan planInfo1 = monkey.giveMeBuilder(PlanInfoResponse.GetPlan.class)
+		PlanInfoResponse.GetPlan planInfo1 = sut.giveMeBuilder(PlanInfoResponse.GetPlan.class)
 			.set("year", 2023).sample();
 
-		PlanInfoResponse.GetPlan planInfo2 = monkey.giveMeBuilder(PlanInfoResponse.GetPlan.class)
+		PlanInfoResponse.GetPlan planInfo2 = sut.giveMeBuilder(PlanInfoResponse.GetPlan.class)
 			.set("year", 2021).sample();
 
 		int execute = 2023 - 2021 + 1;

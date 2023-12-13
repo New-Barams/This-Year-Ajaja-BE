@@ -5,7 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.domain.repository.PlanQueryRepository;
-import com.newbarams.ajaja.module.user.application.DisablePlanService;
+import com.newbarams.ajaja.module.user.application.service.DisablePlanService;
 
 import lombok.RequiredArgsConstructor;
 

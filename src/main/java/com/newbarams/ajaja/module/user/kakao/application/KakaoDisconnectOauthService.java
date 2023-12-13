@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 import com.newbarams.ajaja.infra.feign.kakao.KakaoProperties;
 import com.newbarams.ajaja.infra.feign.kakao.KakaoUnlinkFeignClient;
-import com.newbarams.ajaja.module.user.application.DisconnectOauthService;
+import com.newbarams.ajaja.module.user.application.service.DisconnectOauthService;
 import com.newbarams.ajaja.module.user.kakao.model.KakaoUnlinkRequest;
 
 import lombok.RequiredArgsConstructor;

@@ -25,7 +25,6 @@ public class LoadSentRemindInfoService {
 	public RemindResponse.CommonResponse loadSentRemindInfo(Long planId) {
 		Plan plan = loadPlanService.loadPlanOrElseThrow(planId);
 		List<Feedback> feedbacks = loadFeedbackService.loadFeedback(planId);
-
 		return remindQueryRepository.findAllRemindByPlanId(plan, feedbacks);
 	}
 }

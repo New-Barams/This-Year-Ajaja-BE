@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import com.newbarams.ajaja.common.MockTestSupport;
+import com.newbarams.ajaja.common.support.MockTestSupport;
 import com.newbarams.ajaja.infra.feign.kakao.KakaoAuthorizeFeignClient;
 import com.newbarams.ajaja.infra.feign.kakao.KakaoProperties;
 import com.newbarams.ajaja.module.user.application.model.AccessToken;
@@ -28,9 +28,9 @@ class KakaoAuthorizeServiceTest extends MockTestSupport {
 	@DisplayName("인증을 요청하면 예상한 정보와 일치하고 예외가 발생하지 않아야 한다.")
 	void authorize_Success_WithoutException() {
 		// given
-		String authorizationCode = monkey.giveMeOne(String.class);
-		String redirectUrl = monkey.giveMeOne(String.class);
-		KakaoResponse.Token response = monkey.giveMeOne(KakaoResponse.Token.class);
+		String authorizationCode = sut.giveMeOne(String.class);
+		String redirectUrl = sut.giveMeOne(String.class);
+		KakaoResponse.Token response = sut.giveMeOne(KakaoResponse.Token.class);
 		given(kakaoAuthorizeFeignClient.authorize(any())).willReturn(response);
 
 		// when

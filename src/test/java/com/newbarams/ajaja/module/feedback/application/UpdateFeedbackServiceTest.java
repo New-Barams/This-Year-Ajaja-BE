@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import com.newbarams.ajaja.common.MockTestSupport;
+import com.newbarams.ajaja.common.support.MockTestSupport;
 import com.newbarams.ajaja.module.feedback.domain.Achieve;
 import com.newbarams.ajaja.module.feedback.domain.Feedback;
 import com.newbarams.ajaja.module.feedback.domain.FeedbackQueryRepository;
@@ -20,29 +20,25 @@ import com.newbarams.ajaja.module.plan.application.UpdatePlanAchieveService;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 
 class UpdateFeedbackServiceTest extends MockTestSupport {
-
 	@InjectMocks
 	private UpdateFeedbackService updateFeedbackService;
 
 	@Mock
 	private FeedbackQueryRepository feedbackQueryRepository;
-
 	@Mock
 	private UpdatePlanAchieveService updatePlanAchieveService;
-
 	@Mock
 	private Feedback mockFeedback;
 
 	@Nested
 	class DeadlineTest {
-
 		@Test
 		@DisplayName("기간 내에 피드백을 시행할 경우 성공한다.")
 		void updateTest_Success_WithNoException() {
 			// given
-			List<Feedback> feedbacks = monkey.giveMe(Feedback.class, 2);
+			List<Feedback> feedbacks = sut.giveMe(Feedback.class, 2);
 
-			Plan plan = monkey.giveMeOne(Plan.class);
+			Plan plan = sut.giveMeOne(Plan.class);
 
 			// mock
 			given(feedbackQueryRepository.findByFeedbackId(any())).willReturn(Optional.of(mockFeedback));
@@ -64,13 +60,13 @@ class UpdateFeedbackServiceTest extends MockTestSupport {
 
 			// when,then
 			assertThatNoException().isThrownBy(
-				() -> updateFeedbackService.updateFeedback(1L, 50));
+				() -> updateFeedbackService.updateFeedback(1L, 50)
+			);
 		}
 	}
 
 	@Nested
 	class AchieveTest {
-
 		@Test
 		@DisplayName("선택지 외 다른 항목이 오면 예외를 던진다.")
 		void findRate_Fail_ByException() {
@@ -78,8 +74,8 @@ class UpdateFeedbackServiceTest extends MockTestSupport {
 			int rate = 10;
 
 			// when,then
-			assertThatThrownBy(
-				() -> Achieve.of(rate));
+			assertThatThrownBy(() -> Achieve.of(rate))
+				.isInstanceOf(IllegalArgumentException.class);
 		}
 
 		@Test

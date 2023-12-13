@@ -19,7 +19,6 @@ public class LoadRemindInfoService {
 
 	public RemindResponse.CommonResponse loadRemindInfo(Long planId) {
 		Plan plan = loadPlanService.loadPlanOrElseThrow(planId);
-
 		return futureRemindMapper.toFutureRemind(plan);
 	}
 }

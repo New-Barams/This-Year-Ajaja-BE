@@ -1,5 +1,7 @@
 package com.newbarams.ajaja.module.remind.domain;
 
+import java.beans.ConstructorProperties;
+
 import com.newbarams.ajaja.global.common.SelfValidating;
 
 import jakarta.validation.constraints.NotBlank;
@@ -12,6 +14,7 @@ public class Info extends SelfValidating<Info> {
 	@Size(max = 255)
 	private final String content;
 
+	@ConstructorProperties("content")
 	public Info(String content) {
 		this.content = content;
 		this.validateSelf();

@@ -85,11 +85,7 @@ public class PlanQueryRepository {
 				.and(ajaja.isCanceled.eq(false)))
 			.fetch();
 
-		if (ajajas.isEmpty()) {
-			return false;
-		}
-
-		return true;
+		return !ajajas.isEmpty();
 	}
 
 	private List<String> findTagByPlanId(Long planId) {

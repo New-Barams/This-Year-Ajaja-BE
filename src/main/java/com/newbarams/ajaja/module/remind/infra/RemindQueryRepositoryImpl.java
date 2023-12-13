@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class RemindQueryRepositoryImpl implements RemindQueryRepository {
+class RemindQueryRepositoryImpl implements RemindQueryRepository {
 	private final JPAQueryFactory queryFactory;
 	private final RemindInfoMapper remindInfoMapper;
 
@@ -70,7 +70,7 @@ public class RemindQueryRepositoryImpl implements RemindQueryRepository {
 			plan.getRemindTerm(),
 			plan.getRemindTotalPeriod(),
 			plan.getIsRemindable(),
-			Collections.EMPTY_LIST,
+			Collections.emptyList(),
 			futureResponses
 		);
 	}

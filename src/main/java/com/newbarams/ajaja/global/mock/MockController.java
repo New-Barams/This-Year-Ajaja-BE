@@ -52,10 +52,11 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/mock")
 @RequiredArgsConstructor
-class MockController {
+public class MockController {
 	private static final String CERTIFICATION = "123456";
-	private static final List<String> nicknames = Arrays.asList("노래부르는 다람쥐", "부끄러워하는 코끼리", "춤추는 강아지", "고백하는 고양이 ",
-		"거절하는 거북이 ", "손을 번쩍든 오리");
+	private static final List<String> nicknames = Arrays.asList(
+		"노래부르는 다람쥐", "부끄러워하는 코끼리", "춤추는 강아지", "고백하는 고양이 ", "거절하는 거북이 ", "손을 번쩍든 오리"
+	);
 
 	private final JwtGenerator jwtGenerator;
 	private final JwtValidator jwtValidator;
@@ -421,29 +422,29 @@ class MockController {
 	@Operation(summary = "[테스트] 계획 삭제 API")
 	@DeleteMapping("/plans/{id}")
 	@ResponseStatus(OK)
-	public AjajaResponse deletePlan(@PathVariable Long id, @RequestHeader(name = "Date") String date) {
-		return new AjajaResponse<>(true, null);
+	public AjajaResponse<?> deletePlan(@PathVariable Long id, @RequestHeader(name = "Date") String date) {
+		return AjajaResponse.ok();
 	}
 
 	@Operation(summary = "[테스트] 계획 공개 여부 변경 API")
 	@PutMapping("/plans/{id}/public")
 	@ResponseStatus(OK)
-	public AjajaResponse updatePlanPublicStatus(@PathVariable Long id) {
-		return new AjajaResponse(true, null);
+	public AjajaResponse<?> updatePlanPublicStatus(@PathVariable Long id) {
+		return AjajaResponse.ok();
 	}
 
 	@Operation(summary = "[테스트] 계획 리마인드 알림 여부 변경 API")
 	@PutMapping("/plans/{id}/remindable")
 	@ResponseStatus(OK)
-	public AjajaResponse updatePlanRemindStatus(@PathVariable Long id) {
-		return new AjajaResponse(true, null);
+	public AjajaResponse<?> updatePlanRemindStatus(@PathVariable Long id) {
+		return AjajaResponse.ok();
 	}
 
 	@Operation(summary = "[테스트] 응원메시지 알림 여부 변경 API")
 	@PutMapping("/plans/{id}/ajaja")
 	@ResponseStatus(OK)
-	public AjajaResponse updatePlanAjajaStatus(@PathVariable Long id) {
-		return new AjajaResponse(true, null);
+	public AjajaResponse<?> updatePlanAjajaStatus(@PathVariable Long id) {
+		return AjajaResponse.ok();
 	}
 
 	@Operation(summary = "[토큰 필요] 메인 페이지 내 계획 조회 API", description = "로그인을 했을 시에만 불러올 수 있습니다.",
@@ -480,6 +481,6 @@ class MockController {
 			getPlan2022);
 
 		List<MockPlanInfoResponse.GetPlanInfoResponse> getPlanInfo = List.of(getPlanInfo2023, getPlanInfo2022);
-		return new AjajaResponse<>(true, getPlanInfo);
+		return AjajaResponse.ok(getPlanInfo);
 	}
 }
