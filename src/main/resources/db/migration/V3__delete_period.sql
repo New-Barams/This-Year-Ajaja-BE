@@ -1,0 +1,2 @@
+ALTER TABLE remind DROP COLUMN starts;
+ALTER TABLE remind DROP COLUMN ends;
