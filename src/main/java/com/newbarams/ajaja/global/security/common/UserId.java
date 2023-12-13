@@ -12,7 +12,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
  * This returns User ID which already authenticated from UserAdapter.
  * @author hejow
  * @see UserAdapter
- * @see UserEmail
  */
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
