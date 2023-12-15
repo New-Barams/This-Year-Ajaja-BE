@@ -34,13 +34,22 @@ public class JwtParser {
 
 	public Authentication parseAuthentication(String jwt) {
 		Long userId = parseId(jwt);
-		UserDetails user = userDetailService.loadUserByUsername(String.valueOf(userId)); // todo: ridiculous code
+		UserDetails user = userDetailService.loadUserByUsername(String.valueOf(userId));
 		return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 	}
 
 	public Long parseId(String jwt) {
-		Claims claims = parseClaim(jwt).orElseThrow(() -> new AjajaException(EMPTY_TOKEN));
+		Claims claims = parseClaim(jwt).orElseThrow(() -> new AjajaException(INVALID_TOKEN));
 		return claims.get(jwtSecretProvider.getSignature(), Long.class);
+	}
+
+	boolean canParse(String jwt) {
+		try {
+			parser.parseSignedClaims(jwt);
+			return true;
+		} catch (JwtException | IllegalArgumentException e) {
+			return false;
+		}
 	}
 
 	private Optional<Claims> parseClaim(String jwt) {
