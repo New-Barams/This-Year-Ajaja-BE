@@ -4,6 +4,7 @@ import static com.newbarams.ajaja.module.remind.infra.QRemindEntity.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import org.springframework.stereotype.Repository;
 
@@ -47,9 +48,9 @@ class RemindQueryRepositoryImpl implements RemindQueryRepository {
 	) {
 		List<Message> messages = plan.getMessages();
 
-		for (int i = responses.size(); i < plan.getTotalRemindNumber(); i++) {
-			responses.add(remindInfoMapper.toFutureMessages(messages.get(i)));
-		}
+		IntStream.range(responses.size(), plan.getTotalRemindNumber()).mapToObj(i ->
+			responses.add(remindInfoMapper.toFutureMessages(messages.get(i)))
+		).toList();
 
 		return new RemindResponse.CommonResponse(
 			plan.getRemindTimeName(),
