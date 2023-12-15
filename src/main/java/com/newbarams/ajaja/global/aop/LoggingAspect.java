@@ -23,11 +23,15 @@ public class LoggingAspect {
 		&& execution(public * *(..))
 		""";
 
+	private record Process(Object result, long proceed) {
+	}
+
 	@Around(CONTROLLER_LOGGING_CONDITION)
-	public void executeLogging(ProceedingJoinPoint joinPoint) throws Throwable {
+	public Object executeLogging(ProceedingJoinPoint joinPoint) throws Throwable {
 		HttpServletRequest request = extractRequest();
-		long proceedTime = countProceedTime(joinPoint);
-		log.info("[API] Called : {} {}, Processed : {}ms", request.getMethod(), request.getRequestURI(), proceedTime);
+		Process process = run(joinPoint);
+		log.info("[API] Call : {} {}, Processed : {}ms", request.getMethod(), request.getRequestURI(), process.proceed);
+		return process.result;
 	}
 
 	private HttpServletRequest extractRequest() {
@@ -35,13 +39,13 @@ public class LoggingAspect {
 		return Objects.requireNonNull(attributes).getRequest();
 	}
 
-	private long countProceedTime(ProceedingJoinPoint joinPoint) throws Throwable {
+	private Process run(ProceedingJoinPoint joinPoint) throws Throwable {
 		StopWatch stopWatch = new StopWatch();
 
 		stopWatch.start();
-		joinPoint.proceed();
+		Object result = joinPoint.proceed();
 		stopWatch.stop();
 
-		return stopWatch.getTotalTimeMillis();
+		return new Process(result, stopWatch.getTotalTimeMillis());
 	}
 }
