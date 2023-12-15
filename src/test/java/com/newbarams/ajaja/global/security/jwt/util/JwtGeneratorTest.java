@@ -2,6 +2,8 @@ package com.newbarams.ajaja.global.security.jwt.util;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.util.Date;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,5 +41,6 @@ class JwtGeneratorTest extends MonkeySupport {
 		assertThat(savedToken).isNotNull();
 		assertThat(savedToken).isInstanceOf(String.class);
 		assertThat(response.getRefreshToken()).isEqualTo((String)savedToken);
+		assertThat(response.getAccessTokenExpireIn()).isGreaterThan(new Date().getTime());
 	}
 }

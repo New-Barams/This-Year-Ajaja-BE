@@ -9,6 +9,7 @@ public final class UserResponse {
 	public static class Token {
 		private final String accessToken;
 		private final String refreshToken;
+		private final long accessTokenExpireIn;
 	}
 
 	@Data

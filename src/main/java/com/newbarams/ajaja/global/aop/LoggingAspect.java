@@ -1,5 +1,7 @@
 package com.newbarams.ajaja.global.aop;
 
+import java.util.Objects;
+
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -21,24 +23,29 @@ public class LoggingAspect {
 		&& execution(public * *(..))
 		""";
 
+	private record Process(Object result, long proceed) {
+	}
+
 	@Around(CONTROLLER_LOGGING_CONDITION)
 	public Object executeLogging(ProceedingJoinPoint joinPoint) throws Throwable {
+		HttpServletRequest request = extractRequest();
+		Process process = run(joinPoint);
+		log.info("[API] Call : {} {}, Processed : {}ms", request.getMethod(), request.getRequestURI(), process.proceed);
+		return process.result;
+	}
+
+	private HttpServletRequest extractRequest() {
+		ServletRequestAttributes attributes = (ServletRequestAttributes)RequestContextHolder.getRequestAttributes();
+		return Objects.requireNonNull(attributes).getRequest();
+	}
+
+	private Process run(ProceedingJoinPoint joinPoint) throws Throwable {
 		StopWatch stopWatch = new StopWatch();
 
 		stopWatch.start();
 		Object result = joinPoint.proceed();
 		stopWatch.stop();
 
-		ServletRequestAttributes requestAttributes
-			= (ServletRequestAttributes)RequestContextHolder.getRequestAttributes();
-		HttpServletRequest request = (requestAttributes).getRequest();
-
-		String controllerLog =
-			"[API] Called : " + request.getMethod() + " " + request.getRequestURI()
-				+ ",Processed : " + stopWatch.getTotalTimeMillis() + "ms";
-
-		log.info(controllerLog);
-
-		return result;
+		return new Process(result, stopWatch.getTotalTimeMillis());
 	}
 }
