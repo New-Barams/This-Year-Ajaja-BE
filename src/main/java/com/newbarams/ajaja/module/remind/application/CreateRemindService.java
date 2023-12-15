@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.newbarams.ajaja.module.remind.domain.Info;
 import com.newbarams.ajaja.module.remind.domain.Remind;
 import com.newbarams.ajaja.module.remind.domain.RemindRepository;
+import com.newbarams.ajaja.module.remind.dto.RemindMessageInfo;
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,9 +16,10 @@ import lombok.RequiredArgsConstructor;
 public class CreateRemindService {
 	private final RemindRepository remindRepository;
 
-	public void createRemind(Long userId, Long planId, String message, int remindMonth, int remindDate) {
-		Info info = new Info(message);
-		Remind remind = Remind.plan(userId, planId, info, remindMonth, remindDate);
+	public void createRemind(RemindMessageInfo remindInfo) {
+		Info info = new Info(remindInfo.getMessage());
+		Remind remind = Remind.plan(remindInfo.getUserId(), remindInfo.getPlanId(), info, remindInfo.getRemindMonth(),
+			remindInfo.getRemindDate());
 		remindRepository.save(remind);
 	}
 }
