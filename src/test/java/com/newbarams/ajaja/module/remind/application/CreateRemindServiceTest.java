@@ -9,6 +9,7 @@ import org.mockito.Mock;
 
 import com.newbarams.ajaja.common.support.MockTestSupport;
 import com.newbarams.ajaja.module.remind.domain.RemindRepository;
+import com.newbarams.ajaja.module.remind.dto.RemindMessageInfo;
 
 class CreateRemindServiceTest extends MockTestSupport {
 	@InjectMocks
@@ -21,10 +22,10 @@ class CreateRemindServiceTest extends MockTestSupport {
 	@DisplayName("보낸 리마인드 정보를 담은 리마인드 객체를 저장한다.")
 	void sendRemindPerMonth_Success_WithNoException() {
 		// given
-		String message = "화이팅";
+		RemindMessageInfo info = sut.giveMeOne(RemindMessageInfo.class);
 
 		// when
-		createRemindService.createRemind(1L, 1L, message, 3, 15);
+		createRemindService.createRemind(info);
 
 		// then
 		then(remindRepository).should(times(1)).save(any());
