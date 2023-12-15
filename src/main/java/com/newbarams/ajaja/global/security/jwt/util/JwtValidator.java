@@ -7,38 +7,32 @@ import org.springframework.stereotype.Component;
 import com.newbarams.ajaja.global.cache.CacheUtil;
 import com.newbarams.ajaja.global.exception.AjajaException;
 
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.JwtParser;
-import io.jsonwebtoken.Jwts;
+import lombok.RequiredArgsConstructor;
 
 @Component
+@RequiredArgsConstructor
 public class JwtValidator {
 	private final JwtSecretProvider jwtSecretProvider;
 	private final CacheUtil cacheUtil;
 	private final JwtParser parser;
 
-	JwtValidator(JwtSecretProvider jwtSecretProvider, CacheUtil cacheUtil) {
-		this.jwtSecretProvider = jwtSecretProvider;
-		this.cacheUtil = cacheUtil;
-		this.parser = Jwts.parser().verifyWith(jwtSecretProvider.getSecretKey()).build();
+	/**
+	 * Validation succeeds if either of the parameters is valid
+	 * @author hejow
+	 */
+	public Long validateReissuableAndExtractId(String accessToken, String refreshToken) {
+		return isValidAccessToken(accessToken) ? parser.parseId(accessToken) : validateHistory(refreshToken);
 	}
 
-	public void validateReissueable(Long userId, String refreshToken) {
-		validateToken(refreshToken);
-		validateHistory(userId, refreshToken);
+	private boolean isValidAccessToken(String accessToken) {
+		return parser.canParse(accessToken);
 	}
 
-	private void validateToken(String jwt) {
-		try {
-			parser.parseSignedClaims(jwt);
-		} catch (JwtException | IllegalArgumentException e) {
-			throw new AjajaException(INVALID_TOKEN);
-		}
-	}
-
-	private void validateHistory(Long userId, String refreshToken) {
+	private Long validateHistory(String refreshToken) {
+		Long userId = parser.parseId(refreshToken);
 		String savedToken = getSavedFromCache(userId);
 		compare(savedToken, refreshToken);
+		return userId;
 	}
 
 	private String getSavedFromCache(Long userId) {

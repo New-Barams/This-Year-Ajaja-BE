@@ -3,6 +3,8 @@ package com.newbarams.ajaja.global.security.jwt.util;
 import static com.newbarams.ajaja.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,63 +19,62 @@ import com.newbarams.ajaja.module.user.dto.UserResponse;
 class JwtValidatorTest extends MonkeySupport {
 	@Autowired
 	private JwtValidator jwtValidator;
-
 	@Autowired
 	private JwtGenerator jwtGenerator;
-
 	@Autowired
 	private JwtSecretProvider jwtSecretProvider;
-
 	@Autowired
 	private RedisTemplate<String, Object> redisTemplate;
 
-	@Test
-	@DisplayName("유효한 refresh token을 입력하면 검증에 성공한다.")
-	void validate_Success_ByValidToken() {
-		Long userId = sut.giveMeOne(Long.class);
-		UserResponse.Token tokens = jwtGenerator.generate(userId);
+	private Long userId;
+	private UserResponse.Token tokens;
 
-		// when, then
-		assertThatNoException().isThrownBy(() -> jwtValidator.validateReissueable(userId, tokens.getRefreshToken()));
+	@BeforeEach
+	void setup() {
+		userId = sut.giveMeOne(Long.class);
+		tokens = jwtGenerator.generate(userId);
+	}
+
+	@AfterEach
+	void clearCache() {
+		redisTemplate.delete(jwtSecretProvider.getSignature() + userId);
 	}
 
 	@Test
-	@DisplayName("서명이 다른 토큰을 입력하면 검증에 실패한다.")
-	void validate_Fail_ByWrongSignature() {
+	@DisplayName("유효한 Access Token만으로도 검증해도 성공해야 한다.")
+	void validateReissuable_Success_ByAccessToken() {
 		// given
-		Long userId = sut.giveMeOne(Long.class);
-		String wrongSignatureToken = """
-			eyJhbGciOiJIUzI1NiJ9.
-			eyJuYW1lIjoiSGVqb3cifQ.
-			SI7XBRHE_95nkxQ69SiiCQcqDkZ-FW1RdxNL1DmAAAg
-			""";
 
 		// when, then
-		assertThatException().isThrownBy(() -> jwtValidator.validateReissueable(userId, wrongSignatureToken));
+		assertThatNoException()
+			.isThrownBy(() -> jwtValidator.validateReissuableAndExtractId(tokens.getAccessToken(), null));
 	}
 
 	@Test
-	@DisplayName("로그인 이력 없이 refresh token을 입력하면 검증에 실패한다.")
-	void validate_Fail_ByNoneLoginHistory() {
-		// given
-		Long userId = sut.giveMeOne(Long.class);
-		UserResponse.Token tokens = jwtGenerator.generate(userId);
+	@DisplayName("유효한 Refresh Token만으로도 검증해도 성공해야 한다.")
+	void validateReissuable_Success_ByRefreshToken() {
 
+		// when, then
+		assertThatNoException()
+			.isThrownBy(() -> jwtValidator.validateReissuableAndExtractId(null, tokens.getRefreshToken()));
+	}
+
+	@Test
+	@DisplayName("Refresh Token으로 검증 시 로그인 이력이 존재하지 않으면 검증에 실패해야 한다.")
+	void validateReissuable_Fail_ByNoneLoginHistory() {
+		// given
 		redisTemplate.delete(jwtSecretProvider.getSignature() + userId);
 
 		// when, then
 		assertThatExceptionOfType(AjajaException.class)
-			.isThrownBy(() -> jwtValidator.validateReissueable(userId, tokens.getRefreshToken()))
+			.isThrownBy(() -> jwtValidator.validateReissuableAndExtractId(null, tokens.getRefreshToken()))
 			.withMessage(NEVER_LOGIN.getMessage());
 	}
 
 	@Test
-	@DisplayName("관리 중인 refresh token과 다른 token을 입력하면 검증에 실패해야 한다.")
-	void validate_Fail_ByDifferentRefreshToken() {
+	@DisplayName("검증을 요청한 Refresh Token과 관리 중인 Token이 다르다면 검증에 실패해야 한다..")
+	void validateReissuable_Fail_ByDifferentRefreshToken() {
 		// given
-		Long userId = sut.giveMeOne(Long.class);
-		UserResponse.Token oldTokens = jwtGenerator.generate(userId);
-
 		String newToken = """
 			eyJhbGciOiJIUzUxMiJ9.
 			eyJleHAiOjk5OTk5OTk5OTl9.
@@ -84,7 +85,7 @@ class JwtValidatorTest extends MonkeySupport {
 
 		// when, then
 		assertThatExceptionOfType(AjajaException.class)
-			.isThrownBy(() -> jwtValidator.validateReissueable(userId, oldTokens.getRefreshToken()))
+			.isThrownBy(() -> jwtValidator.validateReissuableAndExtractId(null, tokens.getRefreshToken()))
 			.withMessage(TOKEN_NOT_MATCH.getMessage());
 	}
 }
