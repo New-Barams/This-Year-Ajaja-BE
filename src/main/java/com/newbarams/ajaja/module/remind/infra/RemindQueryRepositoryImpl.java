@@ -37,25 +37,25 @@ class RemindQueryRepositoryImpl implements RemindQueryRepository {
 			return createCommonResponse(new ArrayList<>(), plan);
 		}
 
-		List<RemindResponse.Response> sentMessages = remindInfoMapper.toSentMessages(reminds);
+		List<RemindResponse.Messages> sentMessages = remindInfoMapper.toSentMessages(reminds);
 
 		return createCommonResponse(sentMessages, plan);
 	}
 
 	private RemindResponse.CommonResponse createCommonResponse(
-		List<RemindResponse.Response> responses,
+		List<RemindResponse.Messages> respons,
 		Plan plan
 	) {
 		List<Message> messages = plan.getMessages();
 
-		IntStream.range(responses.size(), plan.getTotalRemindNumber()).mapToObj(i ->
-			responses.add(remindInfoMapper.toFutureMessages(messages.get(i)))
+		IntStream.range(respons.size(), plan.getTotalRemindNumber()).mapToObj(i ->
+			respons.add(remindInfoMapper.toFutureMessages(messages.get(i)))
 		).toList();
 
 		return new RemindResponse.CommonResponse(
 			plan.getRemindTimeName(),
 			plan.getIsRemindable(),
-			responses
+			respons
 		);
 	}
 }

@@ -3,17 +3,16 @@ package com.newbarams.ajaja.module.remind.dto;
 import java.util.List;
 
 public sealed interface RemindResponse
-	permits RemindResponse.CommonResponse, RemindResponse.Response {
+	permits RemindResponse.CommonResponse, RemindResponse.Messages {
 
 	record CommonResponse(
 		String remindTime,
 		boolean isRemindable,
-		List<Response> RemindResponses
-
+		List<Messages> messagesResponses
 	) implements RemindResponse {
 	}
 
-	record Response(
+	record Messages(
 		String remindMessage,
 		int remindMonth,
 		int remindDate,

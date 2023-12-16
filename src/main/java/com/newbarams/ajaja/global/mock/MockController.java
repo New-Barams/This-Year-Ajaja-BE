@@ -198,29 +198,29 @@ public class MockController {
 	@GetMapping("/reminds/{planId}")
 	@ResponseStatus(OK)
 	public AjajaResponse<RemindResponse.CommonResponse> getReminds(@PathVariable Long planId) {
-		List<RemindResponse.Response> sentRespons =
+		List<RemindResponse.Messages> sentRespons =
 			List.of(
-				new RemindResponse.Response(
+				new RemindResponse.Messages(
 					"화이팅",
 					3,
 					13,
 					true
 				),
-				new RemindResponse.Response(
+				new RemindResponse.Messages(
 					"아좌좌",
 					6,
 					13,
 					true
 				));
 
-		List<RemindResponse.Response> responses = List.of(
-			new RemindResponse.Response(
+		List<RemindResponse.Messages> respons = List.of(
+			new RemindResponse.Messages(
 				"잘하고 있지?",
 				9,
 				13,
 				false
 			),
-			new RemindResponse.Response(
+			new RemindResponse.Messages(
 				"조금만 더 힘내!",
 				12,
 				13,
@@ -231,7 +231,7 @@ public class MockController {
 		RemindResponse.CommonResponse response = new RemindResponse.CommonResponse(
 			"MORNING",
 			true,
-			responses
+			respons
 		);
 
 		return new AjajaResponse<>(true, response);
@@ -249,14 +249,14 @@ public class MockController {
 	@GetMapping("/reminds/modify/{planId}")
 	@ResponseStatus(OK)
 	public AjajaResponse<RemindResponse.CommonResponse> getRemindsInfo(@PathVariable Long planId) {
-		List<RemindResponse.Response> responses = List.of(
-			new RemindResponse.Response(
+		List<RemindResponse.Messages> respons = List.of(
+			new RemindResponse.Messages(
 				"화이팅",
 				6,
 				13,
 				false
 			),
-			new RemindResponse.Response(
+			new RemindResponse.Messages(
 				"아좌좌",
 				12,
 				13,
@@ -266,7 +266,7 @@ public class MockController {
 		RemindResponse.CommonResponse response = new RemindResponse.CommonResponse(
 			"MORNING",
 			true,
-			responses
+			respons
 		);
 
 		return new AjajaResponse<>(true, response);

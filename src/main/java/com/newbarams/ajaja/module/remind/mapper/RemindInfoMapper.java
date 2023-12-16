@@ -17,10 +17,10 @@ import com.newbarams.ajaja.module.remind.infra.RemindEntity;
 public interface RemindInfoMapper {
 	@Mapping(source = "content", target = "remindMessage")
 	@Mapping(target = "isReminded", expression = "java(true)")
-	RemindResponse.Response toSentMessages(RemindEntity entity);
+	RemindResponse.Messages toSentMessages(RemindEntity entity);
 
-	List<RemindResponse.Response> toSentMessages(List<RemindEntity> entities);
+	List<RemindResponse.Messages> toSentMessages(List<RemindEntity> entities);
 
 	@Mapping(source = "content", target = "remindMessage")
-	RemindResponse.Response toFutureMessages(Message message);
+	RemindResponse.Messages toFutureMessages(Message message);
 }
