@@ -47,7 +47,7 @@ public class Feedback extends SelfValidating<Feedback> {
 		return Achieve.of(rate).name();
 	}
 
-	public boolean checkDeadline() {
+	public boolean isBeforeDeadline() {
 		return TimeValue.check(this.createdAt);
 	}
 }
