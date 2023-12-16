@@ -2,7 +2,6 @@ package com.newbarams.ajaja.module.plan.mapper;
 
 import static com.newbarams.ajaja.global.exception.ErrorCode.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.mapstruct.factory.Mappers;
@@ -51,13 +50,7 @@ public class PlanMapper {
 			throw new AjajaException(EMPTY_MESSAGES_LIST);
 		}
 
-		List<Message> messages = new ArrayList<>(messageList.size());
-
-		for (PlanRequest.CreateMessage message : messageList) {
-			messages.add(mapper.toDomain(message));
-		}
-
-		return messages;
+		return mapper.toDomain(messageList);
 	}
 
 	public static PlanResponse.Create toResponse(Plan plan, List<String> tags) {
