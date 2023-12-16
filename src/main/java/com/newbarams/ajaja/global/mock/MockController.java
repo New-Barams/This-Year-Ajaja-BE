@@ -69,7 +69,7 @@ public class MockController {
 	@PostMapping("/login")
 	@ResponseStatus(OK)
 	AjajaResponse<UserResponse.Token> login(@RequestBody UserRequest.Login request) {
-		UserResponse.Token response = jwtGenerator.generate(1L);
+		UserResponse.Token response = jwtGenerator.login(1L);
 		return AjajaResponse.ok(response);
 	}
 
@@ -78,7 +78,7 @@ public class MockController {
 	@ResponseStatus(OK)
 	AjajaResponse<UserResponse.Token> reissue(@RequestBody UserRequest.Reissue request) {
 		jwtValidator.validateReissuableAndExtractId(request.getAccessToken(), request.getRefreshToken());
-		UserResponse.Token response = jwtGenerator.generate(1L);
+		UserResponse.Token response = jwtGenerator.reissue(1L, request.getRefreshToken());
 		return AjajaResponse.ok(response);
 	}
 

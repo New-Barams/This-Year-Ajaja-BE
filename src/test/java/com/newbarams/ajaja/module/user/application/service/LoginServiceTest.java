@@ -66,7 +66,7 @@ class LoginServiceTest extends MockTestSupport {
 			then(getProfileService).should(times(1)).getProfile(any());
 			then(userRepository).should(times(1)).findByEmail(any());
 			then(userRepository).should(times(1)).save(any());
-			then(jwtGenerator).should(times(1)).generate(any());
+			then(jwtGenerator).should(times(1)).login(any());
 		}
 
 		@Test
@@ -85,7 +85,7 @@ class LoginServiceTest extends MockTestSupport {
 			then(getProfileService).should(times(1)).getProfile(any());
 			then(userRepository).should(times(1)).findByEmail(any());
 			then(userRepository).shouldHaveNoMoreInteractions();
-			then(jwtGenerator).should(times(1)).generate(any());
+			then(jwtGenerator).should(times(1)).login(any());
 		}
 	}
 }

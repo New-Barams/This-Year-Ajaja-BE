@@ -1,5 +1,6 @@
 package com.newbarams.ajaja.global.common;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -8,6 +9,7 @@ import java.util.Date;
 
 public class TimeValue {
 	private static final String DEFAULT_TIME_ZONE = "Asia/Seoul";
+	private static final int THREE_DAYS = 3;
 
 	private final Instant instant;
 	private final ZonedDateTime zonedDateTime;
@@ -46,7 +48,12 @@ public class TimeValue {
 	}
 
 	public ZonedDateTime oneMonthLater() {
-		return ZonedDateTime.ofInstant(instant.plus(31, ChronoUnit.DAYS), ZoneId.of(DEFAULT_TIME_ZONE));
+		return zonedDateTime.plusMonths(1);
+	}
+
+	public boolean isWithinThreeDays(Date expireIn) {
+		Duration between = Duration.between(instant, expireIn.toInstant());
+		return Math.abs(between.toDays()) <= THREE_DAYS;
 	}
 
 	public static boolean check(Instant createdAt) {

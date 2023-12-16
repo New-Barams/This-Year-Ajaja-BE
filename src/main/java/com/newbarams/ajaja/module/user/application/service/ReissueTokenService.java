@@ -18,6 +18,6 @@ class ReissueTokenService implements ReissueTokenUseCase {
 	@Override
 	public UserResponse.Token reissue(String accessToken, String refreshToken) {
 		Long userId = jwtValidator.validateReissuableAndExtractId(accessToken, refreshToken);
-		return jwtGenerator.generate(userId);
+		return jwtGenerator.reissue(userId, refreshToken);
 	}
 }

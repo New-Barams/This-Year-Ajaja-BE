@@ -27,7 +27,7 @@ class LoginService implements LoginUseCase {
 		AccessToken accessToken = authorizeService.authorize(authorizationCode, redirectUri);
 		Profile profile = getProfileService.getProfile(accessToken.getContent());
 		User user = findUserOrCreateIfNotExists(profile.getEmail(), profile.getOauthId());
-		return jwtGenerator.generate(user.getId());
+		return jwtGenerator.login(user.getId());
 	}
 
 	private User findUserOrCreateIfNotExists(String email, Long oauthId) {
