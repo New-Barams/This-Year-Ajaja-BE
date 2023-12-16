@@ -4,15 +4,13 @@ import java.util.List;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.NullValueMappingStrategy;
 
 import com.newbarams.ajaja.module.plan.domain.Message;
 import com.newbarams.ajaja.module.remind.dto.RemindResponse;
 import com.newbarams.ajaja.module.remind.infra.RemindEntity;
 
 @Mapper(
-	componentModel = "spring",
-	nullValueIterableMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT
+	componentModel = "spring"
 )
 public interface RemindInfoMapper {
 	@Mapping(source = "content", target = "remindMessage")
@@ -22,5 +20,6 @@ public interface RemindInfoMapper {
 	List<RemindResponse.Messages> toSentMessages(List<RemindEntity> entities);
 
 	@Mapping(source = "content", target = "remindMessage")
+	@Mapping(target = "isReminded", expression = "java(false)")
 	RemindResponse.Messages toFutureMessages(Message message);
 }
