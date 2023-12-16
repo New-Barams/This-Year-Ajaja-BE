@@ -4,6 +4,9 @@ import static com.newbarams.ajaja.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -42,7 +45,7 @@ class JwtParserTest extends MonkeySupport {
 	@BeforeEach
 	void setup() {
 		userId = sut.giveMeOne(Long.class);
-		UserResponse.Token response = jwtGenerator.generate(userId);
+		UserResponse.Token response = jwtGenerator.login(userId);
 		accessToken = response.getAccessToken();
 		refreshToken = response.getRefreshToken();
 	}
@@ -53,7 +56,7 @@ class JwtParserTest extends MonkeySupport {
 	}
 
 	@Test
-	@DisplayName("JWT에서 Authentication를 파싱하면 UsernamePasswordAuthenticationToken으로 생성되어야 한다.")
+	@DisplayName("JWT에서 Authentication를 파싱하면 UsernamePasswordAuthenticationToken이 생성되어야 한다.")
 	void parseAuthentication_Success_WithSameUserAdapter() {
 		// given
 		UserAdapter adapter = sut.giveMeOne(UserAdapter.class);
@@ -69,7 +72,7 @@ class JwtParserTest extends MonkeySupport {
 	}
 
 	@Test
-	@DisplayName("AccessToken에서 ID를 파싱하면 생성했을 때의 ID와 동일하고 예외가 발생하지 않아야 한다.")
+	@DisplayName("Access Token에서 ID를 파싱하면 생성했을 때와 ID가 동일하고 예외가 발생하지 않아야 한다.")
 	void parseId_Success_WithAccessToken_WithSameUserId() {
 		// given
 
@@ -81,7 +84,7 @@ class JwtParserTest extends MonkeySupport {
 	}
 
 	@Test
-	@DisplayName("RefreshToken에서 ID를 파싱하면 생성했을 때의 ID와 동일하고 예외가 발생하지 않아야 한다.")
+	@DisplayName("Refresh Token에서 ID를 파싱하면 생성했을 때와 ID가 동일하고 예외가 발생하지 않아야 한다.")
 	void parseId_Success_WithRefreshToken_WithSameUserId() {
 		// given
 
@@ -89,6 +92,19 @@ class JwtParserTest extends MonkeySupport {
 		assertThatNoException().isThrownBy(() -> {
 			Long parsedId = jwtParser.parseId(refreshToken);
 			assertThat(userId).isEqualTo(parsedId);
+		});
+	}
+
+	@Test
+	@DisplayName("Refresh Token에서 만료일을 파싱하면 예외가 발생하지 않아야 한다.")
+	void parseExpireIn_Success_WithinOneWeek() {
+		// given
+		String expected = LocalDateTime.now().plusWeeks(1).toString();
+
+		// when, then
+		assertThatNoException().isThrownBy(() -> {
+			Date expireIn = jwtParser.parseExpireIn(refreshToken);
+			assertThat(expireIn).isCloseTo(expected, 1000);
 		});
 	}
 
@@ -124,7 +140,7 @@ class JwtParserTest extends MonkeySupport {
 	class CanParseTest {
 		@Test
 		@DisplayName("유효한 토큰을 파싱을 시도하면 true를 리턴해야 한다.")
-		void canParse_Success_OnValidToken() {
+		void canParse_Success_ByValidToken() {
 			// given
 
 			// when
