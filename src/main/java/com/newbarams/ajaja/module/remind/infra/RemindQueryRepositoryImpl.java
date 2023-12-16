@@ -33,13 +33,10 @@ class RemindQueryRepositoryImpl implements RemindQueryRepository {
 			.orderBy(remindEntity.createdAt.asc())
 			.fetch();
 
-		if (reminds.isEmpty()) {
-			return createCommonResponse(new ArrayList<>(), plan);
-		}
-
-		List<RemindResponse.Messages> sentMessages = remindInfoMapper.toSentMessages(reminds);
-
-		return createCommonResponse(sentMessages, plan);
+		return createCommonResponse(
+			reminds.isEmpty() ? new ArrayList<>() : remindInfoMapper.toSentMessages(reminds),
+			plan
+		);
 	}
 
 	private RemindResponse.CommonResponse createCommonResponse(
