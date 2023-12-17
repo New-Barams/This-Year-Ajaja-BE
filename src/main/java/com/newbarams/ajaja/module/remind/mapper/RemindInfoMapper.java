@@ -19,6 +19,8 @@ public interface RemindInfoMapper {
 
 	List<RemindResponse.Messages> toSentMessages(List<RemindEntity> entities);
 
+	@Mapping(source = "remindDate.remindMonth", target = "remindMonth")
+	@Mapping(source = "remindDate.remindDay", target = "remindDay")
 	@Mapping(source = "content", target = "remindMessage")
 	@Mapping(target = "isReminded", expression = "java(false)")
 	RemindResponse.Messages toFutureMessages(Message message);

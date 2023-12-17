@@ -31,7 +31,7 @@ public class PlanRequest {
 	public static class CreateMessage {
 		private final String content;
 		private final int remindMonth;
-		private final int remindDat;
+		private final int remindDay;
 	}
 
 	public record Update(
