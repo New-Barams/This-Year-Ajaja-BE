@@ -19,9 +19,9 @@ import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.remind.domain.RemindQueryRepository;
 import com.newbarams.ajaja.module.remind.dto.RemindResponse;
 
-class LoadSentRemindInfoServiceTest extends MockTestSupport {
+class LoadRemindInfoServiceTest extends MockTestSupport {
 	@InjectMocks
-	private LoadSentRemindInfoService loadSentRemindInfoService;
+	private LoadRemindInfoService loadRemindInfoService;
 	@Mock
 	private LoadPlanService loadPlanService;
 	@Mock
@@ -46,7 +46,7 @@ class LoadSentRemindInfoServiceTest extends MockTestSupport {
 
 		// then
 		assertThatNoException().isThrownBy(() ->
-			loadSentRemindInfoService.loadRemindResponse(plan.getId())
+			loadRemindInfoService.loadRemindInfoResponse(plan.getId())
 		);
 	}
 
@@ -60,7 +60,7 @@ class LoadSentRemindInfoServiceTest extends MockTestSupport {
 
 		// then
 		assertThatException().isThrownBy(
-			() -> loadSentRemindInfoService.loadRemindResponse(1L)
+			() -> loadRemindInfoService.loadRemindInfoResponse(1L)
 		);
 
 	}

@@ -13,11 +13,11 @@ import lombok.RequiredArgsConstructor;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class LoadSentRemindInfoService {
+public class LoadRemindInfoService {
 	private final LoadPlanService loadPlanService;
 	private final RemindQueryRepository remindQueryRepository;
 
-	public RemindResponse.CommonResponse loadRemindResponse(Long planId) {
+	public RemindResponse.CommonResponse loadRemindInfoResponse(Long planId) {
 		Plan plan = loadPlanService.loadPlanOrElseThrow(planId);
 		return remindQueryRepository.findAllRemindByPlanId(plan);
 	}
