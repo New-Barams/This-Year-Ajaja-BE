@@ -23,8 +23,9 @@ public class UpdateFeedbackService {
 		Feedback feedback = feedbackQueryRepository.findByFeedbackId(feedbackId)
 			.orElseThrow(() -> AjajaException.withId(feedbackId, NOT_FOUND_FEEDBACK));
 
-		feedback.checkDeadline();
-		feedbackQueryRepository.update(feedbackId, feedback.getAchieveName(rate));
+		if (feedback.isBeforeDeadline()) {
+			feedbackQueryRepository.update(feedbackId, feedback.getAchieveName(rate)); // todo: 더티 체킹 적용 후 도메인 로직에 넣기
+		}
 
 		Long planId = feedback.getPlanId();
 		updatePlanAchieve(planId);

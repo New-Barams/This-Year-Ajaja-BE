@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.newbarams.ajaja.global.common.AjajaResponse;
 import com.newbarams.ajaja.global.exception.ErrorResponse;
 import com.newbarams.ajaja.module.remind.application.LoadRemindInfoService;
-import com.newbarams.ajaja.module.remind.application.LoadSentRemindInfoService;
 import com.newbarams.ajaja.module.remind.dto.RemindResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,9 +25,8 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/reminds")
 public class RemindController {
 	private final LoadRemindInfoService loadRemindInfoService;
-	private final LoadSentRemindInfoService loadSentRemindInfoService;
 
-	@Operation(summary = "[토큰 필요] 비시즌일때 리마인드 조회 API", description = "<b>url에 플랜id 값이 필요합니다.</b>",
+	@Operation(summary = "[토큰 필요] 리마인드 정보 조회 API", description = "<b>url에 플랜id 값이 필요합니다.</b>",
 		responses = {
 			@ApiResponse(responseCode = "200", description = "성공적으로 계획에 대한 정보를 불러왔습니다."),
 			@ApiResponse(responseCode = "400", description = "유효하지 않은 토큰입니다.",
@@ -43,22 +41,6 @@ public class RemindController {
 	public AjajaResponse<RemindResponse> getRemindResponse(
 		@PathVariable Long planId
 	) {
-		return new AjajaResponse<>(true, loadSentRemindInfoService.loadSentRemindInfo(planId));
+		return new AjajaResponse<>(true, loadRemindInfoService.loadRemindInfoResponse(planId));
 	}
-
-	@Operation(summary = "[토큰 필요] 시즌일 때 리마인드 조회 API", description = "<b>url에 플랜id 값이 필요합니다.</b>",
-		responses = {
-			@ApiResponse(responseCode = "200", description = "성공적으로 계획에 대한 정보를 불러왔습니다."),
-			@ApiResponse(responseCode = "400", description = "유효하지 않은 토큰입니다."),
-			@ApiResponse(responseCode = "400", description = "계획 정보를 불러오지 못했습니다."),
-			@ApiResponse(responseCode = "500", description = "서버 내부 문제입니다. 관리자에게 문의 바랍니다.")
-		})
-	@GetMapping("/modify/{planId}")
-	@ResponseStatus(HttpStatus.OK)
-	public AjajaResponse<RemindResponse> getRemindInfoResponse(
-		@PathVariable Long planId
-	) {
-		return new AjajaResponse<>(true, loadRemindInfoService.loadRemindInfo(planId));
-	}
-
 }

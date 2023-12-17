@@ -4,8 +4,6 @@ import java.time.Instant;
 
 import com.newbarams.ajaja.global.common.SelfValidating;
 import com.newbarams.ajaja.global.common.TimeValue;
-import com.newbarams.ajaja.global.exception.AjajaException;
-import com.newbarams.ajaja.global.exception.ErrorCode;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -19,7 +17,7 @@ public class Feedback extends SelfValidating<Feedback> {
 	private final Long planId;
 	private final Achieve achieve;
 
-	private Instant createdAt;
+	private final Instant createdAt;
 	private Instant updatedAt;
 
 	public Feedback(Long id, Long userId, Long planId, Achieve achieve, Instant createdAt,
@@ -49,9 +47,7 @@ public class Feedback extends SelfValidating<Feedback> {
 		return Achieve.of(rate).name();
 	}
 
-	public void checkDeadline() {
-		if (TimeValue.check(this.createdAt)) {
-			throw new AjajaException(ErrorCode.EXPIRED_FEEDBACK);
-		}
+	public boolean isBeforeDeadline() {
+		return TimeValue.check(this.createdAt);
 	}
 }

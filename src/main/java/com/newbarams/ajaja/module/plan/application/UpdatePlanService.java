@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
-import com.newbarams.ajaja.module.plan.mapper.PlanMapper;
 import com.newbarams.ajaja.module.tag.application.UpdatePlanTagService;
 
 import lombok.RequiredArgsConstructor;
@@ -51,8 +50,7 @@ public class UpdatePlanService {
 			request.remindTime(),
 			request.isPublic(),
 			request.canRemind(),
-			request.canAjaja(),
-			PlanMapper.toMessages(request.messages())
+			request.canAjaja()
 		);
 
 		return getPlanService.loadById(id, userId);

@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
+import lombok.Data;
+
 public class PlanRequest {
 
 	public record Create(
@@ -21,8 +23,15 @@ public class PlanRequest {
 
 		List<String> tags,
 
-		List<String> messages
+		List<CreateMessage> messages
 	) {
+	}
+
+	@Data
+	public static class CreateMessage {
+		private final String content;
+		private final int remindMonth;
+		private final int remindDay;
 	}
 
 	public record Update(

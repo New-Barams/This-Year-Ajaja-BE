@@ -88,11 +88,10 @@ class PlanTest {
 	@DisplayName("수정가능한 기간일 경우 작성한 계획을 수정할 수 있다.")
 	void updatePlan_Success_With_Updatable_Date() {
 		Plan plan = fixtureMonkey.giveMeOne(Plan.class);
-		List<Message> messages = fixtureMonkey.giveMe(Message.class, 3);
 
 		assertThatNoException().isThrownBy(() ->
 			plan.update(plan.getUserId(), 1, "title", "des", 12, 3, 1,
-				"EVENING", true, true, true, messages)
+				"EVENING", true, true, true)
 		);
 	}
 
@@ -103,7 +102,7 @@ class PlanTest {
 		List<Message> messages = fixtureMonkey.giveMe(Message.class, 3);
 
 		assertThatThrownBy(() -> plan.update(plan.getUserId(), 12, "title", "des", 12, 3,
-			1, "EVENING", true, true, true, messages))
+			1, "EVENING", true, true, true))
 			.isInstanceOf(AjajaException.class)
 			.hasMessage(INVALID_UPDATABLE_DATE.getMessage());
 	}
@@ -115,7 +114,7 @@ class PlanTest {
 		List<Message> messages = fixtureMonkey.giveMe(Message.class, 3);
 
 		plan.update(plan.getUserId(), 1, "title", "des", 12, 3, 1,
-			"EVENING", true, false, true, messages);
+			"EVENING", true, false, true);
 
 		assertThat(plan.getContent().getTitle()).isEqualTo("title");
 		assertThat(plan.getInfo().getRemindDate()).isEqualTo(1);

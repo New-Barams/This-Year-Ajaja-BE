@@ -33,15 +33,6 @@ class MessageTest {
 	}
 
 	@Test
-	@DisplayName("0보다 작은 index로 생성 요청을 하면 예외가 발생한다.")
-	void createMessage_Fail_ByIndex() {
-		assertThatThrownBy(() -> fixtureMonkey.giveMeBuilder(Message.class)
-			.set("index", Arbitraries.integers().lessOrEqual(-1))
-			.sample())
-			.isInstanceOf(IllegalArgumentException.class);
-	}
-
-	@Test
 	@DisplayName("비어있는 content로 생성 요청을 하면 예외가 발생한다.")
 	void createMessage_Fail_ByEmptyContent() {
 		assertThatThrownBy(() -> fixtureMonkey.giveMeBuilder(Message.class)

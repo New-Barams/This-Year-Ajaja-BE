@@ -36,7 +36,7 @@ class DeletePlanServiceTest {
 			.content(new Content("title", "description"))
 			.info(new RemindInfo(12, 3, 15, "MORNING"))
 			.isPublic(true)
-			.messages(List.of(new Message("content")))
+			.messages(List.of(new Message("content", 3, 15)))
 			.build();
 
 		Plan saved = planRepository.save(plan);
@@ -64,7 +64,7 @@ class DeletePlanServiceTest {
 			.content(new Content("title", "description"))
 			.info(new RemindInfo(12, 3, 15, "MORNING"))
 			.isPublic(true)
-			.messages(List.of(new Message("content")))
+			.messages(List.of(new Message("content", 3, 15)))
 			.build();
 
 		Plan saved = planRepository.save(plan);

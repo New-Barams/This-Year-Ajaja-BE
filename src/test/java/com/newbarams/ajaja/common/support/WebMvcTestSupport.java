@@ -23,7 +23,6 @@ import com.newbarams.ajaja.module.plan.application.LoadPlanInfoService;
 import com.newbarams.ajaja.module.plan.application.LoadPlanService;
 import com.newbarams.ajaja.module.plan.application.UpdatePlanService;
 import com.newbarams.ajaja.module.remind.application.LoadRemindInfoService;
-import com.newbarams.ajaja.module.remind.application.LoadSentRemindInfoService;
 import com.newbarams.ajaja.module.user.application.service.UserMockBeans;
 import com.newbarams.ajaja.module.user.domain.UserQueryRepository;
 
@@ -76,8 +75,6 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 	// Remind
 	@MockBean
 	protected LoadRemindInfoService loadRemindInfoService;
-	@MockBean
-	protected LoadSentRemindInfoService loadSentRemindInfoService;
 
 	// Ajaja
 	@MockBean
