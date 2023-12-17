@@ -15,16 +15,7 @@ import net.jqwik.api.Arbitraries;
 
 import com.newbarams.ajaja.common.support.MonkeySupport;
 
-import com.navercorp.fixturemonkey.FixtureMonkey;
-import com.navercorp.fixturemonkey.api.introspector.ConstructorPropertiesArbitraryIntrospector;
-import com.navercorp.fixturemonkey.jakarta.validation.plugin.JakartaValidationPlugin;
-
 class RemindTest extends MonkeySupport {
-	private final FixtureMonkey sut = FixtureMonkey.builder()
-		.objectIntrospector(ConstructorPropertiesArbitraryIntrospector.INSTANCE)
-		.plugin(new JakartaValidationPlugin())
-		.build();
-
 	@Nested
 	@DisplayName("리마인드 받을 메세지를 테스트한다.")
 	class ContentTest {
