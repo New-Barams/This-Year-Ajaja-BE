@@ -24,15 +24,14 @@ class ReissueTokenServiceTest extends MockTestSupport {
 	@Test
 	void reissue_Success_WithExpectedCall() {
 		// given
-		Long userId = sut.giveMeOne(Long.class);
 		UserResponse.Token tokens = sut.giveMeOne(UserResponse.Token.class);
-		given(jwtGenerator.generate(any())).willReturn(tokens);
+		given(jwtGenerator.reissue(any(), anyString())).willReturn(tokens);
 
 		// when
 		UserResponse.Token response = reissueTokenService.reissue(tokens.getAccessToken(), tokens.getRefreshToken());
 
 		// then
-		then(jwtGenerator).should(times(1)).generate(any());
+		then(jwtGenerator).should(times(1)).reissue(any(), anyString());
 		then(jwtValidator).should(times(1)).validateReissuableAndExtractId(any(), anyString());
 		assertThat(response).usingRecursiveComparison().isEqualTo(tokens);
 	}

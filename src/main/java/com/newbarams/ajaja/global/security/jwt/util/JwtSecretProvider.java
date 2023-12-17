@@ -12,6 +12,8 @@ import lombok.Getter;
 @Getter
 @Component
 class JwtSecretProvider {
+	private static final String DATE_CLAIM_POSTFIX = " DATE";
+
 	private final SecretKey secretKey;
 	private final String signature;
 
@@ -26,5 +28,9 @@ class JwtSecretProvider {
 
 	public String cacheKey(Long userId) {
 		return signature + userId;
+	}
+
+	public String getDateKey() {
+		return signature + DATE_CLAIM_POSTFIX;
 	}
 }

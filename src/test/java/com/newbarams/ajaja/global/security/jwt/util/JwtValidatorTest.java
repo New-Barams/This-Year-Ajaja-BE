@@ -32,7 +32,7 @@ class JwtValidatorTest extends MonkeySupport {
 	@BeforeEach
 	void setup() {
 		userId = sut.giveMeOne(Long.class);
-		tokens = jwtGenerator.generate(userId);
+		tokens = jwtGenerator.login(userId);
 	}
 
 	@AfterEach

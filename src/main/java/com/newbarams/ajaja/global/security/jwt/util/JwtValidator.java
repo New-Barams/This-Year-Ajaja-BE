@@ -21,11 +21,11 @@ public class JwtValidator {
 	 * @author hejow
 	 */
 	public Long validateReissuableAndExtractId(String accessToken, String refreshToken) {
-		return isValidAccessToken(accessToken) ? parser.parseId(accessToken) : validateHistory(refreshToken);
+		return isValidToken(accessToken) ? parser.parseId(accessToken) : validateHistory(refreshToken);
 	}
 
-	private boolean isValidAccessToken(String accessToken) {
-		return parser.canParse(accessToken);
+	private boolean isValidToken(String accessToken) {
+		return parser.isParsable(accessToken);
 	}
 
 	private Long validateHistory(String refreshToken) {

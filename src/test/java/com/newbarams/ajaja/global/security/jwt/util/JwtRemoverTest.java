@@ -29,7 +29,7 @@ class JwtRemoverTest extends MonkeySupport {
 	void remove_Success() {
 		// given
 		Long userId = sut.giveMeOne(Long.class);
-		jwtGenerator.generate(userId);
+		jwtGenerator.login(userId);
 
 		// when
 		jwtRemover.remove(userId);
