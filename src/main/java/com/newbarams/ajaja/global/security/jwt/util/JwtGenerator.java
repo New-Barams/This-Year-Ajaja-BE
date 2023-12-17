@@ -58,7 +58,7 @@ public class JwtGenerator {
 
 		String refreshToken = Jwts.builder()
 			.claim(jwtSecretProvider.getSignature(), userId)
-			.claim(jwtSecretProvider.getExpireKey(), refreshTokenExpireIn)
+			.claim(jwtSecretProvider.getDateKey(), refreshTokenExpireIn)
 			.expiration(refreshTokenExpireIn)
 			.signWith(jwtSecretProvider.getSecretKey())
 			.compact();

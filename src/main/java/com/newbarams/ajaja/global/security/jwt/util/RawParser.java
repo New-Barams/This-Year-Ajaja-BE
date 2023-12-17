@@ -22,10 +22,12 @@ class RawParser {
 	private final JwtParser parser;
 
 	RawParser(JwtSecretProvider jwtSecretProvider) {
-		this.parser = Jwts.parser().verifyWith(jwtSecretProvider.getSecretKey()).build();
+		this.parser = Jwts.parser()
+			.verifyWith(jwtSecretProvider.getSecretKey())
+			.build();
 	}
 
-	boolean parsable(String jwt) {
+	boolean isParsable(String jwt) {
 		try {
 			parser.parseSignedClaims(jwt);
 			return true;

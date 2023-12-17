@@ -12,7 +12,7 @@ import lombok.Getter;
 @Getter
 @Component
 class JwtSecretProvider {
-	private static final String DATE_CLAIM_KEY = " DATE";
+	private static final String DATE_CLAIM_POSTFIX = " DATE";
 
 	private final SecretKey secretKey;
 	private final String signature;
@@ -30,7 +30,7 @@ class JwtSecretProvider {
 		return signature + userId;
 	}
 
-	public String getExpireKey() {
-		return signature + DATE_CLAIM_KEY;
+	public String getDateKey() {
+		return signature + DATE_CLAIM_POSTFIX;
 	}
 }

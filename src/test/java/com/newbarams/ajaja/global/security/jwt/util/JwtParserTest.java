@@ -140,11 +140,11 @@ class JwtParserTest extends MonkeySupport {
 	class CanParseTest {
 		@Test
 		@DisplayName("유효한 토큰을 파싱을 시도하면 true를 리턴해야 한다.")
-		void canParse_Success_ByValidToken() {
+		void isParsable_Success_ByValidToken() {
 			// given
 
 			// when
-			boolean shouldBeTrue = jwtParser.canParse(accessToken);
+			boolean shouldBeTrue = jwtParser.isParsable(accessToken);
 
 			// then
 			assertThat(shouldBeTrue).isTrue();
@@ -152,7 +152,7 @@ class JwtParserTest extends MonkeySupport {
 
 		@Test
 		@DisplayName("유효하지 않은 토큰으로 파싱을 시도하면 false를 리턴해야 한다.")
-		void canParse_Fail_ByInvalidToken() {
+		void isParsable_Fail_ByInvalidToken() {
 			// given
 			String invalidToken = """
 				eyJhbGciOiJIUzI1NiJ9.
@@ -161,7 +161,7 @@ class JwtParserTest extends MonkeySupport {
 				""";
 
 			// when
-			boolean shouldBeFalse = jwtParser.canParse(invalidToken);
+			boolean shouldBeFalse = jwtParser.isParsable(invalidToken);
 
 			// then
 			assertThat(shouldBeFalse).isFalse();

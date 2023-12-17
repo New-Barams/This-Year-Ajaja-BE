@@ -31,12 +31,12 @@ public class JwtParser {
 		return getSpecificClaim(jwt, jwtSecretProvider.getSignature(), Long.class);
 	}
 
-	boolean canParse(String jwt) {
-		return rawParser.parsable(jwt);
+	boolean isParsable(String jwt) {
+		return rawParser.isParsable(jwt);
 	}
 
 	Date parseExpireIn(String refreshToken) {
-		return getSpecificClaim(refreshToken, jwtSecretProvider.getExpireKey(), Date.class);
+		return getSpecificClaim(refreshToken, jwtSecretProvider.getDateKey(), Date.class);
 	}
 
 	private <T> T getSpecificClaim(String token, String key, Class<T> type) {
