@@ -42,7 +42,7 @@ class LoadRemindInfoServiceTest extends MockTestSupport {
 
 		// when
 		given(loadPlanService.loadPlanOrElseThrow(any())).willReturn(plan);
-		given(remindQueryRepository.findAllRemindByPlanId(any())).willReturn(response);
+		given(remindQueryRepository.findAllReminds(any())).willReturn(response);
 
 		// then
 		assertThatNoException().isThrownBy(() ->

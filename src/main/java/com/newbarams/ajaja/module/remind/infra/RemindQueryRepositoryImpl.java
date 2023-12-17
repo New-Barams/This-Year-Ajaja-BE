@@ -23,7 +23,7 @@ class RemindQueryRepositoryImpl implements RemindQueryRepository {
 	private final JPAQueryFactory queryFactory;
 	private final RemindInfoMapper remindInfoMapper;
 
-	public RemindResponse.CommonResponse findAllRemindByPlanId(Plan plan) {
+	public RemindResponse.CommonResponse findAllReminds(Plan plan) {
 		Long planId = plan.getId();
 
 		List<RemindEntity> reminds = queryFactory
@@ -40,19 +40,19 @@ class RemindQueryRepositoryImpl implements RemindQueryRepository {
 	}
 
 	private RemindResponse.CommonResponse createCommonResponse(
-		List<RemindResponse.Messages> respons,
+		List<RemindResponse.Messages> responses,
 		Plan plan
 	) {
 		List<Message> messages = plan.getMessages();
 
-		IntStream.range(respons.size(), plan.getTotalRemindNumber()).mapToObj(i ->
-			respons.add(remindInfoMapper.toFutureMessages(messages.get(i)))
+		IntStream.range(responses.size(), plan.getTotalRemindNumber()).mapToObj(i ->
+			responses.add(remindInfoMapper.toFutureMessages(messages.get(i)))
 		).toList();
 
 		return new RemindResponse.CommonResponse(
 			plan.getRemindTimeName(),
 			plan.getIsRemindable(),
-			respons
+			responses
 		);
 	}
 }

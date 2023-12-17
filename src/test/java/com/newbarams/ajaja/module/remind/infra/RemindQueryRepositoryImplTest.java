@@ -53,7 +53,7 @@ class RemindQueryRepositoryImplTest extends MockTestSupport {
 			.sample();
 
 		// when
-		RemindResponse.CommonResponse reminds = remindQueryRepositoryImpl.findAllRemindByPlanId(plan);
+		RemindResponse.CommonResponse reminds = remindQueryRepositoryImpl.findAllReminds(plan);
 
 		// then
 		Assertions.assertThat(reminds.messagesResponses().size()).isEqualTo(1);
@@ -71,7 +71,7 @@ class RemindQueryRepositoryImplTest extends MockTestSupport {
 
 		// when, then
 		Assertions.assertThatNoException().isThrownBy(() ->
-			remindQueryRepositoryImpl.findAllRemindByPlanId(plan)
+			remindQueryRepositoryImpl.findAllReminds(plan)
 		);
 	}
 }
