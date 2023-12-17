@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-class KakaoDisconnectOauthPort implements DisconnectOauthPort {
+class KakaoDisconnectOauthService implements DisconnectOauthPort {
 	private static final String KAKAO_AK_PREFIX = "KakaoAK ";
 
 	private final KakaoUnlinkFeignClient kakaoUnlinkFeignClient;

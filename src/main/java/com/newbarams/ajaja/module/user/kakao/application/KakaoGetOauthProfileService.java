@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-class KakaoGetOauthProfilePort implements GetOauthProfilePort {
+class KakaoGetOauthProfileService implements GetOauthProfilePort {
 	private final KakaoProfileFeignClient kakaoProfileFeignClient;
 
 	@Override

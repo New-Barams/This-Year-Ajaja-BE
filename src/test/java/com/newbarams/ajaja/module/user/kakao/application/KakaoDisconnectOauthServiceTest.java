@@ -10,9 +10,9 @@ import com.newbarams.ajaja.common.support.MockTestSupport;
 import com.newbarams.ajaja.infra.feign.kakao.KakaoProperties;
 import com.newbarams.ajaja.infra.feign.kakao.KakaoUnlinkFeignClient;
 
-class KakaoDisconnectOauthPortTest extends MockTestSupport {
+class KakaoDisconnectOauthServiceTest extends MockTestSupport {
 	@InjectMocks
-	private KakaoDisconnectOauthPort kakaoDisconnectService;
+	private KakaoDisconnectOauthService kakaoDisconnectService;
 
 	@Mock
 	private KakaoUnlinkFeignClient kakaoUnlinkFeignClient;

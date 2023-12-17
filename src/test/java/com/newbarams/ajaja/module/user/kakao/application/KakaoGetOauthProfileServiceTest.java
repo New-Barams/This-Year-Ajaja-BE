@@ -13,9 +13,9 @@ import com.newbarams.ajaja.infra.feign.kakao.KakaoProfileFeignClient;
 import com.newbarams.ajaja.module.user.application.model.Profile;
 import com.newbarams.ajaja.module.user.kakao.model.KakaoResponse;
 
-class KakaoGetOauthProfilePortTest extends MockTestSupport {
+class KakaoGetOauthProfileServiceTest extends MockTestSupport {
 	@InjectMocks
-	private KakaoGetOauthProfilePort kakaoGetProfileService;
+	private KakaoGetOauthProfileService kakaoGetProfileService;
 
 	@Mock
 	private KakaoProfileFeignClient kakaoProfileFeignClient;
