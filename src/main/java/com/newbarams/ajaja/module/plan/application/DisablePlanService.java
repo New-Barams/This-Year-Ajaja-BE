@@ -5,14 +5,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.domain.repository.PlanQueryRepository;
-import com.newbarams.ajaja.module.user.application.service.DisablePlanService;
+import com.newbarams.ajaja.module.user.application.port.out.DisablePlanPort;
 
 import lombok.RequiredArgsConstructor;
 
 @Component
 @Transactional
 @RequiredArgsConstructor
-class DisablePlanServiceImpl implements DisablePlanService {
+class DisablePlanService implements DisablePlanPort {
 	private final PlanQueryRepository planQueryRepository;
 
 	@Override

@@ -15,6 +15,8 @@ import com.newbarams.ajaja.common.support.MockTestSupport;
 import com.newbarams.ajaja.global.security.jwt.util.JwtGenerator;
 import com.newbarams.ajaja.module.user.application.model.AccessToken;
 import com.newbarams.ajaja.module.user.application.model.Profile;
+import com.newbarams.ajaja.module.user.application.port.out.AuthorizePort;
+import com.newbarams.ajaja.module.user.application.port.out.GetOauthProfilePort;
 import com.newbarams.ajaja.module.user.domain.User;
 import com.newbarams.ajaja.module.user.domain.UserRepository;
 import com.newbarams.ajaja.module.user.kakao.model.KakaoAccount;
@@ -25,9 +27,9 @@ class LoginServiceTest extends MockTestSupport {
 	private LoginService loginService;
 
 	@Mock
-	private AuthorizeService authorizeService;
+	private AuthorizePort authorizePort;
 	@Mock
-	private GetProfileService getProfileService;
+	private GetOauthProfilePort getOauthProfilePort;
 	@Mock
 	private UserRepository userRepository;
 	@Mock
@@ -42,10 +44,10 @@ class LoginServiceTest extends MockTestSupport {
 		private final AccessToken accessToken = sut.giveMeOne(KakaoResponse.Token.class);
 
 		private final Profile profile = sut.giveMeBuilder(KakaoResponse.UserInfo.class)
-			.set("kakaoAccount", sut.giveMeBuilder(KakaoAccount.class)
-				.set("email", email)
-				.sample())
-			.sample();
+				.set("kakaoAccount", sut.giveMeBuilder(KakaoAccount.class)
+						.set("email", email)
+						.sample())
+				.sample();
 
 		private final User user = User.init(email, 1L);
 
@@ -53,8 +55,8 @@ class LoginServiceTest extends MockTestSupport {
 		@DisplayName("새로운 유저가 로그인하면 새롭게 유저 정보를 생성해야 한다.")
 		void login_Success_WithNewUser() {
 			// given
-			given(authorizeService.authorize(any(), any())).willReturn(accessToken);
-			given(getProfileService.getProfile(any())).willReturn(profile);
+			given(authorizePort.authorize(any(), any())).willReturn(accessToken);
+			given(getOauthProfilePort.getProfile(any())).willReturn(profile);
 			given(userRepository.findByEmail(any())).willReturn(Optional.empty());
 			given(userRepository.save(any())).willReturn(user);
 
@@ -62,8 +64,8 @@ class LoginServiceTest extends MockTestSupport {
 			loginService.login(authorizationCode, redirectUrl);
 
 			// then
-			then(authorizeService).should(times(1)).authorize(any(), any());
-			then(getProfileService).should(times(1)).getProfile(any());
+			then(authorizePort).should(times(1)).authorize(any(), any());
+			then(getOauthProfilePort).should(times(1)).getProfile(any());
 			then(userRepository).should(times(1)).findByEmail(any());
 			then(userRepository).should(times(1)).save(any());
 			then(jwtGenerator).should(times(1)).login(any());
@@ -73,16 +75,16 @@ class LoginServiceTest extends MockTestSupport {
 		@DisplayName("기존에 가입된 고객이 로그인하면 생성하는 로직이 호출되지 않아야 한다.")
 		void login_Success_WithOldUser() {
 			// given
-			given(authorizeService.authorize(any(), any())).willReturn(accessToken);
-			given(getProfileService.getProfile(any())).willReturn(profile);
+			given(authorizePort.authorize(any(), any())).willReturn(accessToken);
+			given(getOauthProfilePort.getProfile(any())).willReturn(profile);
 			given(userRepository.findByEmail(any())).willReturn(Optional.of(user));
 
 			// when
 			loginService.login(authorizationCode, redirectUrl);
 
 			// then
-			then(authorizeService).should(times(1)).authorize(any(), any());
-			then(getProfileService).should(times(1)).getProfile(any());
+			then(authorizePort).should(times(1)).authorize(any(), any());
+			then(getOauthProfilePort).should(times(1)).getProfile(any());
 			then(userRepository).should(times(1)).findByEmail(any());
 			then(userRepository).shouldHaveNoMoreInteractions();
 			then(jwtGenerator).should(times(1)).login(any());

@@ -13,9 +13,9 @@ import com.newbarams.ajaja.infra.feign.kakao.KakaoProfileFeignClient;
 import com.newbarams.ajaja.module.user.application.model.Profile;
 import com.newbarams.ajaja.module.user.kakao.model.KakaoResponse;
 
-class KakaoGetProfileServiceTest extends MockTestSupport {
+class KakaoGetOauthProfilePortTest extends MockTestSupport {
 	@InjectMocks
-	private KakaoGetProfileService kakaoGetProfileService;
+	private KakaoGetOauthProfilePort kakaoGetProfileService;
 
 	@Mock
 	private KakaoProfileFeignClient kakaoProfileFeignClient;
@@ -44,7 +44,7 @@ class KakaoGetProfileServiceTest extends MockTestSupport {
 
 		// when, then
 		assertThatThrownBy(() -> kakaoGetProfileService.getProfile(accessToken))
-			.isInstanceOf(NullPointerException.class);
+				.isInstanceOf(NullPointerException.class);
 		then(kakaoProfileFeignClient).shouldHaveNoInteractions();
 	}
 }

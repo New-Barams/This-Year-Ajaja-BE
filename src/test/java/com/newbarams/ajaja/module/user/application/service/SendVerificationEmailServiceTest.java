@@ -12,6 +12,7 @@ import com.newbarams.ajaja.common.annotation.RedisBasedTest;
 import com.newbarams.ajaja.common.support.MonkeySupport;
 import com.newbarams.ajaja.global.cache.CacheUtil;
 import com.newbarams.ajaja.module.user.application.model.Verification;
+import com.newbarams.ajaja.module.user.application.port.out.SendCertificationPort;
 import com.newbarams.ajaja.module.user.domain.Email;
 import com.newbarams.ajaja.module.user.domain.User;
 
@@ -23,7 +24,7 @@ class SendVerificationEmailServiceTest extends MonkeySupport {
 	private CacheUtil cacheUtil;
 
 	@MockBean
-	private SendCertificationService sendCertificationService;
+	private SendCertificationPort sendCertificationPort;
 	@MockBean
 	private RetrieveUserService retrieveUserService;
 
@@ -35,8 +36,8 @@ class SendVerificationEmailServiceTest extends MonkeySupport {
 		String email = "Ajaja@me.com";
 
 		User user = sut.giveMeBuilder(User.class)
-			.set("email", new Email(email))
-			.sample();
+				.set("email", new Email(email))
+				.sample();
 
 		given(retrieveUserService.loadExistById(any())).willReturn(user);
 
@@ -45,7 +46,7 @@ class SendVerificationEmailServiceTest extends MonkeySupport {
 
 		// then
 		then(retrieveUserService).should(times(1)).loadExistById(any());
-		then(sendCertificationService).should(times(1)).send(any(), any());
+		then(sendCertificationPort).should(times(1)).send(any(), any());
 
 		Verification verification = cacheUtil.getEmailVerification(userId);
 		assertThat(verification).isNotNull();

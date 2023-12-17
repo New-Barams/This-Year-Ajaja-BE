@@ -14,9 +14,9 @@ import com.newbarams.ajaja.common.support.MockTestSupport;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.domain.repository.PlanQueryRepository;
 
-class DisablePlanServiceImplTest extends MockTestSupport {
+class DisablePlanServiceTest extends MockTestSupport {
 	@InjectMocks
-	private DisablePlanServiceImpl disablePlanService;
+	private DisablePlanService disablePlanService;
 
 	@Mock
 	private PlanQueryRepository planQueryRepository;
@@ -34,10 +34,10 @@ class DisablePlanServiceImplTest extends MockTestSupport {
 		// then
 		then(planQueryRepository).should(times(1)).findAllCurrentPlansByUserId(any());
 		plans.stream().map(Plan::getStatus)
-			.forEach(status -> {
-				assertThat(status.isCanRemind()).isFalse();
-				assertThat(status.isCanAjaja()).isFalse();
-				assertThat(status.isDeleted()).isTrue();
-			});
+				.forEach(status -> {
+					assertThat(status.isCanRemind()).isFalse();
+					assertThat(status.isCanAjaja()).isFalse();
+					assertThat(status.isDeleted()).isTrue();
+				});
 	}
 }
