@@ -46,5 +46,5 @@ public class RemindEntity extends BaseEntity<RemindEntity> {
 	private int remindMonth;
 
 	@Column(nullable = false)
-	private int remindDate;
+	private int remindDay;
 }

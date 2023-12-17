@@ -20,17 +20,14 @@ public class Remind extends SelfValidating<Remind> {
 	private final Type type;
 
 	private final Info info;
+	private final RemindDate remindDate;
 
-	private final int remindMonth;
-	private final int remindDate;
-
-	public Remind(Long userId, Long planId, Info info, Type type, int remindMonth, int remindDate) {
+	public Remind(Long userId, Long planId, Info info, Type type, int remindMonth, int remindDay) {
 		this.userId = userId;
 		this.planId = planId;
 		this.info = info;
 		this.type = type;
-		this.remindMonth = remindMonth;
-		this.remindDate = remindDate;
+		this.remindDate = new RemindDate(remindMonth, remindDay);
 		this.validateSelf();
 	}
 

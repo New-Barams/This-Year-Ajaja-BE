@@ -15,7 +15,7 @@ public sealed interface RemindResponse
 	record Messages(
 		String remindMessage,
 		int remindMonth,
-		int remindDate,
+		int remindDay,
 		boolean isReminded
 	) implements RemindResponse {
 	}

@@ -59,9 +59,9 @@ public class Plan extends BaseEntity<Plan> {
 	private RemindInfo info;
 	private PlanStatus status;
 
-	@ElementCollection(fetch = FetchType.EAGER) // todo:메세지 로딩 오류로 인한 임시 코드 (나중에 지우기)
+	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "remind_messages", joinColumns = @JoinColumn(name = "plan_id"))
-	@OrderBy("remindMonth ASC")
+	@OrderBy("remindDate ASC") // todo : 엔티티 분리후 month에 대해 적용(세한)
 	private List<Message> messages = new ArrayList<>();
 
 	@Size

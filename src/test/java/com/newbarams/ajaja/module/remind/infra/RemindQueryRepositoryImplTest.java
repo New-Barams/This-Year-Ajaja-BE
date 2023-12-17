@@ -60,12 +60,13 @@ class RemindQueryRepositoryImplTest extends MockTestSupport {
 	}
 
 	@Test
-	@DisplayName("만약 플랜id에 맞는 리마인드 정보가 없으면 빈 리스트를 반환한다.")
+	@DisplayName("만약 플랜id에 맞는 리마인드 정보가 없으면 메세지 정보만 반환한다.")
 	void findNoRemindInfoByPlanId_Success_WithNoException() {
 		// given
 		plan = sut.giveMeBuilder(Plan.class)
 			.set("id", 2L)
 			.set("info", info)
+			.set("messages", messages)
 			.sample();
 
 		// when, then
