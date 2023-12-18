@@ -44,10 +44,6 @@ public class UpdatePlanService {
 			month,
 			request.title(),
 			request.description(),
-			request.remindTotalPeriod(),
-			request.remindTerm(),
-			request.remindDate(),
-			request.remindTime(),
 			request.isPublic(),
 			request.canRemind(),
 			request.canAjaja()

@@ -53,8 +53,8 @@ class UpdatePlanServiceTest {
 			.messages(List.of(new Message("content", 3, 15)))
 			.build();
 
-		PlanRequest.Update request = new PlanRequest.Update("title", "des", 12, 1,
-			15, "MORNING", true, true, true, null, List.of("message"));
+		PlanRequest.Update request
+			= new PlanRequest.Update("title", "des", true, true, true, null);
 
 		Plan saved = planRepository.save(plan);
 
@@ -68,8 +68,8 @@ class UpdatePlanServiceTest {
 	void updatePlan_Fail_By_Not_Found_Plan() {
 		Long planId = Arbitraries.longs().lessOrEqual(-1L).sample();
 
-		PlanRequest.Update request = new PlanRequest.Update("title", "des", 12, 1,
-			15, "MORNING", true, true, true, null, List.of("message"));
+		PlanRequest.Update request
+			= new PlanRequest.Update("title", "des", true, true, true, null);
 
 		assertThatThrownBy(() -> updatePlanService.update(planId, 1L, request, 1))
 			.isInstanceOf(AjajaException.class);
@@ -87,8 +87,8 @@ class UpdatePlanServiceTest {
 			.messages(List.of(new Message("content", 3, 15)))
 			.build();
 
-		PlanRequest.Update request = new PlanRequest.Update("title", "des", 12, 1,
-			15, "MORNING", true, true, true, null, List.of("message"));
+		PlanRequest.Update request
+			= new PlanRequest.Update("title", "des", true, true, true, null);
 
 		Plan saved = planRepository.save(plan);
 

@@ -43,7 +43,7 @@ public class PlanMapper {
 		return new RemindInfo(remindTotalPeriod, remindTerm, remindDate, remindTime);
 	}
 
-	public static List<Message> toMessages(List<PlanRequest.CreateMessage> messageList) {
+	public static List<Message> toMessages(List<PlanRequest.Message> messageList) {
 		MessageMapper mapper = Mappers.getMapper(MessageMapper.class);
 
 		if (messageList == null) {

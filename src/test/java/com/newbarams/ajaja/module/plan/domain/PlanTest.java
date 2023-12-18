@@ -90,8 +90,7 @@ class PlanTest {
 		Plan plan = fixtureMonkey.giveMeOne(Plan.class);
 
 		assertThatNoException().isThrownBy(() ->
-			plan.update(plan.getUserId(), 1, "title", "des", 12, 3, 1,
-				"EVENING", true, true, true)
+			plan.update(plan.getUserId(), 1, "title", "des", true, true, true)
 		);
 	}
 
@@ -101,8 +100,8 @@ class PlanTest {
 		Plan plan = fixtureMonkey.giveMeOne(Plan.class);
 		List<Message> messages = fixtureMonkey.giveMe(Message.class, 3);
 
-		assertThatThrownBy(() -> plan.update(plan.getUserId(), 12, "title", "des", 12, 3,
-			1, "EVENING", true, true, true))
+		assertThatThrownBy(() ->
+			plan.update(plan.getUserId(), 12, "title", "des", true, true, true))
 			.isInstanceOf(AjajaException.class)
 			.hasMessage(INVALID_UPDATABLE_DATE.getMessage());
 	}
@@ -113,11 +112,9 @@ class PlanTest {
 		Plan plan = fixtureMonkey.giveMeOne(Plan.class);
 		List<Message> messages = fixtureMonkey.giveMe(Message.class, 3);
 
-		plan.update(plan.getUserId(), 1, "title", "des", 12, 3, 1,
-			"EVENING", true, false, true);
+		plan.update(plan.getUserId(), 1, "title", "des", true, false, true);
 
 		assertThat(plan.getContent().getTitle()).isEqualTo("title");
-		assertThat(plan.getInfo().getRemindDate()).isEqualTo(1);
 		assertThat(plan.getStatus().isCanRemind()).isEqualTo(false);
 	}
 }

@@ -8,6 +8,7 @@ import java.util.List;
 import org.hibernate.annotations.Where;
 
 import com.newbarams.ajaja.global.common.BaseEntity;
+import com.newbarams.ajaja.global.common.TimeValue;
 import com.newbarams.ajaja.global.exception.AjajaException;
 import com.newbarams.ajaja.module.ajaja.domain.Ajaja;
 
@@ -122,10 +123,6 @@ public class Plan extends BaseEntity<Plan> {
 		int month,
 		String title,
 		String description,
-		int remindTotalPeriod,
-		int remindTerm,
-		int remindDate,
-		String remindTime,
 		boolean isPublic,
 		boolean canRemind,
 		boolean canAjaja
@@ -133,9 +130,20 @@ public class Plan extends BaseEntity<Plan> {
 		validateModifiableMonth(month);
 		validateUser(userId);
 		this.content = content.update(title, description);
-		this.info = info.update(remindTotalPeriod, remindTerm, remindDate, remindTime);
 		this.status = status.update(isPublic, canRemind, canAjaja);
 		this.validateSelf();
+	}
+
+	public void updateRemind(
+		RemindInfo info,
+		List<Message> messages
+	) {
+		if (new TimeValue().getMonth() != 12) { // todo : QA를 위해 변경 달을 12월로 지정 , 서비스 시작 전 단위 기간으로 변경
+			throw new AjajaException(INVALID_UPDATABLE_DATE);
+		}
+
+		this.info = info;
+		this.messages = messages;
 	}
 
 	public void updateAchieve(int achieveRate) {
