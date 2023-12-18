@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -42,6 +43,7 @@ class UpdateRemindInfoServiceTest extends MockTestSupport {
 	}
 
 	@Test
+	@DisplayName("플랜의 리마인드 정보와 메세지를 수정한다.")
 	void updateRemindInfo_Success_WithNNoException() {
 		// given
 		Long planId = 1L;
@@ -56,7 +58,21 @@ class UpdateRemindInfoServiceTest extends MockTestSupport {
 	}
 
 	@Test
+	@DisplayName("조회된 정보가 없을 시에 예외를 던진다.")
 	void updateRemindInfo_Fail_ByNotFoundPlan() {
+		// given
+		Long planId = 2L;
+		given(repository.findById(anyLong())).willReturn(Optional.empty());
+
+		// when,then
+		Assertions.assertThatException().isThrownBy(
+			() -> updateRemindInfoService.updateRemindInfo(planId, dto)
+		);
+	}
+
+	@Test
+	@DisplayName("변경 기간이 아니면 예외를 던진다.")
+	void updateRemindInfo_Fail_ByInvalidUpdatableDate() {
 		// given
 		Long planId = 1L;
 		given(repository.findById(anyLong())).willReturn(Optional.of(mockPlan));
