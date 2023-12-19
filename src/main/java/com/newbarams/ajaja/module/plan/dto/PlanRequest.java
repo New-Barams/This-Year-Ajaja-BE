@@ -23,12 +23,12 @@ public class PlanRequest {
 
 		List<String> tags,
 
-		List<CreateMessage> messages
+		List<Message> messages
 	) {
 	}
 
 	@Data
-	public static class CreateMessage {
+	public static class Message {
 		private final String content;
 		private final int remindMonth;
 		private final int remindDay;
@@ -38,19 +38,21 @@ public class PlanRequest {
 		String title,
 		String description,
 
-		int remindTotalPeriod,
-		int remindTerm,
-		int remindDate,
-		String remindTime,
-
 		boolean isPublic,
 		boolean canRemind,
 		boolean canAjaja,
 
-		List<String> tags,
-
-		List<String> messages
+		List<String> tags
 	) {
+	}
+
+	@Data
+	public static class UpdateRemind {
+		int remindTotalPeriod;
+		int remindTerm;
+		int remindDate;
+		String remindTime;
+		List<Message> messages;
 	}
 
 	public record GetAll(

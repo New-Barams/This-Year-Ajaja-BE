@@ -4,6 +4,7 @@ import static org.springframework.http.HttpStatus.*;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +27,7 @@ import com.newbarams.ajaja.module.plan.application.GetPlanAchieveService;
 import com.newbarams.ajaja.module.plan.application.LoadPlanInfoService;
 import com.newbarams.ajaja.module.plan.application.LoadPlanService;
 import com.newbarams.ajaja.module.plan.application.UpdatePlanService;
+import com.newbarams.ajaja.module.plan.application.UpdateRemindInfoService;
 import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
@@ -51,6 +53,7 @@ public class PlanController {
 	private final GetPlanAchieveService getPlanAchieveService;
 	private final UpdatePlanService updatePlanService;
 	private final LoadPlanInfoService loadPlanInfoService;
+	private final UpdateRemindInfoService updateRemindInfoService;
 
 	@Operation(summary = "[토큰 필요] 계획 생성 API")
 	@PostMapping
@@ -164,5 +167,27 @@ public class PlanController {
 		List<PlanResponse.GetAll> responses = getPlanService.loadAllPlans(request);
 
 		return new AjajaResponse<>(true, responses);
+	}
+
+	@Operation(summary = "[토큰 필요] 리마인드 정보 수정 API", description = "<b>url에 플랜id 값이 필요합니다.</b>",
+		responses = {
+			@ApiResponse(responseCode = "200", description = "성공적으로 리마인드 정보를 수정하였습니다."),
+			@ApiResponse(responseCode = "400", description = "유효하지 않은 토큰입니다.",
+				content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+			@ApiResponse(responseCode = "400", description = "변경 가능한 기간이 아닙니다.",
+				content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+			@ApiResponse(responseCode = "404", description = "계획 정보를 불러오지 못했습니다.",
+				content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+			@ApiResponse(responseCode = "500", description = "서버 내부 문제입니다. 관리자에게 문의 바랍니다.",
+				content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+		})
+	@PutMapping("/{planId}/reminds")
+	@ResponseStatus(HttpStatus.OK)
+	public AjajaResponse<Void> modifyRemindInfo(
+		@PathVariable Long planId,
+		@RequestBody PlanRequest.UpdateRemind request
+	) {
+		updateRemindInfoService.updateRemindInfo(planId, request);
+		return AjajaResponse.ok();
 	}
 }

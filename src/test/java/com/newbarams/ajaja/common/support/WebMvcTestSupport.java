@@ -22,6 +22,7 @@ import com.newbarams.ajaja.module.plan.application.GetPlanAchieveService;
 import com.newbarams.ajaja.module.plan.application.LoadPlanInfoService;
 import com.newbarams.ajaja.module.plan.application.LoadPlanService;
 import com.newbarams.ajaja.module.plan.application.UpdatePlanService;
+import com.newbarams.ajaja.module.plan.application.UpdateRemindInfoService;
 import com.newbarams.ajaja.module.remind.application.LoadRemindInfoService;
 import com.newbarams.ajaja.module.user.application.service.UserMockBeans;
 import com.newbarams.ajaja.module.user.domain.UserQueryRepository;
@@ -65,6 +66,8 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 	protected UpdatePlanService updatePlanService;
 	@MockBean
 	protected LoadPlanInfoService loadPlanInfoService;
+	@MockBean
+	protected UpdateRemindInfoService updateRemindInfoService;
 
 	// Feedback
 	@MockBean
