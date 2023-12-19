@@ -24,6 +24,7 @@ import com.newbarams.ajaja.module.plan.mapper.MessageMapper;
 class UpdateRemindInfoServiceTest extends MockTestSupport {
 	@InjectMocks
 	private UpdateRemindInfoService updateRemindInfoService;
+
 	@Mock
 	private PlanRepository repository;
 	@Mock
@@ -76,9 +77,7 @@ class UpdateRemindInfoServiceTest extends MockTestSupport {
 		// given
 		Long planId = 1L;
 		given(repository.findById(anyLong())).willReturn(Optional.of(mockPlan));
-		given(mapper.toDomain(dto.getMessages())).willReturn(messages);
-		given(mapper.toDomain(dto)).willReturn(info);
-		doThrow(AjajaException.class).when(mockPlan).updateRemind(info, messages);
+		doThrow(AjajaException.class).when(mockPlan).updateRemind(any(), any());
 
 		// when,then
 		Assertions.assertThatException().isThrownBy(

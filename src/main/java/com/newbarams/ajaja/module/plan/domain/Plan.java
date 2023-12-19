@@ -144,6 +144,7 @@ public class Plan extends BaseEntity<Plan> {
 
 		this.info = info;
 		this.messages = messages;
+		this.validateSelf();
 	}
 
 	public void updateAchieve(int achieveRate) {
