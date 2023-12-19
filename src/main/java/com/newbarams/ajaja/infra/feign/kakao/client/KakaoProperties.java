@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.infra.feign.kakao;
+package com.newbarams.ajaja.infra.feign.kakao.client;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

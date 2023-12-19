@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.user.kakao.model;
+package com.newbarams.ajaja.infra.feign.kakao.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -7,8 +7,8 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record KakaoAccount(
-	String email,
-	boolean isEmailValid,
-	boolean isEmailVerified
+		String email,
+		boolean isEmailValid,
+		boolean isEmailVerified
 ) {
 }

@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.user.kakao.model;
+package com.newbarams.ajaja.infra.feign.kakao.model;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
