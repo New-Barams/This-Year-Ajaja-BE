@@ -55,7 +55,7 @@ import lombok.RequiredArgsConstructor;
 public class MockController {
 	private static final String CERTIFICATION = "123456";
 	private static final List<String> nicknames = Arrays.asList(
-			"노래부르는 다람쥐", "부끄러워하는 코끼리", "춤추는 강아지", "고백하는 고양이 ", "거절하는 거북이 ", "손을 번쩍든 오리"
+		"노래부르는 다람쥐", "부끄러워하는 코끼리", "춤추는 강아지", "고백하는 고양이 ", "거절하는 거북이 ", "손을 번쩍든 오리"
 	);
 
 	private final JwtGenerator jwtGenerator;
@@ -141,7 +141,7 @@ public class MockController {
 	public AjajaResponse<MockGetRemindInfo.Response> sendRemind() throws InterruptedException {
 		TimeUnit.SECONDS.sleep(5);
 		MockGetRemindInfo.Response response = new MockGetRemindInfo.Response(1, 1L, "화이팅", false, 0,
-				false, new Timestamp(System.currentTimeMillis()));
+			false, new Timestamp(System.currentTimeMillis()));
 
 		return new AjajaResponse<>(true, response);
 	}
@@ -187,70 +187,70 @@ public class MockController {
 	}
 
 	@Operation(summary = "[토큰 필요] 비시즌일때 리마인드 조회 API", responses = {
-			@ApiResponse(responseCode = "200", description = "성공적으로 계획에 대한 정보를 불러왔습니다."),
-			@ApiResponse(responseCode = "400", description = "유효하지 않은 토큰입니다.",
-					content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-			@ApiResponse(responseCode = "404", description = "계획 정보를 불러오지 못했습니다.",
-					content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-			@ApiResponse(responseCode = "500", description = "서버 내부 문제입니다. 관리자에게 문의 바랍니다.",
-					content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+		@ApiResponse(responseCode = "200", description = "성공적으로 계획에 대한 정보를 불러왔습니다."),
+		@ApiResponse(responseCode = "400", description = "유효하지 않은 토큰입니다.",
+			content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+		@ApiResponse(responseCode = "404", description = "계획 정보를 불러오지 못했습니다.",
+			content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+		@ApiResponse(responseCode = "500", description = "서버 내부 문제입니다. 관리자에게 문의 바랍니다.",
+			content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
 	})
 	@GetMapping("/reminds/{planId}")
 	@ResponseStatus(OK)
 	public AjajaResponse<RemindResponse.CommonResponse> getReminds(@PathVariable Long planId) {
 		List<RemindResponse.Messages> messages = List.of(
-				new RemindResponse.Messages(
-						"잘하고 있지?",
-						9,
-						13,
-						false
-				),
-				new RemindResponse.Messages(
-						"조금만 더 힘내!",
-						12,
-						13,
-						false
-				));
+			new RemindResponse.Messages(
+				"잘하고 있지?",
+				9,
+				13,
+				false
+			),
+			new RemindResponse.Messages(
+				"조금만 더 힘내!",
+				12,
+				13,
+				false
+			));
 
 		RemindResponse.CommonResponse response = new RemindResponse.CommonResponse(
-				"MORNING",
-				true,
-				messages
+			"MORNING",
+			true,
+			messages
 		);
 
 		return new AjajaResponse<>(true, response);
 	}
 
 	@Operation(summary = "[토큰 필요] 시즌일때 리마인드 조회 API", responses = {
-			@ApiResponse(responseCode = "200", description = "성공적으로 계획에 대한 정보를 불러왔습니다."),
-			@ApiResponse(responseCode = "400", description = "유효하지 않은 토큰입니다.",
-					content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-			@ApiResponse(responseCode = "404", description = "계획 정보를 불러오지 못했습니다.",
-					content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-			@ApiResponse(responseCode = "500", description = "서버 내부 문제입니다. 관리자에게 문의 바랍니다.",
-					content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+		@ApiResponse(responseCode = "200", description = "성공적으로 계획에 대한 정보를 불러왔습니다."),
+		@ApiResponse(responseCode = "400", description = "유효하지 않은 토큰입니다.",
+			content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+		@ApiResponse(responseCode = "404", description = "계획 정보를 불러오지 못했습니다.",
+			content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+		@ApiResponse(responseCode = "500", description = "서버 내부 문제입니다. 관리자에게 문의 바랍니다.",
+			content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
 	})
 	@GetMapping("/reminds/modify/{planId}")
 	@ResponseStatus(OK)
 	public AjajaResponse<RemindResponse.CommonResponse> getRemindsInfo(@PathVariable Long planId) {
 		List<RemindResponse.Messages> respons = List.of(
-				new RemindResponse.Messages(
-						"화이팅",
-						6,
-						13,
-						false
-				),
-				new RemindResponse.Messages(
-						"아좌좌",
-						12,
-						13,
-						false
-				));
+			new RemindResponse.Messages(
+				"화이팅",
+				6,
+				13,
+				false
+			),
+			new RemindResponse.Messages(
+				"아좌좌",
+				12,
+				13,
+				false
+			));
 
 		RemindResponse.CommonResponse response = new RemindResponse.CommonResponse(
-				"MORNING",
-				true,
-				respons
+			"MORNING",
+			true,
+			respons
 		);
 
 		return new AjajaResponse<>(true, response);
@@ -260,27 +260,27 @@ public class MockController {
 	@PutMapping("/plans/{planId}/reminds")
 	@ResponseStatus(OK)
 	public AjajaResponse<String> modifyRemindAlarm(
-			@PathVariable int planId,
-			@RequestBody ModifyAlarm modifyAlarm
+		@PathVariable int planId,
+		@RequestBody ModifyAlarm modifyAlarm
 	) {
 		return new AjajaResponse<>(true, null);
 	}
 
 	@Operation(summary = "[토큰 필요] 피드백 반영 API", description = "<b>평가할 피드백에 대한 id가 필요합니다.</b>",
-			responses = {
-					@ApiResponse(responseCode = "200", description = "성공적으로 계획에 대한 정보를 불러왔습니다."),
-					@ApiResponse(responseCode = "400", description = "유효하지 않은 토큰입니다.",
-							content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-					@ApiResponse(responseCode = "404", description = "평가할 피드백에 대한 정보가 존재하지 않습니다.",
-							content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-					@ApiResponse(responseCode = "500", description = "서버 내부 문제입니다. 관리자에게 문의 바랍니다.",
-							content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
-			})
+		responses = {
+			@ApiResponse(responseCode = "200", description = "성공적으로 계획에 대한 정보를 불러왔습니다."),
+			@ApiResponse(responseCode = "400", description = "유효하지 않은 토큰입니다.",
+				content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+			@ApiResponse(responseCode = "404", description = "평가할 피드백에 대한 정보가 존재하지 않습니다.",
+				content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+			@ApiResponse(responseCode = "500", description = "서버 내부 문제입니다. 관리자에게 문의 바랍니다.",
+				content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+		})
 	@PostMapping("/feedbacks/{feedbackId}")
 	@ResponseStatus(OK)
 	public AjajaResponse<Void> updateFeedback(
-			@PathVariable int feedbackId,
-			@RequestBody UpdateFeedback updateFeedback
+		@PathVariable int feedbackId,
+		@RequestBody UpdateFeedback updateFeedback
 	) {
 		return new AjajaResponse<>(true, null);
 	}
@@ -289,7 +289,7 @@ public class MockController {
 	@GetMapping("/{planId}/feedbacks")
 	@ResponseStatus(OK)
 	public AjajaResponse<GetAchieve> findPlanAchieve(
-			@PathVariable int planId
+		@PathVariable int planId
 	) {
 		GetAchieve achieve = new GetAchieve(90);
 
@@ -299,7 +299,7 @@ public class MockController {
 	@Operation(summary = "[테스트] 전체 달성률 보기")
 	@GetMapping("/feedbacks/user/{userId}")
 	public AjajaResponse<GetAchieve> findTotalAchieve(
-			@PathVariable int userId
+		@PathVariable int userId
 	) {
 		GetAchieve achieve = new GetAchieve(90);
 
@@ -310,10 +310,10 @@ public class MockController {
 	@PostMapping("/plans")
 	@ResponseStatus(CREATED)
 	public AjajaResponse<PlanResponse.Create> createPlan(@RequestBody PlanRequest.Create request,
-			@RequestHeader(name = "Date") String date) {
+		@RequestHeader(name = "Date") String date) {
 		List<String> tags = List.of("tag1", "tag2", "tag3");
 		PlanResponse.Create response = new PlanResponse.Create(1L, 1L, "title", "des",
-				true, true, true, 0, tags, Instant.now());
+			true, true, true, 0, tags, Instant.now());
 
 		return new AjajaResponse<>(true, response);
 	}
@@ -327,8 +327,8 @@ public class MockController {
 
 		for (long i = 0; i < 10; i++) {
 			responses.add(
-					new PlanResponse.GetAll(i, 1L, "노래하는 다람쥐", "제목",
-							10, tags, Instant.parse("2023-01-02T08:19:23Z"))
+				new PlanResponse.GetAll(i, 1L, "노래하는 다람쥐", "제목",
+					10, tags, Instant.parse("2023-01-02T08:19:23Z"))
 			);
 		}
 
@@ -341,8 +341,8 @@ public class MockController {
 	public AjajaResponse<PlanResponse.GetOne> getOnePlan(@PathVariable Long id) {
 		List<String> tags = List.of("술", "금주", "알코올 중독");
 		PlanResponse.GetOne response = new PlanResponse.GetOne(1L, 1L, "노래하는 다람쥐", "술 줄이기",
-				"술 한 달에 두번만 먹기", true, true, true, 15, true, tags,
-				Instant.parse("2023-01-04T04:14:14Z"));
+			"술 한 달에 두번만 먹기", true, true, true, 15, true, tags,
+			Instant.parse("2023-01-04T04:14:14Z"));
 
 		return new AjajaResponse<>(true, response);
 	}
@@ -351,10 +351,10 @@ public class MockController {
 	@PutMapping("/plans/{id}")
 	@ResponseStatus(OK)
 	public AjajaResponse<PlanResponse.Create> updatePlan(@PathVariable Long id,
-			@RequestBody PlanRequest.Update request, @RequestHeader(name = "Date") String date) {
+		@RequestBody PlanRequest.Update request, @RequestHeader(name = "Date") String date) {
 		List<String> tags = List.of("tag1", "tag2", "tag3");
 		PlanResponse.Create updated = new PlanResponse.Create(1L, 1L, "title", "des",
-				true, true, true, 0, tags, Instant.now());
+			true, true, true, 0, tags, Instant.now());
 
 		return new AjajaResponse<>(true, updated);
 	}
@@ -388,37 +388,37 @@ public class MockController {
 	}
 
 	@Operation(summary = "[토큰 필요] 메인 페이지 내 계획 조회 API", description = "로그인을 했을 시에만 불러올 수 있습니다.",
-			responses = {
-					@ApiResponse(responseCode = "200", description = "성공적으로 계획에 대한 정보를 불러왔습니다."),
-					@ApiResponse(responseCode = "400", description = "유효하지 않은 토큰입니다.",
-							content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-					@ApiResponse(responseCode = "404", description = "사용자가 존재하지 않습니다.",
-							content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-					@ApiResponse(responseCode = "500", description = "서버 내부 문제입니다. 관리자에게 문의 바랍니다.",
-							content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
-			})
+		responses = {
+			@ApiResponse(responseCode = "200", description = "성공적으로 계획에 대한 정보를 불러왔습니다."),
+			@ApiResponse(responseCode = "400", description = "유효하지 않은 토큰입니다.",
+				content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+			@ApiResponse(responseCode = "404", description = "사용자가 존재하지 않습니다.",
+				content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+			@ApiResponse(responseCode = "500", description = "서버 내부 문제입니다. 관리자에게 문의 바랍니다.",
+				content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+		})
 	@GetMapping("/plans/main")
 	@ResponseStatus(OK)
 	public AjajaResponse<List<MockPlanInfoResponse.GetPlanInfoResponse>> getPlanInfo() {
 		List<MockPlanInfoResponse.GetPlan> getPlan2023 = List.of(
-				new MockPlanInfoResponse.GetPlan(2023, 1L, "매일 운동하기", true, 90, 1, true),
-				new MockPlanInfoResponse.GetPlan(2023, 2L, "매일 코딩하기", true, 90, 2, true),
-				new MockPlanInfoResponse.GetPlan(2023, 3L, "매일 아침 9시에 일어나기", false, 20, 3, true)
+			new MockPlanInfoResponse.GetPlan(2023, 1L, "매일 운동하기", true, 90, 1, true),
+			new MockPlanInfoResponse.GetPlan(2023, 2L, "매일 코딩하기", true, 90, 2, true),
+			new MockPlanInfoResponse.GetPlan(2023, 3L, "매일 아침 9시에 일어나기", false, 20, 3, true)
 		);
 
 		List<MockPlanInfoResponse.GetPlan> getPlan2022 = List.of(
-				new MockPlanInfoResponse.GetPlan(2022, 4L, "졸업 작품 끝내기", true, 90, 1, true),
-				new MockPlanInfoResponse.GetPlan(2022, 5L, "매일 아침 먹기", true, 70, 2, true),
-				new MockPlanInfoResponse.GetPlan(2022, 6L, "총 학점 4.0 이상 나오기", false, 50, 3, true)
+			new MockPlanInfoResponse.GetPlan(2022, 4L, "졸업 작품 끝내기", true, 90, 1, true),
+			new MockPlanInfoResponse.GetPlan(2022, 5L, "매일 아침 먹기", true, 70, 2, true),
+			new MockPlanInfoResponse.GetPlan(2022, 6L, "총 학점 4.0 이상 나오기", false, 50, 3, true)
 		);
 
 		MockPlanInfoResponse.GetPlanInfoResponse getPlanInfo2023 = new MockPlanInfoResponse.GetPlanInfoResponse(2023,
-				50,
-				getPlan2023);
+			50,
+			getPlan2023);
 
 		MockPlanInfoResponse.GetPlanInfoResponse getPlanInfo2022 = new MockPlanInfoResponse.GetPlanInfoResponse(2022,
-				80,
-				getPlan2022);
+			80,
+			getPlan2022);
 
 		List<MockPlanInfoResponse.GetPlanInfoResponse> getPlanInfo = List.of(getPlanInfo2023, getPlanInfo2022);
 		return AjajaResponse.ok(getPlanInfo);

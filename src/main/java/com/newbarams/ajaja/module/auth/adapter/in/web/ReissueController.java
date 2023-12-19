@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.user.adapter.in.web;
+package com.newbarams.ajaja.module.auth.adapter.in.web;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.newbarams.ajaja.global.common.AjajaResponse;
-import com.newbarams.ajaja.module.user.application.port.in.ReissueTokenUseCase;
-import com.newbarams.ajaja.module.user.dto.UserRequest;
-import com.newbarams.ajaja.module.user.dto.UserResponse;
+import com.newbarams.ajaja.module.auth.application.port.in.ReissueTokenUseCase;
+import com.newbarams.ajaja.module.auth.dto.AuthRequest;
+import com.newbarams.ajaja.module.auth.dto.AuthResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -31,8 +31,8 @@ class ReissueController {
 	})
 	@PostMapping("/reissue")
 	@ResponseStatus(OK)
-	public AjajaResponse<UserResponse.Token> reissue(@Valid @RequestBody UserRequest.Reissue request) {
-		UserResponse.Token response = reissueTokenUseCase.reissue(request.getAccessToken(), request.getRefreshToken());
+	public AjajaResponse<AuthResponse.Token> reissue(@Valid @RequestBody AuthRequest.Reissue request) {
+		AuthResponse.Token response = reissueTokenUseCase.reissue(request.getAccessToken(), request.getRefreshToken());
 		return AjajaResponse.ok(response);
 	}
 }

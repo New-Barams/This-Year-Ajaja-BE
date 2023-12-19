@@ -1,12 +1,11 @@
 package com.newbarams.ajaja.module.user.application.port.out;
 
-import com.newbarams.ajaja.module.user.domain.User;
-
 public interface CreateUserPort {
 	/**
 	 * Persist user with given data information
-	 * @param user
+	 * @param email Email that Oauth Server provide
+	 * @param oauthId ID that Oauth Server provide
 	 * @return Identifier of user
 	 */
-	Long create(User user); // todo: User dependency on adapter
+	Long create(String email, Long oauthId);
 }

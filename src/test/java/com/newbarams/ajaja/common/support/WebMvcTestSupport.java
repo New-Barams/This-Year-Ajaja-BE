@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.newbarams.ajaja.common.annotation.ApiTest;
 import com.newbarams.ajaja.global.mock.MockController;
 import com.newbarams.ajaja.module.ajaja.application.SwitchAjajaService;
+import com.newbarams.ajaja.module.auth.application.service.AuthMockBeans;
 import com.newbarams.ajaja.module.feedback.application.GetTotalAchieveService;
 import com.newbarams.ajaja.module.feedback.application.UpdateFeedbackService;
 import com.newbarams.ajaja.module.plan.application.CreatePlanService;
@@ -34,10 +35,10 @@ import com.newbarams.ajaja.module.user.domain.UserQueryRepository;
  * @author hejow
  */
 @WebMvcTest(
-	includeFilters = @Filter(type = FilterType.ANNOTATION, classes = RestController.class),
-	excludeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, classes = MockController.class)
+		includeFilters = @Filter(type = FilterType.ANNOTATION, classes = RestController.class),
+		excludeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, classes = MockController.class)
 )
-@Import(UserMockBeans.class)
+@Import({UserMockBeans.class, AuthMockBeans.class})
 public abstract class WebMvcTestSupport extends MonkeySupport {
 	protected static final String USER_END_POINT = "/users";
 	protected static final String PLAN_END_POINT = "/plans";

@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.user.adapter.in.web;
+package com.newbarams.ajaja.module.auth.adapter.in.web;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.newbarams.ajaja.global.common.AjajaResponse;
-import com.newbarams.ajaja.module.user.application.port.in.LoginUseCase;
-import com.newbarams.ajaja.module.user.dto.UserRequest;
-import com.newbarams.ajaja.module.user.dto.UserResponse;
+import com.newbarams.ajaja.module.auth.application.port.in.LoginUseCase;
+import com.newbarams.ajaja.module.auth.dto.AuthRequest;
+import com.newbarams.ajaja.module.auth.dto.AuthResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -30,8 +30,8 @@ class LoginController {
 	})
 	@PostMapping("/login")
 	@ResponseStatus(OK)
-	public AjajaResponse<UserResponse.Token> login(@Valid @RequestBody UserRequest.Login request) {
-		UserResponse.Token response = loginUseCase.login(request.getAuthorizationCode(), request.getRedirectUri());
+	public AjajaResponse<AuthResponse.Token> login(@Valid @RequestBody AuthRequest.Login request) {
+		AuthResponse.Token response = loginUseCase.login(request.getAuthorizationCode(), request.getRedirectUri());
 		return AjajaResponse.ok(response);
 	}
 }

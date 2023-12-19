@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.user.application.service;
+package com.newbarams.ajaja.module.auth.application.service;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
@@ -13,14 +13,12 @@ import org.mockito.Mock;
 
 import com.newbarams.ajaja.common.support.MockTestSupport;
 import com.newbarams.ajaja.global.security.jwt.util.JwtGenerator;
-import com.newbarams.ajaja.module.user.application.model.AccessToken;
-import com.newbarams.ajaja.module.user.application.model.Profile;
-import com.newbarams.ajaja.module.user.application.port.out.AuthorizePort;
+import com.newbarams.ajaja.infra.feign.kakao.model.KakaoAccount;
+import com.newbarams.ajaja.infra.feign.kakao.model.KakaoResponse;
+import com.newbarams.ajaja.module.auth.application.model.Profile;
+import com.newbarams.ajaja.module.auth.application.port.out.AuthorizePort;
 import com.newbarams.ajaja.module.user.application.port.out.CreateUserPort;
 import com.newbarams.ajaja.module.user.application.port.out.FindUserIdByEmailPort;
-import com.newbarams.ajaja.module.user.application.port.out.GetOauthProfilePort;
-import com.newbarams.ajaja.module.user.kakao.model.KakaoAccount;
-import com.newbarams.ajaja.module.user.kakao.model.KakaoResponse;
 
 class LoginServiceTest extends MockTestSupport {
 	@InjectMocks
@@ -28,8 +26,6 @@ class LoginServiceTest extends MockTestSupport {
 
 	@Mock
 	private AuthorizePort authorizePort;
-	@Mock
-	private GetOauthProfilePort getOauthProfilePort;
 	@Mock
 	private FindUserIdByEmailPort findUserIdByEmailPort;
 	@Mock
@@ -46,7 +42,6 @@ class LoginServiceTest extends MockTestSupport {
 
 		// returns
 		private final String email = "Ajaja@me.com";
-		private final AccessToken accessToken = sut.giveMeOne(KakaoResponse.Token.class);
 		private final Profile profile = sut.giveMeBuilder(KakaoResponse.UserInfo.class)
 				.set("kakaoAccount", sut.giveMeBuilder(KakaoAccount.class)
 						.set("email", email)
@@ -57,19 +52,17 @@ class LoginServiceTest extends MockTestSupport {
 		@DisplayName("새로운 유저가 로그인하면 새롭게 유저 정보를 생성해야 한다.")
 		void login_Success_WithNewUser() {
 			// given
-			given(authorizePort.authorize(any(), any())).willReturn(accessToken);
-			given(getOauthProfilePort.getProfile(any())).willReturn(profile);
+			given(authorizePort.authorize(any(), any())).willReturn(profile);
 			given(findUserIdByEmailPort.findUserIdByEmail(any())).willReturn(Optional.empty());
-			given(createUserPort.create(any())).willReturn(1L);
+			given(createUserPort.create(anyString(), any())).willReturn(1L);
 
 			// when
 			loginService.login(authorizationCode, redirectUrl);
 
 			// then
 			then(authorizePort).should(times(1)).authorize(any(), any());
-			then(getOauthProfilePort).should(times(1)).getProfile(any());
 			then(findUserIdByEmailPort).should(times(1)).findUserIdByEmail(any());
-			then(createUserPort).should(times(1)).create(any());
+			then(createUserPort).should(times(1)).create(anyString(), any());
 			then(jwtGenerator).should(times(1)).login(any());
 		}
 
@@ -77,8 +70,7 @@ class LoginServiceTest extends MockTestSupport {
 		@DisplayName("기존에 가입된 고객이 로그인하면 생성하는 로직이 호출되지 않아야 한다.")
 		void login_Success_WithOldUser() {
 			// given
-			given(authorizePort.authorize(any(), any())).willReturn(accessToken);
-			given(getOauthProfilePort.getProfile(any())).willReturn(profile);
+			given(authorizePort.authorize(any(), any())).willReturn(profile);
 			given(findUserIdByEmailPort.findUserIdByEmail(any())).willReturn(Optional.of(1L));
 
 			// when
@@ -86,7 +78,6 @@ class LoginServiceTest extends MockTestSupport {
 
 			// then
 			then(authorizePort).should(times(1)).authorize(any(), any());
-			then(getOauthProfilePort).should(times(1)).getProfile(any());
 			then(findUserIdByEmailPort).should(times(1)).findUserIdByEmail(any());
 			then(createUserPort).shouldHaveNoMoreInteractions();
 			then(jwtGenerator).should(times(1)).login(any());

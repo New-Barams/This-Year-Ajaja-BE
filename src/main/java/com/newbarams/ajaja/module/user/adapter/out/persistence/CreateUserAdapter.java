@@ -17,8 +17,8 @@ class CreateUserAdapter implements CreateUserPort {
 	private final UserMapper userMapper;
 
 	@Override
-	public Long create(User user) {
-		UserEntity userEntity = userMapper.toEntity(user);
+	public Long create(String email, Long oauthId) {
+		UserEntity userEntity = userMapper.toEntity(User.init(email, oauthId)); // todo: User dependency on adapter
 		return userJpaRepository.save(userEntity).getId();
 	}
 }

@@ -7,8 +7,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import com.newbarams.ajaja.common.support.MockTestSupport;
-import com.newbarams.ajaja.infra.feign.kakao.KakaoProperties;
-import com.newbarams.ajaja.infra.feign.kakao.KakaoUnlinkFeignClient;
+import com.newbarams.ajaja.infra.feign.kakao.client.KakaoProperties;
+import com.newbarams.ajaja.infra.feign.kakao.client.KakaoUnlinkFeignClient;
 
 class KakaoDisconnectOauthServiceTest extends MockTestSupport {
 	@InjectMocks

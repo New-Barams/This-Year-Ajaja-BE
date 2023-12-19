@@ -8,8 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.newbarams.ajaja.common.support.MonkeySupport;
-import com.newbarams.ajaja.module.user.domain.Email;
-import com.newbarams.ajaja.module.user.domain.User;
 import com.newbarams.ajaja.module.user.infra.UserEntity;
 import com.newbarams.ajaja.module.user.infra.UserJpaRepository;
 
@@ -26,13 +24,9 @@ class CreateUserAdapterTest extends MonkeySupport {
 	void create_Success() {
 		// given
 		String email = "ajaja@me.com";
-		User user = sut.giveMeBuilder(User.class)
-				.set("email", new Email(email))
-				.set("deleted", false)
-				.sample();
 
 		// when
-		Long userId = createUserAdapter.create(user);
+		Long userId = createUserAdapter.create(email, 1L);
 
 		// then
 		assertThat(userId).isNotNull();
