@@ -16,9 +16,9 @@ import com.newbarams.ajaja.global.security.jwt.util.JwtGenerator;
 import com.newbarams.ajaja.module.user.application.model.AccessToken;
 import com.newbarams.ajaja.module.user.application.model.Profile;
 import com.newbarams.ajaja.module.user.application.port.out.AuthorizePort;
+import com.newbarams.ajaja.module.user.application.port.out.CreateUserPort;
+import com.newbarams.ajaja.module.user.application.port.out.FindUserIdByEmailPort;
 import com.newbarams.ajaja.module.user.application.port.out.GetOauthProfilePort;
-import com.newbarams.ajaja.module.user.domain.User;
-import com.newbarams.ajaja.module.user.domain.UserRepository;
 import com.newbarams.ajaja.module.user.kakao.model.KakaoAccount;
 import com.newbarams.ajaja.module.user.kakao.model.KakaoResponse;
 
@@ -31,25 +31,27 @@ class LoginServiceTest extends MockTestSupport {
 	@Mock
 	private GetOauthProfilePort getOauthProfilePort;
 	@Mock
-	private UserRepository userRepository;
+	private FindUserIdByEmailPort findUserIdByEmailPort;
+	@Mock
+	private CreateUserPort createUserPort;
 	@Mock
 	private JwtGenerator jwtGenerator;
 
 	@Nested
 	@DisplayName("로그인 테스트")
 	class LoginTest {
-		private final String email = "Ajaja@me.com";
+		// login parameters
 		private final String authorizationCode = sut.giveMeOne(String.class);
 		private final String redirectUrl = sut.giveMeOne(String.class);
-		private final AccessToken accessToken = sut.giveMeOne(KakaoResponse.Token.class);
 
+		// returns
+		private final String email = "Ajaja@me.com";
+		private final AccessToken accessToken = sut.giveMeOne(KakaoResponse.Token.class);
 		private final Profile profile = sut.giveMeBuilder(KakaoResponse.UserInfo.class)
 				.set("kakaoAccount", sut.giveMeBuilder(KakaoAccount.class)
 						.set("email", email)
 						.sample())
 				.sample();
-
-		private final User user = User.init(email, 1L);
 
 		@Test
 		@DisplayName("새로운 유저가 로그인하면 새롭게 유저 정보를 생성해야 한다.")
@@ -57,8 +59,8 @@ class LoginServiceTest extends MockTestSupport {
 			// given
 			given(authorizePort.authorize(any(), any())).willReturn(accessToken);
 			given(getOauthProfilePort.getProfile(any())).willReturn(profile);
-			given(userRepository.findByEmail(any())).willReturn(Optional.empty());
-			given(userRepository.save(any())).willReturn(user);
+			given(findUserIdByEmailPort.findUserIdByEmail(any())).willReturn(Optional.empty());
+			given(createUserPort.create(any())).willReturn(1L);
 
 			// when
 			loginService.login(authorizationCode, redirectUrl);
@@ -66,8 +68,8 @@ class LoginServiceTest extends MockTestSupport {
 			// then
 			then(authorizePort).should(times(1)).authorize(any(), any());
 			then(getOauthProfilePort).should(times(1)).getProfile(any());
-			then(userRepository).should(times(1)).findByEmail(any());
-			then(userRepository).should(times(1)).save(any());
+			then(findUserIdByEmailPort).should(times(1)).findUserIdByEmail(any());
+			then(createUserPort).should(times(1)).create(any());
 			then(jwtGenerator).should(times(1)).login(any());
 		}
 
@@ -77,7 +79,7 @@ class LoginServiceTest extends MockTestSupport {
 			// given
 			given(authorizePort.authorize(any(), any())).willReturn(accessToken);
 			given(getOauthProfilePort.getProfile(any())).willReturn(profile);
-			given(userRepository.findByEmail(any())).willReturn(Optional.of(user));
+			given(findUserIdByEmailPort.findUserIdByEmail(any())).willReturn(Optional.of(1L));
 
 			// when
 			loginService.login(authorizationCode, redirectUrl);
@@ -85,8 +87,8 @@ class LoginServiceTest extends MockTestSupport {
 			// then
 			then(authorizePort).should(times(1)).authorize(any(), any());
 			then(getOauthProfilePort).should(times(1)).getProfile(any());
-			then(userRepository).should(times(1)).findByEmail(any());
-			then(userRepository).shouldHaveNoMoreInteractions();
+			then(findUserIdByEmailPort).should(times(1)).findUserIdByEmail(any());
+			then(createUserPort).shouldHaveNoMoreInteractions();
 			then(jwtGenerator).should(times(1)).login(any());
 		}
 	}

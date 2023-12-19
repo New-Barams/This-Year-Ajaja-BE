@@ -8,9 +8,10 @@ import com.newbarams.ajaja.module.user.application.model.AccessToken;
 import com.newbarams.ajaja.module.user.application.model.Profile;
 import com.newbarams.ajaja.module.user.application.port.in.LoginUseCase;
 import com.newbarams.ajaja.module.user.application.port.out.AuthorizePort;
+import com.newbarams.ajaja.module.user.application.port.out.CreateUserPort;
+import com.newbarams.ajaja.module.user.application.port.out.FindUserIdByEmailPort;
 import com.newbarams.ajaja.module.user.application.port.out.GetOauthProfilePort;
 import com.newbarams.ajaja.module.user.domain.User;
-import com.newbarams.ajaja.module.user.domain.UserRepository;
 import com.newbarams.ajaja.module.user.dto.UserResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -21,24 +22,20 @@ import lombok.RequiredArgsConstructor;
 class LoginService implements LoginUseCase {
 	private final AuthorizePort authorizePort;
 	private final GetOauthProfilePort getOauthProfilePort;
-	private final UserRepository userRepository;
+	private final FindUserIdByEmailPort findUserIdByEmailPort;
+	private final CreateUserPort createUserPort;
 	private final JwtGenerator jwtGenerator;
 
 	@Override
 	public UserResponse.Token login(String authorizationCode, String redirectUri) {
 		AccessToken accessToken = authorizePort.authorize(authorizationCode, redirectUri);
 		Profile profile = getOauthProfilePort.getProfile(accessToken.getContent());
-		User user = findUserOrCreateIfNotExists(profile.getEmail(), profile.getOauthId());
-		return jwtGenerator.login(user.getId());
+		Long userId = findIdOrCreateIfNotExists(profile.getEmail(), profile.getOauthId());
+		return jwtGenerator.login(userId);
 	}
 
-	private User findUserOrCreateIfNotExists(String email, Long oauthId) {
-		return userRepository.findByEmail(email)
-				.orElseGet(() -> createUser(email, oauthId));
-	}
-
-	private User createUser(String email, Long oauthId) {
-		User user = User.init(email, oauthId);
-		return userRepository.save(user);
+	private Long findIdOrCreateIfNotExists(String email, Long oauthId) {
+		return findUserIdByEmailPort.findUserIdByEmail(email)
+				.orElseGet(() -> createUserPort.create(User.init(email, oauthId)));
 	}
 }
