@@ -5,7 +5,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 @TestConfiguration
 @MockBean({
-		LoginService.class,
+	LoginService.class,
 })
 public class AuthMockBeans {
 }
