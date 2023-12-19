@@ -10,7 +10,7 @@ import org.mockito.Mock;
 import com.newbarams.ajaja.common.support.MockTestSupport;
 import com.newbarams.ajaja.global.security.jwt.util.JwtGenerator;
 import com.newbarams.ajaja.global.security.jwt.util.JwtValidator;
-import com.newbarams.ajaja.module.user.dto.UserResponse;
+import com.newbarams.ajaja.module.auth.dto.AuthResponse;
 
 class ReissueTokenServiceTest extends MockTestSupport {
 	@InjectMocks
@@ -24,11 +24,11 @@ class ReissueTokenServiceTest extends MockTestSupport {
 	@Test
 	void reissue_Success_WithExpectedCall() {
 		// given
-		UserResponse.Token tokens = sut.giveMeOne(UserResponse.Token.class);
+		AuthResponse.Token tokens = sut.giveMeOne(AuthResponse.Token.class);
 		given(jwtGenerator.reissue(any(), anyString())).willReturn(tokens);
 
 		// when
-		UserResponse.Token response = reissueTokenService.reissue(tokens.getAccessToken(), tokens.getRefreshToken());
+		AuthResponse.Token response = reissueTokenService.reissue(tokens.getAccessToken(), tokens.getRefreshToken());
 
 		// then
 		then(jwtGenerator).should(times(1)).reissue(any(), anyString());
