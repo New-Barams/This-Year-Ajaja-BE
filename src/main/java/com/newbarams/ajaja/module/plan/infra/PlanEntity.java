@@ -31,7 +31,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @Table(name = "plans")
-@Where(clause = "is_deleted = false")
+@Where(clause = "deleted = false")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class PlanEntity extends BaseEntity<PlanEntity> {
@@ -69,7 +69,7 @@ public class PlanEntity extends BaseEntity<PlanEntity> {
 	private boolean canRemind;
 	@Column(nullable = false)
 	private boolean canAjaja;
-	@Column(nullable = false, name = "is_deleted")
+	@Column(nullable = false)
 	private boolean deleted;
 
 	@ElementCollection(fetch = FetchType.EAGER) // todo:메세지 로딩 오류로 인한 임시 코드 (나중에 지우기)
