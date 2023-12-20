@@ -4,8 +4,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.newbarams.ajaja.module.plan.domain.Plan;
-import com.newbarams.ajaja.module.user.application.port.out.DisablePlanPort;
 import com.newbarams.ajaja.module.plan.infra.PlanQueryRepository;
+import com.newbarams.ajaja.module.user.application.port.out.DisablePlanPort;
 
 import lombok.RequiredArgsConstructor;
 
