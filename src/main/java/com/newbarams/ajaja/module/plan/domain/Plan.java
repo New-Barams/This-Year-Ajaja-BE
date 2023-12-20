@@ -5,76 +5,38 @@ import static com.newbarams.ajaja.global.exception.ErrorCode.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.annotations.Where;
-
-import com.newbarams.ajaja.global.common.BaseEntity;
 import com.newbarams.ajaja.global.common.TimeValue;
 import com.newbarams.ajaja.global.exception.AjajaException;
 import com.newbarams.ajaja.module.ajaja.domain.Ajaja;
+import com.newbarams.ajaja.module.plan.dto.PlanParam;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OrderBy;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.AccessLevel;
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@Entity
-@Table(name = "plans")
-@Where(clause = "is_deleted = false")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Plan extends BaseEntity<Plan> {
+@AllArgsConstructor
+public class Plan {
 	private static final int MODIFIABLE_MONTH = 1;
 	private static final int ONE_MONTH_TERM = 1;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "plan_id")
 	private Long id;
 
-	@NotNull
 	private Long userId;
 
-	@NotNull
-	private Integer achieveRate;
+	private int achieveRate;
 
 	private int iconNumber;
 
-	@Embedded
 	private Content content;
 	private RemindInfo info;
 	private PlanStatus status;
 
-	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "remind_messages", joinColumns = @JoinColumn(name = "plan_id"))
-	@OrderBy("remindDate ASC") // todo : 엔티티 분리후 month에 대해 적용(세한)
-	private List<Message> messages = new ArrayList<>();
+	private List<Message> messages;
 
-	@Size
-	@Where(clause = "is_canceled = false")
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "target_id")
 	private List<Ajaja> ajajas = new ArrayList<>();
 
-	@Builder
-	public Plan(int month, Long userId, Content content, RemindInfo info, boolean isPublic,
+	Plan(Long userId, Content content, RemindInfo info, boolean isPublic,
 		int iconNumber, List<Message> messages) {
-		validateModifiableMonth(month);
 		this.userId = userId;
 		this.content = content;
 		this.info = info;
@@ -82,7 +44,13 @@ public class Plan extends BaseEntity<Plan> {
 		this.iconNumber = iconNumber;
 		this.messages = messages;
 		this.achieveRate = 0;
-		this.validateSelf();
+	}
+
+	public static Plan create(PlanParam.Create param) {
+		validateModifiableMonth(param.getMonth());
+
+		return new Plan(param.getUserId(), param.getContent(), param.getInfo(), param.isPublic(),
+			param.getIconNumber(), param.getMessages());
 	}
 
 	public void delete(Long userId, int month) {
@@ -91,7 +59,7 @@ public class Plan extends BaseEntity<Plan> {
 		this.status.toDeleted();
 	}
 
-	private void validateModifiableMonth(int month) {
+	private static void validateModifiableMonth(int month) {
 		if (month != MODIFIABLE_MONTH) {
 			throw new AjajaException(INVALID_UPDATABLE_DATE);
 		}
@@ -119,19 +87,12 @@ public class Plan extends BaseEntity<Plan> {
 	}
 
 	public void update(
-		Long userId,
-		int month,
-		String title,
-		String description,
-		boolean isPublic,
-		boolean canRemind,
-		boolean canAjaja
+		PlanParam.Update param
 	) {
-		validateModifiableMonth(month);
-		validateUser(userId);
-		this.content = content.update(title, description);
-		this.status = status.update(isPublic, canRemind, canAjaja);
-		this.validateSelf();
+		validateModifiableMonth(param.getMonth());
+		validateUser(param.getUserId());
+		this.content = param.getContent();
+		this.status = param.getStatus();
 	}
 
 	public void updateRemind(
@@ -144,23 +105,18 @@ public class Plan extends BaseEntity<Plan> {
 
 		this.info = info;
 		this.messages = messages;
-		this.validateSelf();
 	}
 
 	public void updateAchieve(int achieveRate) {
 		this.achieveRate = achieveRate;
 	}
 
-	public void addAjaja(Ajaja ajaja) {
-		this.ajajas.add(ajaja);
-	}
-
-	public String getTimeName() {
-		return this.info.getTimeName();
-	}
-
 	public int getRemindTime() {
 		return this.info.getRemindTime();
+	}
+
+	public void addAjaja(Ajaja ajaja) {
+		this.ajajas.add(ajaja);
 	}
 
 	public String getRemindTimeName() {

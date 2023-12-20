@@ -2,7 +2,6 @@ package com.newbarams.ajaja.module.plan.domain;
 
 import com.newbarams.ajaja.global.common.SelfValidating;
 
-import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Positive;
@@ -11,7 +10,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RemindInfo extends SelfValidating<RemindInfo> {
 	enum RemindTime {
@@ -30,7 +28,6 @@ public class RemindInfo extends SelfValidating<RemindInfo> {
 				return 22;
 			}
 		}
-
 	}
 
 	@Positive
@@ -51,10 +48,6 @@ public class RemindInfo extends SelfValidating<RemindInfo> {
 		this.remindDate = remindDate;
 		this.remindTime = RemindTime.valueOf(remindTime.toUpperCase());
 		this.validateSelf();
-	}
-
-	RemindInfo update(int remindTotalPeriod, int remindTerm, int remindDate, String remindTime) {
-		return new RemindInfo(remindTotalPeriod, remindTerm, remindDate, remindTime);
 	}
 
 	public int getRemindTime() {

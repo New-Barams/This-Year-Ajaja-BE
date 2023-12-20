@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.newbarams.ajaja.global.exception.AjajaException;
 import com.newbarams.ajaja.module.plan.domain.Plan;
-import com.newbarams.ajaja.module.plan.domain.repository.PlanRepository;
+import com.newbarams.ajaja.module.plan.domain.PlanRepository;
 
 import lombok.RequiredArgsConstructor;
 

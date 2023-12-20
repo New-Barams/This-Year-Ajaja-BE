@@ -1,9 +1,9 @@
-package com.newbarams.ajaja.module.plan.domain.repository;
+package com.newbarams.ajaja.module.plan.infra;
 
 import static com.newbarams.ajaja.global.util.QueryDslUtil.*;
 import static com.newbarams.ajaja.module.ajaja.domain.Ajaja.Type.*;
 import static com.newbarams.ajaja.module.ajaja.domain.QAjaja.*;
-import static com.newbarams.ajaja.module.plan.domain.QPlan.*;
+import static com.newbarams.ajaja.module.plan.infra.QPlanEntity.*;
 import static com.newbarams.ajaja.module.tag.domain.QPlanTag.*;
 import static com.newbarams.ajaja.module.tag.domain.QTag.*;
 import static com.newbarams.ajaja.module.user.infra.QUserEntity.*;
@@ -42,18 +42,29 @@ public class PlanQueryRepository {
 	private static final int PAGE_SIZE = 3;
 
 	private final JPAQueryFactory queryFactory;
+	private final PlanMapper planMapper;
 
 	public List<Plan> findAllCurrentPlansByUserId(Long userId) {
-		return queryFactory.selectFrom(plan)
-			.where(plan.userId.eq(userId)
+		return queryFactory.selectFrom(planEntity)
+			.where(planEntity.userId.eq(userId)
 				.and(isCurrentYear()))
-			.fetch();
+			.fetch()
+			.stream().map(planMapper::toDomain)
+			.toList();
+	}
+
+	public Long countByUserId(Long userId) {
+		return queryFactory.select(planEntity.count())
+			.from(planEntity)
+			.where(planEntity.userId.eq(userId)
+				.and(isCurrentYear()))
+			.fetchFirst();
 	}
 
 	public Optional<PlanResponse.GetOne> findById(Long id, Long userId) {
-		List<Tuple> tuples = queryFactory.select(plan, userEntity.nickname)
-			.from(plan, userEntity)
-			.where(plan.userId.eq(userEntity.id).and(plan.id.eq(id)))
+		List<Tuple> tuples = queryFactory.select(planEntity, userEntity.nickname)
+			.from(planEntity, userEntity)
+			.where(planEntity.userId.eq(userEntity.id).and(planEntity.id.eq(id)))
 			.fetch();
 
 		return getResponse(tuples, userId);
@@ -68,13 +79,13 @@ public class PlanQueryRepository {
 	}
 
 	private PlanResponse.GetOne tupleToResponse(Tuple tuple, Long userId) {
-		Plan planFromTuple = tuple.get(plan);
+		PlanEntity planFromTuple = tuple.get(planEntity);
 		String nickname = tuple.get(userEntity.nickname);
 
 		List<String> tags = findTagByPlanId(planFromTuple.getId());
 		boolean isPressAjaja = isPressAjaja(planFromTuple.getId(), userId);
 
-		return PlanMapper.toResponse(planFromTuple, nickname, tags, isPressAjaja);
+		return planMapper.toResponse(planFromTuple, nickname, tags, isPressAjaja);
 	}
 
 	private boolean isPressAjaja(Long planId, Long userId) {
@@ -96,11 +107,11 @@ public class PlanQueryRepository {
 	}
 
 	public List<PlanResponse.GetAll> findAllByCursorAndSorting(PlanRequest.GetAll conditions) {
-		List<Tuple> tuples = queryFactory.select(plan, userEntity.nickname)
-			.from(plan, userEntity)
+		List<Tuple> tuples = queryFactory.select(planEntity, userEntity.nickname)
+			.from(planEntity, userEntity)
 
-			.where(plan.userId.eq(userEntity.id),
-				plan.status.isPublic.eq(true),
+			.where(planEntity.userId.eq(userEntity.id),
+				planEntity.isPublic.eq(true),
 				isEqualsYear(conditions.current()),
 				cursorPagination(conditions))
 
@@ -117,10 +128,10 @@ public class PlanQueryRepository {
 			.getYear();
 
 		if (isNewYear) {
-			return plan.createdAt.year().eq(currentYear);
+			return planEntity.createdAt.year().eq(currentYear);
 		}
 
-		return plan.createdAt.year().eq(currentYear).not();
+		return planEntity.createdAt.year().eq(currentYear).not();
 	}
 
 	private BooleanExpression cursorPagination(PlanRequest.GetAll conditions) {
@@ -140,7 +151,7 @@ public class PlanQueryRepository {
 	}
 
 	private BooleanExpression cursorId(Long cursorId) {
-		return plan.id.lt(cursorId);
+		return planEntity.id.lt(cursorId);
 	}
 
 	private BooleanExpression cursorAjajaAndId(Integer cursorAjaja, Long cursorId) {
@@ -148,19 +159,19 @@ public class PlanQueryRepository {
 			return null;
 		}
 
-		return plan.ajajas.size().eq(cursorAjaja)
-			.and(plan.id.lt(cursorId))
-			.or(plan.ajajas.size().lt(cursorAjaja));
+		return planEntity.ajajas.size().eq(cursorAjaja)
+			.and(planEntity.id.lt(cursorId))
+			.or(planEntity.ajajas.size().lt(cursorAjaja));
 	}
 
 	private OrderSpecifier[] sortBy(String condition) {
 		List<OrderSpecifier> orders = new ArrayList<>();
 
 		switch (condition.toLowerCase(Locale.ROOT)) {
-			case LATEST -> orders.add(new OrderSpecifier<>(Order.DESC, plan.createdAt));
+			case LATEST -> orders.add(new OrderSpecifier<>(Order.DESC, planEntity.createdAt));
 			case AJAJA -> {
-				orders.add(new OrderSpecifier<>(Order.DESC, plan.ajajas.size()));
-				orders.add(new OrderSpecifier<>(Order.DESC, plan.id));
+				orders.add(new OrderSpecifier<>(Order.DESC, planEntity.ajajas.size()));
+				orders.add(new OrderSpecifier<>(Order.DESC, planEntity.id));
 			}
 		}
 
@@ -170,48 +181,48 @@ public class PlanQueryRepository {
 	private List<PlanResponse.GetAll> tupleToResponse(List<Tuple> tuples) {
 		return tuples.stream()
 			.map(tuple -> {
-				Plan planFromTuple = tuple.get(plan);
+				PlanEntity planFromTuple = tuple.get(planEntity);
 				String nickname = tuple.get(userEntity.nickname);
 				List<String> tags = findTagByPlanId(planFromTuple.getId());
 
-				return PlanMapper.toGetAllResponse(planFromTuple, nickname, tags);
+				return planMapper.toResponse(planFromTuple, nickname, tags);
 			})
 			.toList();
 	}
 
 	public List<PlanInfoResponse.GetPlan> findAllPlanByUserId(Long userId) {
 		return queryFactory.select(Projections.constructor(PlanInfoResponse.GetPlan.class,
-				plan.createdAt.year(),
-				plan.id,
-				plan.content.title,
-				plan.status.canRemind,
-				plan.achieveRate,
-				plan.iconNumber,
+				planEntity.createdAt.year(),
+				planEntity.id,
+				planEntity.title,
+				planEntity.canRemind,
+				planEntity.achieveRate,
+				planEntity.iconNumber,
 				userEntity.verified
 			))
-			.from(plan)
-			.join(userEntity).on(userEntity.id.eq(plan.userId))
-			.groupBy(plan.createdAt.year(),
-				plan.id,
-				plan.content.title,
-				plan.status.canRemind,
-				plan.achieveRate,
-				plan.iconNumber,
+			.from(planEntity)
+			.join(userEntity).on(userEntity.id.eq(planEntity.userId))
+			.groupBy(planEntity.createdAt.year(),
+				planEntity.id,
+				planEntity.title,
+				planEntity.canRemind,
+				planEntity.achieveRate,
+				planEntity.iconNumber,
 				userEntity.verified)
-			.where(plan.userId.eq(userId))
-			.orderBy(plan.createdAt.year().desc())
+			.where(planEntity.userId.eq(userId))
+			.orderBy(planEntity.createdAt.year().desc())
 			.fetch();
 	}
 
 	public List<RemindMessageInfo> findAllRemindablePlan(String remindTime) {
-		List<Tuple> remindablePlans = queryFactory.select(plan, userEntity)
-			.from(plan, userEntity)
-			.where(plan.status.canRemind
+		List<Tuple> remindablePlans = queryFactory.select(planEntity, userEntity)
+			.from(planEntity, userEntity)
+			.where(planEntity.canRemind
 				.and(isCurrentYear())
 				.and(isRemindMonth())
 				.and(isRemindDate())
-				.and(plan.info.remindTime.stringValue().eq(remindTime)
-					.and(plan.userId.eq(userEntity.id)))
+				.and(planEntity.remindTime.stringValue().eq(remindTime)
+					.and(planEntity.userId.eq(userEntity.id)))
 			)
 			.fetch(); // todo: 리마인드 메세지 날짜에 맞게 쿼리 수정
 
@@ -219,26 +230,29 @@ public class PlanQueryRepository {
 	}
 
 	private BooleanExpression isCurrentYear() {
-		return plan.createdAt.year().eq(new TimeValue().getYear());
+		return planEntity.createdAt.year().eq(new TimeValue().getYear());
 	}
 
 	private BooleanExpression isRemindDate() {
-		return plan.info.remindDate.eq(new TimeValue().getDate());
+		return planEntity.remindDate.eq(new TimeValue().getDate());
 	}
 
 	private List<RemindMessageInfo> mapRemindMessageInfos(List<Tuple> remindablePlans) {
 		return remindablePlans.stream().map(
-				p -> new RemindMessageInfo(
-					p.get(plan).getUserId(),
-					p.get(plan).getId(),
-					p.get(plan).getContent().getTitle(),
-					p.get(userEntity).getRemindEmail(),
-					p.get(plan).getMessage(p.get(plan).getRemindTerm(),
-						new TimeValue().getMonth()),
-					p.get(plan).getInfo(),
-					p.get(plan).getRemindMonth(),
-					p.get(plan).getRemindDate()
-				)
+				p -> {
+					Plan plan = planMapper.toDomain(p.get(planEntity));
+
+					return new RemindMessageInfo(
+						plan.getUserId(),
+						plan.getId(),
+						plan.getContent().getTitle(),
+						p.get(userEntity).getRemindEmail(),
+						plan.getMessage(plan.getRemindTerm(), new TimeValue().getMonth()),
+						plan.getInfo(),
+						plan.getRemindMonth(),
+						plan.getRemindDate()
+					);
+				}
 			)
 			.toList();
 	}

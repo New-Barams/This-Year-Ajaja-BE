@@ -1,6 +1,6 @@
 package com.newbarams.ajaja.global.util;
 
-import static com.newbarams.ajaja.module.plan.domain.QPlan.*;
+import static com.newbarams.ajaja.module.plan.infra.QPlanEntity.*;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -25,13 +25,13 @@ public class QueryDslUtil {
 		int month = zonedDateTime.getMonthValue();
 
 		if (MONTHS_PER_ONE_MONTH.contains(month)) {
-			return plan.info.remindTerm.eq(1);
+			return planEntity.remindTerm.eq(1);
 		} else if (MONTHS_PER_THREE_MONTH.contains(month)) {
-			return plan.info.remindTerm.in(1, 3);
+			return planEntity.remindTerm.in(1, 3);
 		} else if (MONTHS_PER_SIX_MONTH.contains(month)) {
-			return plan.info.remindTerm.in(1, 3, 6);
+			return planEntity.remindTerm.in(1, 3, 6);
 		}
 
-		return plan.info.remindTerm.in(1, 3, 6, 12);
+		return planEntity.remindTerm.in(1, 3, 6, 12);
 	}
 }
