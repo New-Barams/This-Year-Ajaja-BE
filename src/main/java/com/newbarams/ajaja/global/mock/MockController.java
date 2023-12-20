@@ -31,6 +31,8 @@ import com.newbarams.ajaja.global.security.jwt.util.JwtParser;
 import com.newbarams.ajaja.global.security.jwt.util.JwtRemover;
 import com.newbarams.ajaja.global.security.jwt.util.JwtValidator;
 import com.newbarams.ajaja.module.ajaja.application.SchedulingAjajaRemindService;
+import com.newbarams.ajaja.module.auth.dto.AuthRequest;
+import com.newbarams.ajaja.module.auth.dto.AuthResponse;
 import com.newbarams.ajaja.module.feedback.dto.GetAchieve;
 import com.newbarams.ajaja.module.feedback.dto.UpdateFeedback;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
@@ -38,8 +40,6 @@ import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 import com.newbarams.ajaja.module.remind.application.SchedulingRemindService;
 import com.newbarams.ajaja.module.remind.dto.ModifyAlarm;
 import com.newbarams.ajaja.module.remind.dto.RemindResponse;
-import com.newbarams.ajaja.module.user.dto.UserRequest;
-import com.newbarams.ajaja.module.user.dto.UserResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -68,17 +68,17 @@ public class MockController {
 	@Operation(summary = "가짜 로그인 API")
 	@PostMapping("/login")
 	@ResponseStatus(OK)
-	AjajaResponse<UserResponse.Token> login(@RequestBody UserRequest.Login request) {
-		UserResponse.Token response = jwtGenerator.login(1L);
+	AjajaResponse<AuthResponse.Token> login(@RequestBody AuthRequest.Login request) {
+		AuthResponse.Token response = jwtGenerator.login(1L);
 		return AjajaResponse.ok(response);
 	}
 
 	@Operation(summary = "가짜 Token 재발급 API")
 	@PostMapping("/reissue")
 	@ResponseStatus(OK)
-	AjajaResponse<UserResponse.Token> reissue(@RequestBody UserRequest.Reissue request) {
+	AjajaResponse<AuthResponse.Token> reissue(@RequestBody AuthRequest.Reissue request) {
 		jwtValidator.validateReissuableAndExtractId(request.getAccessToken(), request.getRefreshToken());
-		UserResponse.Token response = jwtGenerator.reissue(1L, request.getRefreshToken());
+		AuthResponse.Token response = jwtGenerator.reissue(1L, request.getRefreshToken());
 		return AjajaResponse.ok(response);
 	}
 
@@ -198,22 +198,7 @@ public class MockController {
 	@GetMapping("/reminds/{planId}")
 	@ResponseStatus(OK)
 	public AjajaResponse<RemindResponse.CommonResponse> getReminds(@PathVariable Long planId) {
-		List<RemindResponse.Messages> sentRespons =
-			List.of(
-				new RemindResponse.Messages(
-					"화이팅",
-					3,
-					13,
-					true
-				),
-				new RemindResponse.Messages(
-					"아좌좌",
-					6,
-					13,
-					true
-				));
-
-		List<RemindResponse.Messages> respons = List.of(
+		List<RemindResponse.Messages> messages = List.of(
 			new RemindResponse.Messages(
 				"잘하고 있지?",
 				9,
@@ -225,13 +210,12 @@ public class MockController {
 				12,
 				13,
 				false
-
 			));
 
 		RemindResponse.CommonResponse response = new RemindResponse.CommonResponse(
 			"MORNING",
 			true,
-			respons
+			messages
 		);
 
 		return new AjajaResponse<>(true, response);

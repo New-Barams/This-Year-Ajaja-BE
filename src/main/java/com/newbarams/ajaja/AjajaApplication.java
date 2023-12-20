@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-import com.newbarams.ajaja.infra.feign.kakao.KakaoProperties;
+import com.newbarams.ajaja.infra.feign.kakao.client.KakaoProperties;
 
 @EnableCaching
 @EnableScheduling

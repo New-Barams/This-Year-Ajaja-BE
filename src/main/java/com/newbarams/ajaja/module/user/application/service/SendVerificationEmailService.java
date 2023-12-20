@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.newbarams.ajaja.global.cache.CacheUtil;
 import com.newbarams.ajaja.module.user.application.port.in.SendVerificationEmailUseCase;
+import com.newbarams.ajaja.module.user.application.port.out.SendCertificationPort;
 import com.newbarams.ajaja.module.user.domain.User;
 
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 @RequiredArgsConstructor
 class SendVerificationEmailService implements SendVerificationEmailUseCase {
-	private final SendCertificationService sendCertificationService;
+	private final SendCertificationPort sendCertificationPort;
 	private final RetrieveUserService retrieveUserService;
 	private final CacheUtil cacheUtil;
 
@@ -21,7 +22,7 @@ class SendVerificationEmailService implements SendVerificationEmailUseCase {
 	public void sendVerification(Long userId, String email) {
 		validateEmail(userId, email);
 		String certification = RandomCertificationGenerator.generate();
-		sendCertificationService.send(email, certification);
+		sendCertificationPort.send(email, certification);
 		cacheUtil.saveEmailVerification(userId, email, certification);
 	}
 
