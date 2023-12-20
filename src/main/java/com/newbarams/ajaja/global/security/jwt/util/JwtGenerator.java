@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.newbarams.ajaja.global.cache.CacheUtil;
 import com.newbarams.ajaja.global.common.TimeValue;
-import com.newbarams.ajaja.module.user.dto.UserResponse;
+import com.newbarams.ajaja.module.auth.dto.AuthResponse;
 
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
@@ -26,42 +26,42 @@ public class JwtGenerator {
 	private final CacheUtil cacheUtil;
 	private final JwtParser parser;
 
-	public UserResponse.Token login(Long userId) {
+	public AuthResponse.Token login(Long userId) {
 		return generate(userId, this::generateRefreshToken);
 	}
 
-	public UserResponse.Token reissue(Long userId, String oldRefreshToken) {
+	public AuthResponse.Token reissue(Long userId, String oldRefreshToken) {
 		return generate(userId,
-			(id, time) -> shouldReissue(oldRefreshToken, time) ? generateRefreshToken(id, time) : oldRefreshToken
+				(id, time) -> shouldReissue(oldRefreshToken, time) ? generateRefreshToken(id, time) : oldRefreshToken
 		);
 	}
 
-	private UserResponse.Token generate(Long userId, RefreshTokenGenerator generator) {
+	private AuthResponse.Token generate(Long userId, RefreshTokenGenerator generator) {
 		final TimeValue time = new TimeValue();
 		String accessToken = generateAccessToken(userId, time);
 		String refreshToken = generator.generate(userId, time);
 
-		return new UserResponse.Token(accessToken, refreshToken, time.getTimeMillis() + ACCESS_TOKEN_VALID_TIME);
+		return new AuthResponse.Token(accessToken, refreshToken, time.getTimeMillis() + ACCESS_TOKEN_VALID_TIME);
 	}
 
 	private String generateAccessToken(Long userId, TimeValue time) {
 		Date accessTokenExpireIn = time.expireIn(ACCESS_TOKEN_VALID_TIME);
 		return Jwts.builder()
-			.claim(jwtSecretProvider.getSignature(), userId)
-			.expiration(accessTokenExpireIn)
-			.signWith(jwtSecretProvider.getSecretKey())
-			.compact();
+				.claim(jwtSecretProvider.getSignature(), userId)
+				.expiration(accessTokenExpireIn)
+				.signWith(jwtSecretProvider.getSecretKey())
+				.compact();
 	}
 
 	private String generateRefreshToken(Long userId, TimeValue time) {
 		Date refreshTokenExpireIn = time.expireIn(REFRESH_TOKEN_VALID_TIME);
 
 		String refreshToken = Jwts.builder()
-			.claim(jwtSecretProvider.getSignature(), userId)
-			.claim(jwtSecretProvider.getDateKey(), refreshTokenExpireIn)
-			.expiration(refreshTokenExpireIn)
-			.signWith(jwtSecretProvider.getSecretKey())
-			.compact();
+				.claim(jwtSecretProvider.getSignature(), userId)
+				.claim(jwtSecretProvider.getDateKey(), refreshTokenExpireIn)
+				.expiration(refreshTokenExpireIn)
+				.signWith(jwtSecretProvider.getSecretKey())
+				.compact();
 
 		cacheUtil.saveRefreshToken(jwtSecretProvider.cacheKey(userId), refreshToken, REFRESH_TOKEN_VALID_TIME);
 		return refreshToken;

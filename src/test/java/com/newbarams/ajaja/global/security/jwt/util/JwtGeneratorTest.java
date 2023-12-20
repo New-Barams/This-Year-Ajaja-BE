@@ -16,7 +16,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 import com.newbarams.ajaja.common.annotation.RedisBasedTest;
 import com.newbarams.ajaja.common.support.MockTestSupport;
-import com.newbarams.ajaja.module.user.dto.UserResponse;
+import com.newbarams.ajaja.module.auth.dto.AuthResponse;
 
 @RedisBasedTest
 class JwtGeneratorTest extends MockTestSupport {
@@ -48,7 +48,7 @@ class JwtGeneratorTest extends MockTestSupport {
 		// given
 
 		// when
-		UserResponse.Token response = jwtGenerator.login(userId);
+		AuthResponse.Token response = jwtGenerator.login(userId);
 
 		// then
 		assertThat(response.getAccessToken()).isNotNull();
@@ -65,11 +65,11 @@ class JwtGeneratorTest extends MockTestSupport {
 	@DisplayName("재발급 시 Refresh Token의 만료일이 3일 이상 남았다면 Access Token만 재발급되어야 한다.")
 	void reissue_Success_WithOnlyAccessTokenGenerated() throws InterruptedException {
 		// given
-		UserResponse.Token logined = jwtGenerator.login(userId);
+		AuthResponse.Token logined = jwtGenerator.login(userId);
 		TimeUnit.SECONDS.sleep(1); // to avoid test fail
 
 		// when
-		UserResponse.Token reissued = jwtGenerator.reissue(userId, logined.getRefreshToken());
+		AuthResponse.Token reissued = jwtGenerator.reissue(userId, logined.getRefreshToken());
 
 		// then
 		assertThat(reissued.getAccessToken()).isNotEqualTo(logined.getAccessToken());
@@ -85,7 +85,7 @@ class JwtGeneratorTest extends MockTestSupport {
 	@DisplayName("재발급 시 Refresh Token의 만료일이 3일 이하라면 모두 새롭게 발급되어야 한다.")
 	void reissue_Success_WithNewRefreshToken() throws InterruptedException {
 		// given
-		UserResponse.Token logined = jwtGenerator.login(userId);
+		AuthResponse.Token logined = jwtGenerator.login(userId);
 
 		Date now = new Date();
 		Date twoDaysBefore = new Date(now.getTime() - 60 * 60 * 24 * 2 * 1000L);
@@ -93,7 +93,7 @@ class JwtGeneratorTest extends MockTestSupport {
 		TimeUnit.SECONDS.sleep(1); // to avoid test fail
 
 		// when
-		UserResponse.Token reissued = jwtGenerator.reissue(userId, logined.getRefreshToken());
+		AuthResponse.Token reissued = jwtGenerator.reissue(userId, logined.getRefreshToken());
 
 		// then
 		assertThat(reissued.getAccessToken()).isNotEqualTo(logined.getAccessToken());

@@ -13,7 +13,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import com.newbarams.ajaja.common.annotation.RedisBasedTest;
 import com.newbarams.ajaja.common.support.MonkeySupport;
 import com.newbarams.ajaja.global.exception.AjajaException;
-import com.newbarams.ajaja.module.user.dto.UserResponse;
+import com.newbarams.ajaja.module.auth.dto.AuthResponse;
 
 @RedisBasedTest
 class JwtValidatorTest extends MonkeySupport {
@@ -27,7 +27,7 @@ class JwtValidatorTest extends MonkeySupport {
 	private RedisTemplate<String, Object> redisTemplate;
 
 	private Long userId;
-	private UserResponse.Token tokens;
+	private AuthResponse.Token tokens;
 
 	@BeforeEach
 	void setup() {
@@ -47,7 +47,7 @@ class JwtValidatorTest extends MonkeySupport {
 
 		// when, then
 		assertThatNoException()
-			.isThrownBy(() -> jwtValidator.validateReissuableAndExtractId(tokens.getAccessToken(), null));
+				.isThrownBy(() -> jwtValidator.validateReissuableAndExtractId(tokens.getAccessToken(), null));
 	}
 
 	@Test
@@ -56,7 +56,7 @@ class JwtValidatorTest extends MonkeySupport {
 
 		// when, then
 		assertThatNoException()
-			.isThrownBy(() -> jwtValidator.validateReissuableAndExtractId(null, tokens.getRefreshToken()));
+				.isThrownBy(() -> jwtValidator.validateReissuableAndExtractId(null, tokens.getRefreshToken()));
 	}
 
 	@Test
@@ -67,8 +67,8 @@ class JwtValidatorTest extends MonkeySupport {
 
 		// when, then
 		assertThatExceptionOfType(AjajaException.class)
-			.isThrownBy(() -> jwtValidator.validateReissuableAndExtractId(null, tokens.getRefreshToken()))
-			.withMessage(NEVER_LOGIN.getMessage());
+				.isThrownBy(() -> jwtValidator.validateReissuableAndExtractId(null, tokens.getRefreshToken()))
+				.withMessage(NEVER_LOGIN.getMessage());
 	}
 
 	@Test
@@ -76,16 +76,16 @@ class JwtValidatorTest extends MonkeySupport {
 	void validateReissuable_Fail_ByDifferentRefreshToken() {
 		// given
 		String newToken = """
-			eyJhbGciOiJIUzUxMiJ9.
-			eyJleHAiOjk5OTk5OTk5OTl9.
-			MY8pP9aep_3Dwza-unK3EmnPYJ88mYQe0IWjO_iMlbhKMcAzNpCmD11A9K--o_Pw6dc6slxnlb7zHNAVOUNsOw
-			""";
+				eyJhbGciOiJIUzUxMiJ9.
+				eyJleHAiOjk5OTk5OTk5OTl9.
+				MY8pP9aep_3Dwza-unK3EmnPYJ88mYQe0IWjO_iMlbhKMcAzNpCmD11A9K--o_Pw6dc6slxnlb7zHNAVOUNsOw
+				""";
 
 		redisTemplate.opsForValue().set(jwtSecretProvider.getSignature() + userId, newToken);
 
 		// when, then
 		assertThatExceptionOfType(AjajaException.class)
-			.isThrownBy(() -> jwtValidator.validateReissuableAndExtractId(null, tokens.getRefreshToken()))
-			.withMessage(TOKEN_NOT_MATCH.getMessage());
+				.isThrownBy(() -> jwtValidator.validateReissuableAndExtractId(null, tokens.getRefreshToken()))
+				.withMessage(TOKEN_NOT_MATCH.getMessage());
 	}
 }

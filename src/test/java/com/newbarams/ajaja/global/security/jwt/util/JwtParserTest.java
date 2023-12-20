@@ -22,7 +22,7 @@ import com.newbarams.ajaja.common.annotation.RedisBasedTest;
 import com.newbarams.ajaja.common.support.MonkeySupport;
 import com.newbarams.ajaja.global.security.common.CustomUserDetailService;
 import com.newbarams.ajaja.global.security.common.UserAdapter;
-import com.newbarams.ajaja.module.user.dto.UserResponse;
+import com.newbarams.ajaja.module.auth.dto.AuthResponse;
 
 @RedisBasedTest
 class JwtParserTest extends MonkeySupport {
@@ -45,7 +45,7 @@ class JwtParserTest extends MonkeySupport {
 	@BeforeEach
 	void setup() {
 		userId = sut.giveMeOne(Long.class);
-		UserResponse.Token response = jwtGenerator.login(userId);
+		AuthResponse.Token response = jwtGenerator.login(userId);
 		accessToken = response.getAccessToken();
 		refreshToken = response.getRefreshToken();
 	}
@@ -113,15 +113,15 @@ class JwtParserTest extends MonkeySupport {
 	void parseId_Fail_ByWrongSignature() {
 		// given
 		String wrongSignatureToken = """
-			eyJhbGciOiJIUzI1NiJ9.
-			eyJuYW1lIjoiSGVqb3cifQ.
-			SI7XBRHE_95nkxQ69SiiCQcqDkZ-FW1RdxNL1DmAAAg
-			""";
+				eyJhbGciOiJIUzI1NiJ9.
+				eyJuYW1lIjoiSGVqb3cifQ.
+				SI7XBRHE_95nkxQ69SiiCQcqDkZ-FW1RdxNL1DmAAAg
+				""";
 
 		// when, then
 		assertThatException()
-			.isThrownBy(() -> jwtParser.parseId(wrongSignatureToken))
-			.withMessage(INVALID_SIGNATURE.getMessage());
+				.isThrownBy(() -> jwtParser.parseId(wrongSignatureToken))
+				.withMessage(INVALID_SIGNATURE.getMessage());
 	}
 
 	@Test
@@ -132,8 +132,8 @@ class JwtParserTest extends MonkeySupport {
 
 		// when, then
 		assertThatException()
-			.isThrownBy(() -> jwtParser.parseId(emptyToken))
-			.withMessage(EMPTY_TOKEN.getMessage());
+				.isThrownBy(() -> jwtParser.parseId(emptyToken))
+				.withMessage(EMPTY_TOKEN.getMessage());
 	}
 
 	@Nested
@@ -155,10 +155,10 @@ class JwtParserTest extends MonkeySupport {
 		void isParsable_Fail_ByInvalidToken() {
 			// given
 			String invalidToken = """
-				eyJhbGciOiJIUzI1NiJ9.
-				eyJuYW1lIjoiSGVqb3cifQ.
-				SI7XBRHE_95nkxQ69SiiCQcqDkZ-FW1RdxNL1DmAAAg
-				""";
+					eyJhbGciOiJIUzI1NiJ9.
+					eyJuYW1lIjoiSGVqb3cifQ.
+					SI7XBRHE_95nkxQ69SiiCQcqDkZ-FW1RdxNL1DmAAAg
+					""";
 
 			// when
 			boolean shouldBeFalse = jwtParser.isParsable(invalidToken);

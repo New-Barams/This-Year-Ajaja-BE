@@ -3,16 +3,16 @@ package com.newbarams.ajaja.module.user.kakao.application;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
-import com.newbarams.ajaja.infra.feign.kakao.KakaoProperties;
-import com.newbarams.ajaja.infra.feign.kakao.KakaoUnlinkFeignClient;
-import com.newbarams.ajaja.module.user.application.service.DisconnectOauthService;
-import com.newbarams.ajaja.module.user.kakao.model.KakaoUnlinkRequest;
+import com.newbarams.ajaja.infra.feign.kakao.client.KakaoProperties;
+import com.newbarams.ajaja.infra.feign.kakao.client.KakaoUnlinkFeignClient;
+import com.newbarams.ajaja.infra.feign.kakao.model.KakaoUnlinkRequest;
+import com.newbarams.ajaja.module.user.application.port.out.DisconnectOauthPort;
 
 import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-class KakaoDisconnectOauthService implements DisconnectOauthService {
+class KakaoDisconnectOauthService implements DisconnectOauthPort {
 	private static final String KAKAO_AK_PREFIX = "KakaoAK ";
 
 	private final KakaoUnlinkFeignClient kakaoUnlinkFeignClient;
