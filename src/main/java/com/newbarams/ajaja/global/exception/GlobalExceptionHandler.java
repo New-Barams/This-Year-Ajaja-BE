@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,12 +31,9 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(BAD_REQUEST)
-	public ErrorResponse handleMethodArgumentNotValidException(
-		MethodArgumentNotValidException exception,
-		HttpServletRequest request // todo: remove when api log aop applied
-	) {
+	public ErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
 		String message = exception.getBindingResult().getAllErrors().get(0).getDefaultMessage();
-		log.warn("Valid Fail Occurs At : {}, {}", request.getRequestURI(), message);
+		log.warn("Valid Fail Occurs: {}", message);
 		return ErrorResponse.withMessage(BEAN_VALIDATION_FAIL_EXCEPTION, message);
 	}
 
