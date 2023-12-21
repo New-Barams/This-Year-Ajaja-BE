@@ -8,22 +8,14 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import com.newbarams.ajaja.common.support.MonkeySupport;
 import com.newbarams.ajaja.global.exception.AjajaException;
+import com.newbarams.ajaja.module.plan.dto.PlanParam;
 
-import com.navercorp.fixturemonkey.FixtureMonkey;
-import com.navercorp.fixturemonkey.api.introspector.FieldReflectionArbitraryIntrospector;
-import com.navercorp.fixturemonkey.jakarta.validation.plugin.JakartaValidationPlugin;
-
-class PlanTest {
-	private final FixtureMonkey fixtureMonkey = FixtureMonkey.builder()
-		.objectIntrospector(FieldReflectionArbitraryIntrospector.INSTANCE)
-		.plugin(new JakartaValidationPlugin())
-		.defaultNotNull(true)
-		.build();
-
+class PlanTest extends MonkeySupport {
 	@Test
 	void createPlan_Success() {
-		fixtureMonkey.giveMeOne(Plan.class);
+		sut.giveMeOne(Plan.class);
 	}
 
 	@Test
@@ -31,7 +23,7 @@ class PlanTest {
 	void deletePlan_Success() {
 		PlanStatus planStatus = new PlanStatus(true);
 
-		Plan plan = fixtureMonkey.giveMeBuilder(Plan.class)
+		Plan plan = sut.giveMeBuilder(Plan.class)
 			.set("status", planStatus)
 			.sample();
 
@@ -45,7 +37,7 @@ class PlanTest {
 	void deletePlan_Fail_By_Date() {
 		PlanStatus planStatus = new PlanStatus(true);
 
-		Plan plan = fixtureMonkey.giveMeBuilder(Plan.class)
+		Plan plan = sut.giveMeBuilder(Plan.class)
 			.set("status", planStatus)
 			.sample();
 
@@ -57,7 +49,7 @@ class PlanTest {
 	@Test
 	@DisplayName("계획의 공개여부를 변경할 수 있다.")
 	void updatePublicStatus_Success() {
-		Plan plan = fixtureMonkey.giveMeOne(Plan.class);
+		Plan plan = sut.giveMeOne(Plan.class);
 		boolean isPublic = plan.getStatus().isPublic();
 
 		plan.updatePublicStatus(plan.getUserId());
@@ -67,7 +59,7 @@ class PlanTest {
 	@Test
 	@DisplayName("리마인드 알림 on/off 여부를 변경할 수 있다.")
 	void updateRemindStatus_Success() {
-		Plan plan = fixtureMonkey.giveMeOne(Plan.class);
+		Plan plan = sut.giveMeOne(Plan.class);
 		boolean canRemind = plan.getStatus().isCanRemind();
 
 		plan.updateRemindStatus(plan.getUserId());
@@ -77,7 +69,7 @@ class PlanTest {
 	@Test
 	@DisplayName("응원메시지 알림 on/off 여부를 변경할 수 있다.")
 	void updateAjajaStatus_Success() {
-		Plan plan = fixtureMonkey.giveMeOne(Plan.class);
+		Plan plan = sut.giveMeOne(Plan.class);
 		boolean canAjaja = plan.getStatus().isCanAjaja();
 
 		plan.updateAjajaStatus(plan.getUserId());
@@ -87,21 +79,23 @@ class PlanTest {
 	@Test
 	@DisplayName("수정가능한 기간일 경우 작성한 계획을 수정할 수 있다.")
 	void updatePlan_Success_With_Updatable_Date() {
-		Plan plan = fixtureMonkey.giveMeOne(Plan.class);
+		Plan plan = sut.giveMeOne(Plan.class);
 
 		assertThatNoException().isThrownBy(() ->
-			plan.update(plan.getUserId(), 1, "title", "des", true, true, true)
+			plan.update(new PlanParam.Update(1, plan.getUserId(), new Content("title", "des"),
+				new PlanStatus(true, true, true, false)))
 		);
 	}
 
 	@Test
 	@DisplayName("수정가능한 기간이 아닐 경우 작성한 계획을 수정할 수 없다.")
 	void updatePlan_Fail_By_Not_Updatable_Date() {
-		Plan plan = fixtureMonkey.giveMeOne(Plan.class);
-		List<Message> messages = fixtureMonkey.giveMe(Message.class, 3);
+		Plan plan = sut.giveMeOne(Plan.class);
+		List<Message> messages = sut.giveMe(Message.class, 3);
 
 		assertThatThrownBy(() ->
-			plan.update(plan.getUserId(), 12, "title", "des", true, true, true))
+			plan.update(new PlanParam.Update(12, plan.getUserId(), new Content("title", "des"),
+				new PlanStatus(true, true, true, false))))
 			.isInstanceOf(AjajaException.class)
 			.hasMessage(INVALID_UPDATABLE_DATE.getMessage());
 	}
@@ -109,10 +103,11 @@ class PlanTest {
 	@Test
 	@DisplayName("수정하고자 하는 내용이 수정 후의 내용과 같아야 한다.")
 	void updatePlan_Success() {
-		Plan plan = fixtureMonkey.giveMeOne(Plan.class);
-		List<Message> messages = fixtureMonkey.giveMe(Message.class, 3);
+		Plan plan = sut.giveMeOne(Plan.class);
+		List<Message> messages = sut.giveMe(Message.class, 3);
 
-		plan.update(plan.getUserId(), 1, "title", "des", true, false, true);
+		plan.update(new PlanParam.Update(1, plan.getUserId(), new Content("title", "des"),
+			new PlanStatus(true, false, true, false)));
 
 		assertThat(plan.getContent().getTitle()).isEqualTo("title");
 		assertThat(plan.getStatus().isCanRemind()).isEqualTo(false);

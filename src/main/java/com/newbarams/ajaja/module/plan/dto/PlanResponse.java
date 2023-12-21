@@ -41,8 +41,7 @@ public class PlanResponse {
 		boolean canRemind,
 		boolean canAjaja,
 		int ajajas,
-		List<String> tags,
-		Instant createdAt
+		List<String> tags
 	) {
 	}
 }

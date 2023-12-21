@@ -17,8 +17,9 @@ import com.newbarams.ajaja.global.exception.AjajaException;
 import com.newbarams.ajaja.module.plan.domain.Content;
 import com.newbarams.ajaja.module.plan.domain.Message;
 import com.newbarams.ajaja.module.plan.domain.Plan;
+import com.newbarams.ajaja.module.plan.domain.PlanRepository;
 import com.newbarams.ajaja.module.plan.domain.RemindInfo;
-import com.newbarams.ajaja.module.plan.domain.repository.PlanRepository;
+import com.newbarams.ajaja.module.plan.dto.PlanParam;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.user.domain.User;
 import com.newbarams.ajaja.module.user.domain.UserRepository;
@@ -44,17 +45,20 @@ class UpdatePlanServiceTest {
 		User user = User.init("abcde@naver.com", 1L);
 		User savedUser = userRepository.save(user);
 
-		Plan plan = Plan.builder()
-			.month(1)
-			.userId(savedUser.getId())
-			.content(new Content("title", "description"))
-			.info(new RemindInfo(12, 3, 15, "MORNING"))
-			.isPublic(true)
-			.messages(List.of(new Message("content", 3, 15)))
-			.build();
+		Plan plan = Plan.create(
+			new PlanParam.Create(
+				1,
+				savedUser.getId(),
+				new Content("title", "description"),
+				new RemindInfo(12, 3, 15, "MORNING"),
+				true,
+				1,
+				List.of(new Message("content", 3, 15))
+			)
+		);
 
-		PlanRequest.Update request
-			= new PlanRequest.Update("title", "des", true, true, true, null);
+		PlanRequest.Update request = new PlanRequest.Update("title", "des",
+			true, true, true, null);
 
 		Plan saved = planRepository.save(plan);
 
@@ -68,8 +72,8 @@ class UpdatePlanServiceTest {
 	void updatePlan_Fail_By_Not_Found_Plan() {
 		Long planId = Arbitraries.longs().lessOrEqual(-1L).sample();
 
-		PlanRequest.Update request
-			= new PlanRequest.Update("title", "des", true, true, true, null);
+		PlanRequest.Update request = new PlanRequest.Update("title", "des",
+			true, true, true, null);
 
 		assertThatThrownBy(() -> updatePlanService.update(planId, 1L, request, 1))
 			.isInstanceOf(AjajaException.class);
@@ -78,17 +82,20 @@ class UpdatePlanServiceTest {
 	@Test
 	@DisplayName("planId가 존재하지만, 수정가능한 기간이 아닌 경우 계획을 수정할 수 업다.")
 	void updatePlan_Fail_By_Not_Updatable_Date() {
-		Plan plan = Plan.builder()
-			.month(1)
-			.userId(1L)
-			.content(new Content("title", "description"))
-			.info(new RemindInfo(12, 3, 15, "MORNING"))
-			.isPublic(true)
-			.messages(List.of(new Message("content", 3, 15)))
-			.build();
+		Plan plan = Plan.create(
+			new PlanParam.Create(
+				1,
+				1L,
+				new Content("title", "description"),
+				new RemindInfo(12, 3, 15, "MORNING"),
+				true,
+				1,
+				List.of(new Message("content", 3, 15))
+			)
+		);
 
-		PlanRequest.Update request
-			= new PlanRequest.Update("title", "des", true, true, true, null);
+		PlanRequest.Update request = new PlanRequest.Update("title", "des",
+			true, true, true, null);
 
 		Plan saved = planRepository.save(plan);
 

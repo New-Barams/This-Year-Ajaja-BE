@@ -16,8 +16,9 @@ import com.newbarams.ajaja.global.exception.AjajaException;
 import com.newbarams.ajaja.module.plan.domain.Content;
 import com.newbarams.ajaja.module.plan.domain.Message;
 import com.newbarams.ajaja.module.plan.domain.Plan;
+import com.newbarams.ajaja.module.plan.domain.PlanRepository;
 import com.newbarams.ajaja.module.plan.domain.RemindInfo;
-import com.newbarams.ajaja.module.plan.domain.repository.PlanRepository;
+import com.newbarams.ajaja.module.plan.dto.PlanParam;
 
 @SpringBootTest
 class DeletePlanServiceTest {
@@ -30,14 +31,17 @@ class DeletePlanServiceTest {
 	@Test
 	@DisplayName("planId가 존재하고, 삭제가능한 기간일 경우 계획을 삭제할 수 있다.")
 	void deletePlan_Success() {
-		Plan plan = Plan.builder()
-			.month(1)
-			.userId(1L)
-			.content(new Content("title", "description"))
-			.info(new RemindInfo(12, 3, 15, "MORNING"))
-			.isPublic(true)
-			.messages(List.of(new Message("content", 3, 15)))
-			.build();
+		Plan plan = Plan.create(
+			new PlanParam.Create(
+				1,
+				1L,
+				new Content("title", "description"),
+				new RemindInfo(12, 3, 15, "MORNING"),
+				true,
+				1,
+				List.of(new Message("content", 3, 15))
+			)
+		);
 
 		Plan saved = planRepository.save(plan);
 
@@ -58,14 +62,17 @@ class DeletePlanServiceTest {
 	@Test
 	@DisplayName("planId가 존재하지만, 삭제가능한 기간이 아닌 경우 계획을 삭제할 수 업다.")
 	void deletePlan_Fail_By_Date() {
-		Plan plan = Plan.builder()
-			.month(1)
-			.userId(1L)
-			.content(new Content("title", "description"))
-			.info(new RemindInfo(12, 3, 15, "MORNING"))
-			.isPublic(true)
-			.messages(List.of(new Message("content", 3, 15)))
-			.build();
+		Plan plan = Plan.create(
+			new PlanParam.Create(
+				1,
+				1L,
+				new Content("title", "description"),
+				new RemindInfo(12, 3, 15, "MORNING"),
+				true,
+				1,
+				List.of(new Message("content", 3, 15))
+			)
+		);
 
 		Plan saved = planRepository.save(plan);
 

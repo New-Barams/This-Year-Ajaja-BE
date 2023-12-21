@@ -15,31 +15,37 @@ import org.springframework.transaction.annotation.Transactional;
 
 import net.jqwik.api.Arbitraries;
 
-import com.newbarams.ajaja.module.plan.domain.Content;
 import com.newbarams.ajaja.module.plan.domain.Message;
 import com.newbarams.ajaja.module.plan.domain.Plan;
+import com.newbarams.ajaja.module.plan.domain.PlanRepository;
 import com.newbarams.ajaja.module.plan.domain.PlanStatus;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
+import com.newbarams.ajaja.module.plan.infra.PlanQueryRepository;
 import com.newbarams.ajaja.module.user.domain.User;
 import com.newbarams.ajaja.module.user.domain.UserRepository;
 
 import com.navercorp.fixturemonkey.FixtureMonkey;
+import com.navercorp.fixturemonkey.api.introspector.ConstructorPropertiesArbitraryIntrospector;
+import com.navercorp.fixturemonkey.api.introspector.FailoverIntrospector;
 import com.navercorp.fixturemonkey.api.introspector.FieldReflectionArbitraryIntrospector;
 import com.navercorp.fixturemonkey.jakarta.validation.plugin.JakartaValidationPlugin;
 
 @SpringBootTest
 @Transactional
 class PlanQueryRepositoryTest {
-	private final FixtureMonkey monkey = FixtureMonkey.builder()
-		.objectIntrospector(FieldReflectionArbitraryIntrospector.INSTANCE)
+	private final FixtureMonkey sut = FixtureMonkey.builder()
+		.objectIntrospector(new FailoverIntrospector(
+			List.of(
+				FieldReflectionArbitraryIntrospector.INSTANCE,
+				ConstructorPropertiesArbitraryIntrospector.INSTANCE
+			)
+		))
 		.register(Plan.class, fixture -> fixture.giveMeBuilder(Plan.class)
 			.set("id", Arbitraries.longs().greaterOrEqual(0))
 			.set("messages", List.of(new Message("test", 3, 15)))
-			.set("ajajas", Collections.EMPTY_LIST)
+			.set("ajajas", Collections.emptyList())
 		)
-		.register(Content.class, fixture -> fixture.giveMeBuilder(Content.class)
-			.set("description", Arbitraries.strings().ofMaxLength(255)))
 		.plugin(new JakartaValidationPlugin())
 		.defaultNotNull(true)
 		.useExpressionStrictMode()
@@ -63,7 +69,7 @@ class PlanQueryRepositoryTest {
 
 		saved = userRepository.save(user);
 
-		plan = monkey.giveMeBuilder(Plan.class)
+		plan = sut.giveMeBuilder(Plan.class)
 			.set("userId", saved.getId())
 			.set("status", new PlanStatus(true))
 			.sample();
@@ -74,9 +80,9 @@ class PlanQueryRepositoryTest {
 	void findAllCurrentPlansByUserId_Success() {
 		// given
 		int expectedSize = 4;
-		Long userId = monkey.giveMeOne(Long.class);
+		Long userId = sut.giveMeOne(Long.class);
 
-		List<Plan> plans = monkey.giveMeBuilder(Plan.class)
+		List<Plan> plans = sut.giveMeBuilder(Plan.class)
 			.set("userId", userId)
 			.set("status", new PlanStatus(true))
 			.sampleList(expectedSize);
@@ -113,7 +119,7 @@ class PlanQueryRepositoryTest {
 	void findAllByCursorAndSorting_Default_Success() {
 		int pageSize = 3;
 
-		List<Plan> plans = monkey.giveMeBuilder(Plan.class)
+		List<Plan> plans = sut.giveMeBuilder(Plan.class)
 			.set("userId", saved.getId())
 			.set("status", new PlanStatus(true))
 			.sampleList(10);
@@ -135,14 +141,12 @@ class PlanQueryRepositoryTest {
 	void findAllByCursorAndSorting_With_Latest_Condition_Success() {
 		int pageSize = 3;
 
-		for (int i = 0; i < pageSize; i++) {
-			Plan plan = monkey.giveMeBuilder(Plan.class)
-				.set("userId", saved.getId())
-				.set("status", new PlanStatus(true))
-				.sample();
+		List<Plan> plans = sut.giveMeBuilder(Plan.class)
+			.set("userId", saved.getId())
+			.set("status", new PlanStatus(true))
+			.sampleList(pageSize);
 
-			planRepository.save(plan);
-		}
+		planRepository.saveAll(plans);
 
 		PlanRequest.GetAll latestReq = new PlanRequest.GetAll("latest", true, null, null);
 

@@ -1,7 +1,7 @@
 package com.newbarams.ajaja.module.ajaja.domain.repository;
 
 import static com.newbarams.ajaja.module.ajaja.domain.QAjaja.*;
-import static com.newbarams.ajaja.module.plan.domain.QPlan.*;
+import static com.newbarams.ajaja.module.plan.infra.QPlanEntity.*;
 import static com.newbarams.ajaja.module.user.infra.QUserEntity.*;
 
 import java.time.Instant;
@@ -24,23 +24,23 @@ public class AjajaQueryRepositoryImpl implements AjajaQueryRepository {
 
 	public List<RemindableAjaja> findRemindableAjaja() {
 		return queryFactory.select(Projections.constructor(RemindableAjaja.class,
-				plan.content.title,
-				plan.id,
+				planEntity.title,
+				planEntity.id,
 				userEntity.remindEmail.count(),
 				userEntity.remindEmail
 			)).from(ajaja)
-			.join(plan).on(ajaja.targetId.eq(plan.id))
-			.join(userEntity).on(plan.userId.eq(userEntity.id))
-			.where(plan.status.canAjaja.eq(true)
+			.join(planEntity).on(ajaja.targetId.eq(planEntity.id))
+			.join(userEntity).on(planEntity.userId.eq(userEntity.id))
+			.where(planEntity.canAjaja.eq(true)
 				.and(ajaja.updatedAt.after(Instant.now().minus(7, ChronoUnit.DAYS)))
 				.and(ajaja.updatedAt.before(Instant.now()))
 				.and(ajaja.type.eq(Ajaja.Type.PLAN))
 				.and(ajaja.isCanceled.eq(false))
-				.and(plan.status.isDeleted.eq(false))
+				.and(planEntity.deleted.eq(false))
 			)
 			.groupBy(
-				plan.content.title,
-				plan.id,
+				planEntity.title,
+				planEntity.id,
 				userEntity.signUpEmail
 			)
 			.fetch();

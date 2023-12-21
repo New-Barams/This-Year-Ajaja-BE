@@ -4,8 +4,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.newbarams.ajaja.module.plan.domain.Plan;
+import com.newbarams.ajaja.module.plan.domain.PlanRepository;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
+import com.newbarams.ajaja.module.plan.mapper.PlanMapper;
 import com.newbarams.ajaja.module.tag.application.UpdatePlanTagService;
 
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 public class UpdatePlanService {
 	private final LoadPlanService getPlanService;
 	private final UpdatePlanTagService updatePlanTagService;
+	private final PlanRepository planRepository;
+	private final PlanMapper planMapper;
 
 	public void updatePublicStatus(Long id, Long userId) {
 		Plan plan = getPlanService.loadPlanOrElseThrow(id);
@@ -39,15 +43,9 @@ public class UpdatePlanService {
 		Plan plan = getPlanService.loadPlanOrElseThrow(id);
 		updatePlanTagService.update(id, request.tags());
 
-		plan.update(
-			userId,
-			month,
-			request.title(),
-			request.description(),
-			request.isPublic(),
-			request.canRemind(),
-			request.canAjaja()
-		);
+		plan.update(planMapper.toParam(userId, request, month));
+
+		planRepository.save(plan);
 
 		return getPlanService.loadById(id, userId);
 	}

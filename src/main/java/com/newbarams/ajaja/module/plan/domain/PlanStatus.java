@@ -1,27 +1,25 @@
 package com.newbarams.ajaja.module.plan.domain;
 
-import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class PlanStatus {
 	private boolean isPublic;
 	private boolean canRemind;
 	private boolean canAjaja;
-	private boolean isDeleted;
+	private boolean deleted;
 
 	public PlanStatus(boolean isPublic) {
 		this(isPublic, true, true, false);
 	}
 
 	void toDeleted() {
-		this.isDeleted = true;
+		this.deleted = true;
 	}
 
 	void switchPublic() {
@@ -34,10 +32,6 @@ public class PlanStatus {
 
 	void switchAjaja() {
 		this.canAjaja = !canAjaja;
-	}
-
-	PlanStatus update(boolean isPublic, boolean canRemind, boolean canAjaja) {
-		return new PlanStatus(isPublic, canRemind, canAjaja, isDeleted);
 	}
 
 	PlanStatus disable() {

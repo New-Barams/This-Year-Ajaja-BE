@@ -1,99 +1,110 @@
 package com.newbarams.ajaja.module.plan.mapper;
 
-import static com.newbarams.ajaja.global.exception.ErrorCode.*;
-
 import java.util.List;
 
-import org.mapstruct.factory.Mappers;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
-import com.newbarams.ajaja.global.exception.AjajaException;
+import com.newbarams.ajaja.module.ajaja.domain.Ajaja;
 import com.newbarams.ajaja.module.plan.domain.Content;
 import com.newbarams.ajaja.module.plan.domain.Message;
 import com.newbarams.ajaja.module.plan.domain.Plan;
+import com.newbarams.ajaja.module.plan.domain.PlanStatus;
 import com.newbarams.ajaja.module.plan.domain.RemindInfo;
+import com.newbarams.ajaja.module.plan.dto.PlanParam;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
+import com.newbarams.ajaja.module.plan.infra.PlanEntity;
 
-@Component
-public class PlanMapper {
-	public static Plan toEntity(PlanRequest.Create dto, Long userId, int month) {
-		Content content = toContent(dto.title(), dto.description());
-		RemindInfo info = toRemindInfo(dto.remindTotalPeriod(), dto.remindTerm(), dto.remindDate(),
-			dto.remindTime());
-		List<Message> messages = toMessages(dto.messages());
+@Mapper(componentModel = "spring")
+public interface PlanMapper {
+	@Mapping(source = "content.title", target = "title")
+	@Mapping(source = "content.description", target = "description")
+	@Mapping(source = "info.remindTotalPeriod", target = "remindTotalPeriod")
+	@Mapping(source = "info.remindTerm", target = "remindTerm")
+	@Mapping(source = "info.remindDate", target = "remindDate")
+	@Mapping(target = "remindTime", expression = "java(plan.getRemindTimeName())")
+	@Mapping(source = "status.public", target = "isPublic")
+	@Mapping(source = "status.canRemind", target = "canRemind")
+	@Mapping(source = "status.canAjaja", target = "canAjaja")
+	@Mapping(source = "status.deleted", target = "deleted")
+	PlanEntity toEntity(Plan plan);
 
-		return Plan.builder()
-			.month(month)
-			.userId(userId)
-			.content(content)
-			.info(info)
-			.isPublic(dto.isPublic())
-			.iconNumber(dto.iconNumber())
-			.messages(messages)
-			.build();
+	@Mapping(source = "planEntity", target = "content", qualifiedByName = "toContent")
+	@Mapping(source = "planEntity", target = "info", qualifiedByName = "toRemindInfo")
+	@Mapping(source = "planEntity", target = "status", qualifiedByName = "toPlanStatus")
+	Plan toDomain(PlanEntity planEntity);
+
+	@Named("toContent")
+	static Content toContent(PlanEntity planEntity) {
+		return new Content(planEntity.getTitle(), planEntity.getDescription());
 	}
 
-	private static Content toContent(String title, String description) {
-		return new Content(title, description);
+	@Named("toRemindInfo")
+	static RemindInfo toRemindInfo(PlanEntity planEntity) {
+		return new RemindInfo(planEntity.getRemindTotalPeriod(), planEntity.getRemindTerm(),
+			planEntity.getRemindDate(), planEntity.getRemindTime());
 	}
 
-	private static RemindInfo toRemindInfo(int remindTotalPeriod, int remindTerm, int remindDate,
-		String remindTime) {
-		return new RemindInfo(remindTotalPeriod, remindTerm, remindDate, remindTime);
+	@Named("toPlanStatus")
+	static PlanStatus toPlanStatus(PlanEntity planEntity) {
+		return new PlanStatus(planEntity.isPublic(), planEntity.isCanRemind(), planEntity.isCanAjaja(),
+			planEntity.isDeleted());
 	}
 
-	public static List<Message> toMessages(List<PlanRequest.Message> messageList) {
-		MessageMapper mapper = Mappers.getMapper(MessageMapper.class);
+	@Mapping(source = "request", target = "content", qualifiedByName = "toContent")
+	@Mapping(source = "request", target = "info", qualifiedByName = "toRemindInfo")
+	@Mapping(source = "request.messages", target = "messages", qualifiedByName = "toMessages")
+	PlanParam.Create toParam(Long userId, PlanRequest.Create request, int month);
 
-		if (messageList == null) {
-			throw new AjajaException(EMPTY_MESSAGES_LIST);
-		}
-
-		return mapper.toDomain(messageList);
+	@Named("toContent")
+	static Content toContent(PlanRequest.Create request) {
+		return new Content(request.title(), request.description());
 	}
 
-	public static PlanResponse.Create toResponse(Plan plan, List<String> tags) {
-		return new PlanResponse.Create(
-			plan.getId(),
-			plan.getUserId(),
-			plan.getContent().getTitle(),
-			plan.getContent().getDescription(),
-			plan.getStatus().isPublic(),
-			plan.getStatus().isCanRemind(),
-			plan.getStatus().isCanAjaja(),
-			0,
-			tags,
-			plan.getCreatedAt()
-		);
+	@Named("toRemindInfo")
+	static RemindInfo toRemindInfo(PlanRequest.Create request) {
+		return new RemindInfo(request.remindTotalPeriod(), request.remindTerm(),
+			request.remindDate(), request.remindTime());
 	}
 
-	public static PlanResponse.GetOne toResponse(Plan plan, String nickname, List<String> tags, boolean isPressAjaja) {
-		return new PlanResponse.GetOne(
-			plan.getId(),
-			plan.getUserId(),
-			nickname,
-			plan.getContent().getTitle(),
-			plan.getContent().getDescription(),
-			plan.getStatus().isPublic(),
-			plan.getStatus().isCanRemind(),
-			plan.getStatus().isCanAjaja(),
-			plan.getAjajas().size(),
-			isPressAjaja,
-			tags,
-			plan.getCreatedAt()
-		);
+	@Mapping(source = "plan.ajajas", target = "ajajas", qualifiedByName = "toAjajaCount")
+	@Mapping(source = "plan.content.title", target = "title")
+	@Mapping(source = "plan.content.description", target = "description")
+	@Mapping(source = "plan.status.public", target = "isPublic")
+	@Mapping(source = "plan.status.canRemind", target = "canRemind")
+	@Mapping(source = "plan.status.canAjaja", target = "canAjaja")
+	PlanResponse.Create toResponse(Plan plan, List<String> tags);
+
+	@Mapping(source = "plan.ajajas", target = "ajajas", qualifiedByName = "toAjajaCount")
+	@Mapping(source = "plan.public", target = "isPublic")
+	PlanResponse.GetOne toResponse(PlanEntity plan, String nickname, List<String> tags, boolean isPressAjaja);
+
+	@Mapping(source = "plan.ajajas", target = "ajajas", qualifiedByName = "toAjajaCount")
+	PlanResponse.GetAll toResponse(PlanEntity plan, String nickname, List<String> tags);
+
+	@Named("toMessages")
+	@Mapping(source = "dto.remindMonth", target = "remindMonth")
+	@Mapping(source = "dto.remindDay", target = "remindDay")
+	List<Message> toMessages(List<PlanRequest.Message> dto);
+
+	@Named("toAjajaCount")
+	static int toAjajaCount(List<Ajaja> ajajas) {
+		return ajajas.size();
 	}
 
-	public static PlanResponse.GetAll toGetAllResponse(Plan plan, String nickname, List<String> tags) {
-		return new PlanResponse.GetAll(
-			plan.getId(),
-			plan.getUserId(),
-			nickname,
-			plan.getContent().getTitle(),
-			plan.getAjajas().size(),
-			tags,
-			plan.getCreatedAt()
-		);
+	@Mapping(source = "request", target = "content", qualifiedByName = "toContent")
+	@Mapping(source = "request", target = "status", qualifiedByName = "toPlanStatus")
+	PlanParam.Update toParam(Long userId, PlanRequest.Update request, int month);
+
+	@Named("toContent")
+	static Content toContent(PlanRequest.Update request) {
+		return new Content(request.title(), request.description());
+	}
+
+	@Named("toPlanStatus")
+	static PlanStatus toPlanStatus(PlanRequest.Update request) {
+		return new PlanStatus(request.isPublic(), request.canRemind(), request.canAjaja(), false);
 	}
 }

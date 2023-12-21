@@ -16,7 +16,7 @@ import com.newbarams.ajaja.common.support.MockTestSupport;
 import com.newbarams.ajaja.global.exception.AjajaException;
 import com.newbarams.ajaja.module.feedback.domain.Feedback;
 import com.newbarams.ajaja.module.plan.domain.Plan;
-import com.newbarams.ajaja.module.plan.domain.repository.PlanRepository;
+import com.newbarams.ajaja.module.plan.domain.PlanRepository;
 
 class GetPlanAchieveServiceTest extends MockTestSupport {
 	@InjectMocks

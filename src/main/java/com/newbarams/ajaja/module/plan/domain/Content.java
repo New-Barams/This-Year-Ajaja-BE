@@ -2,7 +2,6 @@ package com.newbarams.ajaja.module.plan.domain;
 
 import com.newbarams.ajaja.global.common.SelfValidating;
 
-import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
@@ -10,11 +9,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Content extends SelfValidating<Content> {
 	@NotBlank
-	@Size(max = 50)
+	@Size(max = 30)
 	private String title;
 
 	@NotBlank
@@ -25,9 +23,5 @@ public class Content extends SelfValidating<Content> {
 		this.title = title;
 		this.description = description;
 		this.validateSelf();
-	}
-
-	Content update(String title, String description) {
-		return new Content(title, description);
 	}
 }
