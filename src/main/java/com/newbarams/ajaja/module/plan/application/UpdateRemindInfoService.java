@@ -24,5 +24,6 @@ public class UpdateRemindInfoService {
 			.orElseThrow(() -> AjajaException.withId(planId, ErrorCode.NOT_FOUND_PLAN));
 
 		plan.updateRemind(mapper.toDomain(request), mapper.toDomain(request.getMessages()));
+		planRepository.save(plan);
 	}
 }
