@@ -104,12 +104,11 @@ class PlanTest extends MonkeySupport {
 	@DisplayName("수정하고자 하는 내용이 수정 후의 내용과 같아야 한다.")
 	void updatePlan_Success() {
 		Plan plan = sut.giveMeOne(Plan.class);
-		List<Message> messages = sut.giveMe(Message.class, 3);
 
 		plan.update(new PlanParam.Update(1, plan.getUserId(), new Content("title", "des"),
-			true, true));
+			true, false));
 
 		assertThat(plan.getContent().getTitle()).isEqualTo("title");
-		assertThat(plan.getStatus().isCanRemind()).isEqualTo(false);
+		assertThat(plan.getStatus().isCanAjaja()).isEqualTo(false);
 	}
 }
