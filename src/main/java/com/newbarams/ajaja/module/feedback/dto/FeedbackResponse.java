@@ -4,7 +4,7 @@ import java.util.List;
 
 import lombok.Data;
 
-public class FeedbackResponse {
+public final class FeedbackResponse {
 	@Data
 	public static class FeedbackInfo {
 		int achieveRate;
