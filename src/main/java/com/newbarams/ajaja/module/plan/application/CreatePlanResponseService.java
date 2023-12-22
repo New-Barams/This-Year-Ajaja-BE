@@ -4,21 +4,23 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.newbarams.ajaja.module.feedback.application.LoadTotalAchieveService;
 import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
 
-@Service
-public class CreatePlanResponseService {
+import lombok.RequiredArgsConstructor;
 
-	PlanInfoResponse.GetPlanInfoResponse createPlanInfo(int planYear, List<PlanInfoResponse.GetPlan> planInfos) {
+@Service
+@RequiredArgsConstructor
+public class CreatePlanResponseService {
+	private final LoadTotalAchieveService loadTotalAchieveService;
+
+	PlanInfoResponse.GetPlanInfoResponse createPlanInfo(int planYear, List<PlanInfoResponse.GetPlan> planInfos,
+		Long userId) {
 		List<PlanInfoResponse.GetPlan> getPlans = planInfos.stream()
 			.filter(plan -> plan.year() == planYear)
 			.toList();
 
-		int totalAchieve = (int)getPlans
-			.stream()
-			.mapToInt(PlanInfoResponse.GetPlan::achieveRate)
-			.average()
-			.orElse(0);
+		int totalAchieve = loadTotalAchieveService.loadTotalAchieve(userId, planYear);
 
 		return new PlanInfoResponse.GetPlanInfoResponse(planYear, totalAchieve, getPlans);
 	}
