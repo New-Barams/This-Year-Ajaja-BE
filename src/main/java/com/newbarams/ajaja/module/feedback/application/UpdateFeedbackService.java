@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.newbarams.ajaja.global.exception.AjajaException;
 import com.newbarams.ajaja.module.feedback.domain.Feedback;
 import com.newbarams.ajaja.module.feedback.domain.FeedbackQueryRepository;
-import com.newbarams.ajaja.module.plan.application.UpdatePlanAchieveService;
+import com.newbarams.ajaja.module.feedback.domain.FeedbackRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,27 +17,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UpdateFeedbackService {
 	private final FeedbackQueryRepository feedbackQueryRepository;
-	private final UpdatePlanAchieveService updatePlanAchieveService;
+	private final FeedbackRepository feedbackRepository;
 
-	public void updateFeedback(Long feedbackId, int rate) {
+	public void updateFeedback(Long feedbackId, int rate, String message) {
 		Feedback feedback = feedbackQueryRepository.findByFeedbackId(feedbackId)
 			.orElseThrow(() -> AjajaException.withId(feedbackId, NOT_FOUND_FEEDBACK));
 
-		if (feedback.isBeforeDeadline()) {
-			feedbackQueryRepository.update(feedbackId, feedback.getAchieveName(rate)); // todo: 더티 체킹 적용 후 도메인 로직에 넣기
-		}
-
-		Long planId = feedback.getPlanId();
-		updatePlanAchieve(planId);
-	}
-
-	private void updatePlanAchieve(Long planId) {
-		int feedbackAverage = (int)feedbackQueryRepository.findAllFeedbackByPlanId(planId)
-			.stream()
-			.mapToInt(Feedback::getRate)
-			.average()
-			.orElse(0);
-
-		updatePlanAchieveService.updatePlanAchieve(planId, feedbackAverage);
+		feedback.updateFeedback(rate, message);
+		feedbackRepository.save(feedback);
 	}
 }
