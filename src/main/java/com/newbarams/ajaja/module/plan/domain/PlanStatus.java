@@ -37,4 +37,8 @@ public class PlanStatus {
 	PlanStatus disable() {
 		return new PlanStatus(isPublic, false, false, true);
 	}
+
+	PlanStatus update(boolean isPublic, boolean canAjaja) {
+		return new PlanStatus(isPublic, canRemind, canAjaja, deleted);
+	}
 }

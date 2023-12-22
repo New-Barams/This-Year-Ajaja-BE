@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.newbarams.ajaja.module.plan.domain.Content;
 import com.newbarams.ajaja.module.plan.domain.Message;
-import com.newbarams.ajaja.module.plan.domain.PlanStatus;
 import com.newbarams.ajaja.module.plan.domain.RemindInfo;
 
 import lombok.AllArgsConstructor;
@@ -29,6 +28,7 @@ public class PlanParam {
 		private final int month;
 		private final Long userId;
 		private final Content content;
-		private final PlanStatus status;
+		private final boolean isPublic;
+		private final boolean canAjaja;
 	}
 }
