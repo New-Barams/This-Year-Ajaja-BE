@@ -5,6 +5,7 @@ import static org.mockito.BDDMockito.*;
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -30,6 +31,7 @@ class LoadFeedbackInfoServiceTest extends MockTestSupport {
 	private FeedbackMapper mapper;
 
 	@Test
+	@DisplayName("계획에 해당하는 피드백 정보를 가져온다.")
 	void findAllFeedback_Success_WithNoException() {
 		// given
 		Long planId = 1L;
@@ -55,6 +57,7 @@ class LoadFeedbackInfoServiceTest extends MockTestSupport {
 	}
 
 	@Test
+	@DisplayName("만일 계획 정보가 없다면 예외를 던진다.")
 	void findAllFeedback_Fail_ByNotFoundPlan() {
 		// given
 		doThrow(AjajaException.class).when(loadPlanService).loadPlanOrElseThrow(anyLong());

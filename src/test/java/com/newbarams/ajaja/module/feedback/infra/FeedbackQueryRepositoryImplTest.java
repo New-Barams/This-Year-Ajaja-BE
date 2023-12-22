@@ -61,7 +61,7 @@ class FeedbackQueryRepositoryImplTest extends MockTestSupport {
 	}
 
 	@Test
-	@DisplayName("만약 플랜id에 맞는 피드백 정보가 없으면 빈 리스트를 반환한다.")
+	@DisplayName("계획에 해당하는 피드백 정보들을 가져온다.")
 	void findAllFeedbackInfosByPlanId_Success_WithNoException() {
 		// given
 		Long planId = 1L;
