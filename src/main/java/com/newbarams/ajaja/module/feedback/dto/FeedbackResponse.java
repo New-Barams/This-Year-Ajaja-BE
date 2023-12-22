@@ -19,6 +19,7 @@ public class FeedbackResponse {
 	public static class RemindedFeedback {
 		Long feedbackId;
 		int achieve;
+		String message;
 		int remindMonth;
 		int remindDay;
 		boolean feedbacked;
