@@ -36,13 +36,13 @@ class LoadPlanInfoServiceTest extends MockTestSupport {
 		int execute = 2023 - 2021 + 1;
 
 		given(planQueryRepository.findAllPlanByUserId(any())).willReturn(List.of(planInfo1, planInfo2));
-		given(createPlanResponseService.createPlanInfo(anyInt(), any())).willReturn(null);
+		given(createPlanResponseService.createPlanInfo(anyInt(), any(), anyLong())).willReturn(null);
 
 		//when
 		loadPlanInfoService.loadPlanInfo(1L);
 
 		// then
-		then(createPlanResponseService).should(times(execute)).createPlanInfo(anyInt(), any());
+		then(createPlanResponseService).should(times(execute)).createPlanInfo(anyInt(), any(), anyLong());
 	}
 
 	@Test

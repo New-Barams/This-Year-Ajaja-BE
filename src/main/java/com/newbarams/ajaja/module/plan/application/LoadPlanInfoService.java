@@ -29,19 +29,20 @@ public class LoadPlanInfoService {
 		int currentYear = planInfos.get(0).year();
 		int firstYear = planInfos.get(planInfos.size() - 1).year();
 
-		return loadPlanInfoResponses(currentYear, firstYear, planInfos);
+		return loadPlanInfoResponses(currentYear, firstYear, planInfos, userId);
 	}
 
 	private List<PlanInfoResponse.GetPlanInfoResponse> loadPlanInfoResponses(
 		int currentYear,
 		int firstYear,
-		List<PlanInfoResponse.GetPlan> planInfos
+		List<PlanInfoResponse.GetPlan> planInfos,
+		Long userId
 	) {
 		List<PlanInfoResponse.GetPlanInfoResponse> planInfoResponses = new ArrayList<>();
 
 		for (int i = currentYear; i >= firstYear; i--) {
 			PlanInfoResponse.GetPlanInfoResponse planInfoResponse
-				= createPlanResponseService.createPlanInfo(i, planInfos);
+				= createPlanResponseService.createPlanInfo(i, planInfos, userId);
 
 			planInfoResponses.add(planInfoResponse);
 		}
