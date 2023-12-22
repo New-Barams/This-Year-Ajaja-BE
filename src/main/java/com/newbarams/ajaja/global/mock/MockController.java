@@ -215,6 +215,9 @@ public class MockController {
 		RemindResponse.CommonResponse response = new RemindResponse.CommonResponse(
 			"MORNING",
 			true,
+			12,
+			3,
+			1,
 			messages
 		);
 
@@ -250,6 +253,9 @@ public class MockController {
 		RemindResponse.CommonResponse response = new RemindResponse.CommonResponse(
 			"MORNING",
 			true,
+			12,
+			3,
+			1,
 			respons
 		);
 

@@ -8,6 +8,9 @@ public sealed interface RemindResponse
 	record CommonResponse(
 		String remindTime,
 		boolean isRemindable,
+		int totalPeriod,
+		int remindTerm,
+		int remindDate,
 		List<Messages> messagesResponses
 	) implements RemindResponse {
 	}
