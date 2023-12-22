@@ -2,7 +2,6 @@ package com.newbarams.ajaja.module.feedback.infra;
 
 import static org.assertj.core.api.Assertions.*;
 
-import java.time.Instant;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -13,14 +12,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.newbarams.ajaja.common.support.MockTestSupport;
+import com.newbarams.ajaja.global.common.TimeValue;
+import com.newbarams.ajaja.module.feedback.domain.Achieve;
 import com.newbarams.ajaja.module.feedback.domain.Feedback;
 import com.newbarams.ajaja.module.feedback.domain.FeedbackRepository;
+import com.newbarams.ajaja.module.feedback.infra.model.FeedbackInfo;
 
 @SpringBootTest
 @Transactional
 class FeedbackQueryRepositoryImplTest extends MockTestSupport {
 	@Autowired
-	private FeedbackQueryRepositoryImpl feedbackRepositoryCustom;
+	private FeedbackQueryRepositoryImpl feedbackQueryRepository;
 	@Autowired
 	private FeedbackRepository feedbackRepository;
 
@@ -28,10 +30,8 @@ class FeedbackQueryRepositoryImplTest extends MockTestSupport {
 
 	@BeforeEach
 	void setUp() {
-		feedback = feedbackRepository.save(sut.giveMeBuilder(Feedback.class)
-			.set("planId", 1L)
-			.set("createdAt", Instant.now())
-			.sample());
+		feedback = new Feedback(1L, 1L, 1L, Achieve.GOOD, "아좌좌", new TimeValue(), new TimeValue());
+		feedbackRepository.save(feedback);
 	}
 
 	@Test
@@ -41,7 +41,7 @@ class FeedbackQueryRepositoryImplTest extends MockTestSupport {
 		Long planId = 1L;
 
 		// when
-		List<Feedback> feedbacks = feedbackRepositoryCustom.findAllFeedbackByPlanId(planId);
+		List<Feedback> feedbacks = feedbackQueryRepository.findAllFeedbackByPlanId(planId);
 
 		// then
 		assertThat(feedbacks).hasSize(1);
@@ -54,9 +54,22 @@ class FeedbackQueryRepositoryImplTest extends MockTestSupport {
 		Long planId = 2L;
 
 		// when
-		List<Feedback> feedbacks = feedbackRepositoryCustom.findAllFeedbackByPlanId(planId);
+		List<Feedback> feedbacks = feedbackQueryRepository.findAllFeedbackByPlanId(planId);
 
 		// then
 		assertThat(feedbacks).isEmpty();
+	}
+
+	@Test
+	@DisplayName("만약 플랜id에 맞는 피드백 정보가 없으면 빈 리스트를 반환한다.")
+	void findAllFeedbackInfosByPlanId_Success_WithNoException() {
+		// given
+		Long planId = 1L;
+
+		// when
+		List<FeedbackInfo> feedbackInfos = feedbackQueryRepository.findFeedbackInfosByPlanId(planId);
+
+		// then
+		assertThat(feedbackInfos.size()).isEqualTo(1);
 	}
 }

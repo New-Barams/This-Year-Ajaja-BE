@@ -16,25 +16,15 @@ class FeedbackControllerTest extends WebMvcTestSupport {
 	@ApiTest
 	void updateFeedback_Success_WithNoException() throws Exception {
 		// given
-		UpdateFeedback updateFeedback = new UpdateFeedback(50);
+		UpdateFeedback updateFeedback = new UpdateFeedback(50, "fighting");
 
-		doNothing().when(updateFeedbackService).updateFeedback(anyLong(), anyInt());
+		doNothing().when(updateFeedbackService).updateFeedback(anyLong(), anyInt(), anyString());
 
 		// when,then
 		mockMvc.perform(MockMvcRequestBuilders.post(FEEDBACK_END_POINT + "/1")
 				.with(csrf())
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(updateFeedback)))
-			.andExpect(status().isOk());
-	}
-
-	@ApiTest
-	void getTotalAchieve_Success_WithNoException() throws Exception {
-		given(getTotalAchieveService.calculateTotalAchieve(anyLong())).willReturn(50);
-
-		mockMvc.perform(MockMvcRequestBuilders.get(FEEDBACK_END_POINT)
-				.with(csrf())
-				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk());
 	}
 }

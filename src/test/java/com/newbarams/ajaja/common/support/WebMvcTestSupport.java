@@ -15,11 +15,11 @@ import com.newbarams.ajaja.common.annotation.ApiTest;
 import com.newbarams.ajaja.global.mock.MockController;
 import com.newbarams.ajaja.module.ajaja.application.SwitchAjajaService;
 import com.newbarams.ajaja.module.auth.application.service.AuthMockBeans;
-import com.newbarams.ajaja.module.feedback.application.GetTotalAchieveService;
+import com.newbarams.ajaja.module.feedback.application.LoadFeedbackInfoService;
+import com.newbarams.ajaja.module.feedback.application.LoadTotalAchieveService;
 import com.newbarams.ajaja.module.feedback.application.UpdateFeedbackService;
 import com.newbarams.ajaja.module.plan.application.CreatePlanService;
 import com.newbarams.ajaja.module.plan.application.DeletePlanService;
-import com.newbarams.ajaja.module.plan.application.GetPlanAchieveService;
 import com.newbarams.ajaja.module.plan.application.LoadPlanInfoService;
 import com.newbarams.ajaja.module.plan.application.LoadPlanService;
 import com.newbarams.ajaja.module.plan.application.UpdatePlanService;
@@ -36,8 +36,8 @@ import com.newbarams.ajaja.module.user.domain.UserQueryRepository;
  * @author hejow
  */
 @WebMvcTest(
-		includeFilters = @Filter(type = FilterType.ANNOTATION, classes = RestController.class),
-		excludeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, classes = MockController.class)
+	includeFilters = @Filter(type = FilterType.ANNOTATION, classes = RestController.class),
+	excludeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, classes = MockController.class)
 )
 @Import({UserMockBeans.class, AuthMockBeans.class})
 public abstract class WebMvcTestSupport extends MonkeySupport {
@@ -62,8 +62,6 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 	@MockBean
 	protected DeletePlanService deletePlanService;
 	@MockBean
-	protected GetPlanAchieveService getPlanAchieveService;
-	@MockBean
 	protected UpdatePlanService updatePlanService;
 	@MockBean
 	protected LoadPlanInfoService loadPlanInfoService;
@@ -74,7 +72,9 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 	@MockBean
 	protected UpdateFeedbackService updateFeedbackService;
 	@MockBean
-	protected GetTotalAchieveService getTotalAchieveService;
+	protected LoadTotalAchieveService loadTotalAchieveService;
+	@MockBean
+	protected LoadFeedbackInfoService loadFeedbackInfoService;
 
 	// Remind
 	@MockBean
