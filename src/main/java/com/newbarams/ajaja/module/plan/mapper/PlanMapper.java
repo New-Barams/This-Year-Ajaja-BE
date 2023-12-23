@@ -95,16 +95,10 @@ public interface PlanMapper {
 	}
 
 	@Mapping(source = "request", target = "content", qualifiedByName = "toContent")
-	@Mapping(source = "request", target = "status", qualifiedByName = "toPlanStatus")
 	PlanParam.Update toParam(Long userId, PlanRequest.Update request, int month);
 
 	@Named("toContent")
 	static Content toContent(PlanRequest.Update request) {
 		return new Content(request.title(), request.description());
-	}
-
-	@Named("toPlanStatus")
-	static PlanStatus toPlanStatus(PlanRequest.Update request) {
-		return new PlanStatus(request.isPublic(), request.canRemind(), request.canAjaja(), false);
 	}
 }
