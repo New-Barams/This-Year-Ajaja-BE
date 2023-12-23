@@ -92,7 +92,7 @@ public class Plan {
 		validateModifiableMonth(param.getMonth());
 		validateUser(param.getUserId());
 		this.content = param.getContent();
-		this.status = param.getStatus();
+		this.status = status.update(param.isPublic(), param.isCanAjaja());
 	}
 
 	public void updateRemind(

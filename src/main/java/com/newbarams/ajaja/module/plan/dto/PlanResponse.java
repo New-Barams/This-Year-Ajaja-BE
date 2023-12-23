@@ -11,6 +11,7 @@ public class PlanResponse {
 		String nickname,
 		String title,
 		String description,
+		int iconNumber,
 		boolean isPublic,
 		boolean canRemind,
 		boolean canAjaja,
@@ -26,6 +27,7 @@ public class PlanResponse {
 		Long userId,
 		String nickname,
 		String title,
+		int iconNumber,
 		long ajajas,
 		List<String> tags,
 		Instant createdAt
@@ -37,6 +39,7 @@ public class PlanResponse {
 		Long userId,
 		String title,
 		String description,
+		int iconNumber,
 		boolean isPublic,
 		boolean canRemind,
 		boolean canAjaja,
