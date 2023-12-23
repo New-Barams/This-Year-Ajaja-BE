@@ -1,44 +1,45 @@
-package com.newbarams.ajaja.module.user.application.service;
+package com.newbarams.ajaja.module.user.application;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import com.newbarams.ajaja.common.support.MockTestSupport;
 import com.newbarams.ajaja.module.user.domain.Email;
+import com.newbarams.ajaja.module.user.domain.Nickname;
 import com.newbarams.ajaja.module.user.domain.User;
 import com.newbarams.ajaja.module.user.domain.UserRepository;
 
-class ChangeReceiveTypeServiceTest extends MockTestSupport {
+class RenewNicknameServiceTest extends MockTestSupport {
 	@InjectMocks
-	private ChangeReceiveTypeService changeReceiveTypeService;
+	private RenewNicknameService renewNicknameService;
 
 	@Mock
 	private RetrieveUserService retrieveUserService;
 	@Mock
 	private UserRepository userRepository;
 
-	@ParameterizedTest
-	@EnumSource(User.ReceiveType.class)
-	@DisplayName("리마인드를 지원하는 종류로 변경할 수 있어야한다.")
-	void change_Success(User.ReceiveType type) {
+	@Test
+	@DisplayName("닉네임 갱신을 요청하면 새로운 이름으로 변경되어야 한다.")
+	void renew_Success_WithNewNickname() {
 		// given
 		User user = sut.giveMeBuilder(User.class)
 			.set("email", new Email("Ajaja@me.com"))
 			.sample();
 
-		given(retrieveUserService.loadExistById(anyLong())).willReturn(user);
+		Nickname oldNickname = user.getNickname();
+		given(retrieveUserService.loadExistById(any())).willReturn(user);
 		given(userRepository.save(any())).willReturn(user);
 
 		// when
-		changeReceiveTypeService.change(user.getId(), type);
+		String newNickname = renewNicknameService.renew(user.getId());
 
 		// then
-		then(retrieveUserService).should(times(1)).loadExistById(anyLong());
+		assertThat(oldNickname.getNickname()).isNotEqualTo(newNickname);
 		then(userRepository).should(times(1)).save(any());
 	}
 }

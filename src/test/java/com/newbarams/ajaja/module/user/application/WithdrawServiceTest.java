@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.user.application.service;
+package com.newbarams.ajaja.module.user.application;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
@@ -32,9 +32,9 @@ class WithdrawServiceTest extends MockTestSupport {
 	void withdraw_Success() {
 		// given
 		User user = sut.giveMeBuilder(User.class)
-				.set("email", new Email("Ajaja@me.com"))
-				.set("deleted", false)
-				.sample();
+			.set("email", new Email("Ajaja@me.com"))
+			.set("deleted", false)
+			.sample();
 
 		given(retrieveUserService.loadExistById(any())).willReturn(user);
 		willDoNothing().given(disconnectOauthPort).disconnect(any());

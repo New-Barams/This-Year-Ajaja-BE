@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.auth.application.service;
+package com.newbarams.ajaja.module.auth.application;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
@@ -43,10 +43,10 @@ class LoginServiceTest extends MockTestSupport {
 		// returns
 		private final String email = "Ajaja@me.com";
 		private final Profile profile = sut.giveMeBuilder(KakaoResponse.UserInfo.class)
-				.set("kakaoAccount", sut.giveMeBuilder(KakaoAccount.class)
-						.set("email", email)
-						.sample())
-				.sample();
+			.set("kakaoAccount", sut.giveMeBuilder(KakaoAccount.class)
+				.set("email", email)
+				.sample())
+			.sample();
 
 		@Test
 		@DisplayName("새로운 유저가 로그인하면 새롭게 유저 정보를 생성해야 한다.")
