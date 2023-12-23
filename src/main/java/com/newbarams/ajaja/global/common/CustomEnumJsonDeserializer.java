@@ -1,33 +1,33 @@
 package com.newbarams.ajaja.global.common;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
-public class CustomEnumJsonDeserializer<T extends Enum<T>> extends JsonDeserializer<T> {
+public class CustomEnumJsonDeserializer extends StdDeserializer<Enum<?>> implements ContextualDeserializer {
 
-	@Override
-	public T deserialize(JsonParser parser, DeserializationContext ctxt) throws IOException {
-		final String target = parser.getValueAsString();
-		final Class<?> dtoClass = parser.getCurrentValue().getClass();
-		final String field = parser.currentName();
-
-		try {
-			final Class<T> enumClass = extractEnumClass(dtoClass, field);
-			return Enum.valueOf(enumClass, target.toUpperCase()); // client로 받아오는 enum은 lower case
-		} catch (IllegalArgumentException | NoSuchFieldException e) {
-			return null;
-		}
+	protected CustomEnumJsonDeserializer(Class<?> vc) {
+		super(vc);
 	}
 
-	private static <T extends Enum<T>> Class<T> extractEnumClass(
-		Class<?> dtoClass,
-		String fieldName
-	) throws NoSuchFieldException {
-		Field field = dtoClass.getDeclaredField(fieldName);
-		return (Class<T>)field.getType();
+	public CustomEnumJsonDeserializer() {
+		this(null);
+	}
+
+	@Override
+	public Enum<?> deserialize(JsonParser parser, DeserializationContext ctxt) throws IOException {
+		String target = parser.getValueAsString();
+		Class<? extends Enum> enumClass = (Class<? extends Enum>)this._valueClass;
+		return Enum.valueOf(enumClass, target.toUpperCase());
+	}
+
+	@Override
+	public JsonDeserializer<?> createContextual(DeserializationContext ctxt, BeanProperty property) {
+		return new CustomEnumJsonDeserializer(property.getType().getRawClass());
 	}
 }
