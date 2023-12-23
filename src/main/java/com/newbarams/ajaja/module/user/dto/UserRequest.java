@@ -1,6 +1,5 @@
 package com.newbarams.ajaja.module.user.dto;
 
-import com.newbarams.ajaja.global.annotation.EnumType;
 import com.newbarams.ajaja.module.user.domain.User;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -25,7 +24,6 @@ public final class UserRequest {
 
 	@Data
 	public static class Receive {
-		@EnumType(enumClass = User.ReceiveType.class)
 		@Schema(description = "변경할 인증번호 타입", allowableValues = {"kakao", "email", "both"})
 		private final User.ReceiveType type;
 	}
