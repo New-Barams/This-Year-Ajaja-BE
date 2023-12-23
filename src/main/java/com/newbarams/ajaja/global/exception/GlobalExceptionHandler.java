@@ -4,10 +4,13 @@ import static com.newbarams.ajaja.global.exception.ErrorCode.*;
 import static org.springframework.http.HttpStatus.*;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +38,13 @@ public class GlobalExceptionHandler {
 		String message = exception.getBindingResult().getAllErrors().get(0).getDefaultMessage();
 		log.warn("Valid Fail Occurs: {}", message);
 		return ErrorResponse.withMessage(BEAN_VALIDATION_FAIL_EXCEPTION, message);
+	}
+
+	@ExceptionHandler({HttpMessageNotReadableException.class, JsonMappingException.class})
+	@ResponseStatus(BAD_REQUEST)
+	public ErrorResponse handleRequestMappingException(RuntimeException exception) {
+		log.warn("Request Mapping Fail Occurs : {}", exception.getMessage());
+		return ErrorResponse.from(INVALID_REQUEST);
 	}
 
 	@ExceptionHandler(RuntimeException.class)
