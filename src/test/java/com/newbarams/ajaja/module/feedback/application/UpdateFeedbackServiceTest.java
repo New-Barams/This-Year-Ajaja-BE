@@ -33,7 +33,7 @@ class UpdateFeedbackServiceTest extends MockTestSupport {
 	class DeadlineTest {
 		@Test
 		@DisplayName("기간 내에 피드백을 시행할 경우 성공한다.")
-		void updateTest_Success_WithNoException() {
+		void updateFeedback_Success_WithNoException() {
 			// given
 			given(feedbackQueryRepository.findByFeedbackId(any())).willReturn(Optional.of(mockFeedback));
 			doNothing().when(feedbackRepository).save(any());
@@ -45,7 +45,7 @@ class UpdateFeedbackServiceTest extends MockTestSupport {
 
 		@Test
 		@DisplayName("데드라인이 지난 피드백을 할 경우 예외를 던진다.")
-		void updateTest_Fail_ByIllegalAccessException() {
+		void updateFeedback_Fail_ByIllegalAccessException() {
 			// given
 			given(feedbackQueryRepository.findByFeedbackId(any())).willReturn(Optional.of(mockFeedback));
 			doThrow(AjajaException.class).when(mockFeedback).updateFeedback(50, "fighting");
@@ -58,7 +58,7 @@ class UpdateFeedbackServiceTest extends MockTestSupport {
 
 		@Test
 		@DisplayName("데드라인이 지난 피드백을 할 경우 예외를 던진다.")
-		void findNoFeedback_Fail_ByNotFoundFeedback() {
+		void updateFeedback_Fail_ByNotFoundFeedback() {
 			// given
 			given(feedbackQueryRepository.findByFeedbackId(any())).willReturn(Optional.empty());
 
