@@ -7,21 +7,21 @@ import lombok.Data;
 public final class FeedbackResponse {
 	@Data
 	public static class FeedbackInfo {
-		int achieveRate;
-		String planName;
-		int totalPeriod;
-		int remindTerm;
-		int remindDay;
-		List<RemindedFeedback> feedbacks;
+		private final int achieveRate;
+		private final String planName;
+		private final int totalPeriod;
+		private final int remindTerm;
+		private final int remindDay;
+		private final List<RemindedFeedback> feedbacks;
 	}
 
 	@Data
 	public static class RemindedFeedback {
-		Long feedbackId;
-		int achieve;
-		String message;
-		int remindMonth;
-		int remindDay;
-		boolean feedbacked;
+		private final Long feedbackId;
+		private final int achieve;
+		private final String message;
+		private final int remindMonth;
+		private final int remindDay;
+		private final boolean feedbacked;
 	}
 }
