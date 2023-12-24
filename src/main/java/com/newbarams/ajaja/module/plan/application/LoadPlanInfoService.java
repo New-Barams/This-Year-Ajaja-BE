@@ -7,8 +7,10 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.newbarams.ajaja.module.feedback.application.LoadTotalAchieveService;
 import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
 import com.newbarams.ajaja.module.plan.infra.PlanQueryRepository;
+import com.newbarams.ajaja.module.plan.mapper.PlanMapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,13 +19,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LoadPlanInfoService {
 	private final PlanQueryRepository planQueryRepository;
-	private final CreatePlanResponseService createPlanResponseService;
+	private final LoadTotalAchieveService loadTotalAchieveService;
+	private final PlanMapper mapper;
 
 	public List<PlanInfoResponse.GetPlanInfoResponse> loadPlanInfo(Long userId) {
 		List<PlanInfoResponse.GetPlan> planInfos = planQueryRepository.findAllPlanByUserId(userId);
 
 		if (planInfos.isEmpty()) {
-			return Collections.EMPTY_LIST;
+			return Collections.emptyList();
 		}
 
 		int currentYear = planInfos.get(0).year();
@@ -40,10 +43,10 @@ public class LoadPlanInfoService {
 	) {
 		List<PlanInfoResponse.GetPlanInfoResponse> planInfoResponses = new ArrayList<>();
 
-		for (int i = currentYear; i >= firstYear; i--) {
+		for (int planYear = currentYear; planYear >= firstYear; planYear--) {
+			int totalAchieve = loadTotalAchieveService.loadTotalAchieve(userId, planYear);
 			PlanInfoResponse.GetPlanInfoResponse planInfoResponse
-				= createPlanResponseService.createPlanInfo(i, planInfos, userId);
-
+				= mapper.toResponse(planYear, totalAchieve, planInfos);
 			planInfoResponses.add(planInfoResponse);
 		}
 
