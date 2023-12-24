@@ -3,6 +3,7 @@ package com.newbarams.ajaja.module.plan.infra;
 import static com.newbarams.ajaja.global.util.QueryDslUtil.*;
 import static com.newbarams.ajaja.module.ajaja.domain.Ajaja.Type.*;
 import static com.newbarams.ajaja.module.ajaja.domain.QAjaja.*;
+import static com.newbarams.ajaja.module.feedback.infra.QFeedbackEntity.*;
 import static com.newbarams.ajaja.module.plan.infra.QPlanEntity.*;
 import static com.newbarams.ajaja.module.tag.domain.QPlanTag.*;
 import static com.newbarams.ajaja.module.tag.domain.QTag.*;
@@ -196,19 +197,16 @@ public class PlanQueryRepository {
 				planEntity.id,
 				planEntity.title,
 				planEntity.canRemind,
-				planEntity.achieveRate,
-				planEntity.iconNumber,
-				userEntity.verified
+				feedbackEntity.achieve.avg().intValue(),
+				planEntity.iconNumber
 			))
 			.from(planEntity)
-			.join(userEntity).on(userEntity.id.eq(planEntity.userId))
+			.leftJoin(feedbackEntity).on(feedbackEntity.planId.eq(planEntity.id))
 			.groupBy(planEntity.createdAt.year(),
 				planEntity.id,
 				planEntity.title,
 				planEntity.canRemind,
-				planEntity.achieveRate,
-				planEntity.iconNumber,
-				userEntity.verified)
+				planEntity.iconNumber)
 			.where(planEntity.userId.eq(userId))
 			.orderBy(planEntity.createdAt.year().desc())
 			.fetch();

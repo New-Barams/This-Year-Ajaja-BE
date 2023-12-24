@@ -4,9 +4,11 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
+import lombok.Getter;
+
+@Getter
 public class TimeValue {
 	private static final String DEFAULT_TIME_ZONE = "Asia/Seoul";
 	private static final int THREE_DAYS = 3;
@@ -21,10 +23,6 @@ public class TimeValue {
 
 	public TimeValue() {
 		this(Instant.now());
-	}
-
-	public Instant now() {
-		return instant;
 	}
 
 	public int getYear() {
@@ -56,7 +54,11 @@ public class TimeValue {
 		return Math.abs(between.toDays()) <= THREE_DAYS;
 	}
 
-	public static boolean check(Instant createdAt) {
-		return Instant.now().isBefore(createdAt.plus(31, ChronoUnit.DAYS));
+	public boolean isAfter(TimeValue time) {
+		return zonedDateTime.isAfter(time.zonedDateTime);
+	}
+
+	public boolean isExpired() {
+		return zonedDateTime.isAfter(zonedDateTime.plusMonths(1));
 	}
 }

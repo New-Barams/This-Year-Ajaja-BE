@@ -12,16 +12,21 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import com.newbarams.ajaja.common.support.MockTestSupport;
+import com.newbarams.ajaja.module.feedback.application.LoadTotalAchieveService;
 import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
 import com.newbarams.ajaja.module.plan.infra.PlanQueryRepository;
+import com.newbarams.ajaja.module.plan.mapper.PlanMapper;
 
 class LoadPlanInfoServiceTest extends MockTestSupport {
 	@InjectMocks
 	private LoadPlanInfoService loadPlanInfoService;
+
 	@Mock
 	private PlanQueryRepository planQueryRepository;
 	@Mock
-	private CreatePlanResponseService createPlanResponseService;
+	private LoadTotalAchieveService loadTotalAchieveService;
+	@Mock
+	private PlanMapper mapper;
 
 	@Test
 	@DisplayName("처음 계획을 작성한 년도부터 현재 년도까지의 계획들을 조회한다.")
@@ -33,16 +38,18 @@ class LoadPlanInfoServiceTest extends MockTestSupport {
 		PlanInfoResponse.GetPlan planInfo2 = sut.giveMeBuilder(PlanInfoResponse.GetPlan.class)
 			.set("year", 2021).sample();
 
+		PlanInfoResponse.GetPlanInfoResponse response = sut.giveMeOne(PlanInfoResponse.GetPlanInfoResponse.class);
+
 		int execute = 2023 - 2021 + 1;
 
 		given(planQueryRepository.findAllPlanByUserId(any())).willReturn(List.of(planInfo1, planInfo2));
-		given(createPlanResponseService.createPlanInfo(anyInt(), any())).willReturn(null);
+		given(mapper.toResponse(anyInt(), anyInt(), anyList())).willReturn(response);
 
 		//when
 		loadPlanInfoService.loadPlanInfo(1L);
 
 		// then
-		then(createPlanResponseService).should(times(execute)).createPlanInfo(anyInt(), any());
+		then(loadTotalAchieveService).should(times(execute)).loadTotalAchieve(anyLong(), anyInt());
 	}
 
 	@Test

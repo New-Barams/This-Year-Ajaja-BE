@@ -12,6 +12,7 @@ import com.newbarams.ajaja.module.plan.domain.Message;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.domain.PlanStatus;
 import com.newbarams.ajaja.module.plan.domain.RemindInfo;
+import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
 import com.newbarams.ajaja.module.plan.dto.PlanParam;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
@@ -100,5 +101,16 @@ public interface PlanMapper {
 	@Named("toContent")
 	static Content toContent(PlanRequest.Update request) {
 		return new Content(request.title(), request.description());
+	}
+
+	@Mapping(source = "planYear", target = "year")
+	@Mapping(target = "getPlanList", expression = "java(createPlanList(planInfos,planYear))")
+	PlanInfoResponse.GetPlanInfoResponse toResponse(int planYear, int totalAchieveRate,
+		List<PlanInfoResponse.GetPlan> planInfos);
+
+	default List<PlanInfoResponse.GetPlan> createPlanList(List<PlanInfoResponse.GetPlan> planInfos, int planYear) {
+		return planInfos.stream()
+			.filter(plan -> plan.year() == planYear)
+			.toList();
 	}
 }
