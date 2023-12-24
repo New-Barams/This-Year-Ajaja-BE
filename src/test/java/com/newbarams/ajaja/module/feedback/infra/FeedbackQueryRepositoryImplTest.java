@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.newbarams.ajaja.common.support.MockTestSupport;
 import com.newbarams.ajaja.global.common.TimeValue;
 import com.newbarams.ajaja.module.feedback.domain.Achieve;
 import com.newbarams.ajaja.module.feedback.domain.Feedback;
@@ -20,7 +19,7 @@ import com.newbarams.ajaja.module.feedback.infra.model.FeedbackInfo;
 
 @SpringBootTest
 @Transactional
-class FeedbackQueryRepositoryImplTest extends MockTestSupport {
+class FeedbackQueryRepositoryImplTest {
 	@Autowired
 	private FeedbackQueryRepositoryImpl feedbackQueryRepository;
 	@Autowired

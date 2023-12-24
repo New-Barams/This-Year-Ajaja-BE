@@ -8,16 +8,13 @@ import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.newbarams.ajaja.common.support.MockTestSupport;
 import com.newbarams.ajaja.module.feedback.domain.FeedbackQueryRepository;
 import com.newbarams.ajaja.module.feedback.infra.model.AchieveInfo;
 
-@ExtendWith(MockitoExtension.class)
 class LoadTotalAchieveServiceTest extends MockTestSupport {
 	@InjectMocks
 	private LoadTotalAchieveService loadTotalAchieveService;
