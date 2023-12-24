@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.user.application;
+package com.newbarams.ajaja.module.auth.application;
 
 import org.springframework.stereotype.Service;
 

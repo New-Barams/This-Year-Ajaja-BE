@@ -6,6 +6,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 @TestConfiguration
 @MockBean({
 	LoginService.class,
+	ReissueTokenService.class,
 })
 public class AuthMockBeans {
 }

@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.user.application;
+package com.newbarams.ajaja.module.auth.application;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;

@@ -7,7 +7,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 @MockBean({
 	ChangeReceiveTypeService.class,
 	LogoutService.class,
-	ReissueTokenService.class,
 	RenewNicknameService.class,
 	SendVerificationEmailService.class,
 	VerifyCertificationService.class,
