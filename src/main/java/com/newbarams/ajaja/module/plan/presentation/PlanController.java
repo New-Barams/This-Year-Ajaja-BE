@@ -63,7 +63,7 @@ public class PlanController {
 	) {
 		PlanResponse.Create response = createPlanService.create(userId, request, month);
 
-		return new AjajaResponse<>(true, response);
+		return AjajaResponse.ok(response);
 	}
 
 	@Operation(summary = "[토큰 필요] 계획 단건 조회 API")
@@ -72,7 +72,7 @@ public class PlanController {
 	public AjajaResponse<PlanResponse.GetOne> getPlan(@UserId Long userId, @PathVariable Long id) {
 		PlanResponse.GetOne response = getPlanService.loadById(id, userId);
 
-		return new AjajaResponse<>(true, response);
+		return AjajaResponse.ok(response);
 	}
 
 	@Operation(summary = "[토큰 필요] 계획 삭제 API")
@@ -85,7 +85,7 @@ public class PlanController {
 	) {
 		deletePlanService.delete(id, userId, month);
 
-		return new AjajaResponse<>(true, null);
+		return AjajaResponse.ok();
 	}
 
 	@Operation(summary = "[토큰 필요] 계획 공개 여부 변경 API")
@@ -94,7 +94,7 @@ public class PlanController {
 	public AjajaResponse updatePlanPublicStatus(@PathVariable Long id, @UserId Long userId) {
 		updatePlanService.updatePublicStatus(id, userId);
 
-		return new AjajaResponse(true, null);
+		return AjajaResponse.ok();
 	}
 
 	@Operation(summary = "[토큰 필요] 계획 리마인드 알림 여부 변경 API")
@@ -103,7 +103,7 @@ public class PlanController {
 	public AjajaResponse updatePlanRemindStatus(@PathVariable Long id, @UserId Long userId) {
 		updatePlanService.updateRemindStatus(id, userId);
 
-		return new AjajaResponse(true, null);
+		return AjajaResponse.ok();
 	}
 
 	@Operation(summary = "[토큰 필요] 응원메시지 알림 여부 변경 API")
@@ -112,7 +112,7 @@ public class PlanController {
 	public AjajaResponse updatePlanAjajaStatus(@PathVariable Long id, @UserId Long userId) {
 		updatePlanService.updateAjajaStatus(id, userId);
 
-		return new AjajaResponse(true, null);
+		return AjajaResponse.ok();
 	}
 
 	@Operation(summary = "[토큰 필요] 계획 수정 API")
@@ -126,7 +126,7 @@ public class PlanController {
 	) {
 		PlanResponse.GetOne updated = updatePlanService.update(id, userId, request, month);
 
-		return new AjajaResponse<>(true, updated);
+		return AjajaResponse.ok(updated);
 	}
 
 	@Operation(summary = "[토큰 필요] 메인 페이지 내 계획 조회 API", description = "로그인을 했을 시에만 불러올 수 있습니다.",
@@ -146,7 +146,7 @@ public class PlanController {
 	) {
 		List<PlanInfoResponse.GetPlanInfoResponse> getPlanInfos = loadPlanInfoService.loadPlanInfo(userId);
 
-		return new AjajaResponse<>(true, getPlanInfos);
+		return AjajaResponse.ok(getPlanInfos);
 	}
 
 	@Operation(summary = "계획 전체 조회 API")
@@ -155,7 +155,7 @@ public class PlanController {
 	public AjajaResponse<List<PlanResponse.GetAll>> getAllPlans(@ModelAttribute PlanRequest.GetAll request) {
 		List<PlanResponse.GetAll> responses = getPlanService.loadAllPlans(request);
 
-		return new AjajaResponse<>(true, responses);
+		return AjajaResponse.ok(responses);
 	}
 
 	@Operation(summary = "[토큰 필요] 리마인드 정보 수정 API", description = "<b>url에 플랜id 값이 필요합니다.</b>",

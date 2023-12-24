@@ -56,7 +56,7 @@ public class FeedbackController {
 		@RequestBody UpdateFeedback updateFeedback
 	) {
 		updateFeedbackService.updateFeedback(feedbackId, updateFeedback.rate(), updateFeedback.message());
-		return new AjajaResponse<>(true, null);
+		return AjajaResponse.ok();
 	}
 
 	@Operation(summary = "[토큰 필요] 피드백 정보 조회 API", description = "<b>피드백 계획에 대한 id가 필요합니다.</b>",
@@ -75,6 +75,6 @@ public class FeedbackController {
 		@PathVariable Long planId
 	) {
 		FeedbackResponse.FeedbackInfo feedbackInfo = loadFeedbackInfoService.loadFeedbackInfoByPlanId(planId);
-		return new AjajaResponse<>(true, feedbackInfo);
+		return AjajaResponse.ok(feedbackInfo);
 	}
 }
