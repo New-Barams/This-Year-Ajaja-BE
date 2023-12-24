@@ -104,11 +104,6 @@ public interface PlanMapper {
 		return new Content(request.title(), request.description());
 	}
 
-	@Named("toPlanStatus")
-	static PlanStatus toPlanStatus(PlanRequest.Update request) {
-		return new PlanStatus(request.isPublic(), request.canRemind(), request.canAjaja(), false);
-	}
-
 	@Mapping(source = "planYear", target = "year")
 	@Mapping(target = "getPlanList", expression = "java(createPlanList(planInfos,planYear))")
 	PlanInfoResponse.GetPlanInfoResponse toResponse(int planYear, int totalAchieveRate,
@@ -119,5 +114,4 @@ public interface PlanMapper {
 			.filter(plan -> plan.year() == planYear)
 			.toList();
 	}
-
 }
