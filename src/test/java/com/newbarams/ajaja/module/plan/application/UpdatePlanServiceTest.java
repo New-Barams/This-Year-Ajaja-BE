@@ -58,7 +58,7 @@ class UpdatePlanServiceTest {
 		);
 
 		PlanRequest.Update request = new PlanRequest.Update("title", "des",
-			true, true, true, null);
+			true, true, null);
 
 		Plan saved = planRepository.save(plan);
 
@@ -73,7 +73,7 @@ class UpdatePlanServiceTest {
 		Long planId = Arbitraries.longs().lessOrEqual(-1L).sample();
 
 		PlanRequest.Update request = new PlanRequest.Update("title", "des",
-			true, true, true, null);
+			true, true, null);
 
 		assertThatThrownBy(() -> updatePlanService.update(planId, 1L, request, 1))
 			.isInstanceOf(AjajaException.class);
@@ -95,7 +95,7 @@ class UpdatePlanServiceTest {
 		);
 
 		PlanRequest.Update request = new PlanRequest.Update("title", "des",
-			true, true, true, null);
+			true, true, null);
 
 		Plan saved = planRepository.save(plan);
 

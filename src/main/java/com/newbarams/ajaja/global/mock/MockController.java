@@ -215,6 +215,9 @@ public class MockController {
 		RemindResponse.CommonResponse response = new RemindResponse.CommonResponse(
 			"MORNING",
 			true,
+			12,
+			3,
+			1,
 			messages
 		);
 
@@ -250,6 +253,9 @@ public class MockController {
 		RemindResponse.CommonResponse response = new RemindResponse.CommonResponse(
 			"MORNING",
 			true,
+			12,
+			3,
+			1,
 			respons
 		);
 
@@ -313,7 +319,7 @@ public class MockController {
 		@RequestHeader(name = "Date") String date) {
 		List<String> tags = List.of("tag1", "tag2", "tag3");
 		PlanResponse.Create response = new PlanResponse.Create(1L, 1L, "title", "des",
-			true, true, true, 0, tags);
+			1, true, true, true, 0, tags);
 
 		return new AjajaResponse<>(true, response);
 	}
@@ -328,7 +334,7 @@ public class MockController {
 		for (long i = 0; i < 10; i++) {
 			responses.add(
 				new PlanResponse.GetAll(i, 1L, "노래하는 다람쥐", "제목",
-					10, tags, Instant.parse("2023-01-02T08:19:23Z"))
+					1, 10, tags, Instant.parse("2023-01-02T08:19:23Z"))
 			);
 		}
 
@@ -341,7 +347,7 @@ public class MockController {
 	public AjajaResponse<PlanResponse.GetOne> getOnePlan(@PathVariable Long id) {
 		List<String> tags = List.of("술", "금주", "알코올 중독");
 		PlanResponse.GetOne response = new PlanResponse.GetOne(1L, 1L, "노래하는 다람쥐", "술 줄이기",
-			"술 한 달에 두번만 먹기", true, true, true, 15, true, tags,
+			"술 한 달에 두번만 먹기", 1, true, true, true, 15, true, tags,
 			Instant.parse("2023-01-04T04:14:14Z"));
 
 		return new AjajaResponse<>(true, response);
@@ -354,7 +360,7 @@ public class MockController {
 		@RequestBody PlanRequest.Update request, @RequestHeader(name = "Date") String date) {
 		List<String> tags = List.of("tag1", "tag2", "tag3");
 		PlanResponse.Create updated = new PlanResponse.Create(1L, 1L, "title", "des",
-			true, true, true, 0, tags);
+			1, true, true, true, 0, tags);
 
 		return new AjajaResponse<>(true, updated);
 	}

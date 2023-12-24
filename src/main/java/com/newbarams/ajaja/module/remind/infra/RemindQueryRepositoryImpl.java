@@ -52,6 +52,9 @@ class RemindQueryRepositoryImpl implements RemindQueryRepository {
 		return new RemindResponse.CommonResponse(
 			plan.getRemindTimeName(),
 			plan.getIsRemindable(),
+			plan.getRemindTotalPeriod(),
+			plan.getRemindTerm(),
+			plan.getRemindDate(),
 			responses
 		);
 	}

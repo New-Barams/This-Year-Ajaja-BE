@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 public enum ErrorCode {
 	// 400
 	BEAN_VALIDATION_FAIL_EXCEPTION(BAD_REQUEST, "올바르지 않은 데이터입니다."),
+	INVALID_REQUEST(BAD_REQUEST, "올바른 형식의 데이터가 입력되지 않았습니다."),
 	INVALID_BEARER_TOKEN(BAD_REQUEST, "유효한 Bearer 토큰의 형식이 아닙니다."),
 	INVALID_SIGNATURE(BAD_REQUEST, "잘못된 서명입니다."),
 	INVALID_TOKEN(BAD_REQUEST, "잘못된 토큰입니다."),

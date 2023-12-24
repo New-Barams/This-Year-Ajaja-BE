@@ -96,7 +96,6 @@ public interface PlanMapper {
 	}
 
 	@Mapping(source = "request", target = "content", qualifiedByName = "toContent")
-	@Mapping(source = "request", target = "status", qualifiedByName = "toPlanStatus")
 	PlanParam.Update toParam(Long userId, PlanRequest.Update request, int month);
 
 	@Named("toContent")
@@ -119,5 +118,4 @@ public interface PlanMapper {
 			.filter(plan -> plan.year() == planYear)
 			.toList();
 	}
-
 }
