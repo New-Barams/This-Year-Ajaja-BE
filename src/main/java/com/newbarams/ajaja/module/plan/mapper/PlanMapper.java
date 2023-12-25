@@ -2,6 +2,7 @@ package com.newbarams.ajaja.module.plan.mapper;
 
 import java.util.List;
 
+import org.mapstruct.InheritConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -17,6 +18,7 @@ import com.newbarams.ajaja.module.plan.dto.PlanParam;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 import com.newbarams.ajaja.module.plan.infra.PlanEntity;
+import com.newbarams.ajaja.module.remind.application.model.RemindMessageInfo;
 
 @Mapper(componentModel = "spring")
 public interface PlanMapper {
@@ -113,4 +115,7 @@ public interface PlanMapper {
 			.filter(plan -> plan.year() == planYear)
 			.toList();
 	}
+
+	@InheritConfiguration(name = "toDomain")
+	RemindMessageInfo toModel(PlanEntity plan, String email);
 }
