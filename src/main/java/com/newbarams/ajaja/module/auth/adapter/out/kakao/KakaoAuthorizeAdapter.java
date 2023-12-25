@@ -1,6 +1,6 @@
 package com.newbarams.ajaja.module.auth.adapter.out.kakao;
 
-import static com.newbarams.ajaja.global.util.BearerTokenUtil.*;
+import static com.newbarams.ajaja.global.util.BearerUtils.*;
 
 import org.springframework.stereotype.Component;
 
@@ -30,10 +30,10 @@ class KakaoAuthorizeAdapter implements AuthorizePort {
 
 	private KakaoTokenRequest generateRequest(String authorizationCode, String redirectUri) {
 		return new KakaoTokenRequest(
-				kakaoProperties.getClientId(),
-				redirectUri,
-				authorizationCode,
-				kakaoProperties.getClientSecret()
+			kakaoProperties.getClientId(),
+			redirectUri,
+			authorizationCode,
+			kakaoProperties.getClientSecret()
 		);
 	}
 }
