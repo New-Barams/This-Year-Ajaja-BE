@@ -44,9 +44,6 @@ public class PlanEntity extends BaseEntity<PlanEntity> {
 	private Long userId;
 
 	@Column(nullable = false)
-	private Integer achieveRate;
-
-	@Column(nullable = false)
 	private Integer iconNumber;
 
 	@Column(nullable = false, length = 30)

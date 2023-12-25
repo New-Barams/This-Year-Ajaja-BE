@@ -1,9 +1,10 @@
 package com.newbarams.ajaja.module.feedback.domain;
 
-import java.time.Instant;
+import static com.newbarams.ajaja.global.exception.ErrorCode.*;
 
 import com.newbarams.ajaja.global.common.SelfValidating;
 import com.newbarams.ajaja.global.common.TimeValue;
+import com.newbarams.ajaja.global.exception.AjajaException;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -15,39 +16,35 @@ public class Feedback extends SelfValidating<Feedback> {
 	private final Long userId;
 	@NotNull
 	private final Long planId;
-	private final Achieve achieve;
+	private Info info;
 
-	private final Instant createdAt;
-	private Instant updatedAt;
+	private final TimeValue createdAt;
+	private final TimeValue updatedAt;
 
-	public Feedback(Long id, Long userId, Long planId, Achieve achieve, Instant createdAt,
-		Instant updatedAt) {
+	public Feedback(Long id, Long userId, Long planId, Achieve achieve, String message, TimeValue createdAt,
+		TimeValue updatedAt) {
 		this.id = id;
 		this.userId = userId;
 		this.planId = planId;
-		this.achieve = achieve;
+		this.info = new Info(achieve, message);
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 		this.validateSelf();
 	}
 
 	public static Feedback create(Long userId, Long planId) {
-		return new Feedback(null, userId, planId, Achieve.FAIL, null, null);
-	}
-
-	public int getRate() {
-		return this.achieve.getRate();
+		return new Feedback(null, userId, planId, Achieve.FAIL, "", null, null);
 	}
 
 	public boolean isFeedback() {
 		return this.getUpdatedAt().isAfter(this.getCreatedAt());
 	}
 
-	public String getAchieveName(int rate) {
-		return Achieve.of(rate).name();
-	}
+	public void updateFeedback(int rate, String message) {
+		if (createdAt.isExpired()) {
+			throw new AjajaException(EXPIRED_FEEDBACK);
+		}
 
-	public boolean isBeforeDeadline() {
-		return TimeValue.check(this.createdAt);
+		this.info = new Info(Achieve.of(rate), message);
 	}
 }

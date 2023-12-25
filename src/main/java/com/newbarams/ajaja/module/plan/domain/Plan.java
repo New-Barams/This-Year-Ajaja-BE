@@ -23,8 +23,6 @@ public class Plan {
 
 	private Long userId;
 
-	private int achieveRate;
-
 	private int iconNumber;
 
 	private Content content;
@@ -43,7 +41,6 @@ public class Plan {
 		this.status = new PlanStatus(isPublic);
 		this.iconNumber = iconNumber;
 		this.messages = messages;
-		this.achieveRate = 0;
 	}
 
 	public static Plan create(PlanParam.Create param) {
@@ -105,10 +102,6 @@ public class Plan {
 
 		this.info = info;
 		this.messages = messages;
-	}
-
-	public void updateAchieve(int achieveRate) {
-		this.achieveRate = achieveRate;
 	}
 
 	public int getRemindTime() {

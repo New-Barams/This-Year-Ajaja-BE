@@ -3,7 +3,6 @@ package com.newbarams.ajaja.module.feedback.application;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
@@ -13,11 +12,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import com.newbarams.ajaja.common.support.MockTestSupport;
+import com.newbarams.ajaja.global.exception.AjajaException;
 import com.newbarams.ajaja.module.feedback.domain.Achieve;
 import com.newbarams.ajaja.module.feedback.domain.Feedback;
 import com.newbarams.ajaja.module.feedback.domain.FeedbackQueryRepository;
-import com.newbarams.ajaja.module.plan.application.UpdatePlanAchieveService;
-import com.newbarams.ajaja.module.plan.domain.Plan;
+import com.newbarams.ajaja.module.feedback.domain.FeedbackRepository;
 
 class UpdateFeedbackServiceTest extends MockTestSupport {
 	@InjectMocks
@@ -26,7 +25,7 @@ class UpdateFeedbackServiceTest extends MockTestSupport {
 	@Mock
 	private FeedbackQueryRepository feedbackQueryRepository;
 	@Mock
-	private UpdatePlanAchieveService updatePlanAchieveService;
+	private FeedbackRepository feedbackRepository;
 	@Mock
 	private Feedback mockFeedback;
 
@@ -34,33 +33,38 @@ class UpdateFeedbackServiceTest extends MockTestSupport {
 	class DeadlineTest {
 		@Test
 		@DisplayName("기간 내에 피드백을 시행할 경우 성공한다.")
-		void updateTest_Success_WithNoException() {
+		void updateFeedback_Success_WithNoException() {
 			// given
-			List<Feedback> feedbacks = sut.giveMe(Feedback.class, 2);
-
-			Plan plan = sut.giveMeOne(Plan.class);
-
-			// mock
 			given(feedbackQueryRepository.findByFeedbackId(any())).willReturn(Optional.of(mockFeedback));
-			doNothing().when(updatePlanAchieveService).updatePlanAchieve(anyLong(), anyInt());
-			given(feedbackQueryRepository.findAllFeedbackByPlanId(any())).willReturn(feedbacks);
+			doNothing().when(feedbackRepository).save(any());
 
 			// when,then
 			assertThatNoException().isThrownBy(
-				() -> updateFeedbackService.updateFeedback(1L, 50));
-
-			assertThat(plan.getAchieveRate()).isNotZero();
+				() -> updateFeedbackService.updateFeedback(1L, 50, "fighting"));
 		}
 
 		@Test
 		@DisplayName("데드라인이 지난 피드백을 할 경우 예외를 던진다.")
-		void updateTest_Fail_ByIllegalAccessException() {
+		void updateFeedback_Fail_ByIllegalAccessException() {
 			// given
 			given(feedbackQueryRepository.findByFeedbackId(any())).willReturn(Optional.of(mockFeedback));
+			doThrow(AjajaException.class).when(mockFeedback).updateFeedback(50, "fighting");
 
 			// when,then
-			assertThatNoException().isThrownBy(
-				() -> updateFeedbackService.updateFeedback(1L, 50)
+			assertThatException().isThrownBy(
+				() -> updateFeedbackService.updateFeedback(1L, 50, "fighting")
+			);
+		}
+
+		@Test
+		@DisplayName("데드라인이 지난 피드백을 할 경우 예외를 던진다.")
+		void updateFeedback_Fail_ByNotFoundFeedback() {
+			// given
+			given(feedbackQueryRepository.findByFeedbackId(any())).willReturn(Optional.empty());
+
+			// when,then
+			assertThatException().isThrownBy(
+				() -> updateFeedbackService.updateFeedback(1L, 50, "fighting")
 			);
 		}
 	}

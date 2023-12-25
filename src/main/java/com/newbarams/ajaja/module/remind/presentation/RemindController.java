@@ -41,6 +41,6 @@ public class RemindController {
 	public AjajaResponse<RemindResponse> getRemindResponse(
 		@PathVariable Long planId
 	) {
-		return new AjajaResponse<>(true, loadRemindInfoService.loadRemindInfoResponse(planId));
+		return AjajaResponse.ok(loadRemindInfoService.loadRemindInfoResponse(planId));
 	}
 }
