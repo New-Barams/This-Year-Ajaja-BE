@@ -45,7 +45,7 @@ class UpdatePlanServiceTest {
 		plan = planRepository.save(Plan.create(
 			new PlanParam.Create(
 				1,
-				1L,
+				user.getId(),
 				new Content("title", "description"),
 				new RemindInfo(12, 3, 15, "MORNING"),
 				true,
