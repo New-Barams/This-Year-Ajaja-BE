@@ -47,6 +47,6 @@ public class UpdatePlanService {
 
 		planRepository.save(plan);
 
-		return getPlanService.loadByIdAndOptionalUser(id, userId);
+		return getPlanService.loadByIdAndOptionalUser(userId, id);
 	}
 }
