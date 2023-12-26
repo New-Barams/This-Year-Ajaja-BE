@@ -53,7 +53,7 @@ public interface PlanMapper {
 		return new PlanStatus(planEntity.isPublic(), planEntity.isCanRemind(), planEntity.isCanAjaja(),
 			planEntity.isDeleted());
 	}
-	
+
 	@Mapping(source = "request.public", target = "isPublic")
 	@Mapping(source = "request", target = "content", qualifiedByName = "toContent")
 	@Mapping(source = "request", target = "info", qualifiedByName = "toRemindInfo")
@@ -96,6 +96,7 @@ public interface PlanMapper {
 		return ajajas.size();
 	}
 
+	@Mapping(source = "request.public", target = "isPublic")
 	@Mapping(source = "request", target = "content", qualifiedByName = "toContent")
 	PlanParam.Update toParam(Long userId, PlanRequest.Update request, int month);
 
