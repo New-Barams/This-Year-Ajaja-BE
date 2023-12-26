@@ -72,6 +72,8 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 	protected LoadPlanInfoService loadPlanInfoService;
 	@MockBean
 	protected UpdateRemindInfoService updateRemindInfoService;
+	@MockBean
+	protected SwitchAjajaService switchAjajaService;
 
 	// Feedback
 	@MockBean
@@ -84,8 +86,4 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 	// Remind
 	@MockBean
 	protected LoadRemindInfoService loadRemindInfoService;
-
-	// Ajaja
-	@MockBean
-	protected SwitchAjajaService switchAjajaService;
 }

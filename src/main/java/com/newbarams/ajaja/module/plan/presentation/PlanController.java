@@ -23,6 +23,7 @@ import com.newbarams.ajaja.global.common.AjajaResponse;
 import com.newbarams.ajaja.global.exception.ErrorResponse;
 import com.newbarams.ajaja.global.security.common.UserId;
 import com.newbarams.ajaja.global.security.jwt.util.JwtParser;
+import com.newbarams.ajaja.module.ajaja.application.SwitchAjajaService;
 import com.newbarams.ajaja.module.plan.application.CreatePlanService;
 import com.newbarams.ajaja.module.plan.application.DeletePlanService;
 import com.newbarams.ajaja.module.plan.application.LoadPlanInfoService;
@@ -54,8 +55,15 @@ public class PlanController {
 	private final UpdatePlanService updatePlanService;
 	private final LoadPlanInfoService loadPlanInfoService;
 	private final UpdateRemindInfoService updateRemindInfoService;
+	private final SwitchAjajaService switchAjajaService;
 
 	private final JwtParser jwtParser; // todo: delete when authentication filtering update
+
+	@PostMapping("/{id}/ajaja")
+	public AjajaResponse<Void> switchAjaja(@UserId Long userId, @PathVariable Long id) {
+		switchAjajaService.switchOrAddIfNotExist(userId, id);
+		return AjajaResponse.ok();
+	}
 
 	@Operation(summary = "계획 단건 조회 API", description = "토큰을 추가해서 보내면 계획 작성자인지, 아좌좌를 눌렀는지 추가적으로 판별합니다.")
 	@GetMapping("/{id}")
