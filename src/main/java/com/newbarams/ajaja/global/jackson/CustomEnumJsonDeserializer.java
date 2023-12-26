@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.global.common;
+package com.newbarams.ajaja.global.jackson;
 
 import java.io.IOException;
 
@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
-public class CustomEnumJsonDeserializer extends StdDeserializer<Enum<?>> implements ContextualDeserializer {
+class CustomEnumJsonDeserializer extends StdDeserializer<Enum<?>> implements ContextualDeserializer {
 
 	protected CustomEnumJsonDeserializer(Class<?> vc) {
 		super(vc);

@@ -10,14 +10,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.newbarams.ajaja.global.exception.AjajaException;
-import com.newbarams.ajaja.global.security.common.CustomUserDetailService;
+import com.newbarams.ajaja.global.security.common.CustomUserDetailsService;
 
 import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
 public class JwtParser {
-	private final CustomUserDetailService userDetailService;
+	private final CustomUserDetailsService userDetailService;
 	private final JwtSecretProvider jwtSecretProvider;
 	private final RawParser rawParser;
 

@@ -34,9 +34,10 @@ secret:
     signature: thisisfortest
 
   kakao:
+    admin-key: thisisfortest
     client-id: thisisfortest
-    redirect-uri: thisisfortest
     client-secret: thisisfortest
+    logout-redirect-url: thisisfortest
 
 ses:
   credentials:

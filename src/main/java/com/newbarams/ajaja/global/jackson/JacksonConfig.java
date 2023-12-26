@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.global.config;
+package com.newbarams.ajaja.global.jackson;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -13,7 +13,6 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.deser.Deserializers;
 import com.fasterxml.jackson.databind.type.ClassKey;
-import com.newbarams.ajaja.global.common.CustomEnumJsonDeserializer;
 
 @Configuration
 public class JacksonConfig {

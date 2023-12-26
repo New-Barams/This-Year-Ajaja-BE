@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.user.application.service;
+package com.newbarams.ajaja.module.user.application;
 
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -7,7 +7,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 @MockBean({
 	ChangeReceiveTypeService.class,
 	LogoutService.class,
-	ReissueTokenService.class,
 	RenewNicknameService.class,
 	SendVerificationEmailService.class,
 	VerifyCertificationService.class,

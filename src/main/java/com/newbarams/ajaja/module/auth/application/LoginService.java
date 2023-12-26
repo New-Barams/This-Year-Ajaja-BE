@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.auth.application.service;
+package com.newbarams.ajaja.module.auth.application;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +31,6 @@ class LoginService implements LoginUseCase {
 
 	private Long findIdOrCreateIfNotExists(String email, Long oauthId) {
 		return findUserIdByEmailPort.findUserIdByEmail(email)
-				.orElseGet(() -> createUserPort.create(email, oauthId));
+			.orElseGet(() -> createUserPort.create(email, oauthId));
 	}
 }

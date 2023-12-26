@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.user.application.service;
+package com.newbarams.ajaja.module.user.application;
 
 import static com.newbarams.ajaja.global.exception.ErrorCode.*;
 

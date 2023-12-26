@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.newbarams.ajaja.common.annotation.ApiTest;
 import com.newbarams.ajaja.global.mock.MockController;
 import com.newbarams.ajaja.module.ajaja.application.SwitchAjajaService;
-import com.newbarams.ajaja.module.auth.application.service.AuthMockBeans;
+import com.newbarams.ajaja.module.auth.application.AuthMockBeans;
 import com.newbarams.ajaja.module.feedback.application.LoadFeedbackInfoService;
 import com.newbarams.ajaja.module.feedback.application.LoadTotalAchieveService;
 import com.newbarams.ajaja.module.feedback.application.UpdateFeedbackService;
@@ -25,7 +25,7 @@ import com.newbarams.ajaja.module.plan.application.LoadPlanService;
 import com.newbarams.ajaja.module.plan.application.UpdatePlanService;
 import com.newbarams.ajaja.module.plan.application.UpdateRemindInfoService;
 import com.newbarams.ajaja.module.remind.application.LoadRemindInfoService;
-import com.newbarams.ajaja.module.user.application.service.UserMockBeans;
+import com.newbarams.ajaja.module.user.application.UserMockBeans;
 import com.newbarams.ajaja.module.user.domain.UserQueryRepository;
 
 /**

@@ -1,5 +1,6 @@
-package com.newbarams.ajaja.module.auth.application.service;
+package com.newbarams.ajaja.module.auth.application;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
 
@@ -8,10 +9,13 @@ import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.newbarams.ajaja.common.support.MockTestSupport;
+import com.newbarams.ajaja.common.support.MonkeySupport;
 import com.newbarams.ajaja.global.security.jwt.util.JwtGenerator;
 import com.newbarams.ajaja.infra.feign.kakao.model.KakaoAccount;
 import com.newbarams.ajaja.infra.feign.kakao.model.KakaoResponse;
@@ -19,18 +23,25 @@ import com.newbarams.ajaja.module.auth.application.model.Profile;
 import com.newbarams.ajaja.module.auth.application.port.out.AuthorizePort;
 import com.newbarams.ajaja.module.user.application.port.out.CreateUserPort;
 import com.newbarams.ajaja.module.user.application.port.out.FindUserIdByEmailPort;
+import com.newbarams.ajaja.module.user.infra.UserEntity;
+import com.newbarams.ajaja.module.user.infra.UserJpaRepository;
 
-class LoginServiceTest extends MockTestSupport {
-	@InjectMocks
+@SpringBootTest
+@Transactional
+class LoginServiceTest extends MonkeySupport {
+	@Autowired
 	private LoginService loginService;
+	@Autowired
+	private UserJpaRepository userRepository;
 
-	@Mock
-	private AuthorizePort authorizePort;
-	@Mock
+	@SpyBean
 	private FindUserIdByEmailPort findUserIdByEmailPort;
-	@Mock
+	@SpyBean
 	private CreateUserPort createUserPort;
-	@Mock
+
+	@MockBean
+	private AuthorizePort authorizePort;
+	@MockBean
 	private JwtGenerator jwtGenerator;
 
 	@Nested
@@ -42,11 +53,12 @@ class LoginServiceTest extends MockTestSupport {
 
 		// returns
 		private final String email = "Ajaja@me.com";
+		private final KakaoAccount kakaoAccount = sut.giveMeBuilder(KakaoAccount.class)
+			.set("email", email)
+			.sample();
 		private final Profile profile = sut.giveMeBuilder(KakaoResponse.UserInfo.class)
-				.set("kakaoAccount", sut.giveMeBuilder(KakaoAccount.class)
-						.set("email", email)
-						.sample())
-				.sample();
+			.set("kakaoAccount", kakaoAccount)
+			.sample();
 
 		@Test
 		@DisplayName("새로운 유저가 로그인하면 새롭게 유저 정보를 생성해야 한다.")
@@ -54,7 +66,7 @@ class LoginServiceTest extends MockTestSupport {
 			// given
 			given(authorizePort.authorize(any(), any())).willReturn(profile);
 			given(findUserIdByEmailPort.findUserIdByEmail(any())).willReturn(Optional.empty());
-			given(createUserPort.create(anyString(), any())).willReturn(1L);
+			given(createUserPort.create(profile.getEmail(), profile.getOauthId())).willReturn(1L);
 
 			// when
 			loginService.login(authorizationCode, redirectUrl);
@@ -81,6 +93,32 @@ class LoginServiceTest extends MockTestSupport {
 			then(findUserIdByEmailPort).should(times(1)).findUserIdByEmail(any());
 			then(createUserPort).shouldHaveNoMoreInteractions();
 			then(jwtGenerator).should(times(1)).login(any());
+		}
+
+		@Test
+		@DisplayName("탈퇴한 유저가 로그인하면 새로운 계정을 만들어야 한다.")
+		void login_Success_ReSignUpWithdrawUser() {
+			// given
+			UserEntity userEntity = sut.giveMeBuilder(UserEntity.class)
+				.set("nickname", "nickname")
+				.set("signUpEmail", email)
+				.set("remindEmail", email)
+				.set("receiveType", "KAKAO")
+				.set("deleted", true)
+				.sample();
+
+			userRepository.save(userEntity);
+			given(authorizePort.authorize(any(), any())).willReturn(profile);
+
+			// when
+			loginService.login(authorizationCode, redirectUrl);
+
+			// then
+			then(authorizePort).should(times(1)).authorize(any(), any());
+
+			UserEntity saved = userRepository.findAll().get(0);
+			assertThat(saved.getSignUpEmail()).isEqualTo(email);
+			assertThat(saved.isDeleted()).isFalse();
 		}
 	}
 }

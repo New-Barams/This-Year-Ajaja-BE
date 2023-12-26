@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.user.application.service;
+package com.newbarams.ajaja.module.user.application;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
@@ -36,8 +36,8 @@ class SendVerificationEmailServiceTest extends MonkeySupport {
 		String email = "Ajaja@me.com";
 
 		User user = sut.giveMeBuilder(User.class)
-				.set("email", new Email(email))
-				.sample();
+			.set("email", new Email(email))
+			.sample();
 
 		given(retrieveUserService.loadExistById(any())).willReturn(user);
 
