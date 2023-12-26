@@ -1,8 +1,8 @@
 package com.newbarams.ajaja.module.plan.infra;
 
-import static com.newbarams.ajaja.global.util.QueryDslUtil.*;
 import static com.newbarams.ajaja.module.ajaja.domain.Ajaja.Type.*;
 import static com.newbarams.ajaja.module.ajaja.domain.QAjaja.*;
+import static com.newbarams.ajaja.module.feedback.infra.QFeedbackEntity.*;
 import static com.newbarams.ajaja.module.plan.infra.QPlanEntity.*;
 import static com.newbarams.ajaja.module.tag.domain.QPlanTag.*;
 import static com.newbarams.ajaja.module.tag.domain.QTag.*;
@@ -18,13 +18,14 @@ import org.springframework.stereotype.Repository;
 import com.newbarams.ajaja.global.common.TimeValue;
 import com.newbarams.ajaja.module.ajaja.domain.Ajaja;
 import com.newbarams.ajaja.module.plan.domain.Plan;
+import com.newbarams.ajaja.module.plan.domain.RemindDate;
 import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 import com.newbarams.ajaja.module.plan.dto.QPlanResponse_Detail;
 import com.newbarams.ajaja.module.plan.dto.QPlanResponse_Writer;
 import com.newbarams.ajaja.module.plan.mapper.PlanMapper;
-import com.newbarams.ajaja.module.remind.dto.RemindMessageInfo;
+import com.newbarams.ajaja.module.remind.application.model.RemindMessageInfo;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -94,6 +95,10 @@ public class PlanQueryRepository {
 			.fetchFirst() != null);
 	}
 
+	private BooleanExpression isCurrentYear() {
+		return planEntity.createdAt.year().eq(new TimeValue().getYear());
+	}
+
 	public Optional<PlanResponse.GetOne> findById(Long id, Long userId) {
 		List<Tuple> tuples = queryFactory.select(planEntity, userEntity.nickname)
 			.from(planEntity, userEntity)
@@ -140,10 +145,10 @@ public class PlanQueryRepository {
 
 			.where(planEntity.userId.eq(userEntity.id),
 				planEntity.isPublic.eq(true),
-				isEqualsYear(conditions.current()),
+				isEqualsYear(conditions.isCurrent()),
 				cursorPagination(conditions))
 
-			.orderBy(sortBy(conditions.sort()))
+			.orderBy(sortBy(conditions.getSort()))
 			.limit(PAGE_SIZE)
 			.fetch();
 
@@ -156,8 +161,8 @@ public class PlanQueryRepository {
 	}
 
 	private BooleanExpression cursorPagination(PlanRequest.GetAll conditions) {
-		return conditions.start() == null ? null :
-			getCursorCondition(conditions.sort(), conditions.start(), conditions.ajaja());
+		return conditions.getStart() == null ? null :
+			getCursorCondition(conditions.getSort(), conditions.getStart(), conditions.getAjaja());
 	}
 
 	private BooleanExpression getCursorCondition(String sort, Long start, Integer cursorAjaja) {
@@ -204,64 +209,41 @@ public class PlanQueryRepository {
 				planEntity.id,
 				planEntity.title,
 				planEntity.canRemind,
-				planEntity.achieveRate,
-				planEntity.iconNumber,
-				userEntity.verified
+				feedbackEntity.achieve.avg().intValue(),
+				planEntity.iconNumber
 			))
 			.from(planEntity)
-			.join(userEntity).on(userEntity.id.eq(planEntity.userId))
+			.leftJoin(feedbackEntity).on(feedbackEntity.planId.eq(planEntity.id))
 			.groupBy(planEntity.createdAt.year(),
 				planEntity.id,
 				planEntity.title,
 				planEntity.canRemind,
-				planEntity.achieveRate,
-				planEntity.iconNumber,
-				userEntity.verified)
+				planEntity.iconNumber)
 			.where(planEntity.userId.eq(userId))
 			.orderBy(planEntity.createdAt.year().desc())
 			.fetch();
 	}
 
-	public List<RemindMessageInfo> findAllRemindablePlan(String remindTime) {
-		List<Tuple> remindablePlans = queryFactory.select(planEntity, userEntity)
-			.from(planEntity, userEntity)
+	public List<RemindMessageInfo> findAllRemindablePlan(String remindTime, TimeValue time) {
+		List<Tuple> remindablePlans = queryFactory.select(
+				planEntity,
+				userEntity.remindEmail
+			)
+			.from(planEntity)
+			.join(userEntity).on(userEntity.id.eq(planEntity.userId))
 			.where(planEntity.canRemind
-				.and(isCurrentYear())
-				.and(isRemindMonth())
-				.and(isRemindDate())
-				.and(planEntity.remindTime.stringValue().eq(remindTime)
-					.and(planEntity.userId.eq(userEntity.id)))
-			)
-			.fetch(); // todo: 리마인드 메세지 날짜에 맞게 쿼리 수정
+				.and(planEntity.remindTime.eq(remindTime)
+					.and(isRemindable(time))))
+			.fetch();
 
-		return mapRemindMessageInfos(remindablePlans);
-	}
-
-	private BooleanExpression isCurrentYear() {
-		return planEntity.createdAt.year().eq(new TimeValue().getYear());
-	}
-
-	private BooleanExpression isRemindDate() {
-		return planEntity.remindDate.eq(new TimeValue().getDate());
-	}
-
-	private List<RemindMessageInfo> mapRemindMessageInfos(List<Tuple> remindablePlans) {
-		return remindablePlans.stream().map(
-				p -> {
-					Plan plan = planMapper.toDomain(p.get(planEntity));
-
-					return new RemindMessageInfo(
-						plan.getUserId(),
-						plan.getId(),
-						plan.getContent().getTitle(),
-						p.get(userEntity).getRemindEmail(),
-						plan.getMessage(plan.getRemindTerm(), new TimeValue().getMonth()),
-						plan.getInfo(),
-						plan.getRemindMonth(),
-						plan.getRemindDate()
-					);
-				}
-			)
+		return remindablePlans.stream()
+			.map(t -> planMapper.toModel(t.get(planEntity), t.get(userEntity.remindEmail)))
 			.toList();
+	}
+
+	private BooleanExpression isRemindable(TimeValue time) {
+		RemindDate today = new RemindDate(time.getMonth(), time.getDate());
+		return planEntity.createdAt.year().eq(time.getYear())
+			.andAnyOf(planEntity.messages.any().remindDate.eq(today));
 	}
 }

@@ -20,7 +20,7 @@ import org.springframework.security.core.Authentication;
 
 import com.newbarams.ajaja.common.annotation.RedisBasedTest;
 import com.newbarams.ajaja.common.support.MonkeySupport;
-import com.newbarams.ajaja.global.security.common.CustomUserDetailService;
+import com.newbarams.ajaja.global.security.common.CustomUserDetailsService;
 import com.newbarams.ajaja.global.security.common.UserAdapter;
 import com.newbarams.ajaja.module.auth.dto.AuthResponse;
 
@@ -36,7 +36,7 @@ class JwtParserTest extends MonkeySupport {
 	private RedisTemplate<String, Object> redisTemplate;
 
 	@MockBean
-	private CustomUserDetailService customUserDetailService;
+	private CustomUserDetailsService customUserDetailsService;
 
 	private Long userId;
 	private String accessToken;
@@ -60,13 +60,13 @@ class JwtParserTest extends MonkeySupport {
 	void parseAuthentication_Success_WithSameUserAdapter() {
 		// given
 		UserAdapter adapter = sut.giveMeOne(UserAdapter.class);
-		given(customUserDetailService.loadUserByUsername(anyString())).willReturn(adapter);
+		given(customUserDetailsService.loadUserByUsername(anyString())).willReturn(adapter);
 
 		// when
 		Authentication authentication = jwtParser.parseAuthentication(accessToken);
 
 		// then
-		then(customUserDetailService).should(times(1)).loadUserByUsername(anyString());
+		then(customUserDetailsService).should(times(1)).loadUserByUsername(anyString());
 		assertThat(authentication).isInstanceOf(UsernamePasswordAuthenticationToken.class);
 		assertThat(authentication.getPrincipal()).isEqualTo(adapter);
 	}
@@ -113,15 +113,15 @@ class JwtParserTest extends MonkeySupport {
 	void parseId_Fail_ByWrongSignature() {
 		// given
 		String wrongSignatureToken = """
-				eyJhbGciOiJIUzI1NiJ9.
-				eyJuYW1lIjoiSGVqb3cifQ.
-				SI7XBRHE_95nkxQ69SiiCQcqDkZ-FW1RdxNL1DmAAAg
-				""";
+			eyJhbGciOiJIUzI1NiJ9.
+			eyJuYW1lIjoiSGVqb3cifQ.
+			SI7XBRHE_95nkxQ69SiiCQcqDkZ-FW1RdxNL1DmAAAg
+			""";
 
 		// when, then
 		assertThatException()
-				.isThrownBy(() -> jwtParser.parseId(wrongSignatureToken))
-				.withMessage(INVALID_SIGNATURE.getMessage());
+			.isThrownBy(() -> jwtParser.parseId(wrongSignatureToken))
+			.withMessage(INVALID_SIGNATURE.getMessage());
 	}
 
 	@Test
@@ -132,8 +132,8 @@ class JwtParserTest extends MonkeySupport {
 
 		// when, then
 		assertThatException()
-				.isThrownBy(() -> jwtParser.parseId(emptyToken))
-				.withMessage(EMPTY_TOKEN.getMessage());
+			.isThrownBy(() -> jwtParser.parseId(emptyToken))
+			.withMessage(EMPTY_TOKEN.getMessage());
 	}
 
 	@Nested
@@ -155,10 +155,10 @@ class JwtParserTest extends MonkeySupport {
 		void isParsable_Fail_ByInvalidToken() {
 			// given
 			String invalidToken = """
-					eyJhbGciOiJIUzI1NiJ9.
-					eyJuYW1lIjoiSGVqb3cifQ.
-					SI7XBRHE_95nkxQ69SiiCQcqDkZ-FW1RdxNL1DmAAAg
-					""";
+				eyJhbGciOiJIUzI1NiJ9.
+				eyJuYW1lIjoiSGVqb3cifQ.
+				SI7XBRHE_95nkxQ69SiiCQcqDkZ-FW1RdxNL1DmAAAg
+				""";
 
 			// when
 			boolean shouldBeFalse = jwtParser.isParsable(invalidToken);

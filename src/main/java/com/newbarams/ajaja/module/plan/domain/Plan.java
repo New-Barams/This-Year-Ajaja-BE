@@ -23,8 +23,6 @@ public class Plan {
 
 	private Long userId;
 
-	private int achieveRate;
-
 	private int iconNumber;
 
 	private Content content;
@@ -43,7 +41,6 @@ public class Plan {
 		this.status = new PlanStatus(isPublic);
 		this.iconNumber = iconNumber;
 		this.messages = messages;
-		this.achieveRate = 0;
 	}
 
 	public static Plan create(PlanParam.Create param) {
@@ -89,6 +86,7 @@ public class Plan {
 	public void update(PlanParam.Update param) {
 		validateModifiableMonth(param.getMonth());
 		validateUser(param.getUserId());
+		this.iconNumber = param.getIconNumber();
 		this.content = param.getContent();
 		this.status = status.update(param.isPublic(), param.isCanAjaja());
 	}
@@ -100,10 +98,6 @@ public class Plan {
 
 		this.info = info;
 		this.messages = messages;
-	}
-
-	public void updateAchieve(int achieveRate) {
-		this.achieveRate = achieveRate;
 	}
 
 	public int getRemindTime() {
@@ -142,8 +136,12 @@ public class Plan {
 		return this.info.getTotalRemindNumber();
 	}
 
-	public String getMessage(int remindTerm, int currentMonth) {
-		int messageIdx = getMessageIdx(remindTerm, currentMonth);
+	public String getPlanTitle() {
+		return this.content.getTitle();
+	}
+
+	public String getMessage(int currentMonth) {
+		int messageIdx = getMessageIdx(this.info.getRemindTerm(), currentMonth);
 		return this.messages.get(messageIdx).getContent();
 	}
 

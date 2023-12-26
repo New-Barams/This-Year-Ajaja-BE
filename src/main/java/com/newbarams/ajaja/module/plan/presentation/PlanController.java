@@ -25,7 +25,6 @@ import com.newbarams.ajaja.global.security.common.UserId;
 import com.newbarams.ajaja.global.security.jwt.util.JwtParser;
 import com.newbarams.ajaja.module.plan.application.CreatePlanService;
 import com.newbarams.ajaja.module.plan.application.DeletePlanService;
-import com.newbarams.ajaja.module.plan.application.GetPlanAchieveService;
 import com.newbarams.ajaja.module.plan.application.LoadPlanInfoService;
 import com.newbarams.ajaja.module.plan.application.LoadPlanService;
 import com.newbarams.ajaja.module.plan.application.UpdatePlanService;
@@ -52,7 +51,6 @@ public class PlanController {
 	private final CreatePlanService createPlanService;
 	private final LoadPlanService getPlanService;
 	private final DeletePlanService deletePlanService;
-	private final GetPlanAchieveService getPlanAchieveService;
 	private final UpdatePlanService updatePlanService;
 	private final LoadPlanInfoService loadPlanInfoService;
 	private final UpdateRemindInfoService updateRemindInfoService;
@@ -93,14 +91,6 @@ public class PlanController {
 	) {
 		deletePlanService.delete(id, userId, month);
 		return AjajaResponse.ok();
-	}
-
-	@Operation(summary = "[토큰 필요] 특정 목표 달성률 조회 API")
-	@GetMapping("/{planId}/feedbacks")
-	@ResponseStatus(OK)
-	public AjajaResponse<Integer> getPlanAchieve(@PathVariable Long planId) {
-		int totalAchieve = getPlanAchieveService.calculatePlanAchieve(planId);
-		return AjajaResponse.ok(totalAchieve);
 	}
 
 	@Operation(summary = "[토큰 필요] 계획 공개 여부 변경 API")

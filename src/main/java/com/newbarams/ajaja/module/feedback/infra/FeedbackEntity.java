@@ -34,8 +34,11 @@ public class FeedbackEntity extends BaseEntity<Feedback> {
 	@Column(nullable = false)
 	private Long planId;
 
-	@Column(nullable = false, length = 20)
-	private String achieve;
+	@Column(nullable = false)
+	private int achieve;
+
+	@Column(nullable = false, length = 100, name = "feedback_message")
+	private String message;
 
 	@Column(nullable = false)
 	private boolean deleted;

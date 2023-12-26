@@ -3,7 +3,6 @@ package com.newbarams.ajaja.global.mock;
 import static org.springframework.http.HttpHeaders.*;
 import static org.springframework.http.HttpStatus.*;
 
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,7 +10,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,6 +33,7 @@ import com.newbarams.ajaja.module.auth.dto.AuthRequest;
 import com.newbarams.ajaja.module.auth.dto.AuthResponse;
 import com.newbarams.ajaja.module.feedback.dto.GetAchieve;
 import com.newbarams.ajaja.module.feedback.dto.UpdateFeedback;
+import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 import com.newbarams.ajaja.module.remind.application.SchedulingRemindService;
@@ -133,17 +132,6 @@ public class MockController {
 
 	private String extractToken(String token) {
 		return token.substring("Bearer ".length());
-	}
-
-	@Operation(summary = "[테스트-5초 후 발송] 리마인드 전송 API")
-	@PostMapping("/plans/{planId}/reminds")
-	@ResponseStatus(OK)
-	public AjajaResponse<MockGetRemindInfo.Response> sendRemind() throws InterruptedException {
-		TimeUnit.SECONDS.sleep(5);
-		MockGetRemindInfo.Response response = new MockGetRemindInfo.Response(1, 1L, "화이팅", false, 0,
-			false, new Timestamp(System.currentTimeMillis()));
-
-		return new AjajaResponse<>(true, response);
 	}
 
 	@Operation(summary = "[QA용] 아자자 즉시 전송")
@@ -405,28 +393,28 @@ public class MockController {
 		})
 	@GetMapping("/plans/main")
 	@ResponseStatus(OK)
-	public AjajaResponse<List<MockPlanInfoResponse.GetPlanInfoResponse>> getPlanInfo() {
-		List<MockPlanInfoResponse.GetPlan> getPlan2023 = List.of(
-			new MockPlanInfoResponse.GetPlan(2023, 1L, "매일 운동하기", true, 90, 1, true),
-			new MockPlanInfoResponse.GetPlan(2023, 2L, "매일 코딩하기", true, 90, 2, true),
-			new MockPlanInfoResponse.GetPlan(2023, 3L, "매일 아침 9시에 일어나기", false, 20, 3, true)
+	public AjajaResponse<List<PlanInfoResponse.GetPlanInfoResponse>> getPlanInfo() {
+		List<PlanInfoResponse.GetPlan> getPlan2023 = List.of(
+			new PlanInfoResponse.GetPlan(2023, 1L, "매일 운동하기", true, 90, 1),
+			new PlanInfoResponse.GetPlan(2023, 2L, "매일 코딩하기", true, 90, 2),
+			new PlanInfoResponse.GetPlan(2023, 3L, "매일 아침 9시에 일어나기", false, 20, 3)
 		);
 
-		List<MockPlanInfoResponse.GetPlan> getPlan2022 = List.of(
-			new MockPlanInfoResponse.GetPlan(2022, 4L, "졸업 작품 끝내기", true, 90, 1, true),
-			new MockPlanInfoResponse.GetPlan(2022, 5L, "매일 아침 먹기", true, 70, 2, true),
-			new MockPlanInfoResponse.GetPlan(2022, 6L, "총 학점 4.0 이상 나오기", false, 50, 3, true)
+		List<PlanInfoResponse.GetPlan> getPlan2022 = List.of(
+			new PlanInfoResponse.GetPlan(2022, 4L, "졸업 작품 끝내기", true, 90, 1),
+			new PlanInfoResponse.GetPlan(2022, 5L, "매일 아침 먹기", true, 70, 2),
+			new PlanInfoResponse.GetPlan(2022, 6L, "총 학점 4.0 이상 나오기", false, 50, 3)
 		);
 
-		MockPlanInfoResponse.GetPlanInfoResponse getPlanInfo2023 = new MockPlanInfoResponse.GetPlanInfoResponse(2023,
+		PlanInfoResponse.GetPlanInfoResponse getPlanInfo2023 = new PlanInfoResponse.GetPlanInfoResponse(2023,
 			50,
 			getPlan2023);
 
-		MockPlanInfoResponse.GetPlanInfoResponse getPlanInfo2022 = new MockPlanInfoResponse.GetPlanInfoResponse(2022,
+		PlanInfoResponse.GetPlanInfoResponse getPlanInfo2022 = new PlanInfoResponse.GetPlanInfoResponse(2022,
 			80,
 			getPlan2022);
 
-		List<MockPlanInfoResponse.GetPlanInfoResponse> getPlanInfo = List.of(getPlanInfo2023, getPlanInfo2022);
+		List<PlanInfoResponse.GetPlanInfoResponse> getPlanInfo = List.of(getPlanInfo2023, getPlanInfo2022);
 		return AjajaResponse.ok(getPlanInfo);
 	}
 }

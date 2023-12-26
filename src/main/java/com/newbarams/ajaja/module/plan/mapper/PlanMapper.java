@@ -2,6 +2,7 @@ package com.newbarams.ajaja.module.plan.mapper;
 
 import java.util.List;
 
+import org.mapstruct.InheritConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -12,10 +13,12 @@ import com.newbarams.ajaja.module.plan.domain.Message;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.domain.PlanStatus;
 import com.newbarams.ajaja.module.plan.domain.RemindInfo;
+import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
 import com.newbarams.ajaja.module.plan.dto.PlanParam;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 import com.newbarams.ajaja.module.plan.infra.PlanEntity;
+import com.newbarams.ajaja.module.remind.application.model.RemindMessageInfo;
 
 @Mapper(componentModel = "spring")
 public interface PlanMapper {
@@ -53,6 +56,7 @@ public interface PlanMapper {
 			planEntity.isDeleted());
 	}
 
+	@Mapping(source = "request.public", target = "isPublic")
 	@Mapping(source = "request", target = "content", qualifiedByName = "toContent")
 	@Mapping(source = "request", target = "info", qualifiedByName = "toRemindInfo")
 	@Mapping(source = "request.messages", target = "messages", qualifiedByName = "toMessages")
@@ -60,13 +64,13 @@ public interface PlanMapper {
 
 	@Named("toContent")
 	static Content toContent(PlanRequest.Create request) {
-		return new Content(request.title(), request.description());
+		return new Content(request.getTitle(), request.getDescription());
 	}
 
 	@Named("toRemindInfo")
 	static RemindInfo toRemindInfo(PlanRequest.Create request) {
-		return new RemindInfo(request.remindTotalPeriod(), request.remindTerm(),
-			request.remindDate(), request.remindTime());
+		return new RemindInfo(request.getRemindTotalPeriod(), request.getRemindTerm(),
+			request.getRemindDate(), request.getRemindTime());
 	}
 
 	@Mapping(source = "plan.ajajas", target = "ajajas", qualifiedByName = "toAjajaCount")
@@ -94,11 +98,26 @@ public interface PlanMapper {
 		return ajajas.size();
 	}
 
+	@Mapping(source = "request.public", target = "isPublic")
 	@Mapping(source = "request", target = "content", qualifiedByName = "toContent")
 	PlanParam.Update toParam(Long userId, PlanRequest.Update request, int month);
 
 	@Named("toContent")
 	static Content toContent(PlanRequest.Update request) {
-		return new Content(request.title(), request.description());
+		return new Content(request.getTitle(), request.getDescription());
 	}
+
+	@Mapping(source = "planYear", target = "year")
+	@Mapping(target = "getPlanList", expression = "java(createPlanList(planInfos,planYear))")
+	PlanInfoResponse.GetPlanInfoResponse toResponse(int planYear, int totalAchieveRate,
+		List<PlanInfoResponse.GetPlan> planInfos);
+
+	default List<PlanInfoResponse.GetPlan> createPlanList(List<PlanInfoResponse.GetPlan> planInfos, int planYear) {
+		return planInfos.stream()
+			.filter(plan -> plan.year() == planYear)
+			.toList();
+	}
+
+	@InheritConfiguration(name = "toDomain")
+	RemindMessageInfo toModel(PlanEntity plan, String email);
 }

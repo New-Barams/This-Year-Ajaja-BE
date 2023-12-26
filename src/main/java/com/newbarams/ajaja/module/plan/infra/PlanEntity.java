@@ -44,9 +44,6 @@ public class PlanEntity extends BaseEntity<PlanEntity> {
 	private Long userId;
 
 	@Column(nullable = false)
-	private Integer achieveRate;
-
-	@Column(nullable = false)
 	private Integer iconNumber;
 
 	@Column(nullable = false, length = 30)
@@ -72,7 +69,7 @@ public class PlanEntity extends BaseEntity<PlanEntity> {
 	@Column(nullable = false)
 	private boolean deleted;
 
-	@ElementCollection(fetch = FetchType.EAGER) // todo:메세지 로딩 오류로 인한 임시 코드 (나중에 지우기)
+	@ElementCollection
 	@CollectionTable(name = "remind_messages", joinColumns = @JoinColumn(name = "plan_id"))
 	@OrderBy("remindDate ASC")
 	private List<Message> messages = new ArrayList<>();

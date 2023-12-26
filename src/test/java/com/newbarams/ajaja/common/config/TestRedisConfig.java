@@ -14,8 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import redis.embedded.RedisServer;
 
 @Slf4j
-@RequiredArgsConstructor
 @TestConfiguration
+@RequiredArgsConstructor
 public class TestRedisConfig {
 	private final RedisProperties properties;
 
@@ -24,12 +24,12 @@ public class TestRedisConfig {
 	@PostConstruct
 	public void redisServer() throws IOException {
 		int port = isRedisRunning() ? findAvailablePort() : properties.getPort();
-		redisServer = new RedisServer(port);
+		redisServer = initServer(port);
 		redisServer.start();
 	}
 
 	@PreDestroy
-	public void stopRedis() {
+	public void stopRedis() throws IOException {
 		if (redisServer != null) {
 			redisServer.stop();
 		}
@@ -40,7 +40,6 @@ public class TestRedisConfig {
 	}
 
 	public int findAvailablePort() throws IOException {
-
 		for (int port = 10000; port <= 65535; port++) {
 			Process process = executeGrepProcessCommand(port);
 			if (!isRunning(process)) {
@@ -49,6 +48,13 @@ public class TestRedisConfig {
 		}
 
 		throw new IllegalArgumentException("Not Found Available port: 10000 ~ 65535");
+	}
+
+	private RedisServer initServer(int port) throws IOException {
+		return RedisServer.newRedisServer()
+			.port(port)
+			.setting("maxmemory 128M")
+			.build();
 	}
 
 	private Process executeGrepProcessCommand(int port) throws IOException {

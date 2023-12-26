@@ -2,14 +2,19 @@ package com.newbarams.ajaja.module.remind.application;
 
 import static org.mockito.BDDMockito.*;
 
+import java.util.List;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import com.newbarams.ajaja.common.support.MockTestSupport;
+import com.newbarams.ajaja.global.common.TimeValue;
+import com.newbarams.ajaja.module.plan.domain.Message;
+import com.newbarams.ajaja.module.plan.domain.Plan;
+import com.newbarams.ajaja.module.plan.domain.RemindInfo;
 import com.newbarams.ajaja.module.remind.domain.RemindRepository;
-import com.newbarams.ajaja.module.remind.dto.RemindMessageInfo;
 
 class CreateRemindServiceTest extends MockTestSupport {
 	@InjectMocks
@@ -20,12 +25,17 @@ class CreateRemindServiceTest extends MockTestSupport {
 
 	@Test
 	@DisplayName("보낸 리마인드 정보를 담은 리마인드 객체를 저장한다.")
-	void sendRemindPerMonth_Success_WithNoException() {
+	void createRemind_Success_WithNoException() {
 		// given
-		RemindMessageInfo info = sut.giveMeOne(RemindMessageInfo.class);
+		List<Message> messages = sut.giveMe(Message.class, 13);
+		RemindInfo info = sut.giveMeBuilder(RemindInfo.class).set("remindTerm", 6).sample();
+		Plan plan = sut.giveMeBuilder(Plan.class)
+			.set("messages", messages)
+			.set("info", info)
+			.sample();
 
 		// when
-		createRemindService.createRemind(info);
+		createRemindService.createRemind(plan, new TimeValue());
 
 		// then
 		then(remindRepository).should(times(1)).save(any());

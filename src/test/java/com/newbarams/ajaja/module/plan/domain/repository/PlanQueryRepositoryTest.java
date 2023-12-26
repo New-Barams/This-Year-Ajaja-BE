@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import net.jqwik.api.Arbitraries;
 
+import com.newbarams.ajaja.global.common.TimeValue;
 import com.newbarams.ajaja.module.plan.domain.Message;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.domain.PlanRepository;
@@ -195,7 +197,16 @@ class PlanQueryRepositoryTest {
 		List<PlanResponse.GetAll> latestRes = planQueryRepository.findAllByCursorAndSorting(latestReq);
 
 		for (int i = 0; i < pageSize - 1; i++) {
-			assertThat(latestRes.get(i).id()).isGreaterThan(latestRes.get(i + 1).id());
+			assertThat(latestRes.get(i).getId()).isGreaterThan(latestRes.get(i + 1).getId());
 		}
+	}
+
+	@Test
+	@DisplayName("해당 시간에 리마인드 가능한 계획들을 조회한다.")
+	void findAllRemindablePlan_Success_WithNoException() {
+		// when,then
+		Assertions.assertThatNoException().isThrownBy(
+			() -> planQueryRepository.findAllRemindablePlan("MORNING", new TimeValue())
+		);
 	}
 }

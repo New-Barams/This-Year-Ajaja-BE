@@ -21,5 +21,6 @@ public interface RemindMapper {
 	@Mapping(source = "remind.remindDate.day", target = "remindDay")
 	@Mapping(source = "remind.info.content", target = "content")
 	@Mapping(target = "deleted", expression = "java(false)")
+	@Mapping(target = "id", ignore = true)
 	RemindEntity toEntity(Remind remind);
 }

@@ -57,7 +57,7 @@ class UpdatePlanServiceTest {
 			)
 		);
 
-		PlanRequest.Update request = new PlanRequest.Update("title", "des",
+		PlanRequest.Update request = new PlanRequest.Update(1, "title", "des",
 			true, true, null);
 
 		Plan saved = planRepository.save(plan);
@@ -72,7 +72,7 @@ class UpdatePlanServiceTest {
 	void updatePlan_Fail_By_Not_Found_Plan() {
 		Long planId = Arbitraries.longs().lessOrEqual(-1L).sample();
 
-		PlanRequest.Update request = new PlanRequest.Update("title", "des",
+		PlanRequest.Update request = new PlanRequest.Update(1, "title", "des",
 			true, true, null);
 
 		assertThatThrownBy(() -> updatePlanService.update(planId, 1L, request, 1))
@@ -94,7 +94,7 @@ class UpdatePlanServiceTest {
 			)
 		);
 
-		PlanRequest.Update request = new PlanRequest.Update("title", "des",
+		PlanRequest.Update request = new PlanRequest.Update(1, "title", "des",
 			true, true, null);
 
 		Plan saved = planRepository.save(plan);
