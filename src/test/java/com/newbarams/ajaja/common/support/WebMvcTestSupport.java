@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.newbarams.ajaja.common.annotation.ApiTest;
 import com.newbarams.ajaja.global.mock.MockController;
+import com.newbarams.ajaja.global.security.jwt.util.JwtParser;
 import com.newbarams.ajaja.module.ajaja.application.SwitchAjajaService;
 import com.newbarams.ajaja.module.auth.application.AuthMockBeans;
 import com.newbarams.ajaja.module.feedback.application.LoadFeedbackInfoService;
@@ -49,6 +50,10 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 	protected MockMvc mockMvc;
 	@Autowired
 	protected ObjectMapper objectMapper;
+
+	// JWT
+	@MockBean
+	protected JwtParser jwtParser; // todo: delete after authentication aop applied
 
 	// User
 	@MockBean

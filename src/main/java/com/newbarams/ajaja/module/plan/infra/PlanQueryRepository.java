@@ -63,6 +63,10 @@ public class PlanQueryRepository {
 			.fetchFirst();
 	}
 
+	private BooleanExpression isCurrentYear() {
+		return planEntity.createdAt.year().eq(new TimeValue().getYear());
+	}
+
 	public Optional<PlanResponse.Detail> findPlanDetailByIdAndOptionalUser(Long userId, Long id) {
 		return Optional.ofNullable(queryFactory.select(new QPlanResponse_Detail(
 				new QPlanResponse_Writer(
@@ -93,10 +97,6 @@ public class PlanQueryRepository {
 				.and(ajaja.type.eq(Ajaja.Type.PLAN))
 				.and(ajaja.isCanceled.isFalse()))
 			.fetchFirst() != null);
-	}
-
-	private BooleanExpression isCurrentYear() {
-		return planEntity.createdAt.year().eq(new TimeValue().getYear());
 	}
 
 	public Optional<PlanResponse.GetOne> findById(Long id, Long userId) {
@@ -166,11 +166,7 @@ public class PlanQueryRepository {
 	}
 
 	private BooleanExpression getCursorCondition(String sort, Long start, Integer cursorAjaja) {
-		return sort.equalsIgnoreCase(LATEST) ? cursorId(start) : cursorAjajaAndId(cursorAjaja, start);
-	}
-
-	private BooleanExpression cursorId(Long cursorId) {
-		return planEntity.id.lt(cursorId);
+		return sort.equalsIgnoreCase(LATEST) ? planEntity.id.lt(start) : cursorAjajaAndId(cursorAjaja, start);
 	}
 
 	private BooleanExpression cursorAjajaAndId(Integer cursorAjaja, Long cursorId) {
@@ -225,18 +221,12 @@ public class PlanQueryRepository {
 	}
 
 	public List<RemindMessageInfo> findAllRemindablePlan(String remindTime, TimeValue time) {
-		List<Tuple> remindablePlans = queryFactory.select(
-				planEntity,
-				userEntity.remindEmail
-			)
+		return queryFactory.select(planEntity, userEntity.remindEmail)
 			.from(planEntity)
 			.join(userEntity).on(userEntity.id.eq(planEntity.userId))
 			.where(planEntity.canRemind
-				.and(planEntity.remindTime.eq(remindTime)
-					.and(isRemindable(time))))
-			.fetch();
-
-		return remindablePlans.stream()
+				.and(planEntity.remindTime.eq(remindTime).and(isRemindable(time))))
+			.fetch().stream()
 			.map(t -> planMapper.toModel(t.get(planEntity), t.get(userEntity.remindEmail)))
 			.toList();
 	}
