@@ -41,7 +41,7 @@ public class UpdatePlanService {
 
 	public PlanResponse.GetOne update(Long id, Long userId, PlanRequest.Update request, int month) {
 		Plan plan = getPlanService.loadPlanOrElseThrow(id);
-		updatePlanTagService.update(id, request.tags());
+		updatePlanTagService.update(id, request.getTags());
 
 		plan.update(planMapper.toParam(userId, request, month));
 

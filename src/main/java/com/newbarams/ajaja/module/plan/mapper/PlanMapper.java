@@ -54,6 +54,7 @@ public interface PlanMapper {
 			planEntity.isDeleted());
 	}
 
+	@Mapping(source = "request.public", target = "isPublic")
 	@Mapping(source = "request", target = "content", qualifiedByName = "toContent")
 	@Mapping(source = "request", target = "info", qualifiedByName = "toRemindInfo")
 	@Mapping(source = "request.messages", target = "messages", qualifiedByName = "toMessages")
@@ -61,13 +62,13 @@ public interface PlanMapper {
 
 	@Named("toContent")
 	static Content toContent(PlanRequest.Create request) {
-		return new Content(request.title(), request.description());
+		return new Content(request.getTitle(), request.getDescription());
 	}
 
 	@Named("toRemindInfo")
 	static RemindInfo toRemindInfo(PlanRequest.Create request) {
-		return new RemindInfo(request.remindTotalPeriod(), request.remindTerm(),
-			request.remindDate(), request.remindTime());
+		return new RemindInfo(request.getRemindTotalPeriod(), request.getRemindTerm(),
+			request.getRemindDate(), request.getRemindTime());
 	}
 
 	@Mapping(source = "plan.ajajas", target = "ajajas", qualifiedByName = "toAjajaCount")
@@ -95,12 +96,13 @@ public interface PlanMapper {
 		return ajajas.size();
 	}
 
+	@Mapping(source = "request.public", target = "isPublic")
 	@Mapping(source = "request", target = "content", qualifiedByName = "toContent")
 	PlanParam.Update toParam(Long userId, PlanRequest.Update request, int month);
 
 	@Named("toContent")
 	static Content toContent(PlanRequest.Update request) {
-		return new Content(request.title(), request.description());
+		return new Content(request.getTitle(), request.getDescription());
 	}
 
 	@Mapping(source = "planYear", target = "year")

@@ -35,7 +35,7 @@ public class CreatePlanService {
 		Plan plan = Plan.create(planMapper.toParam(userId, request, month));
 		Plan savedPlan = planRepository.save(plan);
 
-		List<String> tags = createPlanTagService.create(savedPlan.getId(), request.tags());
+		List<String> tags = createPlanTagService.create(savedPlan.getId(), request.getTags());
 
 		return planMapper.toResponse(savedPlan, tags);
 	}

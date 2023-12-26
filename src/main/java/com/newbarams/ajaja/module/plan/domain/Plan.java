@@ -88,6 +88,7 @@ public class Plan {
 	) {
 		validateModifiableMonth(param.getMonth());
 		validateUser(param.getUserId());
+		this.iconNumber = param.getIconNumber();
 		this.content = param.getContent();
 		this.status = status.update(param.isPublic(), param.isCanAjaja());
 	}

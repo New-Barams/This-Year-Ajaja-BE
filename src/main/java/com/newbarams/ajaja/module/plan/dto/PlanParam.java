@@ -6,12 +6,10 @@ import com.newbarams.ajaja.module.plan.domain.Content;
 import com.newbarams.ajaja.module.plan.domain.Message;
 import com.newbarams.ajaja.module.plan.domain.RemindInfo;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 
 public class PlanParam {
-	@Getter
-	@AllArgsConstructor
+	@Data
 	public static class Create {
 		private final int month;
 		private final Long userId;
@@ -22,10 +20,10 @@ public class PlanParam {
 		private final List<Message> messages;
 	}
 
-	@Getter
-	@AllArgsConstructor
+	@Data
 	public static class Update {
 		private final int month;
+		private final int iconNumber;
 		private final Long userId;
 		private final Content content;
 		private final boolean isPublic;
