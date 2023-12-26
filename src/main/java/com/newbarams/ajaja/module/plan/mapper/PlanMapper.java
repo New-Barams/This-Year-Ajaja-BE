@@ -53,7 +53,8 @@ public interface PlanMapper {
 		return new PlanStatus(planEntity.isPublic(), planEntity.isCanRemind(), planEntity.isCanAjaja(),
 			planEntity.isDeleted());
 	}
-
+	
+	@Mapping(source = "request.public", target = "isPublic")
 	@Mapping(source = "request", target = "content", qualifiedByName = "toContent")
 	@Mapping(source = "request", target = "info", qualifiedByName = "toRemindInfo")
 	@Mapping(source = "request.messages", target = "messages", qualifiedByName = "toMessages")
