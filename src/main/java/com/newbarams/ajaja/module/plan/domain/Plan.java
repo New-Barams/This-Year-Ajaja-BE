@@ -141,12 +141,12 @@ public class Plan {
 		return this.info.getTotalRemindNumber();
 	}
 
-	public boolean getRemindStatus() {
-		return this.status.isCanRemind();
+	public String getPlanTitle() {
+		return this.content.getTitle();
 	}
 
-	public String getMessage(int remindTerm, int currentMonth) {
-		int messageIdx = getMessageIdx(remindTerm, currentMonth);
+	public String getMessage(int currentMonth) {
+		int messageIdx = getMessageIdx(this.info.getRemindTerm(), currentMonth);
 		return this.messages.get(messageIdx).getContent();
 	}
 
