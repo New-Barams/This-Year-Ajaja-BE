@@ -23,9 +23,9 @@ public class LoadPlanService {
 	private final PlanRepository planRepository;
 	private final PlanQueryRepository planQueryRepository;
 
-	public PlanResponse.GetOne loadById(Long id, Long userId) {
-		return planQueryRepository.findById(id, userId)
-			.orElseThrow(() -> new AjajaException(NOT_FOUND_PLAN));
+	public PlanResponse.Detail loadByIdAndOptionalUser(Long userId, Long id) {
+		return planQueryRepository.findPlanDetailByIdAndOptionalUser(userId, id)
+			.orElseThrow(() -> AjajaException.withId(id, NOT_FOUND_PLAN));
 	}
 
 	public Plan loadPlanOrElseThrow(Long id) {

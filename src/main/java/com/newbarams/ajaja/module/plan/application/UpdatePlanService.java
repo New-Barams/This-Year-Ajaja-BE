@@ -39,7 +39,7 @@ public class UpdatePlanService {
 		plan.updateAjajaStatus(userId);
 	}
 
-	public PlanResponse.GetOne update(Long id, Long userId, PlanRequest.Update request, int month) {
+	public PlanResponse.Detail update(Long id, Long userId, PlanRequest.Update request, int month) {
 		Plan plan = getPlanService.loadPlanOrElseThrow(id);
 		updatePlanTagService.update(id, request.tags());
 
@@ -47,6 +47,6 @@ public class UpdatePlanService {
 
 		planRepository.save(plan);
 
-		return getPlanService.loadById(id, userId);
+		return getPlanService.loadByIdAndOptionalUser(id, userId);
 	}
 }

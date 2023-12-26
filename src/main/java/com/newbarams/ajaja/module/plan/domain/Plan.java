@@ -86,19 +86,14 @@ public class Plan {
 		this.status.switchAjaja();
 	}
 
-	public void update(
-		PlanParam.Update param
-	) {
+	public void update(PlanParam.Update param) {
 		validateModifiableMonth(param.getMonth());
 		validateUser(param.getUserId());
 		this.content = param.getContent();
 		this.status = status.update(param.isPublic(), param.isCanAjaja());
 	}
 
-	public void updateRemind(
-		RemindInfo info,
-		List<Message> messages
-	) {
+	public void updateRemind(RemindInfo info, List<Message> messages) {
 		if (new TimeValue().getMonth() != 12) { // todo : QA를 위해 변경 달을 12월로 지정 , 서비스 시작 전 단위 기간으로 변경
 			throw new AjajaException(INVALID_UPDATABLE_DATE);
 		}
@@ -145,10 +140,6 @@ public class Plan {
 
 	public int getTotalRemindNumber() {
 		return this.info.getTotalRemindNumber();
-	}
-
-	public boolean getRemindStatus() {
-		return this.status.isCanRemind();
 	}
 
 	public String getMessage(int remindTerm, int currentMonth) {

@@ -7,10 +7,8 @@ import static com.newbarams.ajaja.module.plan.infra.QPlanEntity.*;
 import static com.newbarams.ajaja.module.tag.domain.QPlanTag.*;
 import static com.newbarams.ajaja.module.tag.domain.QTag.*;
 import static com.newbarams.ajaja.module.user.infra.QUserEntity.*;
+import static com.querydsl.core.types.dsl.Expressions.*;
 
-import java.time.Instant;
-import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -23,6 +21,8 @@ import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
+import com.newbarams.ajaja.module.plan.dto.QPlanResponse_Detail;
+import com.newbarams.ajaja.module.plan.dto.QPlanResponse_Writer;
 import com.newbarams.ajaja.module.plan.mapper.PlanMapper;
 import com.newbarams.ajaja.module.remind.dto.RemindMessageInfo;
 import com.querydsl.core.Tuple;
@@ -30,6 +30,7 @@ import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
@@ -44,7 +45,7 @@ public class PlanQueryRepository {
 	private final JPAQueryFactory queryFactory;
 	private final PlanMapper planMapper;
 
-	public List<Plan> findAllCurrentPlansByUserId(Long userId) {
+	public List<Plan> findAllCurrentPlansByUserId(Long userId) { // todo: domain dependency
 		return queryFactory.selectFrom(planEntity)
 			.where(planEntity.userId.eq(userId)
 				.and(isCurrentYear()))
@@ -61,6 +62,38 @@ public class PlanQueryRepository {
 			.fetchFirst();
 	}
 
+	public Optional<PlanResponse.Detail> findPlanDetailByIdAndOptionalUser(Long userId, Long id) {
+		return Optional.ofNullable(queryFactory.select(new QPlanResponse_Detail(
+				new QPlanResponse_Writer(
+					userEntity.nickname,
+					userId == null ? FALSE : userEntity.id.eq(userId),
+					userId == null ? FALSE : isAjajaPressed(userId, id)),
+				Expressions.asNumber(id),
+				planEntity.title,
+				planEntity.description,
+				planEntity.iconNumber,
+				planEntity.isPublic,
+				planEntity.canRemind,
+				planEntity.canAjaja,
+				planEntity.ajajas.size().longValue(),
+				Expressions.constant(findAllTagsByPlanId(id)),
+				planEntity.createdAt))
+			.from(planEntity)
+			.leftJoin(userEntity).on(userEntity.id.eq(planEntity.userId))
+			.where(planEntity.id.eq(id))
+			.fetchOne()
+		);
+	}
+
+	private BooleanExpression isAjajaPressed(Long userId, Long id) {
+		return Expressions.asBoolean(queryFactory.selectFrom(ajaja)
+			.where(ajaja.targetId.eq(id)
+				.and(ajaja.userId.eq(userId))
+				.and(ajaja.type.eq(Ajaja.Type.PLAN))
+				.and(ajaja.isCanceled.isFalse()))
+			.fetchFirst() != null);
+	}
+
 	public Optional<PlanResponse.GetOne> findById(Long id, Long userId) {
 		List<Tuple> tuples = queryFactory.select(planEntity, userEntity.nickname)
 			.from(planEntity, userEntity)
@@ -71,38 +104,33 @@ public class PlanQueryRepository {
 	}
 
 	private Optional<PlanResponse.GetOne> getResponse(List<Tuple> tuples, Long userId) {
-		if (tuples.isEmpty()) {
-			return Optional.empty();
-		}
-
-		return Optional.of(tupleToResponse(tuples.get(0), userId));
+		return Optional.ofNullable(tupleToResponse(tuples.get(0), userId));
 	}
 
 	private PlanResponse.GetOne tupleToResponse(Tuple tuple, Long userId) {
 		PlanEntity planFromTuple = tuple.get(planEntity);
 		String nickname = tuple.get(userEntity.nickname);
 
-		List<String> tags = findTagByPlanId(planFromTuple.getId());
+		List<String> tags = findAllTagsByPlanId(planFromTuple.getId());
 		boolean isPressAjaja = isPressAjaja(planFromTuple.getId(), userId);
 
 		return planMapper.toResponse(planFromTuple, nickname, tags, isPressAjaja);
 	}
 
 	private boolean isPressAjaja(Long planId, Long userId) {
-		List<Ajaja> ajajas = queryFactory.selectFrom(ajaja)
+		return queryFactory.selectFrom(ajaja)
 			.where(ajaja.targetId.eq(planId)
 				.and(ajaja.userId.eq(userId))
 				.and(ajaja.type.eq(PLAN))
-				.and(ajaja.isCanceled.eq(false)))
-			.fetch();
-
-		return !ajajas.isEmpty();
+				.and(ajaja.isCanceled.isFalse()))
+			.fetchFirst() != null;
 	}
 
-	private List<String> findTagByPlanId(Long planId) {
+	private List<String> findAllTagsByPlanId(Long planId) {
 		return queryFactory.select(tag.name)
 			.from(planTag, tag)
-			.where(planTag.tagId.eq(tag.id).and(planTag.planId.eq(planId)))
+			.where(planTag.tagId.eq(tag.id)
+				.and(planTag.planId.eq(planId)))
 			.fetch();
 	}
 
@@ -123,31 +151,17 @@ public class PlanQueryRepository {
 	}
 
 	private BooleanExpression isEqualsYear(boolean isNewYear) {
-		int currentYear = Instant.now()
-			.atZone(ZoneId.systemDefault())
-			.getYear();
-
-		if (isNewYear) {
-			return planEntity.createdAt.year().eq(currentYear);
-		}
-
-		return planEntity.createdAt.year().eq(currentYear).not();
+		int currentYear = new TimeValue().getYear();
+		return isNewYear ? planEntity.createdAt.year().eq(currentYear) : planEntity.createdAt.year().ne(currentYear);
 	}
 
 	private BooleanExpression cursorPagination(PlanRequest.GetAll conditions) {
-		if (conditions.start() == null) {
-			return null;
-		}
-
-		return getCursorCondition(conditions.sort(), conditions.start(), conditions.ajaja());
+		return conditions.start() == null ? null :
+			getCursorCondition(conditions.sort(), conditions.start(), conditions.ajaja());
 	}
 
 	private BooleanExpression getCursorCondition(String sort, Long start, Integer cursorAjaja) {
-		if (sort.equalsIgnoreCase(LATEST)) {
-			return cursorId(start);
-		}
-
-		return cursorAjajaAndId(cursorAjaja, start);
+		return sort.equalsIgnoreCase(LATEST) ? cursorId(start) : cursorAjajaAndId(cursorAjaja, start);
 	}
 
 	private BooleanExpression cursorId(Long cursorId) {
@@ -155,27 +169,21 @@ public class PlanQueryRepository {
 	}
 
 	private BooleanExpression cursorAjajaAndId(Integer cursorAjaja, Long cursorId) {
-		if (cursorAjaja == null) {
-			return null;
-		}
-
-		return planEntity.ajajas.size().eq(cursorAjaja)
-			.and(planEntity.id.lt(cursorId))
-			.or(planEntity.ajajas.size().lt(cursorAjaja));
+		return cursorAjaja == null ? null :
+			planEntity.ajajas.size().eq(cursorAjaja)
+				.and(planEntity.id.lt(cursorId))
+				.or(planEntity.ajajas.size().lt(cursorAjaja));
 	}
 
 	private OrderSpecifier[] sortBy(String condition) {
-		List<OrderSpecifier> orders = new ArrayList<>();
-
-		switch (condition.toLowerCase(Locale.ROOT)) {
-			case LATEST -> orders.add(new OrderSpecifier<>(Order.DESC, planEntity.createdAt));
-			case AJAJA -> {
-				orders.add(new OrderSpecifier<>(Order.DESC, planEntity.ajajas.size()));
-				orders.add(new OrderSpecifier<>(Order.DESC, planEntity.id));
-			}
-		}
-
-		return orders.toArray(new OrderSpecifier[orders.size()]);
+		return switch (condition.toLowerCase(Locale.ROOT)) {
+			case LATEST -> new OrderSpecifier[] {new OrderSpecifier<>(Order.DESC, planEntity.createdAt)};
+			case AJAJA -> new OrderSpecifier[] {
+				new OrderSpecifier<>(Order.DESC, planEntity.ajajas.size()),
+				new OrderSpecifier<>(Order.DESC, planEntity.id)
+			};
+			default -> new OrderSpecifier[0];
+		};
 	}
 
 	private List<PlanResponse.GetAll> tupleToResponse(List<Tuple> tuples) {
@@ -183,7 +191,7 @@ public class PlanQueryRepository {
 			.map(tuple -> {
 				PlanEntity planFromTuple = tuple.get(planEntity);
 				String nickname = tuple.get(userEntity.nickname);
-				List<String> tags = findTagByPlanId(planFromTuple.getId());
+				List<String> tags = findAllTagsByPlanId(planFromTuple.getId());
 
 				return planMapper.toResponse(planFromTuple, nickname, tags);
 			})

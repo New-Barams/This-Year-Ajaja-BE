@@ -1,5 +1,6 @@
 package com.newbarams.ajaja.module.plan.presentation;
 
+import static org.springframework.http.HttpHeaders.*;
 import static org.springframework.http.HttpStatus.*;
 
 import java.util.List;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.newbarams.ajaja.global.common.AjajaResponse;
 import com.newbarams.ajaja.global.exception.ErrorResponse;
 import com.newbarams.ajaja.global.security.common.UserId;
+import com.newbarams.ajaja.global.security.jwt.util.JwtParser;
 import com.newbarams.ajaja.module.plan.application.CreatePlanService;
 import com.newbarams.ajaja.module.plan.application.DeletePlanService;
 import com.newbarams.ajaja.module.plan.application.GetPlanAchieveService;
@@ -55,6 +57,20 @@ public class PlanController {
 	private final LoadPlanInfoService loadPlanInfoService;
 	private final UpdateRemindInfoService updateRemindInfoService;
 
+	private final JwtParser jwtParser; // todo: delete when authentication filtering update
+
+	@Operation(summary = "계획 단건 조회 API", description = "토큰을 추가해서 보내면 계획 작성자인지, 아좌좌를 눌렀는지 추가적으로 판별합니다.")
+	@GetMapping("/{id}")
+	@ResponseStatus(OK)
+	public AjajaResponse<PlanResponse.Detail> getPlanWithOptionalUser(
+		@RequestHeader(value = AUTHORIZATION, required = false) String accessToken,
+		@PathVariable Long id
+	) {
+		Long userId = accessToken == null ? null : jwtParser.parseId(accessToken);
+		PlanResponse.Detail response = getPlanService.loadByIdAndOptionalUser(userId, id);
+		return AjajaResponse.ok(response);
+	}
+
 	@Operation(summary = "[토큰 필요] 계획 생성 API")
 	@PostMapping
 	@ResponseStatus(CREATED)
@@ -64,30 +80,19 @@ public class PlanController {
 		@RequestHeader(name = "Month") @Min(1) @Max(12) int month
 	) {
 		PlanResponse.Create response = createPlanService.create(userId, request, month);
-
-		return new AjajaResponse<>(true, response);
-	}
-
-	@Operation(summary = "[토큰 필요] 계획 단건 조회 API")
-	@GetMapping("/{id}")
-	@ResponseStatus(OK)
-	public AjajaResponse<PlanResponse.GetOne> getPlan(@UserId Long userId, @PathVariable Long id) {
-		PlanResponse.GetOne response = getPlanService.loadById(id, userId);
-
-		return new AjajaResponse<>(true, response);
+		return AjajaResponse.ok(response);
 	}
 
 	@Operation(summary = "[토큰 필요] 계획 삭제 API")
 	@DeleteMapping("/{id}")
 	@ResponseStatus(OK)
-	public AjajaResponse deletePlan(
+	public AjajaResponse<Void> deletePlan(
 		@PathVariable Long id,
 		@UserId Long userId,
 		@RequestHeader(name = "Month") @Min(1) @Max(12) int month
 	) {
 		deletePlanService.delete(id, userId, month);
-
-		return new AjajaResponse<>(true, null);
+		return AjajaResponse.ok();
 	}
 
 	@Operation(summary = "[토큰 필요] 특정 목표 달성률 조회 API")
@@ -95,49 +100,44 @@ public class PlanController {
 	@ResponseStatus(OK)
 	public AjajaResponse<Integer> getPlanAchieve(@PathVariable Long planId) {
 		int totalAchieve = getPlanAchieveService.calculatePlanAchieve(planId);
-
-		return new AjajaResponse<>(true, totalAchieve);
+		return AjajaResponse.ok(totalAchieve);
 	}
 
 	@Operation(summary = "[토큰 필요] 계획 공개 여부 변경 API")
 	@PutMapping("/{id}/public")
 	@ResponseStatus(OK)
-	public AjajaResponse updatePlanPublicStatus(@PathVariable Long id, @UserId Long userId) {
+	public AjajaResponse<Void> updatePlanPublicStatus(@PathVariable Long id, @UserId Long userId) {
 		updatePlanService.updatePublicStatus(id, userId);
-
-		return new AjajaResponse(true, null);
+		return AjajaResponse.ok();
 	}
 
 	@Operation(summary = "[토큰 필요] 계획 리마인드 알림 여부 변경 API")
 	@PutMapping("/{id}/remindable")
 	@ResponseStatus(OK)
-	public AjajaResponse updatePlanRemindStatus(@PathVariable Long id, @UserId Long userId) {
+	public AjajaResponse<Void> updatePlanRemindStatus(@PathVariable Long id, @UserId Long userId) {
 		updatePlanService.updateRemindStatus(id, userId);
-
-		return new AjajaResponse(true, null);
+		return AjajaResponse.ok();
 	}
 
 	@Operation(summary = "[토큰 필요] 응원메시지 알림 여부 변경 API")
 	@PutMapping("/{id}/ajaja")
 	@ResponseStatus(OK)
-	public AjajaResponse updatePlanAjajaStatus(@PathVariable Long id, @UserId Long userId) {
+	public AjajaResponse<Void> updatePlanAjajaStatus(@PathVariable Long id, @UserId Long userId) {
 		updatePlanService.updateAjajaStatus(id, userId);
-
-		return new AjajaResponse(true, null);
+		return AjajaResponse.ok();
 	}
 
 	@Operation(summary = "[토큰 필요] 계획 수정 API")
 	@PutMapping("/{id}")
 	@ResponseStatus(OK)
-	public AjajaResponse<PlanResponse.GetOne> updatePlan(
+	public AjajaResponse<PlanResponse.Detail> updatePlan(
 		@PathVariable Long id,
 		@UserId Long userId,
 		@RequestBody PlanRequest.Update request,
 		@RequestHeader(name = "Month") @Min(1) @Max(12) int month
 	) {
-		PlanResponse.GetOne updated = updatePlanService.update(id, userId, request, month);
-
-		return new AjajaResponse<>(true, updated);
+		PlanResponse.Detail response = updatePlanService.update(id, userId, request, month);
+		return AjajaResponse.ok(response);
 	}
 
 	@Operation(summary = "[토큰 필요] 메인 페이지 내 계획 조회 API", description = "로그인을 했을 시에만 불러올 수 있습니다.",
@@ -152,12 +152,9 @@ public class PlanController {
 		})
 	@GetMapping("/main")
 	@ResponseStatus(OK)
-	public AjajaResponse<List<PlanInfoResponse.GetPlanInfoResponse>> getPlanInfo(
-		@UserId Long userId
-	) {
-		List<PlanInfoResponse.GetPlanInfoResponse> getPlanInfos = loadPlanInfoService.loadPlanInfo(userId);
-
-		return new AjajaResponse<>(true, getPlanInfos);
+	public AjajaResponse<List<PlanInfoResponse.GetPlanInfoResponse>> getPlanInfo(@UserId Long userId) {
+		List<PlanInfoResponse.GetPlanInfoResponse> response = loadPlanInfoService.loadPlanInfo(userId);
+		return AjajaResponse.ok(response);
 	}
 
 	@Operation(summary = "계획 전체 조회 API")
@@ -165,8 +162,7 @@ public class PlanController {
 	@ResponseStatus(OK)
 	public AjajaResponse<List<PlanResponse.GetAll>> getAllPlans(@ModelAttribute PlanRequest.GetAll request) {
 		List<PlanResponse.GetAll> responses = getPlanService.loadAllPlans(request);
-
-		return new AjajaResponse<>(true, responses);
+		return AjajaResponse.ok(responses);
 	}
 
 	@Operation(summary = "[토큰 필요] 리마인드 정보 수정 API", description = "<b>url에 플랜id 값이 필요합니다.</b>",

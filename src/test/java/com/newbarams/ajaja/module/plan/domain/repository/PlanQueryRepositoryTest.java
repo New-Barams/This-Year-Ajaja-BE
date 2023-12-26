@@ -66,13 +66,55 @@ class PlanQueryRepositoryTest {
 	@BeforeEach
 	void deleteAll() {
 		User user = User.init("email@naver.com", 1L);
-
 		saved = userRepository.save(user);
 
 		plan = sut.giveMeBuilder(Plan.class)
 			.set("userId", saved.getId())
 			.set("status", new PlanStatus(true))
 			.sample();
+	}
+
+	@Test
+	@DisplayName("사용자 ID를 입력하지 않고 상세 조회하면 작성자 정보에서 작성자 여부와 좋아요 여부는 false가 되어야 한다.")
+	void findPlanDetailByIdAndOptionalUser_Success_WithUserIdNotEntered() {
+		// given
+		Plan save = planRepository.save(plan);
+
+		// when
+		Optional<PlanResponse.Detail> result =
+			planQueryRepository.findPlanDetailByIdAndOptionalUser(null, save.getId());
+
+		// then
+		assertThat(result).isNotEmpty();
+
+		PlanResponse.Detail detail = result.get();
+		assertThat(detail.getWriter().getNickname()).isEqualTo(saved.getNickname().getNickname());
+		assertThat(detail.getWriter().isOwner()).isFalse();
+		assertThat(detail.getWriter().isAjajaPressed()).isFalse();
+		assertThat(detail.getId()).isEqualTo(save.getId());
+		assertThat(detail.getAjajas()).isEqualTo(save.getAjajas().size());
+		assertThat(detail.isPublic()).isEqualTo(save.getStatus().isPublic());
+	}
+
+	@Test
+	@DisplayName("작성자의 ID로 상세 조회하면 작성자 정보에서 작성자 여부는 true가 되어야 한다.")
+	void findPlanDetailByIdAndOptionalUser_Success_WithWriterUserId() {
+		// given
+		Plan save = planRepository.save(plan);
+
+		// when
+		Optional<PlanResponse.Detail> result =
+			planQueryRepository.findPlanDetailByIdAndOptionalUser(saved.getId(), save.getId());
+
+		// then
+		assertThat(result).isNotEmpty();
+
+		PlanResponse.Detail detail = result.get();
+		assertThat(detail.getWriter().getNickname()).isEqualTo(saved.getNickname().getNickname());
+		assertThat(detail.getWriter().isOwner()).isTrue();
+		assertThat(detail.getId()).isEqualTo(save.getId());
+		assertThat(detail.getAjajas()).isEqualTo(save.getAjajas().size());
+		assertThat(detail.isPublic()).isEqualTo(save.getStatus().isPublic());
 	}
 
 	@Test
