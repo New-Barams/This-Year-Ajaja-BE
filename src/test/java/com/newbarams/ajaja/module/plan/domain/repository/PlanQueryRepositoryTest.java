@@ -153,7 +153,7 @@ class PlanQueryRepositoryTest {
 		List<PlanResponse.GetAll> latestRes = planQueryRepository.findAllByCursorAndSorting(latestReq);
 
 		for (int i = 0; i < pageSize - 1; i++) {
-			assertThat(latestRes.get(i).id()).isGreaterThan(latestRes.get(i + 1).id());
+			assertThat(latestRes.get(i).getId()).isGreaterThan(latestRes.get(i + 1).getId());
 		}
 	}
 }

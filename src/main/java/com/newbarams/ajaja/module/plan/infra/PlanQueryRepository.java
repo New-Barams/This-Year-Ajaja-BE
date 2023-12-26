@@ -113,10 +113,10 @@ public class PlanQueryRepository {
 
 			.where(planEntity.userId.eq(userEntity.id),
 				planEntity.isPublic.eq(true),
-				isEqualsYear(conditions.current()),
+				isEqualsYear(conditions.isCurrent()),
 				cursorPagination(conditions))
 
-			.orderBy(sortBy(conditions.sort()))
+			.orderBy(sortBy(conditions.getSort()))
 			.limit(PAGE_SIZE)
 			.fetch();
 
@@ -136,11 +136,11 @@ public class PlanQueryRepository {
 	}
 
 	private BooleanExpression cursorPagination(PlanRequest.GetAll conditions) {
-		if (conditions.start() == null) {
+		if (conditions.getStart() == null) {
 			return null;
 		}
 
-		return getCursorCondition(conditions.sort(), conditions.start(), conditions.ajaja());
+		return getCursorCondition(conditions.getSort(), conditions.getStart(), conditions.getAjaja());
 	}
 
 	private BooleanExpression getCursorCondition(String sort, Long start, Integer cursorAjaja) {

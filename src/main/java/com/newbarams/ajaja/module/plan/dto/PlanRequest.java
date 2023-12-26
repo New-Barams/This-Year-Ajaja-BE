@@ -2,29 +2,26 @@ package com.newbarams.ajaja.module.plan.dto;
 
 import java.util.List;
 
-import org.springframework.boot.context.properties.bind.DefaultValue;
-
 import lombok.Data;
 
 public class PlanRequest {
+	@Data
+	public static class Create {
+		private final String title;
+		private final String description;
 
-	public record Create(
-		String title,
-		String description,
+		private final int remindTotalPeriod;
+		private final int remindTerm;
+		private final int remindDate;
+		private final String remindTime;
 
-		int remindTotalPeriod,
-		int remindTerm,
-		int remindDate,
-		String remindTime,
+		private final boolean isPublic;
 
-		boolean isPublic,
+		private final int iconNumber;
 
-		int iconNumber,
+		private final List<String> tags;
 
-		List<String> tags,
-
-		List<Message> messages
-	) {
+		private final List<Message> messages;
 	}
 
 	@Data
@@ -34,17 +31,17 @@ public class PlanRequest {
 		private final int remindDay;
 	}
 
-	public record Update(
-		int iconNumber,
+	@Data
+	public static class Update {
+		private final int iconNumber;
 
-		String title,
-		String description,
+		private final String title;
+		private final String description;
 
-		boolean isPublic,
-		boolean canAjaja,
+		private final boolean isPublic;
+		private final boolean canAjaja;
 
-		List<String> tags
-	) {
+		private final List<String> tags;
 	}
 
 	@Data
@@ -56,15 +53,11 @@ public class PlanRequest {
 		List<Message> messages;
 	}
 
-	public record GetAll(
-		@DefaultValue("latest")
-		String sort,
-
-		@DefaultValue("true")
-		boolean current,
-
-		Integer ajaja,
-		Long start
-	) {
+	@Data
+	public static class GetAll {
+		private final String sort;
+		private final boolean current;
+		private final Integer ajaja;
+		private final Long start;
 	}
 }

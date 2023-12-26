@@ -3,48 +3,68 @@ package com.newbarams.ajaja.module.plan.dto;
 import java.time.Instant;
 import java.util.List;
 
+import lombok.Data;
+
 public class PlanResponse {
+	@Data
+	public static class GetOne {
+		private final Long id;
 
-	public record GetOne(
-		Long id,
-		Long userId,
-		String nickname,
-		String title,
-		String description,
-		int iconNumber,
-		boolean isPublic,
-		boolean canRemind,
-		boolean canAjaja,
-		long ajajas,
-		boolean isPressAjaja,
-		List<String> tags,
-		Instant createdAt
-	) {
+		private final Long userId;
+		private final String nickname;
+
+		private final String title;
+		private final String description;
+
+		private final int iconNumber;
+
+		private final boolean isPublic;
+		private final boolean canRemind;
+		private final boolean canAjaja;
+
+		private final long ajajas;
+		private final boolean isPressAjaja;
+
+		private final List<String> tags;
+
+		private final Instant createdAt;
 	}
 
-	public record GetAll(
-		Long id,
-		Long userId,
-		String nickname,
-		String title,
-		int iconNumber,
-		long ajajas,
-		List<String> tags,
-		Instant createdAt
-	) {
+	@Data
+	public static class GetAll {
+		private final Long id;
+
+		private final Long userId;
+		private final String nickname;
+
+		private final String title;
+
+		private final int iconNumber;
+
+		private final long ajajas;
+
+		private final List<String> tags;
+
+		private final Instant createdAt;
 	}
 
-	public record Create(
-		Long id,
-		Long userId,
-		String title,
-		String description,
-		int iconNumber,
-		boolean isPublic,
-		boolean canRemind,
-		boolean canAjaja,
-		int ajajas,
-		List<String> tags
-	) {
+	@Data
+	public static class Create {
+		private final Long id;
+
+		private final Long userId;
+
+		private final String title;
+		private final String description;
+
+		private final int iconNumber;
+
+		private final boolean isPublic;
+		private final boolean canRemind;
+		private final boolean canAjaja;
+
+		private final int ajajas;
+
+		private final List<String> tags;
 	}
 }
