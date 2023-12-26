@@ -35,6 +35,8 @@ public class PlanRequest {
 	}
 
 	public record Update(
+		int iconNumber,
+
 		String title,
 		String description,
 

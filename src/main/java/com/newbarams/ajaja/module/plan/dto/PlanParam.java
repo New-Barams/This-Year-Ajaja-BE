@@ -26,6 +26,7 @@ public class PlanParam {
 	@AllArgsConstructor
 	public static class Update {
 		private final int month;
+		private final int iconNumber;
 		private final Long userId;
 		private final Content content;
 		private final boolean isPublic;
