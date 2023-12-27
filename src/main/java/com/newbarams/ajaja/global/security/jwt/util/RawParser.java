@@ -48,14 +48,21 @@ class RawParser {
 
 	private void handleParseException(RuntimeException exception) {
 		handleBadSignature(exception);
+		handleInvalidStructure(exception);
 		handleExpiredToken(exception);
 		handleUnsupportedToken(exception);
 		handleEmptyClaim(exception);
 	}
 
 	private void handleBadSignature(RuntimeException exception) {
-		if (exception instanceof SecurityException || exception instanceof MalformedJwtException) {
+		if (exception instanceof SecurityException) {
 			throw new AjajaException(INVALID_SIGNATURE);
+		}
+	}
+
+	private void handleInvalidStructure(RuntimeException exception) {
+		if (exception instanceof MalformedJwtException) {
+			throw new AjajaException(INVALID_TOKEN);
 		}
 	}
 
