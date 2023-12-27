@@ -39,7 +39,7 @@ public class RemindEntity extends BaseEntity<RemindEntity> {
 	@Column(nullable = false)
 	private boolean deleted;
 
-	@Column(nullable = false, length = 255)
+	@Column(nullable = false, length = 250)
 	private String content;
 
 	@Column(nullable = false)

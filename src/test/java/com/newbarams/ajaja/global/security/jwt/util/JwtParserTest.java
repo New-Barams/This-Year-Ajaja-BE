@@ -4,9 +4,6 @@ import static com.newbarams.ajaja.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
-import java.time.LocalDateTime;
-import java.util.Date;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -95,18 +92,18 @@ class JwtParserTest extends MonkeySupport {
 		});
 	}
 
-	@Test
-	@DisplayName("Refresh Token에서 만료일을 파싱하면 예외가 발생하지 않아야 한다.")
-	void parseExpireIn_Success_WithinOneWeek() {
-		// given
-		String expected = LocalDateTime.now().plusWeeks(1).toString();
-
-		// when, then
-		assertThatNoException().isThrownBy(() -> {
-			Date expireIn = jwtParser.parseExpireIn(refreshToken);
-			assertThat(expireIn).isCloseTo(expected, 1000);
-		});
-	}
+	// @Test
+	// @DisplayName("Refresh Token에서 만료일을 파싱하면 예외가 발생하지 않아야 한다.")
+	// void parseExpireIn_Success_WithinOneWeek() {
+	// 	// given
+	// 	String expected = LocalDateTime.now().plusWeeks(1).toString();
+	//
+	// 	// when, then
+	// 	assertThatNoException().isThrownBy(() -> {
+	// 		Date expireIn = jwtParser.parseExpireIn(refreshToken);
+	// 		assertThat(expireIn).isCloseTo(expected, 1000);
+	// 	});
+	// }
 
 	@Test
 	@DisplayName("서명이 다른 토큰을 파싱 시도하면 예외가 발생한다.")

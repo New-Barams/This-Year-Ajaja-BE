@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class Message extends SelfValidating<Message> {
 
 	@NotBlank
-	@Size(max = 255)
+	@Size(max = 250)
 	private String content;
 
 	@Embedded

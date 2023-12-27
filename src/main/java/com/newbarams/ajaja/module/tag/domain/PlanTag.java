@@ -30,5 +30,6 @@ public class PlanTag extends BaseEntity<PlanTag> {
 	public PlanTag(Long planId, Long tagId) {
 		this.planId = planId;
 		this.tagId = tagId;
+		this.validateSelf();
 	}
 }
