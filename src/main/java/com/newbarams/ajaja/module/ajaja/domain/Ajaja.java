@@ -90,10 +90,6 @@ public class Ajaja extends BaseEntity<Ajaja> {
 		return Objects.hash(targetId, userId, type);
 	}
 
-	public Long getUserId() {
-		return userId;
-	}
-
 	public void switchStatus() {
 		this.isCanceled = !isCanceled;
 	}
