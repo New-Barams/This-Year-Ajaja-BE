@@ -147,6 +147,26 @@ class PlanQueryRepositoryTest {
 	}
 
 	@Test
+	@DisplayName("계획의 ID를 이용해 하나의 계획을 가져올 수 있다.")
+	void findByUserIdAndPlanId_Success_WithNoException() {
+		Plan savedPlan = planRepository.save(plan);
+
+		Plan plan = planQueryRepository.findByUserIdAndPlanId(savedPlan.getUserId(), savedPlan.getId());
+		assertThat(plan).isNotNull();
+	}
+
+	@Test
+	@DisplayName("계획의 ID를 이용해 하나의 계획을 가져올 수 있다.")
+	void findByUserIdAndPlanId_Fail_ByNotMatchPlanIdAndUserId() {
+		Plan savedPlan = planRepository.save(plan);
+		Long userId = savedPlan.getUserId() + 1L;
+
+		assertThatException().isThrownBy(
+			() -> planQueryRepository.findByUserIdAndPlanId(userId, savedPlan.getId())
+		);
+	}
+
+	@Test
 	@DisplayName("최신순 or 인기순 정렬 시 지정된 개수만큼의 계획을 받는다.")
 	void findAllByCursorAndSorting_Default_Success() {
 		int pageSize = 3;
