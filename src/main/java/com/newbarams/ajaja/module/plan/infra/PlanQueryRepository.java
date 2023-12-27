@@ -1,5 +1,6 @@
 package com.newbarams.ajaja.module.plan.infra;
 
+import static com.newbarams.ajaja.global.exception.ErrorCode.*;
 import static com.newbarams.ajaja.module.ajaja.domain.Ajaja.Type.*;
 import static com.newbarams.ajaja.module.ajaja.domain.QAjaja.*;
 import static com.newbarams.ajaja.module.feedback.infra.QFeedbackEntity.*;
@@ -16,10 +17,10 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 import com.newbarams.ajaja.global.common.TimeValue;
+import com.newbarams.ajaja.global.exception.AjajaException;
 import com.newbarams.ajaja.module.ajaja.domain.Ajaja;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.domain.RemindDate;
-import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 import com.newbarams.ajaja.module.plan.dto.QPlanResponse_Detail;
@@ -106,6 +107,18 @@ public class PlanQueryRepository {
 			.fetch();
 
 		return getResponse(tuples, userId);
+	}
+
+	public Plan findByUserIdAndPlanId(Long userId, Long planId) {
+		PlanEntity entity = queryFactory.selectFrom(planEntity)
+			.where(planEntity.userId.eq(userId)
+				.and(planEntity.id.eq(planId)))
+			.fetchOne();
+
+		if (entity == null) {
+			throw AjajaException.withId(planId, NOT_FOUND_PLAN);
+		}
+		return planMapper.toDomain(entity);
 	}
 
 	private Optional<PlanResponse.GetOne> getResponse(List<Tuple> tuples, Long userId) {
@@ -199,8 +212,8 @@ public class PlanQueryRepository {
 			.toList();
 	}
 
-	public List<PlanInfoResponse.GetPlan> findAllPlanByUserId(Long userId) {
-		return queryFactory.select(Projections.constructor(PlanInfoResponse.GetPlan.class,
+	public List<PlanResponse.PlanInfo> findAllPlanByUserId(Long userId) {
+		return queryFactory.select(Projections.constructor(PlanResponse.PlanInfo.class,
 				planEntity.createdAt.year(),
 				planEntity.id,
 				planEntity.title,

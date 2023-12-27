@@ -115,4 +115,21 @@ public final class PlanResponse {
 
 		private final List<String> tags;
 	}
+
+	@Data
+	public static class MainInfo {
+		private final int year;
+		private final int totalAchieveRate;
+		private final List<PlanResponse.PlanInfo> getPlanList;
+	}
+
+	@Data
+	public static class PlanInfo {
+		private final int year;
+		private final Long planId;
+		private final String title;
+		private final boolean remindable;
+		private final int achieveRate;
+		private final int icon;
+	}
 }

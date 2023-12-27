@@ -15,8 +15,8 @@ import com.newbarams.ajaja.global.common.AjajaResponse;
 import com.newbarams.ajaja.global.exception.ErrorResponse;
 import com.newbarams.ajaja.module.feedback.application.LoadFeedbackInfoService;
 import com.newbarams.ajaja.module.feedback.application.UpdateFeedbackService;
+import com.newbarams.ajaja.module.feedback.dto.FeedbackRequest;
 import com.newbarams.ajaja.module.feedback.dto.FeedbackResponse;
-import com.newbarams.ajaja.module.feedback.dto.UpdateFeedback;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -53,9 +53,9 @@ public class FeedbackController {
 	@ResponseStatus(OK)
 	public AjajaResponse<Void> updateFeedback(
 		@PathVariable Long feedbackId,
-		@RequestBody UpdateFeedback updateFeedback
+		@RequestBody FeedbackRequest.UpdateFeedback updateFeedback
 	) {
-		updateFeedbackService.updateFeedback(feedbackId, updateFeedback.rate(), updateFeedback.message());
+		updateFeedbackService.updateFeedback(feedbackId, updateFeedback.getRate(), updateFeedback.getMessage());
 		return AjajaResponse.ok();
 	}
 
