@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.newbarams.ajaja.global.common.AjajaResponse;
 import com.newbarams.ajaja.global.exception.ErrorResponse;
+import com.newbarams.ajaja.global.security.common.UserId;
 import com.newbarams.ajaja.module.remind.application.LoadRemindInfoService;
 import com.newbarams.ajaja.module.remind.dto.RemindResponse;
 
@@ -39,8 +40,9 @@ public class RemindController {
 	@GetMapping("/{planId}")
 	@ResponseStatus(HttpStatus.OK)
 	public AjajaResponse<RemindResponse.RemindInfo> getRemindResponse(
+		@UserId Long userId,
 		@PathVariable Long planId
 	) {
-		return AjajaResponse.ok(loadRemindInfoService.loadRemindInfoResponse(planId));
+		return AjajaResponse.ok(loadRemindInfoService.loadRemindInfoResponse(userId, planId));
 	}
 }

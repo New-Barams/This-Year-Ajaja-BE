@@ -47,6 +47,7 @@ class UpdateRemindInfoServiceTest extends MockTestSupport {
 	@DisplayName("플랜의 리마인드 정보와 메세지를 수정한다.")
 	void updateRemindInfo_Success_WithNNoException() {
 		// given
+		Long userId = 1L;
 		Long planId = 1L;
 		given(repository.findById(anyLong())).willReturn(Optional.of(plan));
 		given(mapper.toDomain(dto.getMessages())).willReturn(messages);
@@ -54,7 +55,7 @@ class UpdateRemindInfoServiceTest extends MockTestSupport {
 
 		// when,then
 		Assertions.assertThatNoException().isThrownBy(
-			() -> updateRemindInfoService.updateRemindInfo(planId, dto)
+			() -> updateRemindInfoService.updateRemindInfo(userId, planId, dto)
 		);
 	}
 
@@ -62,12 +63,13 @@ class UpdateRemindInfoServiceTest extends MockTestSupport {
 	@DisplayName("조회된 정보가 없을 시에 예외를 던진다.")
 	void updateRemindInfo_Fail_ByNotFoundPlan() {
 		// given
+		Long userId = 2L;
 		Long planId = 2L;
 		given(repository.findById(anyLong())).willReturn(Optional.empty());
 
 		// when,then
 		Assertions.assertThatException().isThrownBy(
-			() -> updateRemindInfoService.updateRemindInfo(planId, dto)
+			() -> updateRemindInfoService.updateRemindInfo(userId, planId, dto)
 		);
 	}
 
@@ -75,13 +77,14 @@ class UpdateRemindInfoServiceTest extends MockTestSupport {
 	@DisplayName("변경 기간이 아니면 예외를 던진다.")
 	void updateRemindInfo_Fail_ByInvalidUpdatableDate() {
 		// given
+		Long userId = 1L;
 		Long planId = 1L;
 		given(repository.findById(anyLong())).willReturn(Optional.of(mockPlan));
 		doThrow(AjajaException.class).when(mockPlan).updateRemind(any(), any());
 
 		// when,then
 		Assertions.assertThatException().isThrownBy(
-			() -> updateRemindInfoService.updateRemindInfo(planId, dto)
+			() -> updateRemindInfoService.updateRemindInfo(userId, planId, dto)
 		);
 	}
 }

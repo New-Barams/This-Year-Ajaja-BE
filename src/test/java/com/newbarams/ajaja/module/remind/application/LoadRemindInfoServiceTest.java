@@ -46,7 +46,7 @@ class LoadRemindInfoServiceTest extends MockTestSupport {
 
 		// then
 		assertThatNoException().isThrownBy(() ->
-			loadRemindInfoService.loadRemindInfoResponse(plan.getId())
+			loadRemindInfoService.loadRemindInfoResponse(1L, plan.getId())
 		);
 	}
 
@@ -60,7 +60,7 @@ class LoadRemindInfoServiceTest extends MockTestSupport {
 
 		// then
 		assertThatException().isThrownBy(
-			() -> loadRemindInfoService.loadRemindInfoResponse(1L)
+			() -> loadRemindInfoService.loadRemindInfoResponse(1L, 1L)
 		);
 
 	}

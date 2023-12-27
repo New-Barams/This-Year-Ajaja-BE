@@ -177,10 +177,11 @@ public class PlanController {
 	@PutMapping("/{planId}/reminds")
 	@ResponseStatus(HttpStatus.OK)
 	public AjajaResponse<Void> modifyRemindInfo(
+		@UserId Long userId,
 		@PathVariable Long planId,
 		@RequestBody PlanRequest.UpdateRemind request
 	) {
-		updateRemindInfoService.updateRemindInfo(planId, request);
+		updateRemindInfoService.updateRemindInfo(userId, planId, request);
 		return AjajaResponse.ok();
 	}
 }

@@ -1,5 +1,6 @@
 package com.newbarams.ajaja.module.plan.infra;
 
+import static com.newbarams.ajaja.global.exception.ErrorCode.*;
 import static com.newbarams.ajaja.module.ajaja.domain.Ajaja.Type.*;
 import static com.newbarams.ajaja.module.ajaja.domain.QAjaja.*;
 import static com.newbarams.ajaja.module.feedback.infra.QFeedbackEntity.*;
@@ -16,6 +17,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 import com.newbarams.ajaja.global.common.TimeValue;
+import com.newbarams.ajaja.global.exception.AjajaException;
 import com.newbarams.ajaja.module.ajaja.domain.Ajaja;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.domain.RemindDate;
@@ -105,6 +107,18 @@ public class PlanQueryRepository {
 			.fetch();
 
 		return getResponse(tuples, userId);
+	}
+
+	public Plan findByUserIdAndPlanId(Long userId, Long planId) {
+		PlanEntity entity = queryFactory.selectFrom(planEntity)
+			.where(planEntity.userId.eq(userId)
+				.and(planEntity.id.eq(planId)))
+			.fetchOne();
+
+		if (entity == null) {
+			throw AjajaException.withId(planId, NOT_FOUND_PLAN);
+		}
+		return planMapper.toDomain(entity);
 	}
 
 	private Optional<PlanResponse.GetOne> getResponse(List<Tuple> tuples, Long userId) {

@@ -28,6 +28,10 @@ public class LoadPlanService {
 			.orElseThrow(() -> AjajaException.withId(id, NOT_FOUND_PLAN));
 	}
 
+	public Plan loadByUserIdAndPlanId(Long userId, Long id) {
+		return planQueryRepository.findByUserIdAndPlanId(userId, id);
+	}
+
 	public Plan loadPlanOrElseThrow(Long id) {
 		return planRepository.findById(id)
 			.orElseThrow(() -> AjajaException.withId(id, NOT_FOUND_PLAN));
