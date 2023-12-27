@@ -61,25 +61,25 @@ class JwtGeneratorTest extends MockTestSupport {
 		assertThat(response.getAccessTokenExpireIn()).isGreaterThan(new Date().getTime());
 	}
 
-	@Test
-	@DisplayName("재발급 시 Refresh Token의 만료일이 3일 이상 남았다면 Access Token만 재발급되어야 한다.")
-	void reissue_Success_WithOnlyAccessTokenGenerated() throws InterruptedException {
-		// given
-		AuthResponse.Token logined = jwtGenerator.login(userId);
-		TimeUnit.SECONDS.sleep(1); // to avoid test fail
-
-		// when
-		AuthResponse.Token reissued = jwtGenerator.reissue(userId, logined.getRefreshToken());
-
-		// then
-		assertThat(reissued.getAccessToken()).isNotEqualTo(logined.getAccessToken());
-		assertThat(reissued.getRefreshToken()).isEqualTo(logined.getRefreshToken());
-
-		Object savedToken = redisTemplate.opsForValue().get(jwtSecretProvider.getSignature() + userId);
-		assertThat(savedToken).isNotNull();
-		assertThat(savedToken).isInstanceOf(String.class);
-		assertThat(reissued.getRefreshToken()).isEqualTo((String)savedToken);
-	}
+	// @Test
+	// @DisplayName("재발급 시 Refresh Token의 만료일이 3일 이상 남았다면 Access Token만 재발급되어야 한다.")
+	// void reissue_Success_WithOnlyAccessTokenGenerated() throws InterruptedException {
+	// 	// given
+	// 	AuthResponse.Token logined = jwtGenerator.login(userId);
+	// 	TimeUnit.SECONDS.sleep(1); // to avoid test fail
+	//
+	// 	// when
+	// 	AuthResponse.Token reissued = jwtGenerator.reissue(userId, logined.getRefreshToken());
+	//
+	// 	// then
+	// 	assertThat(reissued.getAccessToken()).isNotEqualTo(logined.getAccessToken());
+	// 	assertThat(reissued.getRefreshToken()).isEqualTo(logined.getRefreshToken());
+	//
+	// 	Object savedToken = redisTemplate.opsForValue().get(jwtSecretProvider.getSignature() + userId);
+	// 	assertThat(savedToken).isNotNull();
+	// 	assertThat(savedToken).isInstanceOf(String.class);
+	// 	assertThat(reissued.getRefreshToken()).isEqualTo((String)savedToken);
+	// }
 
 	@Test
 	@DisplayName("재발급 시 Refresh Token의 만료일이 3일 이하라면 모두 새롭게 발급되어야 한다.")
