@@ -3,7 +3,6 @@ package com.newbarams.ajaja.module.plan.application;
 import static org.mockito.BDDMockito.*;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +18,7 @@ import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.domain.PlanRepository;
 import com.newbarams.ajaja.module.plan.domain.RemindInfo;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
+import com.newbarams.ajaja.module.plan.infra.PlanQueryRepository;
 import com.newbarams.ajaja.module.plan.mapper.MessageMapper;
 
 class UpdateRemindInfoServiceTest extends MockTestSupport {
@@ -27,6 +27,8 @@ class UpdateRemindInfoServiceTest extends MockTestSupport {
 
 	@Mock
 	private PlanRepository repository;
+	@Mock
+	private PlanQueryRepository planQueryRepository;
 	@Mock
 	private MessageMapper mapper;
 	@Mock
@@ -49,7 +51,7 @@ class UpdateRemindInfoServiceTest extends MockTestSupport {
 		// given
 		Long userId = 1L;
 		Long planId = 1L;
-		given(repository.findById(anyLong())).willReturn(Optional.of(plan));
+		given(planQueryRepository.findByUserIdAndPlanId(anyLong(), anyLong())).willReturn(plan);
 		given(mapper.toDomain(dto.getMessages())).willReturn(messages);
 		given(mapper.toDomain(dto)).willReturn(info);
 
@@ -65,7 +67,7 @@ class UpdateRemindInfoServiceTest extends MockTestSupport {
 		// given
 		Long userId = 2L;
 		Long planId = 2L;
-		given(repository.findById(anyLong())).willReturn(Optional.empty());
+		doThrow(AjajaException.class).when(planQueryRepository).findByUserIdAndPlanId(anyLong(), anyLong());
 
 		// when,then
 		Assertions.assertThatException().isThrownBy(
@@ -79,7 +81,7 @@ class UpdateRemindInfoServiceTest extends MockTestSupport {
 		// given
 		Long userId = 1L;
 		Long planId = 1L;
-		given(repository.findById(anyLong())).willReturn(Optional.of(mockPlan));
+		given(planQueryRepository.findByUserIdAndPlanId(anyLong(), anyLong())).willReturn(mockPlan);
 		doThrow(AjajaException.class).when(mockPlan).updateRemind(any(), any());
 
 		// when,then

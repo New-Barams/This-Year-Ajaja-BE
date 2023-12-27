@@ -41,7 +41,7 @@ class LoadRemindInfoServiceTest extends MockTestSupport {
 		RemindResponse.RemindInfo response = sut.giveMeOne(RemindResponse.RemindInfo.class);
 
 		// when
-		given(loadPlanService.loadPlanOrElseThrow(any())).willReturn(plan);
+		given(loadPlanService.loadByUserIdAndPlanId(anyLong(), anyLong())).willReturn(plan);
 		given(remindQueryRepository.findAllReminds(any())).willReturn(response);
 
 		// then
@@ -51,12 +51,13 @@ class LoadRemindInfoServiceTest extends MockTestSupport {
 	}
 
 	@Test
+	@DisplayName("조회된 계획이 없으면 예외를 던진다.")
 	void getRemindInfo_Fail_WithNoException() {
 		// given
 		Plan plan = null;
 
 		// when
-		doThrow(AjajaException.class).when(loadPlanService).loadPlanOrElseThrow(any());
+		doThrow(AjajaException.class).when(loadPlanService).loadByUserIdAndPlanId(anyLong(), anyLong());
 
 		// then
 		assertThatException().isThrownBy(

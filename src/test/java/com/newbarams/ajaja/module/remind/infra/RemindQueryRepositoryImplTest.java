@@ -56,7 +56,7 @@ class RemindQueryRepositoryImplTest extends MockTestSupport {
 		RemindResponse.RemindInfo reminds = remindQueryRepositoryImpl.findAllReminds(plan);
 
 		// then
-		Assertions.assertThat(reminds.messagesResponses().size()).isEqualTo(1);
+		Assertions.assertThat(reminds.getMessageResponses().size()).isEqualTo(1);
 	}
 
 	@Test
