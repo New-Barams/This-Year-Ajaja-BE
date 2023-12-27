@@ -38,7 +38,7 @@ public class RemindController {
 		})
 	@GetMapping("/{planId}")
 	@ResponseStatus(HttpStatus.OK)
-	public AjajaResponse<RemindResponse> getRemindResponse(
+	public AjajaResponse<RemindResponse.RemindInfo> getRemindResponse(
 		@PathVariable Long planId
 	) {
 		return AjajaResponse.ok(loadRemindInfoService.loadRemindInfoResponse(planId));

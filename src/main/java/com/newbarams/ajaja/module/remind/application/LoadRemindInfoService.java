@@ -17,7 +17,7 @@ public class LoadRemindInfoService {
 	private final LoadPlanService loadPlanService;
 	private final RemindQueryRepository remindQueryRepository;
 
-	public RemindResponse.CommonResponse loadRemindInfoResponse(Long planId) {
+	public RemindResponse.RemindInfo loadRemindInfoResponse(Long planId) {
 		Plan plan = loadPlanService.loadPlanOrElseThrow(planId);
 		return remindQueryRepository.findAllReminds(plan);
 	}

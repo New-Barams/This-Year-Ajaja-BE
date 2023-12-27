@@ -9,14 +9,14 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.newbarams.ajaja.common.annotation.ApiTest;
 import com.newbarams.ajaja.common.support.WebMvcTestSupport;
-import com.newbarams.ajaja.module.feedback.dto.UpdateFeedback;
+import com.newbarams.ajaja.module.feedback.dto.FeedbackRequest;
 
 class FeedbackControllerTest extends WebMvcTestSupport {
 
 	@ApiTest
 	void updateFeedback_Success_WithNoException() throws Exception {
 		// given
-		UpdateFeedback updateFeedback = new UpdateFeedback(50, "fighting");
+		FeedbackRequest.UpdateFeedback feedbackRequest = new FeedbackRequest.UpdateFeedback(50, "fighting");
 
 		doNothing().when(updateFeedbackService).updateFeedback(anyLong(), anyInt(), anyString());
 
@@ -24,7 +24,7 @@ class FeedbackControllerTest extends WebMvcTestSupport {
 		mockMvc.perform(MockMvcRequestBuilders.post(FEEDBACK_END_POINT + "/1")
 				.with(csrf())
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(updateFeedback)))
+				.content(objectMapper.writeValueAsString(feedbackRequest)))
 			.andExpect(status().isOk());
 	}
 }

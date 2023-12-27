@@ -38,7 +38,7 @@ class LoadRemindInfoServiceTest extends MockTestSupport {
 			.set("messages", messages)
 			.sample();
 
-		RemindResponse.CommonResponse response = sut.giveMeOne(RemindResponse.CommonResponse.class);
+		RemindResponse.RemindInfo response = sut.giveMeOne(RemindResponse.RemindInfo.class);
 
 		// when
 		given(loadPlanService.loadPlanOrElseThrow(any())).willReturn(plan);

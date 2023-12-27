@@ -30,7 +30,6 @@ import com.newbarams.ajaja.module.plan.application.LoadPlanInfoService;
 import com.newbarams.ajaja.module.plan.application.LoadPlanService;
 import com.newbarams.ajaja.module.plan.application.UpdatePlanService;
 import com.newbarams.ajaja.module.plan.application.UpdateRemindInfoService;
-import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 
@@ -150,8 +149,8 @@ public class PlanController {
 		})
 	@GetMapping("/main")
 	@ResponseStatus(OK)
-	public AjajaResponse<List<PlanInfoResponse.GetPlanInfoResponse>> getPlanInfo(@UserId Long userId) {
-		List<PlanInfoResponse.GetPlanInfoResponse> response = loadPlanInfoService.loadPlanInfo(userId);
+	public AjajaResponse<List<PlanResponse.MainInfo>> getPlanInfo(@UserId Long userId) {
+		List<PlanResponse.MainInfo> response = loadPlanInfoService.loadPlanInfo(userId);
 		return AjajaResponse.ok(response);
 	}
 
