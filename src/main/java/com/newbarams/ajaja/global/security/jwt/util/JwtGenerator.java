@@ -19,8 +19,10 @@ public class JwtGenerator {
 		String generate(Long userId, TimeValue time);
 	}
 
-	private static final long ACCESS_TOKEN_VALID_TIME = 30 * 60 * 1000L; // 30분
-	private static final long REFRESH_TOKEN_VALID_TIME = 7 * 24 * 60 * 60 * 1000L; // 7일
+	// private static final long ACCESS_TOKEN_VALID_TIME = 30 * 60 * 1000L; // 30분
+	// private static final long REFRESH_TOKEN_VALID_TIME = 7 * 24 * 60 * 60 * 1000L; // 7일
+	private static final long ACCESS_TOKEN_VALID_TIME = 3 * 60 * 1000L; // 3분 test
+	private static final long REFRESH_TOKEN_VALID_TIME = 5 * 60 * 1000L; // 5분 test
 
 	private final JwtSecretProvider jwtSecretProvider;
 	private final CacheUtil cacheUtil;
@@ -32,7 +34,7 @@ public class JwtGenerator {
 
 	public AuthResponse.Token reissue(Long userId, String oldRefreshToken) {
 		return generate(userId,
-				(id, time) -> shouldReissue(oldRefreshToken, time) ? generateRefreshToken(id, time) : oldRefreshToken
+			(id, time) -> shouldReissue(oldRefreshToken, time) ? generateRefreshToken(id, time) : oldRefreshToken
 		);
 	}
 
@@ -47,21 +49,21 @@ public class JwtGenerator {
 	private String generateAccessToken(Long userId, TimeValue time) {
 		Date accessTokenExpireIn = time.expireIn(ACCESS_TOKEN_VALID_TIME);
 		return Jwts.builder()
-				.claim(jwtSecretProvider.getSignature(), userId)
-				.expiration(accessTokenExpireIn)
-				.signWith(jwtSecretProvider.getSecretKey())
-				.compact();
+			.claim(jwtSecretProvider.getSignature(), userId)
+			.expiration(accessTokenExpireIn)
+			.signWith(jwtSecretProvider.getSecretKey())
+			.compact();
 	}
 
 	private String generateRefreshToken(Long userId, TimeValue time) {
 		Date refreshTokenExpireIn = time.expireIn(REFRESH_TOKEN_VALID_TIME);
 
 		String refreshToken = Jwts.builder()
-				.claim(jwtSecretProvider.getSignature(), userId)
-				.claim(jwtSecretProvider.getDateKey(), refreshTokenExpireIn)
-				.expiration(refreshTokenExpireIn)
-				.signWith(jwtSecretProvider.getSecretKey())
-				.compact();
+			.claim(jwtSecretProvider.getSignature(), userId)
+			.claim(jwtSecretProvider.getDateKey(), refreshTokenExpireIn)
+			.expiration(refreshTokenExpireIn)
+			.signWith(jwtSecretProvider.getSecretKey())
+			.compact();
 
 		cacheUtil.saveRefreshToken(jwtSecretProvider.cacheKey(userId), refreshToken, REFRESH_TOKEN_VALID_TIME);
 		return refreshToken;
