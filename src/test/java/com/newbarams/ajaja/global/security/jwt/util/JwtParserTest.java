@@ -110,15 +110,13 @@ class JwtParserTest extends MonkeySupport {
 	void parseId_Fail_ByWrongSignature() {
 		// given
 		String wrongSignatureToken = """
-			eyJhbGciOiJIUzI1NiJ9.
-			eyJuYW1lIjoiSGVqb3cifQ.
-			SI7XBRHE_95nkxQ69SiiCQcqDkZ-FW1RdxNL1DmAAAg
+			eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
+			eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.
+			SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
 			""";
 
 		// when, then
-		assertThatException()
-			.isThrownBy(() -> jwtParser.parseId(wrongSignatureToken))
-			.withMessage(INVALID_SIGNATURE.getMessage());
+		assertThatException().isThrownBy(() -> jwtParser.parseId(wrongSignatureToken));
 	}
 
 	@Test

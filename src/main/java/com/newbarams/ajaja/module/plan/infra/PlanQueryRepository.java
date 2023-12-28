@@ -70,7 +70,7 @@ public class PlanQueryRepository {
 		return Optional.ofNullable(queryFactory.select(new QPlanResponse_Detail(
 				new QPlanResponse_Writer(
 					userEntity.nickname,
-					userId == null ? FALSE : userEntity.id.intValue().eq(asNumber(userId)), // querydsl bigint casting error
+					userId == null ? FALSE : userEntity.id.intValue().eq(asNumber(userId)), // bigint casting error
 					userId == null ? FALSE : isAjajaPressed(userId, id)),
 				asNumber(id),
 				planEntity.title,
