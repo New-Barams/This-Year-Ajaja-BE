@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import com.newbarams.ajaja.common.support.MockTestSupport;
 import com.newbarams.ajaja.infra.feign.kakao.client.KakaoProperties;
 import com.newbarams.ajaja.infra.feign.kakao.client.KakaoUnlinkFeignClient;
+import com.newbarams.ajaja.infra.feign.kakao.model.KakaoResponse;
 
 class KakaoDisconnectOauthServiceTest extends MockTestSupport {
 	@InjectMocks
@@ -16,7 +17,6 @@ class KakaoDisconnectOauthServiceTest extends MockTestSupport {
 
 	@Mock
 	private KakaoUnlinkFeignClient kakaoUnlinkFeignClient;
-
 	@Mock
 	private KakaoProperties kakaoProperties;
 
@@ -25,7 +25,10 @@ class KakaoDisconnectOauthServiceTest extends MockTestSupport {
 		// given
 		Long oauthId = sut.giveMeOne(Long.class);
 		String adminKey = sut.giveMeOne(String.class);
+		KakaoResponse.Withdraw response = sut.giveMeOne(KakaoResponse.Withdraw.class);
+
 		given(kakaoProperties.getAdminKey()).willReturn(adminKey);
+		given(kakaoUnlinkFeignClient.unlink(anyString(), any())).willReturn(response);
 
 		// when
 		kakaoDisconnectService.disconnect(oauthId);

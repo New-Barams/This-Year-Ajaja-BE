@@ -11,13 +11,9 @@ import lombok.Data;
 public final class KakaoResponse {
 	@Data
 	@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+	@JsonIgnoreProperties(ignoreUnknown = true)
 	public static class Token implements AccessToken {
 		private final String accessToken;
-		private final String tokenType;
-		private final String refreshToken;
-		private final int expiresIn;
-		private final String scope;
-		private final String refreshTokenExpiresIn;
 
 		@Override
 		public String getContent() {
@@ -41,5 +37,11 @@ public final class KakaoResponse {
 		public String getEmail() {
 			return kakaoAccount.email();
 		}
+	}
+
+	@Data
+	@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+	public static class Withdraw {
+		private final Long id;
 	}
 }
