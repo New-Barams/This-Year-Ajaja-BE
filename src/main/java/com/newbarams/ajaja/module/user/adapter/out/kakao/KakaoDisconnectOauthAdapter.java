@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.user.kakao.application;
+package com.newbarams.ajaja.module.user.adapter.out.kakao;
 
 import java.util.Objects;
 
@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-class KakaoDisconnectOauthService implements DisconnectOauthPort {
+class KakaoDisconnectOauthAdapter implements DisconnectOauthPort {
 	private static final String KAKAO_AK_PREFIX = "KakaoAK ";
 
 	private final KakaoUnlinkFeignClient kakaoUnlinkFeignClient;

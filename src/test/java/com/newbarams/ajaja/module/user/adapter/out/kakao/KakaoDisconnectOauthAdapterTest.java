@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.user.kakao.application;
+package com.newbarams.ajaja.module.user.adapter.out.kakao;
 
 import static org.mockito.BDDMockito.*;
 
@@ -11,9 +11,9 @@ import com.newbarams.ajaja.infra.feign.kakao.client.KakaoProperties;
 import com.newbarams.ajaja.infra.feign.kakao.client.KakaoUnlinkFeignClient;
 import com.newbarams.ajaja.infra.feign.kakao.model.KakaoResponse;
 
-class KakaoDisconnectOauthServiceTest extends MockTestSupport {
+class KakaoDisconnectOauthAdapterTest extends MockTestSupport {
 	@InjectMocks
-	private KakaoDisconnectOauthService kakaoDisconnectService;
+	private KakaoDisconnectOauthAdapter kakaoDisconnectOauthAdapter;
 
 	@Mock
 	private KakaoUnlinkFeignClient kakaoUnlinkFeignClient;
@@ -31,7 +31,7 @@ class KakaoDisconnectOauthServiceTest extends MockTestSupport {
 		given(kakaoUnlinkFeignClient.unlink(anyString(), any())).willReturn(response);
 
 		// when
-		kakaoDisconnectService.disconnect(oauthId);
+		kakaoDisconnectOauthAdapter.disconnect(oauthId);
 
 		// then
 		then(kakaoUnlinkFeignClient).should(times(1)).unlink(anyString(), any());
