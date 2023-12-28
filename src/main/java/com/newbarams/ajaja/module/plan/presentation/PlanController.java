@@ -23,6 +23,7 @@ import com.newbarams.ajaja.global.common.AjajaResponse;
 import com.newbarams.ajaja.global.exception.ErrorResponse;
 import com.newbarams.ajaja.global.security.common.UserId;
 import com.newbarams.ajaja.global.security.jwt.util.JwtParser;
+import com.newbarams.ajaja.global.util.BearerUtils;
 import com.newbarams.ajaja.module.ajaja.application.SwitchAjajaService;
 import com.newbarams.ajaja.module.plan.application.CreatePlanService;
 import com.newbarams.ajaja.module.plan.application.DeletePlanService;
@@ -72,9 +73,14 @@ public class PlanController {
 		@RequestHeader(value = AUTHORIZATION, required = false) String accessToken,
 		@PathVariable Long id
 	) {
-		Long userId = accessToken == null ? null : jwtParser.parseId(accessToken);
+		Long userId = accessToken == null ? null : parseUserId(accessToken);
 		PlanResponse.Detail response = getPlanService.loadByIdAndOptionalUser(userId, id);
 		return AjajaResponse.ok(response);
+	}
+
+	private Long parseUserId(String accessToken) {
+		BearerUtils.validate(accessToken);
+		return jwtParser.parseId(BearerUtils.resolve(accessToken));
 	}
 
 	@Operation(summary = "[토큰 필요] 계획 생성 API")

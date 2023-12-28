@@ -31,7 +31,6 @@ import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
@@ -71,9 +70,9 @@ public class PlanQueryRepository {
 		return Optional.ofNullable(queryFactory.select(new QPlanResponse_Detail(
 				new QPlanResponse_Writer(
 					userEntity.nickname,
-					userId == null ? FALSE : userEntity.id.eq(userId),
+					userId == null ? FALSE : userEntity.id.intValue().eq(asNumber(userId)), // querydsl bigint casting error
 					userId == null ? FALSE : isAjajaPressed(userId, id)),
-				Expressions.asNumber(id),
+				asNumber(id),
 				planEntity.title,
 				planEntity.description,
 				planEntity.iconNumber,
@@ -81,7 +80,7 @@ public class PlanQueryRepository {
 				planEntity.canRemind,
 				planEntity.canAjaja,
 				planEntity.ajajas.size().longValue(),
-				Expressions.constant(findAllTagsByPlanId(id)),
+				constant(findAllTagsByPlanId(id)),
 				planEntity.createdAt))
 			.from(planEntity)
 			.leftJoin(userEntity).on(userEntity.id.eq(planEntity.userId))
@@ -91,7 +90,7 @@ public class PlanQueryRepository {
 	}
 
 	private BooleanExpression isAjajaPressed(Long userId, Long id) {
-		return Expressions.asBoolean(queryFactory.selectFrom(ajaja)
+		return asBoolean(queryFactory.selectFrom(ajaja)
 			.where(ajaja.targetId.eq(id)
 				.and(ajaja.userId.eq(userId))
 				.and(ajaja.type.eq(Ajaja.Type.PLAN))
