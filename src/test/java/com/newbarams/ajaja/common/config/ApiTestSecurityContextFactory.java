@@ -13,7 +13,7 @@ import com.newbarams.ajaja.common.annotation.ApiTest;
 import com.newbarams.ajaja.global.security.common.UserAdapter;
 
 public class ApiTestSecurityContextFactory implements WithSecurityContextFactory<ApiTest> {
-	private static final UserDetails user = new UserAdapter(1L, "ajaja@me.com");
+	private static final UserDetails user = new UserAdapter(1L, 1L);
 
 	@Override
 	public SecurityContext createSecurityContext(ApiTest annotation) {
