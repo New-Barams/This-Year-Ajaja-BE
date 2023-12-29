@@ -307,7 +307,7 @@ public class MockController {
 		@RequestHeader(name = "Date") String date) {
 		List<String> tags = List.of("tag1", "tag2", "tag3");
 		PlanResponse.Create response = new PlanResponse.Create(1L, 1L, "title", "des",
-			1, true, true, true, 0, tags);
+			1, true, true, true, tags);
 
 		return new AjajaResponse<>(true, response);
 	}
@@ -348,7 +348,7 @@ public class MockController {
 		@RequestBody PlanRequest.Update request, @RequestHeader(name = "Date") String date) {
 		List<String> tags = List.of("tag1", "tag2", "tag3");
 		PlanResponse.Create updated = new PlanResponse.Create(1L, 1L, "title", "des",
-			1, true, true, true, 0, tags);
+			1, true, true, true, tags);
 
 		return new AjajaResponse<>(true, updated);
 	}

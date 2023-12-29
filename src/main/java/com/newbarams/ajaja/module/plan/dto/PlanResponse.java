@@ -111,7 +111,7 @@ public final class PlanResponse {
 		private final boolean canRemind;
 		private final boolean canAjaja;
 
-		private final int ajajas;
+		private final int ajajas = 0;
 
 		private final List<String> tags;
 	}

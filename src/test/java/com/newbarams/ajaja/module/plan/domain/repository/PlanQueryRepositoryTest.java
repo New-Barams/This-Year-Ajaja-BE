@@ -2,7 +2,6 @@ package com.newbarams.ajaja.module.plan.domain.repository;
 
 import static org.assertj.core.api.Assertions.*;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,7 +45,6 @@ class PlanQueryRepositoryTest {
 		.register(Plan.class, fixture -> fixture.giveMeBuilder(Plan.class)
 			.set("id", Arbitraries.longs().greaterOrEqual(0))
 			.set("messages", List.of(new Message("test", 3, 15)))
-			.set("ajajas", Collections.emptyList())
 		)
 		.plugin(new JakartaValidationPlugin())
 		.defaultNotNull(true)
@@ -91,7 +89,6 @@ class PlanQueryRepositoryTest {
 		assertThat(detail.getWriter().isOwner()).isFalse();
 		assertThat(detail.getWriter().isAjajaPressed()).isFalse();
 		assertThat(detail.getId()).isEqualTo(save.getId());
-		assertThat(detail.getAjajas()).isEqualTo(save.getAjajas().size());
 		assertThat(detail.isPublic()).isEqualTo(save.getStatus().isPublic());
 	}
 
@@ -112,7 +109,6 @@ class PlanQueryRepositoryTest {
 		assertThat(detail.getWriter().getNickname()).isEqualTo(user.getNickname().getNickname());
 		assertThat(detail.getWriter().isOwner()).isTrue();
 		assertThat(detail.getId()).isEqualTo(save.getId());
-		assertThat(detail.getAjajas()).isEqualTo(save.getAjajas().size());
 		assertThat(detail.isPublic()).isEqualTo(save.getStatus().isPublic());
 	}
 
@@ -142,7 +138,8 @@ class PlanQueryRepositoryTest {
 	void findById_Success() {
 		Plan savedPlan = planRepository.save(plan);
 
-		Optional<PlanResponse.GetOne> response = planQueryRepository.findById(savedPlan.getId(), user.getId());
+		Optional<PlanResponse.Detail> response =
+			planQueryRepository.findPlanDetailByIdAndOptionalUser(user.getId(), savedPlan.getId());
 		assertThat(response).isNotEmpty();
 	}
 

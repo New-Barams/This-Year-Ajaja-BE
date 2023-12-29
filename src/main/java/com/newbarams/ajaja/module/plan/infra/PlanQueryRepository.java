@@ -1,7 +1,6 @@
 package com.newbarams.ajaja.module.plan.infra;
 
-import static com.newbarams.ajaja.module.ajaja.domain.Ajaja.Type.*;
-import static com.newbarams.ajaja.module.ajaja.domain.QAjaja.*;
+import static com.newbarams.ajaja.module.ajaja.infra.QAjajaEntity.*;
 import static com.newbarams.ajaja.module.feedback.infra.QFeedbackEntity.*;
 import static com.newbarams.ajaja.module.plan.infra.QPlanEntity.*;
 import static com.newbarams.ajaja.module.tag.domain.QPlanTag.*;
@@ -91,44 +90,12 @@ public class PlanQueryRepository {
 	}
 
 	private BooleanExpression isAjajaPressed(Long userId, Long id) {
-		return Expressions.asBoolean(queryFactory.selectFrom(ajaja)
-			.where(ajaja.targetId.eq(id)
-				.and(ajaja.userId.eq(userId))
-				.and(ajaja.type.eq(Ajaja.Type.PLAN))
-				.and(ajaja.isCanceled.isFalse()))
+		return Expressions.asBoolean(queryFactory.selectFrom(ajajaEntity)
+			.where(ajajaEntity.targetId.eq(id)
+				.and(ajajaEntity.userId.eq(userId))
+				.and(ajajaEntity.type.eq(Ajaja.Type.PLAN.name()))
+				.and(ajajaEntity.canceled.isFalse()))
 			.fetchFirst() != null);
-	}
-
-	public Optional<PlanResponse.GetOne> findById(Long id, Long userId) {
-		List<Tuple> tuples = queryFactory.select(planEntity, userEntity.nickname)
-			.from(planEntity, userEntity)
-			.where(planEntity.userId.eq(userEntity.id).and(planEntity.id.eq(id)))
-			.fetch();
-
-		return getResponse(tuples, userId);
-	}
-
-	private Optional<PlanResponse.GetOne> getResponse(List<Tuple> tuples, Long userId) {
-		return Optional.ofNullable(tupleToResponse(tuples.get(0), userId));
-	}
-
-	private PlanResponse.GetOne tupleToResponse(Tuple tuple, Long userId) {
-		PlanEntity planFromTuple = tuple.get(planEntity);
-		String nickname = tuple.get(userEntity.nickname);
-
-		List<String> tags = findAllTagsByPlanId(planFromTuple.getId());
-		boolean isPressAjaja = isPressAjaja(planFromTuple.getId(), userId);
-
-		return planMapper.toResponse(planFromTuple, nickname, tags, isPressAjaja);
-	}
-
-	private boolean isPressAjaja(Long planId, Long userId) {
-		return queryFactory.selectFrom(ajaja)
-			.where(ajaja.targetId.eq(planId)
-				.and(ajaja.userId.eq(userId))
-				.and(ajaja.type.eq(PLAN))
-				.and(ajaja.isCanceled.isFalse()))
-			.fetchFirst() != null;
 	}
 
 	private List<String> findAllTagsByPlanId(Long planId) {
