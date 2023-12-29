@@ -3,7 +3,6 @@ package com.newbarams.ajaja.module.user.adapter.out.persistence;
 import static com.newbarams.ajaja.global.exception.ErrorCode.*;
 
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.newbarams.ajaja.global.exception.AjajaException;
 import com.newbarams.ajaja.module.user.application.port.out.DeleteUserPort;
@@ -13,7 +12,6 @@ import com.newbarams.ajaja.module.user.infra.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
 
 @Repository
-@Transactional
 @RequiredArgsConstructor
 class DeleteUserAdapter implements DeleteUserPort {
 	private final UserJpaRepository userJpaRepository;
