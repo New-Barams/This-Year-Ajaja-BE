@@ -9,26 +9,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
 import com.newbarams.ajaja.common.support.JpaTestSupport;
-import com.newbarams.ajaja.module.user.domain.User;
+import com.newbarams.ajaja.module.user.infra.OauthInfo;
 import com.newbarams.ajaja.module.user.infra.UserEntity;
 import com.newbarams.ajaja.module.user.infra.UserJpaRepository;
-import com.newbarams.ajaja.module.user.mapper.UserMapper;
-import com.newbarams.ajaja.module.user.mapper.UserMapperImpl;
 
-@ContextConfiguration(classes = {DeleteUserAdapter.class, UserMapperImpl.class})
+@ContextConfiguration(classes = DeleteUserAdapter.class)
 class DeleteUserAdapterTest extends JpaTestSupport {
 	@Autowired
 	private DeleteUserAdapter deleteUserAdapter;
 	@Autowired
 	private UserJpaRepository userJpaRepository;
-	@Autowired
-	private UserMapper userMapper;
 
 	@Test
 	void delete_Success() {
 		// given
-		User user = User.init("ajaja@me.com", sut.giveMeOne(Long.class));
-		UserEntity entity = userJpaRepository.save(userMapper.toEntity(user));
+		UserEntity entity = userJpaRepository.save(new UserEntity(
+			null,
+			"nickname",
+			"email",
+			"email",
+			false,
+			"type",
+			OauthInfo.kakao(sut.giveMeOne(Long.class)),
+			false
+		));
 
 		// when
 		deleteUserAdapter.delete(entity.getId());
