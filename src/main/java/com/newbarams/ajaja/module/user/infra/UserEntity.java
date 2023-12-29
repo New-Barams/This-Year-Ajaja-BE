@@ -48,4 +48,8 @@ public class UserEntity extends BaseEntity<UserEntity> {
 
 	@Column(nullable = false)
 	private boolean deleted;
+
+	public void delete() {
+		this.deleted = true;
+	}
 }

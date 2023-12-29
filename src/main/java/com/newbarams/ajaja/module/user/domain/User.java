@@ -28,10 +28,6 @@ public class User {
 		this.email = email.verified(validatedEmail);
 	}
 
-	public void delete() {
-		this.deleted = true;
-	}
-
 	public String updateNickname() {
 		this.nickname = Nickname.renew();
 		return nickname.getNickname();

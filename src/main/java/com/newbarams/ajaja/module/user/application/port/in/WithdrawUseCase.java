@@ -1,5 +1,10 @@
 package com.newbarams.ajaja.module.user.application.port.in;
 
 public interface WithdrawUseCase {
-	void withdraw(Long userId);
+	/**
+	 * Withdraw user and disconnect from oauth server
+	 * @param userId
+	 * @param oauthId
+	 */
+	void withdraw(Long userId, Long oauthId);
 }
