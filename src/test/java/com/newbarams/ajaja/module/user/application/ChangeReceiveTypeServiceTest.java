@@ -9,18 +9,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import com.newbarams.ajaja.common.support.MockTestSupport;
+import com.newbarams.ajaja.module.user.application.port.out.ChangeReceiveTypePort;
 import com.newbarams.ajaja.module.user.domain.Email;
 import com.newbarams.ajaja.module.user.domain.User;
-import com.newbarams.ajaja.module.user.domain.UserRepository;
 
 class ChangeReceiveTypeServiceTest extends MockTestSupport {
 	@InjectMocks
 	private ChangeReceiveTypeService changeReceiveTypeService;
 
 	@Mock
-	private RetrieveUserService retrieveUserService;
-	@Mock
-	private UserRepository userRepository;
+	private ChangeReceiveTypePort changeReceiveTypePort;
 
 	@ParameterizedTest
 	@EnumSource(User.ReceiveType.class)
@@ -31,14 +29,12 @@ class ChangeReceiveTypeServiceTest extends MockTestSupport {
 			.set("email", new Email("Ajaja@me.com"))
 			.sample();
 
-		given(retrieveUserService.loadExistById(anyLong())).willReturn(user);
-		given(userRepository.save(any())).willReturn(user);
+		willDoNothing().given(changeReceiveTypePort).change(anyLong(), any());
 
 		// when
 		changeReceiveTypeService.change(user.getId(), type);
 
 		// then
-		then(retrieveUserService).should(times(1)).loadExistById(anyLong());
-		then(userRepository).should(times(1)).save(any());
+		then(changeReceiveTypePort).should(times(1)).change(anyLong(), any());
 	}
 }

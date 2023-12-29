@@ -52,4 +52,8 @@ public class UserEntity extends BaseEntity<UserEntity> {
 	public void delete() {
 		this.deleted = true;
 	}
+
+	public void updateReceive(String receiveType) {
+		this.receiveType = receiveType;
+	}
 }

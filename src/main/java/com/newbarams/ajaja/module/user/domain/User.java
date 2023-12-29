@@ -33,10 +33,6 @@ public class User {
 		return nickname.getNickname();
 	}
 
-	public void updateReceive(ReceiveType receiveType) {
-		this.receiveType = receiveType;
-	}
-
 	public Long getId() {
 		return userId.getId();
 	}
