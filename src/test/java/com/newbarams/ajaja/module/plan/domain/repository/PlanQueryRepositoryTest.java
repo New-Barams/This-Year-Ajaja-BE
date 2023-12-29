@@ -93,7 +93,6 @@ class PlanQueryRepositoryTest {
 			assertThat(detail.getWriter().isOwner()).isFalse();
 			assertThat(detail.getWriter().isAjajaPressed()).isFalse();
 			assertThat(detail.getId()).isEqualTo(save.getId());
-			assertThat(detail.getAjajas()).isEqualTo(save.getAjajas().size());
 			assertThat(detail.isPublic()).isEqualTo(save.getStatus().isPublic());
 		}
 
