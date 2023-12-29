@@ -24,6 +24,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 	}
 
 	private UserAdapter toAdapter(User user) {
-		return new UserAdapter(user.getId(), user.getEmail());
+		return new UserAdapter(user.getId(), user.getOauthId());
 	}
 }

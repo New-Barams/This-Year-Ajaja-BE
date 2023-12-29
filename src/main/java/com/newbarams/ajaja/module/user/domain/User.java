@@ -28,17 +28,9 @@ public class User {
 		this.email = email.verified(validatedEmail);
 	}
 
-	public void delete() {
-		this.deleted = true;
-	}
-
 	public String updateNickname() {
 		this.nickname = Nickname.renew();
 		return nickname.getNickname();
-	}
-
-	public void updateReceive(ReceiveType receiveType) {
-		this.receiveType = receiveType;
 	}
 
 	public Long getId() {
