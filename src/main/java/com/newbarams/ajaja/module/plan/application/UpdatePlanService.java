@@ -25,18 +25,21 @@ public class UpdatePlanService {
 		Plan plan = getPlanService.loadPlanOrElseThrow(id);
 
 		plan.updatePublicStatus(userId);
+		planRepository.save(plan);
 	}
 
 	public void updateRemindStatus(Long id, Long userId) {
 		Plan plan = getPlanService.loadPlanOrElseThrow(id);
 
 		plan.updateRemindStatus(userId);
+		planRepository.save(plan);
 	}
 
 	public void updateAjajaStatus(Long id, Long userId) {
 		Plan plan = getPlanService.loadPlanOrElseThrow(id);
 
 		plan.updateAjajaStatus(userId);
+		planRepository.save(plan);
 	}
 
 	public PlanResponse.Detail update(Long id, Long userId, PlanRequest.Update request, int month) {
