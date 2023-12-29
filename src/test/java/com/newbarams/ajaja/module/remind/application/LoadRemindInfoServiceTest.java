@@ -38,29 +38,30 @@ class LoadRemindInfoServiceTest extends MockTestSupport {
 			.set("messages", messages)
 			.sample();
 
-		RemindResponse.CommonResponse response = sut.giveMeOne(RemindResponse.CommonResponse.class);
+		RemindResponse.RemindInfo response = sut.giveMeOne(RemindResponse.RemindInfo.class);
 
 		// when
-		given(loadPlanService.loadPlanOrElseThrow(any())).willReturn(plan);
+		given(loadPlanService.loadByUserIdAndPlanId(anyLong(), anyLong())).willReturn(plan);
 		given(remindQueryRepository.findAllReminds(any())).willReturn(response);
 
 		// then
 		assertThatNoException().isThrownBy(() ->
-			loadRemindInfoService.loadRemindInfoResponse(plan.getId())
+			loadRemindInfoService.loadRemindInfoResponse(1L, plan.getId())
 		);
 	}
 
 	@Test
+	@DisplayName("조회된 계획이 없으면 예외를 던진다.")
 	void getRemindInfo_Fail_WithNoException() {
 		// given
 		Plan plan = null;
 
 		// when
-		doThrow(AjajaException.class).when(loadPlanService).loadPlanOrElseThrow(any());
+		doThrow(AjajaException.class).when(loadPlanService).loadByUserIdAndPlanId(anyLong(), anyLong());
 
 		// then
 		assertThatException().isThrownBy(
-			() -> loadRemindInfoService.loadRemindInfoResponse(1L)
+			() -> loadRemindInfoService.loadRemindInfoResponse(1L, 1L)
 		);
 
 	}

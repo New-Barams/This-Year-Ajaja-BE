@@ -15,10 +15,10 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 import com.newbarams.ajaja.global.common.TimeValue;
+import com.newbarams.ajaja.global.exception.AjajaException;
 import com.newbarams.ajaja.module.ajaja.domain.Ajaja;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.domain.RemindDate;
-import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 import com.newbarams.ajaja.module.plan.dto.QPlanResponse_Detail;
@@ -30,7 +30,6 @@ import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
@@ -70,9 +69,9 @@ public class PlanQueryRepository {
 		return Optional.ofNullable(queryFactory.select(new QPlanResponse_Detail(
 				new QPlanResponse_Writer(
 					userEntity.nickname,
-					userId == null ? FALSE : userEntity.id.eq(userId),
+					userId == null ? FALSE : userEntity.id.intValue().eq(asNumber(userId)), // bigint casting error
 					userId == null ? FALSE : isAjajaPressed(userId, id)),
-				Expressions.asNumber(id),
+				asNumber(id),
 				planEntity.title,
 				planEntity.description,
 				planEntity.iconNumber,
@@ -80,7 +79,7 @@ public class PlanQueryRepository {
 				planEntity.canRemind,
 				planEntity.canAjaja,
 				planEntity.ajajas.size().longValue(),
-				Expressions.constant(findAllTagsByPlanId(id)),
+				constant(findAllTagsByPlanId(id)),
 				planEntity.createdAt))
 			.from(planEntity)
 			.leftJoin(userEntity).on(userEntity.id.eq(planEntity.userId))
@@ -96,6 +95,18 @@ public class PlanQueryRepository {
 				.and(ajajaEntity.type.eq(Ajaja.Type.PLAN.name()))
 				.and(ajajaEntity.canceled.isFalse()))
 			.fetchFirst() != null);
+	}
+
+	public Plan findByUserIdAndPlanId(Long userId, Long planId) {
+		PlanEntity entity = queryFactory.selectFrom(planEntity)
+			.where(planEntity.userId.eq(userId)
+				.and(planEntity.id.eq(planId)))
+			.fetchOne();
+
+		if (entity == null) {
+			throw AjajaException.withId(planId, NOT_FOUND_PLAN);
+		}
+		return planMapper.toDomain(entity);
 	}
 
 	private List<String> findAllTagsByPlanId(Long planId) {
@@ -166,8 +177,8 @@ public class PlanQueryRepository {
 			.toList();
 	}
 
-	public List<PlanInfoResponse.GetPlan> findAllPlanByUserId(Long userId) {
-		return queryFactory.select(Projections.constructor(PlanInfoResponse.GetPlan.class,
+	public List<PlanResponse.PlanInfo> findAllPlanByUserId(Long userId) {
+		return queryFactory.select(Projections.constructor(PlanResponse.PlanInfo.class,
 				planEntity.createdAt.year(),
 				planEntity.id,
 				planEntity.title,

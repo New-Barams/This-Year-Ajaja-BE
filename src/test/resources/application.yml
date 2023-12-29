@@ -23,6 +23,7 @@ logging:
     org:
       springframework:
         test.context.cache: debug
+    com.newbarams.ajaja: DEBUG
 
 jasypt:
   encryptor:

@@ -46,33 +46,40 @@ public class PlanEntity extends BaseEntity<PlanEntity> {
 	@Column(nullable = false)
 	private Integer iconNumber;
 
-	@Column(nullable = false, length = 30)
+	@Column(nullable = false, length = 20)
 	private String title;
-	@Column(nullable = false, length = 300)
+
+	@Column(nullable = false, length = 250)
 	private String description;
 
 	@Column(nullable = false)
 	private Integer remindTotalPeriod;
+
 	@Column(nullable = false)
 	private Integer remindTerm;
+
 	@Column(nullable = false)
 	private Integer remindDate;
+
 	@Column(nullable = false)
 	private String remindTime;
 
 	@Column(nullable = false, name = "is_public")
 	private boolean isPublic;
+
 	@Column(nullable = false)
 	private boolean canRemind;
+
 	@Column(nullable = false)
 	private boolean canAjaja;
+
 	@Column(nullable = false)
 	private boolean deleted;
 
 	@ElementCollection
 	@CollectionTable(name = "remind_messages", joinColumns = @JoinColumn(name = "plan_id"))
 	@OrderBy("remindDate ASC")
-	private List<Message> messages = new ArrayList<>();
+	private List<Message> messages = new ArrayList<>(); // todo: domain dependency
 
 	@Size
 	@Where(clause = "is_canceled = false")

@@ -12,11 +12,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Content extends SelfValidating<Content> {
 	@NotBlank
-	@Size(max = 30)
+	@Size(max = 20)
 	private String title;
 
 	@NotBlank
-	@Size(max = 300)
+	@Size(max = 250)
 	private String description;
 
 	public Content(String title, String description) {

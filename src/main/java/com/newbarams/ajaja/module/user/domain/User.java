@@ -17,7 +17,7 @@ public class User {
 	private boolean deleted;
 
 	public static User init(String email, Long oauthId) {
-		return new User(UserId.from(oauthId), Nickname.renew(), new Email(email), ReceiveType.EMAIL, false);
+		return new User(UserId.from(oauthId), Nickname.renew(), new Email(email), ReceiveType.KAKAO, false);
 	}
 
 	public void validateEmail(String requestEmail) {

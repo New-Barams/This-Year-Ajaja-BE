@@ -31,13 +31,10 @@ import com.newbarams.ajaja.global.security.jwt.util.JwtValidator;
 import com.newbarams.ajaja.module.ajaja.application.SchedulingAjajaRemindService;
 import com.newbarams.ajaja.module.auth.dto.AuthRequest;
 import com.newbarams.ajaja.module.auth.dto.AuthResponse;
-import com.newbarams.ajaja.module.feedback.dto.GetAchieve;
-import com.newbarams.ajaja.module.feedback.dto.UpdateFeedback;
-import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
+import com.newbarams.ajaja.module.feedback.dto.FeedbackRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 import com.newbarams.ajaja.module.remind.application.SchedulingRemindService;
-import com.newbarams.ajaja.module.remind.dto.ModifyAlarm;
 import com.newbarams.ajaja.module.remind.dto.RemindResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -185,22 +182,22 @@ public class MockController {
 	})
 	@GetMapping("/reminds/{planId}")
 	@ResponseStatus(OK)
-	public AjajaResponse<RemindResponse.CommonResponse> getReminds(@PathVariable Long planId) {
-		List<RemindResponse.Messages> messages = List.of(
-			new RemindResponse.Messages(
+	public AjajaResponse<RemindResponse.RemindInfo> getReminds(@PathVariable Long planId) {
+		List<RemindResponse.Message> messages = List.of(
+			new RemindResponse.Message(
 				"잘하고 있지?",
 				9,
 				13,
 				false
 			),
-			new RemindResponse.Messages(
+			new RemindResponse.Message(
 				"조금만 더 힘내!",
 				12,
 				13,
 				false
 			));
 
-		RemindResponse.CommonResponse response = new RemindResponse.CommonResponse(
+		RemindResponse.RemindInfo response = new RemindResponse.RemindInfo(
 			"MORNING",
 			true,
 			12,
@@ -223,41 +220,31 @@ public class MockController {
 	})
 	@GetMapping("/reminds/modify/{planId}")
 	@ResponseStatus(OK)
-	public AjajaResponse<RemindResponse.CommonResponse> getRemindsInfo(@PathVariable Long planId) {
-		List<RemindResponse.Messages> respons = List.of(
-			new RemindResponse.Messages(
+	public AjajaResponse<RemindResponse.RemindInfo> getRemindsInfo(@PathVariable Long planId) {
+		List<RemindResponse.Message> responses = List.of(
+			new RemindResponse.Message(
 				"화이팅",
 				6,
 				13,
 				false
 			),
-			new RemindResponse.Messages(
+			new RemindResponse.Message(
 				"아좌좌",
 				12,
 				13,
 				false
 			));
 
-		RemindResponse.CommonResponse response = new RemindResponse.CommonResponse(
+		RemindResponse.RemindInfo response = new RemindResponse.RemindInfo(
 			"MORNING",
 			true,
 			12,
 			3,
 			1,
-			respons
+			responses
 		);
 
 		return new AjajaResponse<>(true, response);
-	}
-
-	@Operation(summary = "[테스트] 리마인드 알림 끄기 API")
-	@PutMapping("/plans/{planId}/reminds")
-	@ResponseStatus(OK)
-	public AjajaResponse<String> modifyRemindAlarm(
-		@PathVariable int planId,
-		@RequestBody ModifyAlarm modifyAlarm
-	) {
-		return new AjajaResponse<>(true, null);
 	}
 
 	@Operation(summary = "[토큰 필요] 피드백 반영 API", description = "<b>평가할 피드백에 대한 id가 필요합니다.</b>",
@@ -274,30 +261,9 @@ public class MockController {
 	@ResponseStatus(OK)
 	public AjajaResponse<Void> updateFeedback(
 		@PathVariable int feedbackId,
-		@RequestBody UpdateFeedback updateFeedback
+		@RequestBody FeedbackRequest.UpdateFeedback updateFeedback
 	) {
 		return new AjajaResponse<>(true, null);
-	}
-
-	@Operation(summary = "[테스트] 목표별 계획률 보기 API")
-	@GetMapping("/{planId}/feedbacks")
-	@ResponseStatus(OK)
-	public AjajaResponse<GetAchieve> findPlanAchieve(
-		@PathVariable int planId
-	) {
-		GetAchieve achieve = new GetAchieve(90);
-
-		return new AjajaResponse<>(true, achieve);
-	}
-
-	@Operation(summary = "[테스트] 전체 달성률 보기")
-	@GetMapping("/feedbacks/user/{userId}")
-	public AjajaResponse<GetAchieve> findTotalAchieve(
-		@PathVariable int userId
-	) {
-		GetAchieve achieve = new GetAchieve(90);
-
-		return new AjajaResponse<>(true, achieve);
 	}
 
 	@Operation(summary = "[테스트] 계획 생성 API")
@@ -393,28 +359,27 @@ public class MockController {
 		})
 	@GetMapping("/plans/main")
 	@ResponseStatus(OK)
-	public AjajaResponse<List<PlanInfoResponse.GetPlanInfoResponse>> getPlanInfo() {
-		List<PlanInfoResponse.GetPlan> getPlan2023 = List.of(
-			new PlanInfoResponse.GetPlan(2023, 1L, "매일 운동하기", true, 90, 1),
-			new PlanInfoResponse.GetPlan(2023, 2L, "매일 코딩하기", true, 90, 2),
-			new PlanInfoResponse.GetPlan(2023, 3L, "매일 아침 9시에 일어나기", false, 20, 3)
+	public AjajaResponse<List<PlanResponse.MainInfo>> getPlanInfo() {
+		List<PlanResponse.PlanInfo> getPlan2023 = List.of(
+			new PlanResponse.PlanInfo(2023, 1L, "매일 운동하기", true, 90, 1),
+			new PlanResponse.PlanInfo(2023, 2L, "매일 코딩하기", true, 90, 2),
+			new PlanResponse.PlanInfo(2023, 3L, "매일 아침 9시에 일어나기", false, 20, 3)
 		);
 
-		List<PlanInfoResponse.GetPlan> getPlan2022 = List.of(
-			new PlanInfoResponse.GetPlan(2022, 4L, "졸업 작품 끝내기", true, 90, 1),
-			new PlanInfoResponse.GetPlan(2022, 5L, "매일 아침 먹기", true, 70, 2),
-			new PlanInfoResponse.GetPlan(2022, 6L, "총 학점 4.0 이상 나오기", false, 50, 3)
+		List<PlanResponse.PlanInfo> getPlan2022 = List.of(
+			new PlanResponse.PlanInfo(2022, 4L, "졸업 작품 끝내기", true, 90, 1),
+			new PlanResponse.PlanInfo(2022, 5L, "매일 아침 먹기", true, 70, 2),
+			new PlanResponse.PlanInfo(2022, 6L, "총 학점 4.0 이상 나오기", false, 50, 3)
 		);
 
-		PlanInfoResponse.GetPlanInfoResponse getPlanInfo2023 = new PlanInfoResponse.GetPlanInfoResponse(2023,
-			50,
-			getPlan2023);
+		PlanResponse.MainInfo getPlanInfo2023 = new PlanResponse.MainInfo(2023,
+			50, getPlan2023);
 
-		PlanInfoResponse.GetPlanInfoResponse getPlanInfo2022 = new PlanInfoResponse.GetPlanInfoResponse(2022,
+		PlanResponse.MainInfo getPlanInfo2022 = new PlanResponse.MainInfo(2022,
 			80,
 			getPlan2022);
 
-		List<PlanInfoResponse.GetPlanInfoResponse> getPlanInfo = List.of(getPlanInfo2023, getPlanInfo2022);
+		List<PlanResponse.MainInfo> getPlanInfo = List.of(getPlanInfo2023, getPlanInfo2022);
 		return AjajaResponse.ok(getPlanInfo);
 	}
 }

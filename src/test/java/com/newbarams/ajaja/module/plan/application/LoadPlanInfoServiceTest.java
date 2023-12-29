@@ -13,7 +13,7 @@ import org.mockito.Mock;
 
 import com.newbarams.ajaja.common.support.MockTestSupport;
 import com.newbarams.ajaja.module.feedback.application.LoadTotalAchieveService;
-import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
+import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 import com.newbarams.ajaja.module.plan.infra.PlanQueryRepository;
 import com.newbarams.ajaja.module.plan.mapper.PlanMapper;
 
@@ -32,13 +32,13 @@ class LoadPlanInfoServiceTest extends MockTestSupport {
 	@DisplayName("처음 계획을 작성한 년도부터 현재 년도까지의 계획들을 조회한다.")
 	void getPlanInfo_Success_WithNoException() {
 		// given
-		PlanInfoResponse.GetPlan planInfo1 = sut.giveMeBuilder(PlanInfoResponse.GetPlan.class)
+		PlanResponse.PlanInfo planInfo1 = sut.giveMeBuilder(PlanResponse.PlanInfo.class)
 			.set("year", 2023).sample();
 
-		PlanInfoResponse.GetPlan planInfo2 = sut.giveMeBuilder(PlanInfoResponse.GetPlan.class)
+		PlanResponse.PlanInfo planInfo2 = sut.giveMeBuilder(PlanResponse.PlanInfo.class)
 			.set("year", 2021).sample();
 
-		PlanInfoResponse.GetPlanInfoResponse response = sut.giveMeOne(PlanInfoResponse.GetPlanInfoResponse.class);
+		PlanResponse.MainInfo response = sut.giveMeOne(PlanResponse.MainInfo.class);
 
 		int execute = 2023 - 2021 + 1;
 
@@ -59,7 +59,7 @@ class LoadPlanInfoServiceTest extends MockTestSupport {
 		given(planQueryRepository.findAllPlanByUserId(any())).willReturn(Collections.emptyList());
 
 		//when
-		List<PlanInfoResponse.GetPlanInfoResponse> planInfoResponses = loadPlanInfoService.loadPlanInfo(1L);
+		List<PlanResponse.MainInfo> planInfoResponses = loadPlanInfoService.loadPlanInfo(1L);
 
 		// then
 		Assertions.assertThat(planInfoResponses).isEmpty();

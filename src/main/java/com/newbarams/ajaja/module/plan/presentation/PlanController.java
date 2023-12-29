@@ -23,6 +23,7 @@ import com.newbarams.ajaja.global.common.AjajaResponse;
 import com.newbarams.ajaja.global.exception.ErrorResponse;
 import com.newbarams.ajaja.global.security.common.UserId;
 import com.newbarams.ajaja.global.security.jwt.util.JwtParser;
+import com.newbarams.ajaja.global.util.BearerUtils;
 import com.newbarams.ajaja.module.ajaja.application.SwitchAjajaService;
 import com.newbarams.ajaja.module.plan.application.CreatePlanService;
 import com.newbarams.ajaja.module.plan.application.DeletePlanService;
@@ -30,7 +31,6 @@ import com.newbarams.ajaja.module.plan.application.LoadPlanInfoService;
 import com.newbarams.ajaja.module.plan.application.LoadPlanService;
 import com.newbarams.ajaja.module.plan.application.UpdatePlanService;
 import com.newbarams.ajaja.module.plan.application.UpdateRemindInfoService;
-import com.newbarams.ajaja.module.plan.dto.PlanInfoResponse;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 
@@ -72,9 +72,14 @@ public class PlanController {
 		@RequestHeader(value = AUTHORIZATION, required = false) String accessToken,
 		@PathVariable Long id
 	) {
-		Long userId = accessToken == null ? null : jwtParser.parseId(accessToken);
+		Long userId = accessToken == null ? null : parseUserId(accessToken);
 		PlanResponse.Detail response = getPlanService.loadByIdAndOptionalUser(userId, id);
 		return AjajaResponse.ok(response);
+	}
+
+	private Long parseUserId(String accessToken) {
+		BearerUtils.validate(accessToken);
+		return jwtParser.parseId(BearerUtils.resolve(accessToken));
 	}
 
 	@Operation(summary = "[토큰 필요] 계획 생성 API")
@@ -150,8 +155,8 @@ public class PlanController {
 		})
 	@GetMapping("/main")
 	@ResponseStatus(OK)
-	public AjajaResponse<List<PlanInfoResponse.GetPlanInfoResponse>> getPlanInfo(@UserId Long userId) {
-		List<PlanInfoResponse.GetPlanInfoResponse> response = loadPlanInfoService.loadPlanInfo(userId);
+	public AjajaResponse<List<PlanResponse.MainInfo>> getPlanInfo(@UserId Long userId) {
+		List<PlanResponse.MainInfo> response = loadPlanInfoService.loadPlanInfo(userId);
 		return AjajaResponse.ok(response);
 	}
 
@@ -178,10 +183,11 @@ public class PlanController {
 	@PutMapping("/{planId}/reminds")
 	@ResponseStatus(HttpStatus.OK)
 	public AjajaResponse<Void> modifyRemindInfo(
+		@UserId Long userId,
 		@PathVariable Long planId,
 		@RequestBody PlanRequest.UpdateRemind request
 	) {
-		updateRemindInfoService.updateRemindInfo(planId, request);
+		updateRemindInfoService.updateRemindInfo(userId, planId, request);
 		return AjajaResponse.ok();
 	}
 }

@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -71,45 +72,71 @@ class PlanQueryRepositoryTest {
 			.sample();
 	}
 
-	@Test
-	@DisplayName("사용자 ID를 입력하지 않고 상세 조회하면 작성자 정보에서 작성자 여부와 좋아요 여부는 false가 되어야 한다.")
-	void findPlanDetailByIdAndOptionalUser_Success_WithUserIdNotEntered() {
-		// given
-		Plan save = planRepository.save(plan);
+	@Nested
+	@DisplayName("findPlanDetailByIdAndOptionalUser 테스트")
+	class FindPlanDetailByIdAndOptionalUserTest {
+		@Test
+		@DisplayName("사용자 ID를 입력하지 않고 상세 조회하면 작성자 정보에서 작성자 여부와 좋아요 여부는 false가 되어야 한다.")
+		void findPlanDetailByIdAndOptionalUser_Success_WithUserIdNotEntered() { // no ajaja pressed query
+			// given
+			Plan save = planRepository.save(plan);
 
-		// when
-		Optional<PlanResponse.Detail> result =
-			planQueryRepository.findPlanDetailByIdAndOptionalUser(null, save.getId());
+			// when
+			Optional<PlanResponse.Detail> result =
+				planQueryRepository.findPlanDetailByIdAndOptionalUser(null, save.getId());
 
-		// then
-		assertThat(result).isNotEmpty();
+			// then
+			assertThat(result).isNotEmpty();
 
-		PlanResponse.Detail detail = result.get();
-		assertThat(detail.getWriter().getNickname()).isEqualTo(user.getNickname().getNickname());
-		assertThat(detail.getWriter().isOwner()).isFalse();
-		assertThat(detail.getWriter().isAjajaPressed()).isFalse();
-		assertThat(detail.getId()).isEqualTo(save.getId());
-		assertThat(detail.isPublic()).isEqualTo(save.getStatus().isPublic());
-	}
+			PlanResponse.Detail detail = result.get();
+			assertThat(detail.getWriter().getNickname()).isEqualTo(user.getNickname().getNickname());
+			assertThat(detail.getWriter().isOwner()).isFalse();
+			assertThat(detail.getWriter().isAjajaPressed()).isFalse();
+			assertThat(detail.getId()).isEqualTo(save.getId());
+			assertThat(detail.getAjajas()).isEqualTo(save.getAjajas().size());
+			assertThat(detail.isPublic()).isEqualTo(save.getStatus().isPublic());
+		}
 
-	@Test
-	@DisplayName("작성자의 ID로 상세 조회하면 작성자 정보에서 작성자 여부는 true가 되어야 한다.")
-	void findPlanDetailByIdAndOptionalUser_Success_WithWriterUserId() {
-		// given
-		Plan save = planRepository.save(plan);
+		@Test
+		@DisplayName("작성자의 ID로 상세 조회하면 작성자 정보에서 작성자 여부는 true가 되어야 한다.")
+		void findPlanDetailByIdAndOptionalUser_Success_WithWriterUserId() {
+			// given
+			Plan save = planRepository.save(plan);
 
-		// when
-		Optional<PlanResponse.Detail> result =
-			planQueryRepository.findPlanDetailByIdAndOptionalUser(user.getId(), save.getId());
+			// when
+			Optional<PlanResponse.Detail> result =
+				planQueryRepository.findPlanDetailByIdAndOptionalUser(user.getId(), save.getId());
 
-		// then
-		assertThat(result).isNotEmpty();
+			// then
+			assertThat(result).isNotEmpty();
 
-		PlanResponse.Detail detail = result.get();
-		assertThat(detail.getWriter().getNickname()).isEqualTo(user.getNickname().getNickname());
-		assertThat(detail.getWriter().isOwner()).isTrue();
-		assertThat(detail.getId()).isEqualTo(save.getId());
-		assertThat(detail.isPublic()).isEqualTo(save.getStatus().isPublic());
+			PlanResponse.Detail detail = result.get();
+			assertThat(detail.getWriter().getNickname()).isEqualTo(user.getNickname().getNickname());
+			assertThat(detail.getWriter().isOwner()).isTrue();
+			assertThat(detail.getId()).isEqualTo(save.getId());
+			assertThat(detail.isPublic()).isEqualTo(save.getStatus().isPublic());
+		}
+
+		@Test
+		@DisplayName("다른 사람의 id로 상세 조회하면 작성자 정보에서 작성자 여부와 좋아요 여부는 false가 되어야 한다.")
+		void findPlanDetailByIdAndOptionalUser_Success_WithStrangerId() {
+			// given
+			Long strangerId = user.getId() + 1;
+			Plan save = planRepository.save(plan);
+
+			// when
+			Optional<PlanResponse.Detail> result =
+				planQueryRepository.findPlanDetailByIdAndOptionalUser(strangerId, save.getId());
+
+			// then
+			assertThat(result).isNotEmpty();
+
+			PlanResponse.Detail detail = result.get();
+			assertThat(detail.getWriter().isOwner()).isFalse();
+			assertThat(detail.getWriter().isAjajaPressed()).isFalse();
+			assertThat(detail.getId()).isEqualTo(save.getId());
+			assertThat(detail.isPublic()).isEqualTo(save.getStatus().isPublic());
+		}
 	}
 
 	@Test
@@ -135,12 +162,22 @@ class PlanQueryRepositoryTest {
 
 	@Test
 	@DisplayName("계획의 ID를 이용해 하나의 계획을 가져올 수 있다.")
-	void findById_Success() {
+	void findByUserIdAndPlanId_Success_WithNoException() {
 		Plan savedPlan = planRepository.save(plan);
 
-		Optional<PlanResponse.Detail> response =
-			planQueryRepository.findPlanDetailByIdAndOptionalUser(user.getId(), savedPlan.getId());
-		assertThat(response).isNotEmpty();
+		Plan plan = planQueryRepository.findByUserIdAndPlanId(savedPlan.getUserId(), savedPlan.getId());
+		assertThat(plan).isNotNull();
+	}
+
+	@Test
+	@DisplayName("계획의 ID를 이용해 하나의 계획을 가져올 수 있다.")
+	void findByUserIdAndPlanId_Fail_ByNotMatchPlanIdAndUserId() {
+		Plan savedPlan = planRepository.save(plan);
+		Long userId = savedPlan.getUserId() + 1L;
+
+		assertThatException().isThrownBy(
+			() -> planQueryRepository.findByUserIdAndPlanId(userId, savedPlan.getId())
+		);
 	}
 
 	@Test
