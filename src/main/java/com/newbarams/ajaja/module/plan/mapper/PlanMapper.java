@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-import com.newbarams.ajaja.module.ajaja.domain.Ajaja;
+import com.newbarams.ajaja.module.ajaja.infra.AjajaEntity;
 import com.newbarams.ajaja.module.plan.domain.Content;
 import com.newbarams.ajaja.module.plan.domain.Message;
 import com.newbarams.ajaja.module.plan.domain.Plan;
@@ -31,6 +31,7 @@ public interface PlanMapper {
 	@Mapping(source = "status.canRemind", target = "canRemind")
 	@Mapping(source = "status.canAjaja", target = "canAjaja")
 	@Mapping(source = "status.deleted", target = "deleted")
+	@Mapping(target = "ajajas", ignore = true)
 	PlanEntity toEntity(Plan plan);
 
 	@Mapping(source = "planEntity", target = "content", qualifiedByName = "toContent")
@@ -72,17 +73,12 @@ public interface PlanMapper {
 			request.getRemindDate(), request.getRemindTime());
 	}
 
-	@Mapping(source = "plan.ajajas", target = "ajajas", qualifiedByName = "toAjajaCount")
 	@Mapping(source = "plan.content.title", target = "title")
 	@Mapping(source = "plan.content.description", target = "description")
 	@Mapping(source = "plan.status.public", target = "isPublic")
 	@Mapping(source = "plan.status.canRemind", target = "canRemind")
 	@Mapping(source = "plan.status.canAjaja", target = "canAjaja")
 	PlanResponse.Create toResponse(Plan plan, List<String> tags);
-
-	@Mapping(source = "plan.ajajas", target = "ajajas", qualifiedByName = "toAjajaCount")
-	@Mapping(source = "plan.public", target = "isPublic")
-	PlanResponse.GetOne toResponse(PlanEntity plan, String nickname, List<String> tags, boolean isPressAjaja);
 
 	@Mapping(source = "plan.ajajas", target = "ajajas", qualifiedByName = "toAjajaCount")
 	PlanResponse.GetAll toResponse(PlanEntity plan, String nickname, List<String> tags);
@@ -93,7 +89,7 @@ public interface PlanMapper {
 	List<Message> toMessages(List<PlanRequest.Message> dto);
 
 	@Named("toAjajaCount")
-	static int toAjajaCount(List<Ajaja> ajajas) {
+	static int toAjajaCount(List<AjajaEntity> ajajas) {
 		return ajajas.size();
 	}
 

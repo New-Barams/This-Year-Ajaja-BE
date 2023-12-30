@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.newbarams.ajaja.module.ajaja.domain.Ajaja;
-import com.newbarams.ajaja.module.ajaja.domain.repository.AjajaRepository;
+import com.newbarams.ajaja.module.ajaja.domain.AjajaRepository;
 import com.newbarams.ajaja.module.plan.application.LoadPlanService;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 
@@ -22,7 +22,7 @@ public class SwitchAjajaService {
 	public void switchOrAddIfNotExist(Long userId, Long planId) {
 		Plan plan = loadPlanService.loadPlanOrElseThrow(planId);
 
-		Ajaja ajaja = ajajaRepository.findByTargetIdAndUserIdAndType(planId, userId, PLAN)
+		Ajaja ajaja = ajajaRepository.findByTargetIdAndUserIdAndType(planId, userId, PLAN.name())
 			.orElseGet(Ajaja::defaultValue);
 
 		if (ajaja.isEqualsDefault()) {
@@ -30,12 +30,16 @@ public class SwitchAjajaService {
 			return;
 		}
 
-		ajaja.switchStatus();
+		switchStatus(ajaja);
 	}
 
 	private void addToPlan(Plan plan, Long userId) {
 		Ajaja ajaja = Ajaja.plan(plan.getId(), userId);
-		plan.addAjaja(ajaja);
+		ajajaRepository.save(ajaja);
+	}
+
+	private void switchStatus(Ajaja ajaja) {
+		ajaja.switchStatus();
 		ajajaRepository.save(ajaja);
 	}
 }

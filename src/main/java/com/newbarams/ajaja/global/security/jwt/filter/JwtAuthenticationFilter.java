@@ -56,16 +56,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	}
 
 	private boolean isNotGetPlans(HttpServletRequest request) {
-		return !isGetOnePlan(request.getRequestURI()) && !isGetAllPlans(request.getRequestURI(), request.getMethod());
+		return !isGetOnePlan(request.getRequestURI(), request.getMethod()) && !isGetAllPlans(request.getRequestURI(),
+			request.getMethod());
 	}
 
 	private boolean isGetAllPlans(String uri, String httpMethod) { // todo: separate filtering this request
 		return PLAN_URI.equals(uri) && GET.matches(httpMethod);
 	}
 
-	private boolean isGetOnePlan(String uri) {
+	private boolean isGetOnePlan(String uri, String httpMethod) {
 		Matcher matcher = GET_ONE_PLAN.matcher(uri);
-		return matcher.matches();
+		return matcher.matches() && GET.matches(httpMethod);
 	}
 
 	private String resolveJwt(String token) {

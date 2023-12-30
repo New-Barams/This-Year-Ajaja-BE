@@ -6,7 +6,7 @@ import java.util.List;
 import org.hibernate.annotations.Where;
 
 import com.newbarams.ajaja.global.common.BaseEntity;
-import com.newbarams.ajaja.module.ajaja.domain.Ajaja;
+import com.newbarams.ajaja.module.ajaja.infra.AjajaEntity;
 import com.newbarams.ajaja.module.plan.domain.Message;
 
 import jakarta.persistence.CascadeType;
@@ -83,7 +83,7 @@ public class PlanEntity extends BaseEntity<PlanEntity> {
 
 	@Size
 	@Where(clause = "is_canceled = false")
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "target_id")
-	private List<Ajaja> ajajas = new ArrayList<>(); // todo: domain dependency
+	private List<AjajaEntity> ajajas = new ArrayList<>();
 }
