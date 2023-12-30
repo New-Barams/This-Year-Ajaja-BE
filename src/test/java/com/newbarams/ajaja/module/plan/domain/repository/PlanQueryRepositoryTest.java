@@ -14,57 +14,38 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import net.jqwik.api.Arbitraries;
-
+import com.newbarams.ajaja.common.support.MonkeySupport;
 import com.newbarams.ajaja.global.common.TimeValue;
-import com.newbarams.ajaja.module.plan.domain.Message;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.domain.PlanRepository;
 import com.newbarams.ajaja.module.plan.domain.PlanStatus;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 import com.newbarams.ajaja.module.plan.infra.PlanQueryRepository;
+import com.newbarams.ajaja.module.user.adapter.out.persistence.UserJpaRepository;
+import com.newbarams.ajaja.module.user.adapter.out.persistence.model.UserEntity;
 import com.newbarams.ajaja.module.user.domain.User;
-import com.newbarams.ajaja.module.user.domain.UserRepository;
-
-import com.navercorp.fixturemonkey.FixtureMonkey;
-import com.navercorp.fixturemonkey.api.introspector.ConstructorPropertiesArbitraryIntrospector;
-import com.navercorp.fixturemonkey.api.introspector.FailoverIntrospector;
-import com.navercorp.fixturemonkey.api.introspector.FieldReflectionArbitraryIntrospector;
-import com.navercorp.fixturemonkey.jakarta.validation.plugin.JakartaValidationPlugin;
+import com.newbarams.ajaja.module.user.mapper.UserMapper;
 
 @SpringBootTest
 @Transactional
-class PlanQueryRepositoryTest {
-	private final FixtureMonkey sut = FixtureMonkey.builder()
-		.objectIntrospector(new FailoverIntrospector(
-			List.of(
-				FieldReflectionArbitraryIntrospector.INSTANCE,
-				ConstructorPropertiesArbitraryIntrospector.INSTANCE
-			)
-		))
-		.register(Plan.class, fixture -> fixture.giveMeBuilder(Plan.class)
-			.set("id", Arbitraries.longs().greaterOrEqual(0))
-			.set("messages", List.of(new Message("test", 3, 15)))
-		)
-		.plugin(new JakartaValidationPlugin())
-		.defaultNotNull(true)
-		.useExpressionStrictMode()
-		.build();
-
+class PlanQueryRepositoryTest extends MonkeySupport {
 	@Autowired
 	private PlanQueryRepository planQueryRepository;
 	@Autowired
 	private PlanRepository planRepository;
 	@Autowired
-	private UserRepository userRepository;
+	private UserJpaRepository userRepository;
+	@Autowired
+	private UserMapper userMapper;
 
 	private User user;
 	private Plan plan;
 
 	@BeforeEach
 	void deleteAll() {
-		user = userRepository.save(User.init("email@naver.com", sut.giveMeOne(Long.class)));
+		UserEntity entity = userMapper.toEntity(User.init("email@naver.com", sut.giveMeOne(Long.class)));
+		user = userMapper.toDomain(userRepository.save(entity));
 
 		plan = sut.giveMeBuilder(Plan.class)
 			.set("userId", this.user.getId())

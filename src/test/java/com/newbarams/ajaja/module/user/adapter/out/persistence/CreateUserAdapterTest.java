@@ -8,8 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.newbarams.ajaja.common.support.MonkeySupport;
-import com.newbarams.ajaja.module.user.infra.UserEntity;
-import com.newbarams.ajaja.module.user.infra.UserJpaRepository;
+import com.newbarams.ajaja.module.user.adapter.out.persistence.model.UserEntity;
 
 @SpringBootTest
 @Transactional

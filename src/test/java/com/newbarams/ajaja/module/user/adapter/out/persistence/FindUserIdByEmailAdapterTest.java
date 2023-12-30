@@ -11,8 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import com.newbarams.ajaja.common.support.MockTestSupport;
-import com.newbarams.ajaja.module.user.infra.UserEntity;
-import com.newbarams.ajaja.module.user.infra.UserJpaRepository;
+import com.newbarams.ajaja.module.user.adapter.out.persistence.model.UserEntity;
 
 class FindUserIdByEmailAdapterTest extends MockTestSupport {
 	@InjectMocks

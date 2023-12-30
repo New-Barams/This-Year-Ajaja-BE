@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import com.newbarams.ajaja.module.user.application.port.out.RetrieveUserPort;
 import com.newbarams.ajaja.module.user.domain.User;
-import com.newbarams.ajaja.module.user.infra.UserJpaRepository;
 import com.newbarams.ajaja.module.user.mapper.UserMapper;
 
 import lombok.RequiredArgsConstructor;

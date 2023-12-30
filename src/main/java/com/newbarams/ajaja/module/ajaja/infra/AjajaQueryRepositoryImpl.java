@@ -2,7 +2,7 @@ package com.newbarams.ajaja.module.ajaja.infra;
 
 import static com.newbarams.ajaja.module.ajaja.infra.QAjajaEntity.*;
 import static com.newbarams.ajaja.module.plan.infra.QPlanEntity.*;
-import static com.newbarams.ajaja.module.user.infra.QUserEntity.*;
+import static com.newbarams.ajaja.module.user.adapter.out.persistence.model.QUserEntity.*;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;

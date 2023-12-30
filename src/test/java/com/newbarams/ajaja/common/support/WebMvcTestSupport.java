@@ -27,7 +27,7 @@ import com.newbarams.ajaja.module.plan.application.UpdatePlanService;
 import com.newbarams.ajaja.module.plan.application.UpdateRemindInfoService;
 import com.newbarams.ajaja.module.remind.application.LoadRemindInfoService;
 import com.newbarams.ajaja.module.user.application.UserMockBeans;
-import com.newbarams.ajaja.module.user.domain.UserQueryRepository;
+import com.newbarams.ajaja.module.user.application.port.out.GetMyPagePort;
 
 /**
  * Supports Cached Context On WebMvcTest with Monkey <br>
@@ -57,7 +57,7 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 
 	// User
 	@MockBean
-	protected UserQueryRepository userQueryRepository;
+	protected GetMyPagePort getMyPagePort;
 
 	// Plan
 	@MockBean
