@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class GetMyPageAdapter implements GetMyPagePort {
+class GetMyPageAdapter implements GetMyPagePort {
 	private final JPAQueryFactory queryFactory;
 
 	@Override
