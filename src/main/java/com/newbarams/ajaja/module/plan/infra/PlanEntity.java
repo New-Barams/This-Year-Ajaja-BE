@@ -83,7 +83,7 @@ public class PlanEntity extends BaseEntity<PlanEntity> {
 
 	@Size
 	@Where(clause = "is_canceled = false")
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "target_id")
 	private List<AjajaEntity> ajajas = new ArrayList<>();
 }
