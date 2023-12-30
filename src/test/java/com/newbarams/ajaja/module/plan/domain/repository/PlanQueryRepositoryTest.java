@@ -64,7 +64,7 @@ class PlanQueryRepositoryTest {
 
 	@BeforeEach
 	void deleteAll() {
-		user = userRepository.save(User.init("email@naver.com", 1L));
+		user = userRepository.save(User.init("email@naver.com", sut.giveMeOne(Long.class)));
 
 		plan = sut.giveMeBuilder(Plan.class)
 			.set("userId", this.user.getId())
