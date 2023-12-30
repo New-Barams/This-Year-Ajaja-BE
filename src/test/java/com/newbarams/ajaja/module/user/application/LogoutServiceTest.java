@@ -11,14 +11,14 @@ import org.mockito.Mock;
 import com.newbarams.ajaja.common.support.MockTestSupport;
 import com.newbarams.ajaja.global.exception.AjajaException;
 import com.newbarams.ajaja.global.security.jwt.util.JwtRemover;
-import com.newbarams.ajaja.module.user.domain.UserRepository;
+import com.newbarams.ajaja.module.user.application.port.out.CheckExistUserPort;
 
 class LogoutServiceTest extends MockTestSupport {
 	@InjectMocks
 	private LogoutService logoutService;
 
 	@Mock
-	private UserRepository userRepository;
+	private CheckExistUserPort checkExistUserPort;
 	@Mock
 	private JwtRemover jwtRemover;
 
@@ -27,13 +27,13 @@ class LogoutServiceTest extends MockTestSupport {
 	void logout_Success_ThenTokenRemoved() {
 		// given
 		Long userId = sut.giveMeOne(Long.class);
-		given(userRepository.existsById(any())).willReturn(true);
+		given(checkExistUserPort.isExist(any())).willReturn(true);
 
 		// when
 		logoutService.logout(userId);
 
 		// then
-		then(userRepository).should(times(1)).existsById(any());
+		then(checkExistUserPort).should(times(1)).isExist(any());
 		then(jwtRemover).should(times(1)).remove(any());
 	}
 
@@ -42,7 +42,7 @@ class LogoutServiceTest extends MockTestSupport {
 	void logout_Fail_ByNotExistUser() {
 		// given
 		Long userId = sut.giveMeOne(Long.class);
-		given(userRepository.existsById(any())).willReturn(false);
+		given(checkExistUserPort.isExist(any())).willReturn(false);
 
 		// when, then
 		assertThatExceptionOfType(AjajaException.class)
