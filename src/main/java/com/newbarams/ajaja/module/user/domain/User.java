@@ -28,9 +28,8 @@ public class User {
 		this.email = email.verified(validatedEmail);
 	}
 
-	public String updateNickname() {
+	public void updateNickname() {
 		this.nickname = Nickname.renew();
-		return nickname.getNickname();
 	}
 
 	public Long getId() {
