@@ -80,4 +80,16 @@ class DeletePlanServiceTest {
 			.isInstanceOf(AjajaException.class)
 			.hasMessage(INVALID_UPDATABLE_DATE.getMessage());
 	}
+
+	@Test
+	@DisplayName("계획 작성자가 아닌 경우 계획을 삭제할 수 없다.")
+	void deletePlan_Fail_By_User() {
+		// given
+		Long strangerId = 100L;
+
+		// when, then
+		assertThatThrownBy(() -> deletePlanService.delete(plan.getId(), strangerId, 1))
+			.isInstanceOf(AjajaException.class)
+			.hasMessage(INVALID_USER_ACCESS.getMessage());
+	}
 }
