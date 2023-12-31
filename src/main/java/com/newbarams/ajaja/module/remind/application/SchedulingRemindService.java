@@ -23,17 +23,17 @@ public class SchedulingRemindService {
 	private final CreateFeedbackService createFeedbackService;
 	private final PlanQueryRepository planQueryRepository;
 
-	@Scheduled(cron = "0 0 9 * * *")
+	@Scheduled(cron = "0 0 9 * 2-12 *")
 	public void scheduleMorningRemind() {
 		sendRemindsOnScheduledTime("MORNING");
 	}
 
-	@Scheduled(cron = "0 0 13 * * *")
+	@Scheduled(cron = "0 0 13 * 2-12 *")
 	public void scheduleAfternoonRemind() {
 		sendRemindsOnScheduledTime("AFTERNOON");
 	}
 
-	@Scheduled(cron = "0 0 22 * * *")
+	@Scheduled(cron = "0 0 22 * 2-12 *")
 	public void scheduleEveningRemind() {
 		sendRemindsOnScheduledTime("EVENING");
 	}
