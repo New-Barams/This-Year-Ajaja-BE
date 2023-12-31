@@ -51,14 +51,16 @@ class UpdateRemindInfoServiceTest extends MockTestSupport {
 		// given
 		Long userId = 1L;
 		Long planId = 1L;
-		given(planQueryRepository.findByUserIdAndPlanId(anyLong(), anyLong())).willReturn(plan);
+		given(planQueryRepository.findByUserIdAndPlanId(anyLong(), anyLong())).willReturn(mockPlan);
 		given(mapper.toDomain(dto.getMessages())).willReturn(messages);
 		given(mapper.toDomain(dto)).willReturn(info);
+		doNothing().when(mockPlan).updateRemind(any(), any());
 
-		// when,then
-		Assertions.assertThatNoException().isThrownBy(
-			() -> updateRemindInfoService.updateRemindInfo(userId, planId, dto)
-		);
+		// when
+		updateRemindInfoService.updateRemindInfo(userId, planId, dto);
+
+		// then
+		then(mockPlan).should(times(1)).updateRemind(any(), any());
 	}
 
 	@Test
