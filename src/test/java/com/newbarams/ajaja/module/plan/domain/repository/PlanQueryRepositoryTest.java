@@ -51,6 +51,7 @@ class PlanQueryRepositoryTest extends MonkeySupport {
 		plan = sut.giveMeBuilder(Plan.class)
 			.set("userId", this.user.getId())
 			.set("status", new PlanStatus(true))
+			.set("ajajas", Collections.EMPTY_LIST)
 			.sample();
 	}
 
@@ -130,6 +131,7 @@ class PlanQueryRepositoryTest extends MonkeySupport {
 		List<Plan> plans = sut.giveMeBuilder(Plan.class)
 			.set("userId", userId)
 			.set("status", new PlanStatus(true))
+			.set("ajajas", Collections.EMPTY_LIST)
 			.sampleList(expectedSize);
 
 		planRepository.saveAll(plans);
@@ -169,6 +171,7 @@ class PlanQueryRepositoryTest extends MonkeySupport {
 		List<Plan> plans = sut.giveMeBuilder(Plan.class)
 			.set("userId", user.getId())
 			.set("status", new PlanStatus(true))
+			.set("ajajas", Collections.EMPTY_LIST)
 			.sampleList(10);
 
 		planRepository.saveAll(plans);
@@ -191,6 +194,7 @@ class PlanQueryRepositoryTest extends MonkeySupport {
 		List<Plan> plans = sut.giveMeBuilder(Plan.class)
 			.set("userId", user.getId())
 			.set("status", new PlanStatus(true))
+			.set("ajajas", Collections.EMPTY_LIST)
 			.sampleList(pageSize);
 
 		planRepository.saveAll(plans);
