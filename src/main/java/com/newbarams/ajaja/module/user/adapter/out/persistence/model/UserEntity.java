@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.user.infra;
+package com.newbarams.ajaja.module.user.adapter.out.persistence.model;
 
 import org.hibernate.annotations.Where;
 
@@ -48,12 +48,4 @@ public class UserEntity extends BaseEntity<UserEntity> {
 
 	@Column(nullable = false)
 	private boolean deleted;
-
-	public void delete() {
-		this.deleted = true;
-	}
-
-	public void updateReceive(String receiveType) {
-		this.receiveType = receiveType;
-	}
 }

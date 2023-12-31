@@ -4,8 +4,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.newbarams.ajaja.module.user.application.port.in.RenewNicknameUseCase;
+import com.newbarams.ajaja.module.user.application.port.out.ApplyChangePort;
 import com.newbarams.ajaja.module.user.domain.User;
-import com.newbarams.ajaja.module.user.domain.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -14,13 +14,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 class RenewNicknameService implements RenewNicknameUseCase {
 	private final RetrieveUserService retrieveUserService;
-	private final UserRepository userRepository;
+	private final ApplyChangePort applyChangePort;
 
 	@Override
-	public String renew(Long id) {
+	public void renew(Long id) {
 		User user = retrieveUserService.loadExistById(id);
-		String newNickname = user.updateNickname();
-		userRepository.save(user);
-		return newNickname;
+		user.updateNickname();
+		applyChangePort.apply(user);
 	}
 }

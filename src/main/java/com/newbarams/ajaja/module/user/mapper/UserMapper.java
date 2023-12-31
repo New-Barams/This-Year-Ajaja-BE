@@ -4,10 +4,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
+import com.newbarams.ajaja.module.user.adapter.out.persistence.model.UserEntity;
 import com.newbarams.ajaja.module.user.domain.Email;
 import com.newbarams.ajaja.module.user.domain.User;
 import com.newbarams.ajaja.module.user.domain.UserId;
-import com.newbarams.ajaja.module.user.infra.UserEntity;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {

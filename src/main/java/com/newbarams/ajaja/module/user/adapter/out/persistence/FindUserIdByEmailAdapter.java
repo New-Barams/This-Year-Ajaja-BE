@@ -4,9 +4,8 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
+import com.newbarams.ajaja.module.user.adapter.out.persistence.model.UserEntity;
 import com.newbarams.ajaja.module.user.application.port.out.FindUserIdByEmailPort;
-import com.newbarams.ajaja.module.user.infra.UserEntity;
-import com.newbarams.ajaja.module.user.infra.UserJpaRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,6 +17,6 @@ class FindUserIdByEmailAdapter implements FindUserIdByEmailPort {
 	@Override
 	public Optional<Long> findUserIdByEmail(String email) {
 		return userJpaRepository.findBySignUpEmail(email)
-				.map(UserEntity::getId);
+			.map(UserEntity::getId);
 	}
 }

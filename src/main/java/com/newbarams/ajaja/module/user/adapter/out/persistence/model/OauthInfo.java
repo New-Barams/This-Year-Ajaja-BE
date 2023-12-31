@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.user.infra;
+package com.newbarams.ajaja.module.user.adapter.out.persistence.model;
 
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
