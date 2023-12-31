@@ -31,7 +31,6 @@ public interface PlanMapper {
 	@Mapping(source = "status.canRemind", target = "canRemind")
 	@Mapping(source = "status.canAjaja", target = "canAjaja")
 	@Mapping(source = "status.deleted", target = "deleted")
-	@Mapping(target = "ajajas", ignore = true)
 	PlanEntity toEntity(Plan plan);
 
 	@Mapping(source = "planEntity", target = "content", qualifiedByName = "toContent")

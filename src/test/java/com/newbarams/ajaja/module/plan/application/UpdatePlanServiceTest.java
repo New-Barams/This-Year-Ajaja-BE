@@ -100,4 +100,19 @@ class UpdatePlanServiceTest extends MonkeySupport {
 			.isInstanceOf(AjajaException.class)
 			.hasMessage(INVALID_UPDATABLE_DATE.getMessage());
 	}
+
+	@Test
+	@DisplayName("계획 작성자가 아닌 경우 계획을 수정할 수 없다.")
+	void updatePlan_Fail_By_User() {
+		// given
+		Long strangerId = 100L;
+
+		PlanRequest.Update request =
+			new PlanRequest.Update(1, "title", "des", true, true, null);
+
+		// when, then
+		assertThatThrownBy(() -> updatePlanService.update(plan.getId(), strangerId, request, 1))
+			.isInstanceOf(AjajaException.class)
+			.hasMessage(INVALID_USER_ACCESS.getMessage());
+	}
 }
