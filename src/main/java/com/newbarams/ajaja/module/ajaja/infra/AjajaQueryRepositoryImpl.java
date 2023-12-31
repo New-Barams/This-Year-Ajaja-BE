@@ -33,11 +33,13 @@ public class AjajaQueryRepositoryImpl implements AjajaQueryRepository {
 			.join(planEntity).on(ajajaEntity.targetId.eq(planEntity.id))
 			.join(userEntity).on(planEntity.userId.eq(userEntity.id))
 			.where(planEntity.canAjaja.eq(true)
-				.and(ajajaEntity.updatedAt.after(Instant.now().minus(7, ChronoUnit.DAYS)))
-				.and(ajajaEntity.updatedAt.before(Instant.now()))
+				.and(userEntity.receiveType.eq("EMAIL")
+					.or(userEntity.receiveType.eq("BOTH")))
+				.and(ajajaEntity.updatedAt.between(Instant.now().minus(7, ChronoUnit.DAYS), Instant.now()))
 				.and(ajajaEntity.type.eq(Ajaja.Type.PLAN.name()))
-				.and(ajajaEntity.canceled.eq(false))
-				.and(planEntity.deleted.eq(false))
+				.and(ajajaEntity.canceled.isFalse())
+				.and(planEntity.deleted.isFalse()
+					.and(userEntity.deleted.isFalse()))
 			)
 			.groupBy(
 				planEntity.title,
