@@ -27,6 +27,7 @@ public class AjajaQueryRepositoryImpl implements AjajaQueryRepository {
 		return queryFactory.select(Projections.constructor(RemindableAjaja.class,
 				planEntity.title,
 				planEntity.id,
+				userEntity.id,
 				userEntity.remindEmail.count(),
 				userEntity.remindEmail
 			)).from(ajajaEntity)
