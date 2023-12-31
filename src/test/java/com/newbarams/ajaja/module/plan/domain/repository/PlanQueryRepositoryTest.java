@@ -2,6 +2,7 @@ package com.newbarams.ajaja.module.plan.domain.repository;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,6 +47,7 @@ class PlanQueryRepositoryTest {
 		.register(Plan.class, fixture -> fixture.giveMeBuilder(Plan.class)
 			.set("id", Arbitraries.longs().greaterOrEqual(0))
 			.set("messages", List.of(new Message("test", 3, 15)))
+			.set("ajajas", Collections.EMPTY_LIST)
 		)
 		.plugin(new JakartaValidationPlugin())
 		.defaultNotNull(true)
