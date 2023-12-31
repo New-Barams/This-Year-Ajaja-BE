@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.user.infra;
+package com.newbarams.ajaja.module.user.adapter.out.persistence;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -6,32 +6,34 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.context.ContextConfiguration;
 
-import com.newbarams.ajaja.common.support.MonkeySupport;
-import com.newbarams.ajaja.module.user.domain.Email;
-import com.newbarams.ajaja.module.user.domain.User;
-import com.newbarams.ajaja.module.user.domain.UserRepository;
+import com.newbarams.ajaja.common.support.JpaTestSupport;
+import com.newbarams.ajaja.module.user.adapter.out.persistence.model.OauthInfo;
+import com.newbarams.ajaja.module.user.adapter.out.persistence.model.UserEntity;
 import com.newbarams.ajaja.module.user.dto.UserResponse;
 
-@SpringBootTest
-@Transactional
-class UserQueryRepositoryImplTest extends MonkeySupport {
+@ContextConfiguration(classes = GetMyPageAdapter.class)
+class GetMyPageAdapterTest extends JpaTestSupport {
 	@Autowired
-	private UserQueryRepositoryImpl userQueryRepositoryImpl;
-
+	private GetMyPageAdapter getMyPageAdapter;
 	@Autowired
-	private UserRepository userRepository;
+	private UserJpaRepository userJpaRepository;
 
-	private User user;
+	private UserEntity user;
 
 	@BeforeEach
 	void setup() {
-		user = userRepository.save(sut.giveMeBuilder(User.class)
-			.set("email", new Email("Ajaja@me.com"))
-			.set("deleted", false)
-			.sample());
+		user = userJpaRepository.save(new UserEntity(
+			null,
+			"nickname",
+			"email",
+			"email",
+			false,
+			"type",
+			OauthInfo.kakao(sut.giveMeOne(Long.class)),
+			false
+		));
 	}
 
 	@Test
@@ -41,11 +43,11 @@ class UserQueryRepositoryImplTest extends MonkeySupport {
 		Long id = user.getId();
 
 		// when
-		UserResponse.MyPage result = userQueryRepositoryImpl.findUserInfoById(id);
+		UserResponse.MyPage result = getMyPageAdapter.findUserInfoById(id);
 
 		// then
 		assertThat(result).isNotNull();
-		assertThat(result.getDefaultEmail()).isEqualTo(user.getEmail());
+		assertThat(result.getDefaultEmail()).isEqualTo(user.getSignUpEmail());
 		assertThat(result.getRemindEmail()).isEqualTo(user.getRemindEmail());
 		assertThat(result.isEmailVerified()).isEqualTo(user.isVerified());
 		assertThat(result.getReceiveType()).isLowerCase();
@@ -58,7 +60,7 @@ class UserQueryRepositoryImplTest extends MonkeySupport {
 		Long userId = -1L;
 
 		// when
-		UserResponse.MyPage result = userQueryRepositoryImpl.findUserInfoById(userId);
+		UserResponse.MyPage result = getMyPageAdapter.findUserInfoById(userId);
 
 		// then
 		assertThat(result).isNull();

@@ -6,7 +6,7 @@ import static com.newbarams.ajaja.module.feedback.infra.QFeedbackEntity.*;
 import static com.newbarams.ajaja.module.plan.infra.QPlanEntity.*;
 import static com.newbarams.ajaja.module.tag.domain.QPlanTag.*;
 import static com.newbarams.ajaja.module.tag.domain.QTag.*;
-import static com.newbarams.ajaja.module.user.infra.QUserEntity.*;
+import static com.newbarams.ajaja.module.user.adapter.out.persistence.model.QUserEntity.*;
 import static com.querydsl.core.types.dsl.Expressions.*;
 
 import java.util.List;

@@ -21,10 +21,10 @@ import com.newbarams.ajaja.infra.feign.kakao.model.KakaoAccount;
 import com.newbarams.ajaja.infra.feign.kakao.model.KakaoResponse;
 import com.newbarams.ajaja.module.auth.application.model.Profile;
 import com.newbarams.ajaja.module.auth.application.port.out.AuthorizePort;
+import com.newbarams.ajaja.module.user.adapter.out.persistence.UserJpaRepository;
+import com.newbarams.ajaja.module.user.adapter.out.persistence.model.UserEntity;
 import com.newbarams.ajaja.module.user.application.port.out.CreateUserPort;
 import com.newbarams.ajaja.module.user.application.port.out.FindUserIdByEmailPort;
-import com.newbarams.ajaja.module.user.infra.UserEntity;
-import com.newbarams.ajaja.module.user.infra.UserJpaRepository;
 
 @SpringBootTest
 @Transactional

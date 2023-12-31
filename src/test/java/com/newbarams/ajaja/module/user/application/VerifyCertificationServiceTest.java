@@ -14,9 +14,9 @@ import com.newbarams.ajaja.common.annotation.RedisBasedTest;
 import com.newbarams.ajaja.common.support.MockTestSupport;
 import com.newbarams.ajaja.global.cache.CacheUtil;
 import com.newbarams.ajaja.global.exception.AjajaException;
+import com.newbarams.ajaja.module.user.application.port.out.ApplyChangePort;
 import com.newbarams.ajaja.module.user.domain.Email;
 import com.newbarams.ajaja.module.user.domain.User;
-import com.newbarams.ajaja.module.user.domain.UserRepository;
 
 @RedisBasedTest
 class VerifyCertificationServiceTest extends MockTestSupport {
@@ -28,9 +28,9 @@ class VerifyCertificationServiceTest extends MockTestSupport {
 	private CacheUtil cacheUtil;
 
 	@MockBean
-	private UserRepository userRepository;
-	@MockBean
 	private RetrieveUserService retrieveUserService;
+	@MockBean
+	private ApplyChangePort applyChangePort;
 
 	private User user;
 
@@ -50,14 +50,14 @@ class VerifyCertificationServiceTest extends MockTestSupport {
 		cacheUtil.saveEmailVerification(user.getId(), DEFAULT_EMAIL, certification);
 
 		given(retrieveUserService.loadExistById(anyLong())).willReturn(user);
-		given(userRepository.save(any())).willReturn(user);
+		willDoNothing().given(applyChangePort).apply(any());
 
 		// when
 		verifyCertificationService.verify(user.getId(), certification);
 
 		// then
 		then(retrieveUserService).should(times(1)).loadExistById(anyLong());
-		then(userRepository).should(times(1)).save(any());
+		then(applyChangePort).should(times(1)).apply(any());
 		assertThat(user.getRemindEmail()).isEqualTo(DEFAULT_EMAIL);
 		assertThat(user.isVerified()).isTrue();
 	}

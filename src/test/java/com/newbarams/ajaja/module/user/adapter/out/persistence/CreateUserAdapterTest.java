@@ -4,21 +4,21 @@ import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.context.ContextConfiguration;
 
-import com.newbarams.ajaja.common.support.MonkeySupport;
-import com.newbarams.ajaja.module.user.infra.UserEntity;
-import com.newbarams.ajaja.module.user.infra.UserJpaRepository;
+import com.newbarams.ajaja.common.support.JpaTestSupport;
+import com.newbarams.ajaja.module.user.adapter.out.persistence.model.UserEntity;
+import com.newbarams.ajaja.module.user.mapper.UserMapper;
+import com.newbarams.ajaja.module.user.mapper.UserMapperImpl;
 
-@SpringBootTest
-@Transactional
-class CreateUserAdapterTest extends MonkeySupport {
+@ContextConfiguration(classes = {CreateUserAdapter.class, UserMapperImpl.class})
+class CreateUserAdapterTest extends JpaTestSupport {
 	@Autowired
 	private CreateUserAdapter createUserAdapter;
-
 	@Autowired
 	private UserJpaRepository userJpaRepository;
+	@Autowired
+	private UserMapper userMapper;
 
 	@Test
 	void create_Success() {

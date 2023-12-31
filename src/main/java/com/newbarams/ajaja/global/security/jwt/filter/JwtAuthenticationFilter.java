@@ -48,24 +48,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	}
 
 	private boolean isSecureUri(HttpServletRequest request) {
-		return isNotGetPlans(request) && isNotSecuredUri(request);
+		return isNotGetPlans(request.getRequestURI(), request.getMethod()) && isNotSecuredUri(request.getRequestURI());
 	}
 
-	private boolean isNotSecuredUri(HttpServletRequest request) {
-		return allowList.stream().noneMatch(request.getRequestURI()::contains);
+	private boolean isNotSecuredUri(String requestUri) {
+		return allowList.stream().noneMatch(requestUri::contains);
 	}
 
-	private boolean isNotGetPlans(HttpServletRequest request) {
-		return !isGetOnePlan(request.getRequestURI(), request.getMethod()) && !isGetAllPlans(request.getRequestURI(),
-			request.getMethod());
+	private boolean isNotGetPlans(String requestUri, String httpMethod) {
+		return !isGetOnePlan(requestUri, httpMethod) && !isGetAllPlans(requestUri, httpMethod);
 	}
 
-	private boolean isGetAllPlans(String uri, String httpMethod) { // todo: separate filtering this request
-		return PLAN_URI.equals(uri) && GET.matches(httpMethod);
+	private boolean isGetAllPlans(String requestUri, String httpMethod) { // todo: separate filtering this request
+		return PLAN_URI.equals(requestUri) && GET.matches(httpMethod);
 	}
 
-	private boolean isGetOnePlan(String uri, String httpMethod) {
-		Matcher matcher = GET_ONE_PLAN.matcher(uri);
+	private boolean isGetOnePlan(String requestUri, String httpMethod) {
+		Matcher matcher = GET_ONE_PLAN.matcher(requestUri);
 		return matcher.matches() && GET.matches(httpMethod);
 	}
 

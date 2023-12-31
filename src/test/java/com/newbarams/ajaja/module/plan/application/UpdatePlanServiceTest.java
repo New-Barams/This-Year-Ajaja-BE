@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import net.jqwik.api.Arbitraries;
 
+import com.newbarams.ajaja.common.support.MonkeySupport;
 import com.newbarams.ajaja.global.exception.AjajaException;
 import com.newbarams.ajaja.module.plan.domain.Content;
 import com.newbarams.ajaja.module.plan.domain.Message;
@@ -22,25 +23,30 @@ import com.newbarams.ajaja.module.plan.domain.PlanRepository;
 import com.newbarams.ajaja.module.plan.domain.RemindInfo;
 import com.newbarams.ajaja.module.plan.dto.PlanParam;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
+import com.newbarams.ajaja.module.user.adapter.out.persistence.UserJpaRepository;
+import com.newbarams.ajaja.module.user.adapter.out.persistence.model.UserEntity;
 import com.newbarams.ajaja.module.user.domain.User;
-import com.newbarams.ajaja.module.user.domain.UserRepository;
+import com.newbarams.ajaja.module.user.mapper.UserMapper;
 
 @SpringBootTest
 @Transactional
-class UpdatePlanServiceTest {
+class UpdatePlanServiceTest extends MonkeySupport {
 	@Autowired
 	private UpdatePlanService updatePlanService;
 	@Autowired
 	private PlanRepository planRepository;
 	@Autowired
-	private UserRepository userRepository;
+	private UserJpaRepository userRepository;
+	@Autowired
+	private UserMapper userMapper;
 
 	private User user;
 	private Plan plan;
 
 	@BeforeEach
 	void setup() {
-		user = userRepository.save(User.init("abcde@naver.com", 1L));
+		UserEntity entity = userMapper.toEntity(User.init("email@naver.com", sut.giveMeOne(Long.class)));
+		user = userMapper.toDomain(userRepository.save(entity));
 
 		plan = planRepository.save(Plan.create(
 			new PlanParam.Create(

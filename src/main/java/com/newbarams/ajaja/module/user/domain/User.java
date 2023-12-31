@@ -20,6 +20,10 @@ public class User {
 		return new User(UserId.from(oauthId), Nickname.renew(), new Email(email), ReceiveType.KAKAO, false);
 	}
 
+	public void delete() {
+		this.deleted = true;
+	}
+
 	public void validateEmail(String requestEmail) {
 		email.validateVerifiable(requestEmail);
 	}
@@ -28,9 +32,12 @@ public class User {
 		this.email = email.verified(validatedEmail);
 	}
 
-	public String updateNickname() {
+	public void updateNickname() {
 		this.nickname = Nickname.renew();
-		return nickname.getNickname();
+	}
+
+	public void updateReceive(ReceiveType receiveType) {
+		this.receiveType = receiveType;
 	}
 
 	public Long getId() {
