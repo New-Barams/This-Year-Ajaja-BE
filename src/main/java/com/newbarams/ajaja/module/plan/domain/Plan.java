@@ -93,7 +93,7 @@ public class Plan {
 	}
 
 	public void updateRemind(RemindInfo info, List<Message> messages) {
-		if (new TimeValue().getMonth() != 12) { // todo : QA를 위해 변경 달을 12월로 지정 , 서비스 시작 전 단위 기간으로 변경
+		if (new TimeValue().getMonth() != MODIFIABLE_MONTH) {
 			throw new AjajaException(INVALID_UPDATABLE_DATE);
 		}
 
