@@ -24,7 +24,7 @@ public class AjajaEntity extends BaseEntity<AjajaEntity> {
 	@Column(name = "ajaja_id")
 	private Long id;
 
-	@Column(name = "target_id")
+	@Column(name = "target_id", nullable = false)
 	private Long targetId;
 
 	@Column(nullable = false)

@@ -2,10 +2,12 @@ package com.newbarams.ajaja.module.plan.domain;
 
 import static com.newbarams.ajaja.global.exception.ErrorCode.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.newbarams.ajaja.global.common.TimeValue;
 import com.newbarams.ajaja.global.exception.AjajaException;
+import com.newbarams.ajaja.module.ajaja.infra.AjajaEntity;
 import com.newbarams.ajaja.module.plan.dto.PlanParam;
 
 import lombok.AllArgsConstructor;
@@ -29,6 +31,8 @@ public class Plan {
 
 	private List<Message> messages;
 
+	private List<AjajaEntity> ajajas;
+
 	Plan(Long userId, Content content, RemindInfo info, boolean isPublic,
 		int iconNumber, List<Message> messages) {
 		this.userId = userId;
@@ -37,6 +41,7 @@ public class Plan {
 		this.status = new PlanStatus(isPublic);
 		this.iconNumber = iconNumber;
 		this.messages = messages;
+		this.ajajas = new ArrayList<>();
 	}
 
 	public static Plan create(PlanParam.Create param) {
