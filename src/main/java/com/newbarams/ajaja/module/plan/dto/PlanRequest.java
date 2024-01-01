@@ -16,6 +16,7 @@ public class PlanRequest {
 		private final String remindTime;
 
 		private final boolean isPublic;
+		private final boolean canAjaja;
 
 		private final int iconNumber;
 

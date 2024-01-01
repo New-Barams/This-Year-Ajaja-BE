@@ -21,7 +21,7 @@ class PlanTest extends MonkeySupport {
 	@Test
 	@DisplayName("삭제가능한 기간일 경우 작성한 계획을 삭제할 수 있다.")
 	void deletePlan_Success() {
-		PlanStatus planStatus = new PlanStatus(true);
+		PlanStatus planStatus = new PlanStatus(true, true);
 
 		Plan plan = sut.giveMeBuilder(Plan.class)
 			.set("status", planStatus)
@@ -35,7 +35,7 @@ class PlanTest extends MonkeySupport {
 	@Test
 	@DisplayName("삭제가능한 기간이 아닌 경우 계획을 삭제할 수 없다.")
 	void deletePlan_Fail_By_Date() {
-		PlanStatus planStatus = new PlanStatus(true);
+		PlanStatus planStatus = new PlanStatus(true, true);
 
 		Plan plan = sut.giveMeBuilder(Plan.class)
 			.set("status", planStatus)
