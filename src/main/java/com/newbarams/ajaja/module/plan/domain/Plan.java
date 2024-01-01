@@ -4,6 +4,7 @@ import static com.newbarams.ajaja.global.exception.ErrorCode.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.newbarams.ajaja.global.common.TimeValue;
 import com.newbarams.ajaja.global.exception.AjajaException;
@@ -148,5 +149,20 @@ public class Plan {
 
 	public void disable() {
 		this.status = status.disable();
+	}
+
+	public RemindDate getFeedbackPeriod(TimeValue current) {
+		Optional<Message> currentRemindInfo = this.messages.stream().filter(message -> {
+			RemindDate feedbackPeriod = message.getRemindDate();
+			return current.isBetween(
+				feedbackPeriod.getRemindMonth(), feedbackPeriod.getRemindDay(), this.getRemindTime()
+			);
+		}).findAny();
+
+		if (currentRemindInfo.isEmpty()) {
+			throw new AjajaException(EXPIRED_FEEDBACK);
+		}
+
+		return currentRemindInfo.get().getRemindDate();
 	}
 }

@@ -25,6 +25,7 @@ public enum ErrorCode {
 	NOT_SUPPORT_RECEIVE_TYPE(BAD_REQUEST, "지원하는 리마인드 수신 방법이 아닙니다."),
 	EXCEED_MAX_NUMBER_OF_PLANS(BAD_REQUEST, "유저가 가질 수 있는 최대 계획 개수를 초과하였습니다."),
 	EMPTY_MESSAGES_LIST(BAD_REQUEST, "작성된 리마인드 메세지가 없습니다."),
+	EXPIRED_FEEDBACK(CONFLICT, "피드백 기간이 아닙니다."),
 
 	// 404
 	USER_NOT_FOUND(NOT_FOUND, "사용자가 존재하지 않습니다."),
@@ -34,7 +35,7 @@ public enum ErrorCode {
 	NOT_FOUND_FEEDBACK(NOT_FOUND, "피드백 정보가 존재하지 않습니다."),
 
 	// 409
-	EXPIRED_FEEDBACK(CONFLICT, "평가 기간이 지났습니다."),
+	ALREADY_FEEDBACK(CONFLICT, "이미 평가된 피드백 정보가 있습니다."),
 	UNABLE_TO_VERIFY_EMAIL(CONFLICT, "이메일 인증을 할 수 없습니다. 인증이 완료된 상태라면 기존 리마인드 이메일과 다른 이메일을 입력해야 합니다."),
 	CERTIFICATION_NOT_MATCH(CONFLICT, "인증 번호가 일치하지 않습니다."),
 

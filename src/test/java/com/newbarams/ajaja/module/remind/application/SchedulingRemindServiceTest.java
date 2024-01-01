@@ -9,7 +9,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import com.newbarams.ajaja.common.support.MockTestSupport;
-import com.newbarams.ajaja.module.feedback.application.CreateFeedbackService;
 import com.newbarams.ajaja.module.plan.infra.PlanQueryRepository;
 import com.newbarams.ajaja.module.remind.application.model.RemindMessageInfo;
 
@@ -21,8 +20,6 @@ class SchedulingRemindServiceTest extends MockTestSupport {
 	private CreateRemindService createRemindService;
 	@Mock
 	private SendPlanRemindService sendPlanRemindService;
-	@Mock
-	private CreateFeedbackService createFeedbackService;
 	@Mock
 	private PlanQueryRepository planQueryRepository;
 

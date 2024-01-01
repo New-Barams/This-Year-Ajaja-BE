@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.newbarams.ajaja.global.common.TimeValue;
-import com.newbarams.ajaja.module.feedback.application.CreateFeedbackService;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.infra.PlanQueryRepository;
 import com.newbarams.ajaja.module.remind.application.model.RemindMessageInfo;
@@ -20,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 public class SchedulingRemindService {
 	private final CreateRemindService createRemindService;
 	private final SendPlanRemindService sendPlanRemindService;
-	private final CreateFeedbackService createFeedbackService;
 	private final PlanQueryRepository planQueryRepository;
 
 	@Scheduled(cron = "0 0 9 * 2-12 *")
@@ -47,7 +45,6 @@ public class SchedulingRemindService {
 	private void sendEmail(List<RemindMessageInfo> remindMessageInfos, TimeValue time) {
 		for (RemindMessageInfo remindInfo : remindMessageInfos) {
 			Plan plan = remindInfo.plan();
-			createFeedbackService.create(plan.getUserId(), plan.getId());
 
 			sendPlanRemindService.send(
 				remindInfo.email(),

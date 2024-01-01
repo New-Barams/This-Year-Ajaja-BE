@@ -2,8 +2,10 @@ package com.newbarams.ajaja.module.feedback.infra;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.time.Instant;
 import java.util.List;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -57,6 +59,18 @@ class FeedbackQueryRepositoryImplTest {
 
 		// then
 		assertThat(feedbacks).isEmpty();
+	}
+
+	@Test
+	void findByPlanIdAndPeriod_Success_WithNoException() {
+		// given
+		Long planId = 2L;
+
+		// when
+		boolean isFeedbacked = feedbackQueryRepository.findByPlanIdAndPeriod(planId, new TimeValue(), Instant.now());
+
+		// then
+		Assertions.assertThat(isFeedbacked).isFalse();
 	}
 
 	@Test
