@@ -14,8 +14,8 @@ public class PlanStatus {
 	private boolean canAjaja;
 	private boolean deleted;
 
-	public PlanStatus(boolean isPublic) {
-		this(isPublic, true, true, false);
+	public PlanStatus(boolean isPublic, boolean canAjaja) {
+		this(isPublic, true, canAjaja, false);
 	}
 
 	void toDeleted() {

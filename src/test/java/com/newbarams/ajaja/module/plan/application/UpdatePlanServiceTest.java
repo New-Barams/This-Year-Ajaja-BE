@@ -20,6 +20,7 @@ import com.newbarams.ajaja.module.plan.domain.Content;
 import com.newbarams.ajaja.module.plan.domain.Message;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.domain.PlanRepository;
+import com.newbarams.ajaja.module.plan.domain.PlanStatus;
 import com.newbarams.ajaja.module.plan.domain.RemindInfo;
 import com.newbarams.ajaja.module.plan.dto.PlanParam;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
@@ -54,7 +55,7 @@ class UpdatePlanServiceTest extends MonkeySupport {
 				user.getId(),
 				new Content("title", "description"),
 				new RemindInfo(12, 3, 15, "MORNING"),
-				true,
+				new PlanStatus(true, true),
 				1,
 				List.of(new Message("content", 3, 15))
 			)

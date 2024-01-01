@@ -55,10 +55,10 @@ public interface PlanMapper {
 			planEntity.isDeleted());
 	}
 
-	@Mapping(source = "request.public", target = "isPublic")
 	@Mapping(source = "request", target = "content", qualifiedByName = "toContent")
 	@Mapping(source = "request", target = "info", qualifiedByName = "toRemindInfo")
 	@Mapping(source = "request.messages", target = "messages", qualifiedByName = "toMessages")
+	@Mapping(source = "request", target = "status", qualifiedByName = "toPlanStatus")
 	PlanParam.Create toParam(Long userId, PlanRequest.Create request, int month);
 
 	@Named("toContent")
@@ -70,6 +70,11 @@ public interface PlanMapper {
 	static RemindInfo toRemindInfo(PlanRequest.Create request) {
 		return new RemindInfo(request.getRemindTotalPeriod(), request.getRemindTerm(),
 			request.getRemindDate(), request.getRemindTime());
+	}
+
+	@Named("toPlanStatus")
+	static PlanStatus toPlanStatus(PlanRequest.Create request) {
+		return new PlanStatus(request.isPublic(), request.isCanAjaja());
 	}
 
 	@Mapping(source = "plan.content.title", target = "title")

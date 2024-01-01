@@ -33,12 +33,12 @@ public class Plan {
 
 	private List<AjajaEntity> ajajas;
 
-	Plan(Long userId, Content content, RemindInfo info, boolean isPublic,
+	Plan(Long userId, Content content, RemindInfo info, PlanStatus status,
 		int iconNumber, List<Message> messages) {
 		this.userId = userId;
 		this.content = content;
 		this.info = info;
-		this.status = new PlanStatus(isPublic);
+		this.status = status;
 		this.iconNumber = iconNumber;
 		this.messages = messages;
 		this.ajajas = new ArrayList<>();
@@ -47,7 +47,7 @@ public class Plan {
 	public static Plan create(PlanParam.Create param) {
 		validateModifiableMonth(param.getMonth());
 
-		return new Plan(param.getUserId(), param.getContent(), param.getInfo(), param.isPublic(),
+		return new Plan(param.getUserId(), param.getContent(), param.getInfo(), param.getStatus(),
 			param.getIconNumber(), param.getMessages());
 	}
 
