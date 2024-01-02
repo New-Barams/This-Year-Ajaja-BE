@@ -64,12 +64,12 @@ public class TimeValue {
 		return this.zonedDateTime.isAfter(dateTime) && this.zonedDateTime.isBefore(dateTime.plusMonths(1));
 	}
 
-	public ZonedDateTime parseDateTime(int month, int date, int hour) {
+	private ZonedDateTime parseDateTime(int month, int date, int hour) {
 		return Year.of(zonedDateTime.getYear())
 			.atMonth(month)
 			.atDay(date)
 			.atTime(hour, 0)
-			.atZone(ZoneId.of("Asia/Seoul"));
+			.atZone(ZoneId.of(DEFAULT_TIME_ZONE));
 	}
 
 	public boolean isExpired() {
@@ -77,12 +77,11 @@ public class TimeValue {
 	}
 
 	public static Instant parseInstant(int year, int month, int date, int hour) {
-		ZonedDateTime dateTime = Year.of(year)
+		return Year.of(year)
 			.atMonth(month)
 			.atDay(date)
 			.atTime(hour, 0)
-			.atZone(ZoneId.of(DEFAULT_TIME_ZONE));
-
-		return dateTime.toInstant();
+			.atZone(ZoneId.of(DEFAULT_TIME_ZONE))
+			.toInstant();
 	}
 }
