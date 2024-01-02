@@ -149,4 +149,15 @@ public class Plan {
 	public void disable() {
 		this.status = status.disable();
 	}
+
+	public RemindDate getFeedbackPeriod(TimeValue current) {
+		return this.messages.stream()
+			.filter(message -> current.isBetween(
+				message.getRemindDate().getRemindMonth(),
+				message.getRemindDate().getRemindDay(),
+				this.getRemindTime()))
+			.findAny()
+			.map(Message::getRemindDate)
+			.orElseThrow(() -> new AjajaException(EXPIRED_FEEDBACK));
+	}
 }

@@ -32,8 +32,8 @@ public class Feedback extends SelfValidating<Feedback> {
 		this.validateSelf();
 	}
 
-	public static Feedback create(Long userId, Long planId) {
-		return new Feedback(null, userId, planId, Achieve.FAIL, "", null, null);
+	public static Feedback create(Long userId, Long planId, int rate, String message) {
+		return new Feedback(null, userId, planId, Achieve.of(rate), message, null, null);
 	}
 
 	public boolean isFeedback() {

@@ -3,8 +3,6 @@ package com.newbarams.ajaja.module.feedback.application;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
-import java.util.Optional;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -14,57 +12,82 @@ import org.mockito.Mock;
 import com.newbarams.ajaja.common.support.MockTestSupport;
 import com.newbarams.ajaja.global.exception.AjajaException;
 import com.newbarams.ajaja.module.feedback.domain.Achieve;
-import com.newbarams.ajaja.module.feedback.domain.Feedback;
 import com.newbarams.ajaja.module.feedback.domain.FeedbackQueryRepository;
 import com.newbarams.ajaja.module.feedback.domain.FeedbackRepository;
+import com.newbarams.ajaja.module.plan.application.LoadPlanService;
+import com.newbarams.ajaja.module.plan.domain.Plan;
+import com.newbarams.ajaja.module.plan.domain.RemindDate;
 
 class UpdateFeedbackServiceTest extends MockTestSupport {
 	@InjectMocks
 	private UpdateFeedbackService updateFeedbackService;
 
 	@Mock
+	private LoadPlanService loadPlanService;
+	@Mock
 	private FeedbackQueryRepository feedbackQueryRepository;
 	@Mock
 	private FeedbackRepository feedbackRepository;
 	@Mock
-	private Feedback mockFeedback;
+	private Plan mockPlan;
 
 	@Nested
 	class DeadlineTest {
+		private RemindDate remindDate = sut.giveMeBuilder(RemindDate.class)
+			.set("remindMonth", 2)
+			.set("remindDay", 17)
+			.sample();
+
 		@Test
 		@DisplayName("기간 내에 피드백을 시행할 경우 성공한다.")
 		void updateFeedback_Success_WithNoException() {
 			// given
-			given(feedbackQueryRepository.findByFeedbackId(any())).willReturn(Optional.of(mockFeedback));
+			given(loadPlanService.loadByUserIdAndPlanId(anyLong(), anyLong())).willReturn(mockPlan);
+			given(mockPlan.getFeedbackPeriod(any())).willReturn(remindDate);
+			given(feedbackQueryRepository.existByPlanIdAndPeriod(any(), any())).willReturn(false);
 			doNothing().when(feedbackRepository).save(any());
 
 			// when,then
 			assertThatNoException().isThrownBy(
-				() -> updateFeedbackService.updateFeedback(1L, 50, "fighting"));
+				() -> updateFeedbackService.updateFeedback(1L, 1L, 50, "fighting"));
 		}
 
 		@Test
-		@DisplayName("데드라인이 지난 피드백을 할 경우 예외를 던진다.")
-		void updateFeedback_Fail_ByIllegalAccessException() {
+		@DisplayName("타인의 계획을 피드백 하려는 경우에는 예외를 던진다.")
+		void updateFeedback_Fail_ByNotFoundPlan() {
 			// given
-			given(feedbackQueryRepository.findByFeedbackId(any())).willReturn(Optional.of(mockFeedback));
-			doThrow(AjajaException.class).when(mockFeedback).updateFeedback(50, "fighting");
+			doThrow(AjajaException.class).when(loadPlanService).loadByUserIdAndPlanId(anyLong(), anyLong());
 
 			// when,then
 			assertThatException().isThrownBy(
-				() -> updateFeedbackService.updateFeedback(1L, 50, "fighting")
+				() -> updateFeedbackService.updateFeedback(1L, 1L, 50, "fighting")
 			);
 		}
 
 		@Test
-		@DisplayName("데드라인이 지난 피드백을 할 경우 예외를 던진다.")
-		void updateFeedback_Fail_ByNotFoundFeedback() {
+		@DisplayName("피드백 기간이 아닐 경우에는 예외를 던진다.")
+		void updateFeedback_Fail_ByExpiredFeedbackPeriod() {
 			// given
-			given(feedbackQueryRepository.findByFeedbackId(any())).willReturn(Optional.empty());
+			given(loadPlanService.loadByUserIdAndPlanId(anyLong(), anyLong())).willReturn(mockPlan);
+			doThrow(AjajaException.class).when(mockPlan).getFeedbackPeriod(any());
 
 			// when,then
 			assertThatException().isThrownBy(
-				() -> updateFeedbackService.updateFeedback(1L, 50, "fighting")
+				() -> updateFeedbackService.updateFeedback(1L, 1L, 50, "fighting")
+			);
+		}
+
+		@Test
+		@DisplayName("해당 기간에 이미 피드백을 한 경우에는 예외를 던진다.")
+		void updateFeedback_Fail_ByAlreadyFeedbackFound() {
+			// given
+			given(loadPlanService.loadByUserIdAndPlanId(anyLong(), anyLong())).willReturn(mockPlan);
+			given(mockPlan.getFeedbackPeriod(any())).willReturn(remindDate);
+			given(feedbackQueryRepository.existByPlanIdAndPeriod(any(), any())).willReturn(true);
+
+			// when,then
+			assertThatException().isThrownBy(
+				() -> updateFeedbackService.updateFeedback(1L, 1L, 50, "fighting")
 			);
 		}
 	}
