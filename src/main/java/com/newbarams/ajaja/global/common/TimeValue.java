@@ -59,16 +59,16 @@ public class TimeValue {
 		return zonedDateTime.isAfter(time.zonedDateTime);
 	}
 
-	public boolean isBetween(int month, int date, int time) {
-		ZonedDateTime dateTime = parseDateTime(month, date, time);
+	public boolean isBetween(int month, int date, int hour) {
+		ZonedDateTime dateTime = parseDateTime(month, date, hour);
 		return this.zonedDateTime.isAfter(dateTime) && this.zonedDateTime.isBefore(dateTime.plusMonths(1));
 	}
 
-	public ZonedDateTime parseDateTime(int month, int date, int time) {
+	public ZonedDateTime parseDateTime(int month, int date, int hour) {
 		return Year.of(zonedDateTime.getYear())
 			.atMonth(month)
 			.atDay(date)
-			.atTime(time, 0)
+			.atTime(hour, 0)
 			.atZone(ZoneId.of("Asia/Seoul"));
 	}
 
@@ -76,8 +76,13 @@ public class TimeValue {
 		return zonedDateTime.isAfter(zonedDateTime.plusMonths(1));
 	}
 
-	public static Instant parseInstant(int year, int month, int date, int time) {
-		return Instant.parse(year + "-" + String.format("%02d", month) + "-" + String.format("%02d", date) + "T"
-			+ String.format("%02d", time) + ":00:00Z").atZone(ZoneId.of("Asia/Seoul")).toInstant();
+	public static Instant parseInstant(int year, int month, int date, int hour) {
+		ZonedDateTime dateTime = Year.of(year)
+			.atMonth(month)
+			.atDay(date)
+			.atTime(hour, 0)
+			.atZone(ZoneId.of(DEFAULT_TIME_ZONE));
+
+		return dateTime.toInstant();
 	}
 }
