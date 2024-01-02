@@ -44,7 +44,7 @@ class UpdateFeedbackServiceTest extends MockTestSupport {
 			// given
 			given(loadPlanService.loadByUserIdAndPlanId(anyLong(), anyLong())).willReturn(mockPlan);
 			given(mockPlan.getFeedbackPeriod(any())).willReturn(remindDate);
-			given(feedbackQueryRepository.findByPlanIdAndPeriod(any(), any(), any())).willReturn(false);
+			given(feedbackQueryRepository.findByPlanIdAndPeriod(any(), any())).willReturn(false);
 			doNothing().when(feedbackRepository).save(any());
 
 			// when,then
@@ -83,7 +83,7 @@ class UpdateFeedbackServiceTest extends MockTestSupport {
 			// given
 			given(loadPlanService.loadByUserIdAndPlanId(anyLong(), anyLong())).willReturn(mockPlan);
 			given(mockPlan.getFeedbackPeriod(any())).willReturn(remindDate);
-			given(feedbackQueryRepository.findByPlanIdAndPeriod(any(), any(), any())).willReturn(true);
+			given(feedbackQueryRepository.findByPlanIdAndPeriod(any(), any())).willReturn(true);
 
 			// when,then
 			assertThatException().isThrownBy(
