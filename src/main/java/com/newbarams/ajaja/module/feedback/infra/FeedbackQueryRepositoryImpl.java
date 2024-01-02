@@ -37,7 +37,7 @@ class FeedbackQueryRepositoryImpl implements FeedbackQueryRepository {
 	}
 
 	@Override
-	public boolean findByPlanIdAndPeriod(Long planId, Instant period) {
+	public boolean existByPlanIdAndPeriod(Long planId, Instant period) {
 		return queryFactory.selectFrom(feedbackEntity)
 			.where(feedbackEntity.planId.eq(planId)
 				.and(feedbackEntity.createdAt.between(period, period.plus(31, ChronoUnit.DAYS)))

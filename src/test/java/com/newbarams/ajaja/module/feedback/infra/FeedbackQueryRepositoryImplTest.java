@@ -67,7 +67,7 @@ class FeedbackQueryRepositoryImplTest {
 		Long planId = 2L;
 
 		// when
-		boolean isFeedbacked = feedbackQueryRepository.findByPlanIdAndPeriod(planId, Instant.now());
+		boolean isFeedbacked = feedbackQueryRepository.existByPlanIdAndPeriod(planId, Instant.now());
 
 		// then
 		Assertions.assertThat(isFeedbacked).isFalse();

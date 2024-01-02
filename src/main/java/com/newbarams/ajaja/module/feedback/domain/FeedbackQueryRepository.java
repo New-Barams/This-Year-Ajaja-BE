@@ -9,7 +9,7 @@ import com.newbarams.ajaja.module.feedback.infra.model.FeedbackInfo;
 public interface FeedbackQueryRepository {
 	List<Feedback> findAllFeedbackByPlanId(Long planId);
 
-	boolean findByPlanIdAndPeriod(Long feedbackId, Instant instant);
+	boolean existByPlanIdAndPeriod(Long feedbackId, Instant instant);
 
 	List<FeedbackInfo> findFeedbackInfosByPlanId(Long planId);
 

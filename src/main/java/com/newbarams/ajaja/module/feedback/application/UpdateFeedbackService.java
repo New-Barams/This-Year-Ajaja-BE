@@ -43,7 +43,7 @@ public class UpdateFeedbackService {
 	}
 
 	private void checkExistFeedback(Long planId, Instant periodInstant) {
-		boolean isFeedbacked = feedbackQueryRepository.findByPlanIdAndPeriod(planId, periodInstant);
+		boolean isFeedbacked = feedbackQueryRepository.existByPlanIdAndPeriod(planId, periodInstant);
 
 		if (isFeedbacked) {
 			throw new AjajaException(ErrorCode.ALREADY_FEEDBACK);
