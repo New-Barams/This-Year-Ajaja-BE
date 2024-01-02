@@ -29,17 +29,24 @@ public class UpdateFeedbackService {
 		Plan plan = loadPlanService.loadByUserIdAndPlanId(userId, planId);
 		TimeValue current = new TimeValue();
 
-		RemindDate feedbackPeriod = plan.getFeedbackPeriod(current);
-		Instant periodInstant = TimeValue.parseInstant(current.getYear(), feedbackPeriod.getRemindMonth(),
-			feedbackPeriod.getRemindDay(), plan.getRemindTime());
+		Instant periodInstant = createPeriodInstant(plan, current);
+		checkExistFeedback(planId, periodInstant);
 
-		boolean isFeedbacked = feedbackQueryRepository.findByPlanIdAndPeriod(planId, current, periodInstant);
+		Feedback feedback = Feedback.create(userId, planId, rate, message);
+		feedbackRepository.save(feedback);
+	}
+
+	private Instant createPeriodInstant(Plan plan, TimeValue current) {
+		RemindDate feedbackPeriod = plan.getFeedbackPeriod(current);
+		return TimeValue.parseInstant(current.getYear(), feedbackPeriod.getRemindMonth(),
+			feedbackPeriod.getRemindDay(), plan.getRemindTime());
+	}
+
+	private void checkExistFeedback(Long planId, Instant periodInstant) {
+		boolean isFeedbacked = feedbackQueryRepository.findByPlanIdAndPeriod(planId, periodInstant);
 
 		if (isFeedbacked) {
 			throw new AjajaException(ErrorCode.ALREADY_FEEDBACK);
 		}
-
-		Feedback feedback = Feedback.create(userId, planId, rate, message);
-		feedbackRepository.save(feedback);
 	}
 }
