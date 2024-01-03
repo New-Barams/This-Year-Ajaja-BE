@@ -1,9 +1,9 @@
-name: renew docker image
+name: release server
 
 on:
   push:
     branches:
-      - main
+      - prod
 
 env:
   GRADLE_VERSION: 8.3

@@ -1,9 +1,10 @@
-name: check convention, test w/ jacoco
+name: convention check w/ jacoco
 
 on:
   pull_request:
     branches:
-      - main
+      - prod
+      - dev
 
 permissions:
   checks: write
