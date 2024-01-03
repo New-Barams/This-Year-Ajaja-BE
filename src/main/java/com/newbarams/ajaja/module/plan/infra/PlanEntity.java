@@ -78,7 +78,7 @@ public class PlanEntity extends BaseEntity<PlanEntity> {
 
 	@ElementCollection
 	@CollectionTable(name = "remind_messages", joinColumns = @JoinColumn(name = "plan_id"))
-	@OrderBy("remindDate ASC")
+	@OrderBy("remindDate.remindMonth ASC")
 	private List<Message> messages = new ArrayList<>(); // todo: domain dependency
 
 	@Size
