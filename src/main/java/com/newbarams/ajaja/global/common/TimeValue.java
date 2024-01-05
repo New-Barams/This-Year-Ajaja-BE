@@ -2,6 +2,7 @@ package com.newbarams.ajaja.global.common;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.Year;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
@@ -58,7 +59,29 @@ public class TimeValue {
 		return zonedDateTime.isAfter(time.zonedDateTime);
 	}
 
+	public boolean isBetween(int month, int date, int hour) {
+		ZonedDateTime dateTime = parseDateTime(month, date, hour);
+		return this.zonedDateTime.isAfter(dateTime) && this.zonedDateTime.isBefore(dateTime.plusMonths(1));
+	}
+
+	private ZonedDateTime parseDateTime(int month, int date, int hour) {
+		return Year.of(zonedDateTime.getYear())
+			.atMonth(month)
+			.atDay(date)
+			.atTime(hour, 0)
+			.atZone(ZoneId.of(DEFAULT_TIME_ZONE));
+	}
+
 	public boolean isExpired() {
 		return zonedDateTime.isAfter(zonedDateTime.plusMonths(1));
+	}
+
+	public static Instant parseInstant(int year, int month, int date, int hour) {
+		return Year.of(year)
+			.atMonth(month)
+			.atDay(date)
+			.atTime(hour, 0)
+			.atZone(ZoneId.of(DEFAULT_TIME_ZONE))
+			.toInstant();
 	}
 }

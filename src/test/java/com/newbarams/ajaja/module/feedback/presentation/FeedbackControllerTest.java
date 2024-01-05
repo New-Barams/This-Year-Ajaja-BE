@@ -18,7 +18,7 @@ class FeedbackControllerTest extends WebMvcTestSupport {
 		// given
 		FeedbackRequest.UpdateFeedback feedbackRequest = new FeedbackRequest.UpdateFeedback(50, "fighting");
 
-		doNothing().when(updateFeedbackService).updateFeedback(anyLong(), anyInt(), anyString());
+		doNothing().when(updateFeedbackService).updateFeedback(anyLong(), anyLong(), anyInt(), anyString());
 
 		// when,then
 		mockMvc.perform(MockMvcRequestBuilders.post(FEEDBACK_END_POINT + "/1")

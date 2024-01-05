@@ -2,8 +2,9 @@ package com.newbarams.ajaja.module.feedback.infra;
 
 import static com.newbarams.ajaja.module.feedback.infra.QFeedbackEntity.*;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
@@ -36,12 +37,11 @@ class FeedbackQueryRepositoryImpl implements FeedbackQueryRepository {
 	}
 
 	@Override
-	public Optional<Feedback> findByFeedbackId(Long feedbackId) {
-		FeedbackEntity entity = queryFactory.selectFrom(feedbackEntity)
-			.where(feedbackEntity.id.eq(feedbackId))
-			.fetchOne();
-
-		return Optional.of(mapper.toDomain(entity));
+	public boolean existByPlanIdAndPeriod(Long planId, Instant period) {
+		return queryFactory.selectFrom(feedbackEntity)
+			.where(feedbackEntity.planId.eq(planId)
+				.and(feedbackEntity.createdAt.between(period, period.plus(31, ChronoUnit.DAYS)))
+			).fetchOne() != null;
 	}
 
 	@Override
