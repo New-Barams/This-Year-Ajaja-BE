@@ -16,6 +16,7 @@ import net.jqwik.api.Arbitraries;
 
 import com.newbarams.ajaja.common.support.MonkeySupport;
 import com.newbarams.ajaja.global.exception.AjajaException;
+import com.newbarams.ajaja.module.ajaja.application.SwitchAjajaService;
 import com.newbarams.ajaja.module.plan.domain.Content;
 import com.newbarams.ajaja.module.plan.domain.Message;
 import com.newbarams.ajaja.module.plan.domain.Plan;
@@ -24,6 +25,7 @@ import com.newbarams.ajaja.module.plan.domain.PlanStatus;
 import com.newbarams.ajaja.module.plan.domain.RemindInfo;
 import com.newbarams.ajaja.module.plan.dto.PlanParam;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
+import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 import com.newbarams.ajaja.module.user.adapter.out.persistence.UserJpaRepository;
 import com.newbarams.ajaja.module.user.adapter.out.persistence.model.UserEntity;
 import com.newbarams.ajaja.module.user.domain.User;
@@ -34,6 +36,8 @@ import com.newbarams.ajaja.module.user.mapper.UserMapper;
 class UpdatePlanServiceTest extends MonkeySupport {
 	@Autowired
 	private UpdatePlanService updatePlanService;
+	@Autowired
+	private SwitchAjajaService switchAjajaService;
 	@Autowired
 	private PlanRepository planRepository;
 	@Autowired
@@ -64,7 +68,7 @@ class UpdatePlanServiceTest extends MonkeySupport {
 
 	@Test
 	@DisplayName("planId가 존재하고, 수정가능한 기간일 경우 계획을 수정할 수 있다.")
-	void updatePlan_Success() {
+	void updatePlan_Success_With_Condition() {
 		// given
 		PlanRequest.Update request =
 			new PlanRequest.Update(1, "title", "des", true, true, null);
@@ -115,5 +119,25 @@ class UpdatePlanServiceTest extends MonkeySupport {
 		assertThatThrownBy(() -> updatePlanService.update(plan.getId(), strangerId, request, 1))
 			.isInstanceOf(AjajaException.class)
 			.hasMessage(INVALID_USER_ACCESS.getMessage());
+	}
+
+	@Test
+	@DisplayName("유저가 요청한 수정 내용과 수정 후의 내용이 같아야 한다.")
+	void updatePlan_Success_With_Detail() {
+		// given
+		switchAjajaService.switchOrAddIfNotExist(user.getId(), plan.getId());
+
+		PlanRequest.Update request =
+			new PlanRequest.Update(1, "updated", "updated", true, true, null);
+
+		// when
+		PlanResponse.Detail updated = updatePlanService.update(plan.getId(), user.getId(), request, 1);
+
+		// then
+		assertThat(updated.getTitle()).isEqualTo(request.getTitle());
+		assertThat(updated.getDescription()).isEqualTo(request.getDescription());
+		assertThat(updated.isPublic()).isEqualTo(request.isPublic());
+		assertThat(updated.isCanAjaja()).isEqualTo(request.isCanAjaja());
+		assertThat(updated.getAjajas()).isEqualTo(1L);
 	}
 }
