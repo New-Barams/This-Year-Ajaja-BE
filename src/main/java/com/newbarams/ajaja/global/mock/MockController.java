@@ -247,7 +247,7 @@ public class MockController {
 		return new AjajaResponse<>(true, response);
 	}
 
-	@Operation(summary = "[토큰 필요] 피드백 반영 API", description = "<b>평가할 피드백에 대한 id가 필요합니다.</b>",
+	@Operation(summary = "[토큰 필요] 피드백 반영 API", description = "<b>평가할 계획에 대한 id가 필요합니다.</b>",
 		responses = {
 			@ApiResponse(responseCode = "200", description = "성공적으로 계획에 대한 정보를 불러왔습니다."),
 			@ApiResponse(responseCode = "400", description = "유효하지 않은 토큰입니다.",
@@ -257,13 +257,46 @@ public class MockController {
 			@ApiResponse(responseCode = "500", description = "서버 내부 문제입니다. 관리자에게 문의 바랍니다.",
 				content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
 		})
-	@PostMapping("/feedbacks/{feedbackId}")
+	@PostMapping("/feedbacks/{planId}")
 	@ResponseStatus(OK)
 	public AjajaResponse<Void> updateFeedback(
-		@PathVariable int feedbackId,
+		@PathVariable int planId,
 		@RequestBody FeedbackRequest.UpdateFeedback updateFeedback
 	) {
 		return new AjajaResponse<>(true, null);
+	}
+
+	@Operation(summary = "[토큰 필요] 모든 피드백 보기 API", description = "<b>조회할 계획에 대한 id가 필요합니다.</b>",
+		responses = {
+			@ApiResponse(responseCode = "200", description = "성공적으로 계획에 대한 정보를 불러왔습니다."),
+			@ApiResponse(responseCode = "400", description = "유효하지 않은 토큰입니다.",
+				content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+			@ApiResponse(responseCode = "404", description = "평가할 피드백에 대한 정보가 존재하지 않습니다.",
+				content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+			@ApiResponse(responseCode = "500", description = "서버 내부 문제입니다. 관리자에게 문의 바랍니다.",
+				content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+		})
+	@GetMapping("/feedbacks/{planId}")
+	@ResponseStatus(OK)
+	public AjajaResponse<MockFeedbackResponse.FeedbackInfo> getFeedbacks(
+		@PathVariable int planId
+	) {
+		MockFeedbackResponse.RemindedFeedback feedback1 =
+			new MockFeedbackResponse.RemindedFeedback(
+				50, "화이팅", 3, 12, true
+			);
+		MockFeedbackResponse.RemindedFeedback feedback2 =
+			new MockFeedbackResponse.RemindedFeedback(0, "", 6, 12, true);
+		MockFeedbackResponse.RemindedFeedback feedback3 =
+			new MockFeedbackResponse.RemindedFeedback(0, "", 9, 12, false);
+		MockFeedbackResponse.RemindedFeedback feedback4 =
+			new MockFeedbackResponse.RemindedFeedback(0, "", 12, 12, false);
+
+		List<MockFeedbackResponse.RemindedFeedback> feedbacks = List.of(feedback1, feedback2, feedback3, feedback4);
+		MockFeedbackResponse.FeedbackInfo feedbackInfo =
+			new MockFeedbackResponse.FeedbackInfo(12, "1일 1커밋", 9, feedbacks);
+
+		return AjajaResponse.ok(feedbackInfo);
 	}
 
 	@Operation(summary = "[테스트] 계획 생성 API")
