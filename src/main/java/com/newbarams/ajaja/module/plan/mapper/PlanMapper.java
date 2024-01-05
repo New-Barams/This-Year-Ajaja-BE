@@ -1,5 +1,6 @@
 package com.newbarams.ajaja.module.plan.mapper;
 
+import java.time.Instant;
 import java.util.List;
 
 import org.mapstruct.InheritConfiguration;
@@ -7,7 +8,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
+import com.newbarams.ajaja.global.common.TimeValue;
 import com.newbarams.ajaja.module.ajaja.infra.AjajaEntity;
+import com.newbarams.ajaja.module.feedback.application.model.PlanFeedbackInfo;
 import com.newbarams.ajaja.module.plan.domain.Content;
 import com.newbarams.ajaja.module.plan.domain.Message;
 import com.newbarams.ajaja.module.plan.domain.Plan;
@@ -36,7 +39,12 @@ public interface PlanMapper {
 	@Mapping(source = "planEntity", target = "content", qualifiedByName = "toContent")
 	@Mapping(source = "planEntity", target = "info", qualifiedByName = "toRemindInfo")
 	@Mapping(source = "planEntity", target = "status", qualifiedByName = "toPlanStatus")
+	@Mapping(target = "createdAt", expression = "java(parseTimeValue(planEntity.getCreatedAt()))")
 	Plan toDomain(PlanEntity planEntity);
+
+	default TimeValue parseTimeValue(Instant createdAt) {
+		return createdAt == null ? null : new TimeValue(createdAt); // 계획 저장 후 조회 시 작성일 null로 인한 코드
+	}
 
 	@Named("toContent")
 	static Content toContent(PlanEntity planEntity) {
@@ -119,4 +127,13 @@ public interface PlanMapper {
 
 	@InheritConfiguration(name = "toDomain")
 	RemindMessageInfo toModel(PlanEntity plan, String email);
+
+	@Mapping(target = "createdYear", expression = "java(plan.getCreatedAt().getYear())")
+	@Mapping(target = "remindMonth", expression = "java(plan.getRemindMonth())")
+	@Mapping(source = "info.remindDate", target = "remindDate")
+	@Mapping(source = "info.remindTotalPeriod", target = "totalPeriod")
+	@Mapping(source = "info.remindTerm", target = "remindTerm")
+	@Mapping(source = "info.remindTime", target = "remindTime")
+	@Mapping(source = "content.title", target = "title")
+	PlanFeedbackInfo toModel(Plan plan);
 }

@@ -32,6 +32,7 @@ public class Plan {
 	private List<Message> messages;
 
 	private List<AjajaEntity> ajajas;
+	private TimeValue createdAt;
 
 	Plan(Long userId, Content content, RemindInfo info, PlanStatus status,
 		int iconNumber, List<Message> messages) {
@@ -153,6 +154,7 @@ public class Plan {
 	public RemindDate getFeedbackPeriod(TimeValue current) {
 		return this.messages.stream()
 			.filter(message -> current.isBetween(
+				this.createdAt.getYear(),
 				message.getRemindDate().getRemindMonth(),
 				message.getRemindDate().getRemindDay(),
 				this.getRemindTime()))
