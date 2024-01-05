@@ -1,7 +1,5 @@
 package com.newbarams.ajaja.module.feedback.application;
 
-import java.time.Instant;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,21 +27,21 @@ public class UpdateFeedbackService {
 		Plan plan = loadPlanService.loadByUserIdAndPlanId(userId, planId);
 		TimeValue current = new TimeValue();
 
-		Instant periodInstant = createPeriodInstant(plan, current);
-		checkExistFeedback(planId, periodInstant);
+		TimeValue period = parsePeriod(plan, current);
+		checkExistFeedback(planId, period);
 
 		Feedback feedback = Feedback.create(userId, planId, rate, message);
 		feedbackRepository.save(feedback);
 	}
 
-	private Instant createPeriodInstant(Plan plan, TimeValue current) {
+	private TimeValue parsePeriod(Plan plan, TimeValue current) {
 		RemindDate feedbackPeriod = plan.getFeedbackPeriod(current);
-		return TimeValue.parseInstant(current.getYear(), feedbackPeriod.getRemindMonth(),
+		return TimeValue.parseTimeValue(current.getYear(), feedbackPeriod.getRemindMonth(),
 			feedbackPeriod.getRemindDay(), plan.getRemindTime());
 	}
 
-	private void checkExistFeedback(Long planId, Instant periodInstant) {
-		boolean isFeedbacked = feedbackQueryRepository.existByPlanIdAndPeriod(planId, periodInstant);
+	private void checkExistFeedback(Long planId, TimeValue period) {
+		boolean isFeedbacked = feedbackQueryRepository.existByPlanIdAndPeriod(planId, period);
 
 		if (isFeedbacked) {
 			throw new AjajaException(ErrorCode.ALREADY_FEEDBACK);
