@@ -266,7 +266,7 @@ public class MockController {
 		return new AjajaResponse<>(true, null);
 	}
 
-	@Operation(summary = "[토큰 필요] 모든 피드백 보기 API", description = "<b>조회할 계획에 대한 id가 필요합니다.</b>",
+	@Operation(summary = "[토큰 필요] 모든 피드백 조회 API", description = "<b>조회할 계획에 대한 id가 필요합니다.</b>",
 		responses = {
 			@ApiResponse(responseCode = "200", description = "성공적으로 계획에 대한 정보를 불러왔습니다."),
 			@ApiResponse(responseCode = "400", description = "유효하지 않은 토큰입니다.",
