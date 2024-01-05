@@ -72,9 +72,10 @@ public class FeedbackController {
 	@GetMapping("/{planId}")
 	@ResponseStatus(OK)
 	public AjajaResponse<FeedbackResponse.FeedbackInfo> getFeedbackInfo(
+		@UserId Long userId,
 		@PathVariable Long planId
 	) {
-		FeedbackResponse.FeedbackInfo feedbackInfo = loadFeedbackInfoService.loadFeedbackInfoByPlanId(planId);
+		FeedbackResponse.FeedbackInfo feedbackInfo = loadFeedbackInfoService.loadFeedbackInfoByPlanId(userId, planId);
 		return AjajaResponse.ok(feedbackInfo);
 	}
 }
