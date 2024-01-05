@@ -1,20 +1,15 @@
-name: Auto assgin
+name: auto assign
 
 on:
   pull_request:
   issues:
     types: [opened, labeled, unlabeled]
 
-env:
-  REVIEWERS: 2jie0516, kys0411, Hejow
-
 jobs:
   assign:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: wow-actions/auto-assign@v3
+      - uses: kentaro-m/auto-assign-action@v1.2.5
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          assignees: ${{ github.actor }}
-          reviewers: ${{ env.REVIEWERS }}
+          configuration-path: '.github/ajaja-reviewers.yml'

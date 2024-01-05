@@ -1,0 +1,10 @@
+addReviewers: true
+
+addAssignees: author
+
+reviewers:
+  - Hejow
+  - 2jie0516
+  - kys0411
+
+numberOfReviewers: 0 # default
