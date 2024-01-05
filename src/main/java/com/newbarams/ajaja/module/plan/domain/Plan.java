@@ -7,7 +7,7 @@ import java.util.List;
 
 import com.newbarams.ajaja.global.common.TimeValue;
 import com.newbarams.ajaja.global.exception.AjajaException;
-import com.newbarams.ajaja.module.ajaja.infra.AjajaEntity;
+import com.newbarams.ajaja.module.ajaja.domain.Ajaja;
 import com.newbarams.ajaja.module.plan.dto.PlanParam;
 
 import lombok.AllArgsConstructor;
@@ -31,7 +31,7 @@ public class Plan {
 
 	private List<Message> messages;
 
-	private List<AjajaEntity> ajajas;
+	private List<Ajaja> ajajas;
 
 	Plan(Long userId, Content content, RemindInfo info, PlanStatus status,
 		int iconNumber, List<Message> messages) {

@@ -7,6 +7,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
+import com.newbarams.ajaja.module.ajaja.domain.Ajaja;
+import com.newbarams.ajaja.module.ajaja.domain.Ajaja.Type;
 import com.newbarams.ajaja.module.ajaja.infra.AjajaEntity;
 import com.newbarams.ajaja.module.plan.domain.Content;
 import com.newbarams.ajaja.module.plan.domain.Message;
@@ -31,11 +33,21 @@ public interface PlanMapper {
 	@Mapping(source = "status.canRemind", target = "canRemind")
 	@Mapping(source = "status.canAjaja", target = "canAjaja")
 	@Mapping(source = "status.deleted", target = "deleted")
+	@Mapping(source = "ajajas", target = "ajajas", qualifiedByName = "toAjajaEntities")
 	PlanEntity toEntity(Plan plan);
+
+	@Named("toAjajaEntities")
+	static List<AjajaEntity> toAjajaEntities(List<Ajaja> ajajas) {
+		return ajajas.stream()
+			.map((ajaja) -> new AjajaEntity(ajaja.getId(), ajaja.getTargetId(),
+				ajaja.getUserId(), ajaja.isCanceled(), ajaja.getType()))
+			.toList();
+	}
 
 	@Mapping(source = "planEntity", target = "content", qualifiedByName = "toContent")
 	@Mapping(source = "planEntity", target = "info", qualifiedByName = "toRemindInfo")
 	@Mapping(source = "planEntity", target = "status", qualifiedByName = "toPlanStatus")
+	@Mapping(source = "ajajas", target = "ajajas", qualifiedByName = "toAjajas")
 	Plan toDomain(PlanEntity planEntity);
 
 	@Named("toContent")
@@ -53,6 +65,14 @@ public interface PlanMapper {
 	static PlanStatus toPlanStatus(PlanEntity planEntity) {
 		return new PlanStatus(planEntity.isPublic(), planEntity.isCanRemind(), planEntity.isCanAjaja(),
 			planEntity.isDeleted());
+	}
+
+	@Named("toAjajas")
+	static List<Ajaja> toAjajas(List<AjajaEntity> ajajas) {
+		return ajajas.stream()
+			.map((ajaja) -> new Ajaja(ajaja.getId(), ajaja.getTargetId(),
+				ajaja.getUserId(), ajaja.isCanceled(), Type.valueOf(ajaja.getType())))
+			.toList();
 	}
 
 	@Mapping(source = "request", target = "content", qualifiedByName = "toContent")
