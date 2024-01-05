@@ -10,6 +10,7 @@ import org.mapstruct.Named;
 
 import com.newbarams.ajaja.global.common.TimeValue;
 import com.newbarams.ajaja.module.ajaja.infra.AjajaEntity;
+import com.newbarams.ajaja.module.feedback.application.model.FeedbackPeriod;
 import com.newbarams.ajaja.module.feedback.application.model.PlanFeedbackInfo;
 import com.newbarams.ajaja.module.plan.domain.Content;
 import com.newbarams.ajaja.module.plan.domain.Message;
@@ -130,10 +131,17 @@ public interface PlanMapper {
 
 	@Mapping(target = "createdYear", expression = "java(plan.getCreatedAt().getYear())")
 	@Mapping(target = "remindMonth", expression = "java(plan.getRemindMonth())")
+	@Mapping(target = "periods", expression = "java(getFeedbackPeriods(plan.getMessages()))")
 	@Mapping(source = "info.remindDate", target = "remindDate")
 	@Mapping(source = "info.remindTotalPeriod", target = "totalPeriod")
 	@Mapping(source = "info.remindTerm", target = "remindTerm")
 	@Mapping(source = "info.remindTime", target = "remindTime")
 	@Mapping(source = "content.title", target = "title")
 	PlanFeedbackInfo toModel(Plan plan);
+
+	default List<FeedbackPeriod> getFeedbackPeriods(List<Message> messages) {
+		return messages.stream().map(Message::getRemindDate)
+			.map(remindDate -> new FeedbackPeriod(remindDate.getRemindMonth(), remindDate.getRemindDay()))
+			.toList();
+	}
 }

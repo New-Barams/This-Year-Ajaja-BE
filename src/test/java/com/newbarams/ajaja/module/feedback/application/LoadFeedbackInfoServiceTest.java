@@ -13,14 +13,13 @@ import org.mockito.Mock;
 
 import com.newbarams.ajaja.common.support.MockTestSupport;
 import com.newbarams.ajaja.global.exception.AjajaException;
+import com.newbarams.ajaja.module.feedback.application.model.FeedbackPeriod;
 import com.newbarams.ajaja.module.feedback.application.model.PlanFeedbackInfo;
 import com.newbarams.ajaja.module.feedback.domain.FeedbackQueryRepository;
 import com.newbarams.ajaja.module.feedback.dto.FeedbackResponse;
 import com.newbarams.ajaja.module.feedback.infra.model.FeedbackInfo;
 import com.newbarams.ajaja.module.feedback.mapper.FeedbackMapper;
 import com.newbarams.ajaja.module.plan.application.LoadPlanService;
-import com.newbarams.ajaja.module.plan.domain.Message;
-import com.newbarams.ajaja.module.plan.domain.RemindDate;
 
 class LoadFeedbackInfoServiceTest extends MockTestSupport {
 	@InjectMocks
@@ -43,20 +42,19 @@ class LoadFeedbackInfoServiceTest extends MockTestSupport {
 			.set("feedbackMonth", 3)
 			.set("feedbackDate", 15)
 			.sampleList(4);
-		RemindDate remindDate = sut.giveMeBuilder(RemindDate.class)
-			.set("remindMonth", 2)
-			.set("remindDay", 15)
-			.sample();
-		List<Message> messages = sut.giveMeBuilder(Message.class)
-			.set("remindDate", remindDate)
+
+		List<FeedbackPeriod> periods = sut.giveMeBuilder(FeedbackPeriod.class)
+			.set("remindMonth", 3)
+			.set("remindDate", 15)
 			.sampleList(4);
+
 		planFeedbackInfo = sut.giveMeBuilder(PlanFeedbackInfo.class)
 			.set("title", "계획")
 			.set("createdYear", 2023)
 			.set("remindMonth", 2)
 			.set("remindDate", 15)
 			.set("remindTime", 9)
-			.set("messages", messages)
+			.set("periods", periods)
 			.sample();
 		feedbackInfo = sut.giveMeBuilder(FeedbackResponse.FeedbackInfo.class)
 			.set("title", "계획")
