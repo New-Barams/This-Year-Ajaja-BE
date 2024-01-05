@@ -40,7 +40,7 @@ class FeedbackQueryRepositoryImpl implements FeedbackQueryRepository {
 		return queryFactory.selectFrom(feedbackEntity)
 			.where(feedbackEntity.planId.eq(planId)
 				.and(feedbackEntity.createdAt.between(period.getInstant(), period.oneMonthLater().toInstant()))
-			).fetchOne() != null;
+			).fetchFirst() != null;
 	}
 
 	@Override
