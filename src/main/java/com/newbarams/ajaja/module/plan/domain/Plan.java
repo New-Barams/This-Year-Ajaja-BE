@@ -154,10 +154,12 @@ public class Plan {
 	public RemindDate getFeedbackPeriod(TimeValue current) {
 		return this.messages.stream()
 			.filter(message -> current.isBetween(
-				this.createdAt.getYear(),
-				message.getRemindDate().getRemindMonth(),
-				message.getRemindDate().getRemindDay(),
-				this.getRemindTime()))
+				TimeValue.parse(
+					this.createdAt.getYear(),
+					message.getRemindDate().getRemindMonth(),
+					message.getRemindDate().getRemindDay(),
+					this.getRemindTime()))
+			)
 			.findAny()
 			.map(Message::getRemindDate)
 			.orElseThrow(() -> new AjajaException(EXPIRED_FEEDBACK));

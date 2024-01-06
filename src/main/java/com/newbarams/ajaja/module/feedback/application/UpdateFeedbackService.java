@@ -36,7 +36,7 @@ public class UpdateFeedbackService {
 
 	private TimeValue parsePeriod(Plan plan, TimeValue current) {
 		RemindDate feedbackPeriod = plan.getFeedbackPeriod(current);
-		return TimeValue.parseTimeValue(current.getYear(), feedbackPeriod.getRemindMonth(),
+		return TimeValue.parse(current.getYear(), feedbackPeriod.getRemindMonth(),
 			feedbackPeriod.getRemindDay(), plan.getRemindTime());
 	}
 

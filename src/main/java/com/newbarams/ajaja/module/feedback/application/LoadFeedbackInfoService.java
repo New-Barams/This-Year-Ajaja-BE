@@ -72,8 +72,8 @@ public class LoadFeedbackInfoService {
 		}
 
 		TimeValue feedbackDate = parsePeriod(planInfo, feedbackInfo.feedbackMonth(), feedbackInfo.feedbackDate());
-		boolean isBetweenPeriod = feedbackDate.isBetween(planInfo.createdYear(), feedbackPeriod.remindMonth(),
-			feedbackPeriod.remindDate(), planInfo.remindTime());
+		boolean isBetweenPeriod = feedbackDate.isBetween(TimeValue.parse(planInfo.createdYear(),
+			feedbackPeriod.remindMonth(), feedbackPeriod.remindDate(), planInfo.remindTime()));
 
 		if (isBetweenPeriod && infos.hasNext()) {
 			infos.next();
@@ -82,7 +82,7 @@ public class LoadFeedbackInfoService {
 	}
 
 	private TimeValue parsePeriod(PlanFeedbackInfo planInfo, int month, int date) {
-		return TimeValue.parseTimeValue(
+		return TimeValue.parse(
 			planInfo.createdYear(),
 			month,
 			date,

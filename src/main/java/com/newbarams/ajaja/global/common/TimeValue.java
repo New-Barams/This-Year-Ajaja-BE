@@ -61,10 +61,9 @@ public class TimeValue {
 		return zonedDateTime.isAfter(time.zonedDateTime);
 	}
 
-	public boolean isBetween(int year, int month, int date, int hour) {
-		TimeValue dateTime = TimeValue.parseTimeValue(year, month, date, hour);
-		return this.zonedDateTime.isAfter(dateTime.zonedDateTime)
-			&& this.zonedDateTime.isBefore(dateTime.oneMonthLater());
+	public boolean isBetween(TimeValue time) {
+		return this.zonedDateTime.isAfter(time.zonedDateTime)
+			&& this.zonedDateTime.isBefore(time.oneMonthLater());
 	}
 
 	private ZonedDateTime parseDateTime(int month, int date, int hour, int minute) {
@@ -79,7 +78,7 @@ public class TimeValue {
 		return zonedDateTime.isAfter(zonedDateTime.plusMonths(1));
 	}
 
-	public static TimeValue parseTimeValue(int year, int month, int date, int hour) {
+	public static TimeValue parse(int year, int month, int date, int hour) {
 		Instant instant = Year.of(year)
 			.atMonth(month)
 			.atDay(date)
