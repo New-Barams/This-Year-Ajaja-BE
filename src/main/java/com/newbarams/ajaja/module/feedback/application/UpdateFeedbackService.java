@@ -11,7 +11,6 @@ import com.newbarams.ajaja.module.feedback.domain.FeedbackQueryRepository;
 import com.newbarams.ajaja.module.feedback.domain.FeedbackRepository;
 import com.newbarams.ajaja.module.plan.application.LoadPlanService;
 import com.newbarams.ajaja.module.plan.domain.Plan;
-import com.newbarams.ajaja.module.plan.domain.RemindDate;
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,17 +26,11 @@ public class UpdateFeedbackService {
 		Plan plan = loadPlanService.loadByUserIdAndPlanId(userId, planId);
 		TimeValue current = new TimeValue();
 
-		TimeValue period = parsePeriod(plan, current);
+		TimeValue period = plan.getFeedbackPeriod(current);
 		checkExistFeedback(planId, period);
 
 		Feedback feedback = Feedback.create(userId, planId, rate, message);
 		feedbackRepository.save(feedback);
-	}
-
-	private TimeValue parsePeriod(Plan plan, TimeValue current) {
-		RemindDate feedbackPeriod = plan.getFeedbackPeriod(current);
-		return TimeValue.parse(current.getYear(), feedbackPeriod.getRemindMonth(),
-			feedbackPeriod.getRemindDay(), plan.getRemindTime());
 	}
 
 	private void checkExistFeedback(Long planId, TimeValue period) {
