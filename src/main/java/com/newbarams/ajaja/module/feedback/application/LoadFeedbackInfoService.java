@@ -1,6 +1,5 @@
 package com.newbarams.ajaja.module.feedback.application;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -40,16 +39,10 @@ public class LoadFeedbackInfoService {
 		Iterator<FeedbackInfo> feedbackInfos,
 		PlanFeedbackInfo planInfo
 	) {
-		List<FeedbackResponse.RemindFeedback> feedbacks = new ArrayList<>();
-		List<FeedbackPeriod> periods = planInfo.periods();
 		FeedbackInfo feedbackInfo = feedbackInfos.hasNext() ? feedbackInfos.next() : null;
 
-		for (FeedbackPeriod period : periods) {
-			FeedbackResponse.RemindFeedback feedback = createRemindFeedbackResponse(feedbackInfo, planInfo, period,
-				feedbackInfos);
-			feedbacks.add(feedback);
-		}
-		return feedbacks;
+		return planInfo.periods().stream()
+			.map(period -> createRemindFeedbackResponse(feedbackInfo, planInfo, period, feedbackInfos)).toList();
 	}
 
 	private FeedbackResponse.RemindFeedback createRemindFeedbackResponse(
