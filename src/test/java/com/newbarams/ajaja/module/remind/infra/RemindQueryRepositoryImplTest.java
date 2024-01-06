@@ -1,6 +1,5 @@
 package com.newbarams.ajaja.module.remind.infra;
 
-import java.time.Instant;
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
@@ -12,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.newbarams.ajaja.common.support.MockTestSupport;
+import com.newbarams.ajaja.global.common.TimeValue;
 import com.newbarams.ajaja.module.plan.domain.Content;
 import com.newbarams.ajaja.module.plan.domain.Message;
 import com.newbarams.ajaja.module.plan.domain.Plan;
@@ -49,7 +49,7 @@ class RemindQueryRepositoryImplTest extends MockTestSupport {
 			.set("isPublic", true)
 			.set("icon", 1)
 			.set("messages", messages)
-			.set("createdAt", Instant.now())
+			.set("createdAt", new TimeValue())
 			.sample();
 
 		// when

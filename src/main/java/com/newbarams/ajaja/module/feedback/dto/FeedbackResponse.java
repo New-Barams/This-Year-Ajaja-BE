@@ -8,20 +8,19 @@ public final class FeedbackResponse {
 	@Data
 	public static class FeedbackInfo {
 		private final int achieveRate;
-		private final String planName;
-		private final int totalPeriod;
-		private final int remindTerm;
-		private final int remindDay;
-		private final List<RemindedFeedback> feedbacks;
+		private final String title;
+		private final int remindTime;
+		private final List<RemindFeedback> feedbacks;
 	}
 
 	@Data
-	public static class RemindedFeedback {
-		private final Long feedbackId;
+	public static class RemindFeedback {
 		private final int achieve;
 		private final String message;
 		private final int remindMonth;
-		private final int remindDay;
-		private final boolean feedbacked;
+		private final int remindDate;
+		private final int endMonth;
+		private final int endDate;
+		private final boolean reminded;
 	}
 }

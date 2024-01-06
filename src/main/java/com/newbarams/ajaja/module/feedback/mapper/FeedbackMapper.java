@@ -1,15 +1,17 @@
 package com.newbarams.ajaja.module.feedback.mapper;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import com.newbarams.ajaja.global.common.TimeValue;
+import com.newbarams.ajaja.module.feedback.application.model.PlanFeedbackInfo;
 import com.newbarams.ajaja.module.feedback.domain.Feedback;
 import com.newbarams.ajaja.module.feedback.dto.FeedbackResponse;
 import com.newbarams.ajaja.module.feedback.infra.FeedbackEntity;
 import com.newbarams.ajaja.module.feedback.infra.model.FeedbackInfo;
-import com.newbarams.ajaja.module.plan.domain.Plan;
 
 @Mapper(componentModel = "spring")
 public interface FeedbackMapper {
@@ -21,27 +23,39 @@ public interface FeedbackMapper {
 
 	List<Feedback> toDomain(List<FeedbackEntity> entities);
 
+	@Mapping(target = "achieveRate", expression = "java(findAchieveRate(feedbacks))")
+	@Mapping(source = "info.title", target = "title")
+	FeedbackResponse.FeedbackInfo toResponse(PlanFeedbackInfo info, List<FeedbackResponse.RemindFeedback> feedbacks);
+
 	@Mapping(target = "deleted", expression = "java(false)")
 	@Mapping(source = "info.message", target = "message")
 	@Mapping(target = "achieve", expression = "java(feedback.getInfo().getAchieve().getRate())")
 	FeedbackEntity toEntity(Feedback feedback);
 
-	@Mapping(target = "feedbacks", expression = "java(toResponse(feedbackInfos))")
-	@Mapping(target = "achieveRate", expression = "java(findAchieveRate(feedbackInfos))")
-	@Mapping(source = "plan.content.title", target = "planName")
-	@Mapping(source = "plan.info.remindTotalPeriod", target = "totalPeriod")
-	@Mapping(source = "plan.info.remindTerm", target = "remindTerm")
-	@Mapping(source = "plan.info.remindDate", target = "remindDay")
-	FeedbackResponse.FeedbackInfo toResponse(Plan plan, List<FeedbackInfo> feedbackInfos);
-
-	default int findAchieveRate(List<FeedbackInfo> feedbackInfos) {
-		return (int)feedbackInfos.stream()
-			.mapToInt(FeedbackInfo::achieve)
+	default int findAchieveRate(List<FeedbackResponse.RemindFeedback> feedbacks) {
+		return (int)feedbacks.stream()
+			.mapToInt(FeedbackResponse.RemindFeedback::getAchieve)
 			.average()
 			.orElse(0);
 	}
 
-	List<FeedbackResponse.RemindedFeedback> toResponse(List<FeedbackInfo> feedbackInfos);
+	@Mapping(target = "reminded", expression = "java(true)")
+	@Mapping(target = "remindMonth", expression = "java(sendDate.getMonth())")
+	@Mapping(target = "remindDate", expression = "java(sendDate.getDate())")
+	@Mapping(target = "endMonth", expression = "java(endDate.getMonthValue())")
+	@Mapping(target = "endDate", expression = "java(endDate.getDayOfMonth())")
+	FeedbackResponse.RemindFeedback toResponse(TimeValue sendDate, FeedbackInfo feedbackInfo, ZonedDateTime endDate);
 
-	FeedbackResponse.RemindedFeedback toResponse(FeedbackInfo feedbackInfo);
+	@Mapping(target = "message", expression = "java(\"\")")
+	@Mapping(target = "reminded", expression = "java(isReminded(sendDate))")
+	@Mapping(target = "remindMonth", expression = "java(sendDate.getMonth())")
+	@Mapping(target = "remindDate", expression = "java(sendDate.getDate())")
+	@Mapping(target = "endMonth", expression = "java(endDate.getMonthValue())")
+	@Mapping(target = "endDate", expression = "java(endDate.getDayOfMonth())")
+	FeedbackResponse.RemindFeedback toEmptyResponse(TimeValue sendDate, Integer remindTime, ZonedDateTime endDate);
+
+	default boolean isReminded(TimeValue sendDate) {
+		TimeValue current = new TimeValue();
+		return current.isAfter(sendDate);
+	}
 }
