@@ -13,6 +13,7 @@ import lombok.Getter;
 public class TimeValue {
 	private static final String DEFAULT_TIME_ZONE = "Asia/Seoul";
 	private static final int THREE_DAYS = 3;
+	private static final int LAST_MONTH = 12;
 
 	private final Instant instant;
 	private final ZonedDateTime zonedDateTime;
@@ -47,7 +48,7 @@ public class TimeValue {
 	}
 
 	public ZonedDateTime oneMonthLater() {
-		return zonedDateTime.getMonthValue() == 12
+		return zonedDateTime.getMonthValue() == LAST_MONTH
 			? parseDateTime(12, 31, 23, 59) : zonedDateTime.plusMonths(1);
 	}
 
