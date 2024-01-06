@@ -2,7 +2,6 @@ package com.newbarams.ajaja.module.feedback.infra;
 
 import static org.assertj.core.api.Assertions.*;
 
-import java.time.Instant;
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
@@ -67,7 +66,7 @@ class FeedbackQueryRepositoryImplTest {
 		Long planId = 2L;
 
 		// when
-		boolean isFeedbacked = feedbackQueryRepository.existByPlanIdAndPeriod(planId, Instant.now());
+		boolean isFeedbacked = feedbackQueryRepository.existByPlanIdAndPeriod(planId, new TimeValue());
 
 		// then
 		Assertions.assertThat(isFeedbacked).isFalse();

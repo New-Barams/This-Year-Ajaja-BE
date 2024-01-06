@@ -13,6 +13,7 @@ import lombok.Getter;
 public class TimeValue {
 	private static final String DEFAULT_TIME_ZONE = "Asia/Seoul";
 	private static final int THREE_DAYS = 3;
+	private static final int LAST_MONTH = 12;
 
 	private final Instant instant;
 	private final ZonedDateTime zonedDateTime;
@@ -47,7 +48,8 @@ public class TimeValue {
 	}
 
 	public ZonedDateTime oneMonthLater() {
-		return zonedDateTime.plusMonths(1);
+		return zonedDateTime.getMonthValue() == LAST_MONTH
+			? parseDateTime(12, 31, 23, 59) : zonedDateTime.plusMonths(1);
 	}
 
 	public boolean isWithinThreeDays(Date expireIn) {
@@ -59,16 +61,16 @@ public class TimeValue {
 		return zonedDateTime.isAfter(time.zonedDateTime);
 	}
 
-	public boolean isBetween(int month, int date, int hour) {
-		ZonedDateTime dateTime = parseDateTime(month, date, hour);
-		return this.zonedDateTime.isAfter(dateTime) && this.zonedDateTime.isBefore(dateTime.plusMonths(1));
+	public boolean isBetween(TimeValue time) {
+		return this.zonedDateTime.isAfter(time.zonedDateTime)
+			&& this.zonedDateTime.isBefore(time.oneMonthLater());
 	}
 
-	private ZonedDateTime parseDateTime(int month, int date, int hour) {
+	private ZonedDateTime parseDateTime(int month, int date, int hour, int minute) {
 		return Year.of(zonedDateTime.getYear())
 			.atMonth(month)
 			.atDay(date)
-			.atTime(hour, 0)
+			.atTime(hour, minute)
 			.atZone(ZoneId.of(DEFAULT_TIME_ZONE));
 	}
 
@@ -76,12 +78,14 @@ public class TimeValue {
 		return zonedDateTime.isAfter(zonedDateTime.plusMonths(1));
 	}
 
-	public static Instant parseInstant(int year, int month, int date, int hour) {
-		return Year.of(year)
+	public static TimeValue parse(int year, int month, int date, int hour) {
+		Instant instant = Year.of(year)
 			.atMonth(month)
 			.atDay(date)
 			.atTime(hour, 0)
 			.atZone(ZoneId.of(DEFAULT_TIME_ZONE))
 			.toInstant();
+
+		return new TimeValue(instant);
 	}
 }

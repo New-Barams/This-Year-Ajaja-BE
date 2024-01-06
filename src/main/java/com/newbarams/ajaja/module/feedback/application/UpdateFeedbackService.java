@@ -1,7 +1,5 @@
 package com.newbarams.ajaja.module.feedback.application;
 
-import java.time.Instant;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,7 +11,6 @@ import com.newbarams.ajaja.module.feedback.domain.FeedbackQueryRepository;
 import com.newbarams.ajaja.module.feedback.domain.FeedbackRepository;
 import com.newbarams.ajaja.module.plan.application.LoadPlanService;
 import com.newbarams.ajaja.module.plan.domain.Plan;
-import com.newbarams.ajaja.module.plan.domain.RemindDate;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,23 +26,15 @@ public class UpdateFeedbackService {
 		Plan plan = loadPlanService.loadByUserIdAndPlanId(userId, planId);
 		TimeValue current = new TimeValue();
 
-		Instant periodInstant = createPeriodInstant(plan, current);
-		checkExistFeedback(planId, periodInstant);
+		TimeValue period = plan.getFeedbackPeriod(current);
+		checkExistFeedback(planId, period);
 
 		Feedback feedback = Feedback.create(userId, planId, rate, message);
 		feedbackRepository.save(feedback);
 	}
 
-	private Instant createPeriodInstant(Plan plan, TimeValue current) {
-		RemindDate feedbackPeriod = plan.getFeedbackPeriod(current);
-		return TimeValue.parseInstant(current.getYear(), feedbackPeriod.getRemindMonth(),
-			feedbackPeriod.getRemindDay(), plan.getRemindTime());
-	}
-
-	private void checkExistFeedback(Long planId, Instant periodInstant) {
-		boolean isFeedbacked = feedbackQueryRepository.existByPlanIdAndPeriod(planId, periodInstant);
-
-		if (isFeedbacked) {
+	private void checkExistFeedback(Long planId, TimeValue period) {
+		if (feedbackQueryRepository.existByPlanIdAndPeriod(planId, period)) {
 			throw new AjajaException(ErrorCode.ALREADY_FEEDBACK);
 		}
 	}

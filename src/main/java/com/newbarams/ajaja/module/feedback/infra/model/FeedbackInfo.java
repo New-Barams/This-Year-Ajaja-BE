@@ -5,7 +5,7 @@ public record FeedbackInfo(
 	boolean feedbacked,
 	int achieve,
 	String message,
-	int remindMonth,
-	int remindDay
+	int feedbackMonth,
+	int feedbackDate
 ) {
 }

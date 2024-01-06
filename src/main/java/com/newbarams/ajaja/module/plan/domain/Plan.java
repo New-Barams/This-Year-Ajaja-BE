@@ -32,6 +32,7 @@ public class Plan {
 	private List<Message> messages;
 
 	private List<AjajaEntity> ajajas;
+	private TimeValue createdAt;
 
 	Plan(Long userId, Content content, RemindInfo info, PlanStatus status,
 		int iconNumber, List<Message> messages) {
@@ -150,14 +151,20 @@ public class Plan {
 		this.status = status.disable();
 	}
 
-	public RemindDate getFeedbackPeriod(TimeValue current) {
+	public TimeValue getFeedbackPeriod(TimeValue current) {
 		return this.messages.stream()
 			.filter(message -> current.isBetween(
+				TimeValue.parse(
+					this.createdAt.getYear(),
+					message.getRemindDate().getRemindMonth(),
+					message.getRemindDate().getRemindDay(),
+					this.getRemindTime()))
+			)
+			.findAny()
+			.map(message -> TimeValue.parse(this.createdAt.getYear(),
 				message.getRemindDate().getRemindMonth(),
 				message.getRemindDate().getRemindDay(),
 				this.getRemindTime()))
-			.findAny()
-			.map(Message::getRemindDate)
 			.orElseThrow(() -> new AjajaException(EXPIRED_FEEDBACK));
 	}
 }
