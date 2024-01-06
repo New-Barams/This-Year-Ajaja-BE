@@ -54,8 +54,12 @@ public class LoadFeedbackInfoService {
 		TimeValue sendDateValue = TimeValue.parse(planInfo.createdYear(), period.remindMonth(), period.remindDate(),
 			planInfo.remindTime());
 
-		return isFeedbacked(feedbackInfo, planInfo, period, feedbackInfos)
-			? feedbackMapper.toResponse(sendDateValue, feedbackInfo, sendDateValue.oneMonthLater()) :
+		boolean feedbacked = isFeedbacked(feedbackInfo, planInfo, period, feedbackInfos);
+		if (feedbacked && feedbackInfos.hasNext()) {
+			feedbackInfos.next();
+		}
+
+		return feedbacked ? feedbackMapper.toResponse(sendDateValue, feedbackInfo, sendDateValue.oneMonthLater()) :
 			feedbackMapper.toEmptyResponse(sendDateValue, planInfo.remindTime(), sendDateValue.oneMonthLater());
 	}
 
@@ -67,12 +71,8 @@ public class LoadFeedbackInfoService {
 
 		TimeValue feedbackDate = TimeValue.parse(planInfo.createdYear(), feedbackInfo.feedbackMonth(),
 			feedbackInfo.feedbackDate(), planInfo.remindTime());
-		boolean isBetweenPeriod = feedbackDate.isBetween(TimeValue.parse(planInfo.createdYear(),
-			feedbackPeriod.remindMonth(), feedbackPeriod.remindDate(), planInfo.remindTime()));
 
-		if (isBetweenPeriod && infos.hasNext()) {
-			infos.next();
-		}
-		return isBetweenPeriod;
+		return feedbackDate.isBetween(TimeValue.parse(planInfo.createdYear(),
+			feedbackPeriod.remindMonth(), feedbackPeriod.remindDate(), planInfo.remindTime()));
 	}
 }
