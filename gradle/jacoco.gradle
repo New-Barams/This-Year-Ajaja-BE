@@ -13,7 +13,6 @@ for(qPattern in "**/QA" .. "**/QZ") {
     qDomains.add(qPattern+"*")
 }
 
-apply plugin: 'java'
 apply plugin: 'jacoco'
 
 repositories {

@@ -4,6 +4,7 @@ pluginManagement {
         id 'io.spring.dependency-management' version "${springDependencyManagementVersion}"
         id 'jacoco' version "${jacocoToolVersion}"
         id 'checkstyle'
+        id 'org.asciidoctor.jvm.convert' version "${restDocsVersion}"
     }
 }
 

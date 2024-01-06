@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot'
     id 'io.spring.dependency-management'
+    id 'org.asciidoctor.jvm.convert'
 }
 
 group = "${projectGroup}"
@@ -12,8 +13,9 @@ java.sourceCompatibility = "${javaVersion}"
 
 apply from: 'gradle/jacoco.gradle'
 apply from: 'gradle/lombok.gradle'
-apply from: 'gradle/checkstyle.gradle'
-apply from: 'gradle/testsupport.gradle'
+apply from: 'gradle/check-style.gradle'
+apply from: 'gradle/test-support.gradle'
+apply from: 'gradle/rest-docs.gradle'
 
 dependencies {
     // Spring
@@ -75,10 +77,6 @@ configurations {
 
 repositories {
     mavenCentral()
-}
-
-tasks.named('test') {
-    useJUnitPlatform()
 }
 
 clean {
