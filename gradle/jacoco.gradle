@@ -13,12 +13,6 @@ for(qPattern in "**/QA" .. "**/QZ") {
     qDomains.add(qPattern+"*")
 }
 
-apply plugin: 'jacoco'
-
-repositories {
-    mavenCentral()
-}
-
 jacocoTestReport {
     dependsOn test
 
@@ -61,9 +55,9 @@ jacocoTestCoverageVerification {
     }
 }
 
-task testWithCoverage {
-    group 'verification'
-    description 'run w/ jacoco test report'
+tasks.register('testWithJacoco') {
+    group 'custom'
+    description 'generate jacoco test report'
 
     dependsOn ':test', ':jacocoTestReport', ':jacocoTestCoverageVerification'
 
