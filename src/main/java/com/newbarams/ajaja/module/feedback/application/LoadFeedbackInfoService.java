@@ -54,7 +54,7 @@ public class LoadFeedbackInfoService {
 		TimeValue sendDateValue = TimeValue.parse(planInfo.createdYear(), period.remindMonth(), period.remindDate(),
 			planInfo.remindTime());
 
-		boolean feedbacked = isFeedbacked(feedbackInfo, planInfo, period, feedbackInfos);
+		boolean feedbacked = isFeedbacked(feedbackInfo, planInfo, period);
 		if (feedbacked && feedbackInfos.hasNext()) {
 			feedbackInfos.next();
 		}
@@ -63,8 +63,7 @@ public class LoadFeedbackInfoService {
 			feedbackMapper.toEmptyResponse(sendDateValue, planInfo.remindTime(), sendDateValue.oneMonthLater());
 	}
 
-	private boolean isFeedbacked(FeedbackInfo feedbackInfo, PlanFeedbackInfo planInfo, FeedbackPeriod feedbackPeriod,
-		Iterator<FeedbackInfo> infos) {
+	private boolean isFeedbacked(FeedbackInfo feedbackInfo, PlanFeedbackInfo planInfo, FeedbackPeriod feedbackPeriod) {
 		if (feedbackInfo == null) {
 			return false;
 		}

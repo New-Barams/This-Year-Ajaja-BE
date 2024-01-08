@@ -7,6 +7,7 @@ import lombok.Data;
 public final class FeedbackResponse {
 	@Data
 	public static class FeedbackInfo {
+		private final int createdYear;
 		private final int achieveRate;
 		private final String title;
 		private final int remindTime;
