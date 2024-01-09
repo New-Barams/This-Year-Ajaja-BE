@@ -76,10 +76,10 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 			.apply(springSecurity())
 			.apply(documentationConfiguration(restDocumentation))
 			.addFilter(new CharacterEncodingFilter(UTF_8, true))
-			.defaultRequest(post(ANY_END_POINT).with(csrf()))
-			.defaultRequest(get(ANY_END_POINT).with(csrf()))
-			.defaultRequest(put(ANY_END_POINT).with(csrf()))
-			.defaultRequest(delete(ANY_END_POINT).with(csrf()))
+			.defaultRequest(post(ANY_END_POINT).with(csrf().asHeader()))
+			.defaultRequest(get(ANY_END_POINT).with(csrf().asHeader()))
+			.defaultRequest(put(ANY_END_POINT).with(csrf().asHeader()))
+			.defaultRequest(delete(ANY_END_POINT).with(csrf().asHeader()))
 			.build();
 	}
 
