@@ -99,7 +99,7 @@ public class DocsGenerator {
 		Objects.requireNonNull(tree, "Response Cannot Be NULL");
 		return generateDescriptors(tree, INITIAL_PATH);
 	}
-	
+
 	private static List<FieldDescriptor> generateDescriptors(JsonNode tree, String parentPath) {
 		return StreamSupport.stream(spliteratorUnknownSize(tree.fields(), ORDERED), false)
 			.flatMap(entry -> {
