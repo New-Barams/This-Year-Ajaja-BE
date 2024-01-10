@@ -23,7 +23,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 	private static final List<String> ALLOW_LIST = List.of(
-		"/swagger-ui", "/api-docs", "/login", "/reissue", "/mock"
+		"/index.html", "/swagger-spec", "/swagger-ui", "/api-docs", "favicon", // swagger, rest-docs
+		"/login", "/reissue", "/mock" // apis
 	);
 
 	private final JwtParser jwtParser;
