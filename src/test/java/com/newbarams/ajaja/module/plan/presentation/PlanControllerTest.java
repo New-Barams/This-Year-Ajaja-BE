@@ -12,7 +12,8 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 
 import com.newbarams.ajaja.common.annotation.ApiTest;
 import com.newbarams.ajaja.common.support.WebMvcTestSupport;
-import com.newbarams.ajaja.common.util.DocsGenerator;
+import com.newbarams.ajaja.common.util.ApiTag;
+import com.newbarams.ajaja.common.util.RestDocument;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 
@@ -28,14 +29,14 @@ class PlanControllerTest extends WebMvcTestSupport {
 	void updatePlan_Success() throws Exception {
 		// given
 		PlanRequest.Update request = new PlanRequest.Update(1, "올해도 아좌좌", "아좌좌 마이 라이프", true, true, TAG_FIXTURE);
-		PlanResponse.Detail response = DETAIL_RESPONSE_FIXTURE;
+		PlanResponse.Detail response = DETAIL_RESPONSE_FIXTURE; // to reduce getter on validation
 
 		given(updatePlanService.update(anyLong(), anyLong(), any(), anyInt())).willReturn(response);
 
 		// when
 		var result = mockMvc.perform(RestDocumentationRequestBuilders.put(PLAN_END_POINT.concat("/{id}"), 1)
 			.contentType(MediaType.APPLICATION_JSON)
-			.header(HttpHeaders.AUTHORIZATION, "Bearer Token")
+			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.header("Month", 12)
 			.content(objectMapper.writeValueAsString(request)));
 
@@ -60,14 +61,14 @@ class PlanControllerTest extends WebMvcTestSupport {
 
 		// docs
 		result.andDo(
-			DocsGenerator.generate(
-				"계획 API",
-				"계획 수정",
-				"계획 수정 API",
-				"요청한 데이터로 계획을 수정합니다.",
-				true,
-				result
-			)
+			RestDocument.builder()
+				.identifier("plan-update")
+				.tag(ApiTag.PLAN)
+				.summary("계획 수정 API")
+				.description("요청한 데이터로 계획을 수정합니다.")
+				.secured(true)
+				.result(result)
+				.generateDocs()
 		);
 	}
 
@@ -104,14 +105,13 @@ class PlanControllerTest extends WebMvcTestSupport {
 
 		// docs
 		result.andDo(
-			DocsGenerator.generate(
-				"계획 API",
-				"전체 계획 조회",
-				"전체 계획 조회 API",
-				"커서 기반으로 계획을 가져온다",
-				false,
-				result
-			)
+			RestDocument.builder()
+				.identifier("plan-query-all")
+				.tag(ApiTag.PLAN)
+				.summary("전체 계획 조회 API")
+				.description("커서 기반으로 계획을 가져온다")
+				.result(result)
+				.generateDocs()
 			// MockMvcRestDocumentationWrapper.document("전체 계획 조회",
 			// 	Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
 			// 	Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),

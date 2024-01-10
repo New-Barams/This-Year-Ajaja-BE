@@ -8,7 +8,6 @@ import org.springframework.test.context.ContextConfiguration;
 
 import com.newbarams.ajaja.common.support.JpaTestSupport;
 import com.newbarams.ajaja.module.user.adapter.out.persistence.model.UserEntity;
-import com.newbarams.ajaja.module.user.mapper.UserMapper;
 import com.newbarams.ajaja.module.user.mapper.UserMapperImpl;
 
 @ContextConfiguration(classes = {CreateUserAdapter.class, UserMapperImpl.class})
@@ -17,8 +16,6 @@ class CreateUserAdapterTest extends JpaTestSupport {
 	private CreateUserAdapter createUserAdapter;
 	@Autowired
 	private UserJpaRepository userJpaRepository;
-	@Autowired
-	private UserMapper userMapper;
 
 	@Test
 	void create_Success() {
