@@ -8,7 +8,8 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 
 import com.newbarams.ajaja.common.annotation.ApiTest;
 import com.newbarams.ajaja.common.support.WebMvcTestSupport;
-import com.newbarams.ajaja.common.util.DocsGenerator;
+import com.newbarams.ajaja.common.util.ApiTag;
+import com.newbarams.ajaja.common.util.RestDocument;
 import com.newbarams.ajaja.module.auth.dto.AuthRequest;
 import com.newbarams.ajaja.module.auth.dto.AuthResponse;
 
@@ -38,14 +39,13 @@ class ReissueControllerTest extends WebMvcTestSupport {
 
 		// docs
 		result.andDo(
-			DocsGenerator.generate(
-				"인증 API",
-				"토큰 재발급",
-				"토큰 재발급 API",
-				"기존에 발급받은 토큰으로 새로운 토큰을 재발급할 수 있습니다.",
-				false,
-				result
-			)
+			RestDocument.builder()
+				.identifier("token-reissue")
+				.tag(ApiTag.AUTH)
+				.summary("토큰 재발급 API")
+				.description("기존에 발급받은 토큰으로 새로운 토큰을 재발급할 수 있습니다.")
+				.result(result)
+				.generateDocs()
 			// MockMvcRestDocumentationWrapper.document("reissue api",
 			// 	Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
 			// 	Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),

@@ -1,5 +1,6 @@
 package com.newbarams.ajaja.common.util;
 
+import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.*;
 import static com.epages.restdocs.apispec.ResourceDocumentation.*;
 import static java.util.Spliterator.*;
 import static java.util.Spliterators.*;
@@ -15,12 +16,12 @@ import java.util.Objects;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.restdocs.payload.FieldDescriptor;
-import org.springframework.test.web.servlet.ResultActions;
 
 import com.epages.restdocs.apispec.HeaderDescriptorWithType;
-import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
 import com.epages.restdocs.apispec.ParameterDescriptorWithType;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -36,34 +37,31 @@ import lombok.NoArgsConstructor;
  * @author hejow
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class DocsGenerator {
+class RestDocsGenerator {
 	private static final List<HeaderDescriptorWithType> BEARER_TOKEN_HEADER =
 		List.of(headerWithName(AUTHORIZATION).description("Bearer Token"));
 
 	private static final String TOKEN_REQUIRED = "[토큰 필요] ";
 	private static final String INITIAL_PATH = "";
 
-	// private final String tag;
-	// private final String identifier;
-	// private final String summary;
-	// private final String description;
-	// private final boolean secured;
-	// private final ResultActions result;
-
 	public static RestDocumentationResultHandler generate(
-		String tag,
 		String identifier,
+		String tag,
 		String summary,
 		String description,
 		boolean secured,
-		ResultActions result
+		MockHttpServletRequest request,
+		MockHttpServletResponse response
 	) {
-		List<FieldDescriptor> requestFieldDescriptors = generateRequestDescriptors(result);
-		List<FieldDescriptor> responseFieldDescriptors = generateResponseDescriptors(result);
-		List<ParameterDescriptorWithType> queryParameters = generateQueryParameters(result);
-		List<ParameterDescriptorWithType> pathVariables = generatePathVariables(result);
+		List<HeaderDescriptorWithType> requestHeaders = secured ? BEARER_TOKEN_HEADER : Collections.emptyList();
 
-		return MockMvcRestDocumentationWrapper.document(
+		List<FieldDescriptor> requestFields = generateRequestDescriptors(request);
+		List<FieldDescriptor> responseFields = generateResponseDescriptors(response);
+
+		List<ParameterDescriptorWithType> queryParameters = generateQueryParameters(request);
+		List<ParameterDescriptorWithType> pathVariables = generatePathVariables(request);
+
+		return document(
 			identifier,
 			preprocessRequest(prettyPrint()),
 			preprocessResponse(prettyPrint()),
@@ -71,12 +69,13 @@ public class DocsGenerator {
 				.tag(tag)
 				.summary(secured ? TOKEN_REQUIRED.concat(summary) : summary)
 				.description(secured ? TOKEN_REQUIRED.concat(description) : description)
-				.requestHeaders(secured ? BEARER_TOKEN_HEADER : Collections.emptyList())
-				.requestFields(requestFieldDescriptors)
-				.responseFields(responseFieldDescriptors)
+				.requestHeaders(requestHeaders)
+				.requestFields(requestFields)
+				.responseFields(responseFields)
 				.queryParameters(queryParameters)
 				.pathParameters(pathVariables)
-				.build())
+				.build()
+			)
 		);
 	}
 
@@ -84,8 +83,8 @@ public class DocsGenerator {
 	 * generate request FieldDescriptors
 	 * @return List of FieldDescriptors, If request body is null will return emptyList()
 	 */
-	private static List<FieldDescriptor> generateRequestDescriptors(ResultActions result) {
-		JsonNode tree = JsonParser.readTree(() -> result.andReturn().getRequest().getContentAsString());
+	private static List<FieldDescriptor> generateRequestDescriptors(MockHttpServletRequest request) {
+		JsonNode tree = JsonParser.readTree(request::getContentAsString);
 		return tree != null ? generateDescriptors(tree, INITIAL_PATH) : Collections.emptyList();
 	}
 
@@ -94,9 +93,9 @@ public class DocsGenerator {
 	 * @throws NullPointerException when response body is null
 	 * @return List of FieldDescriptors
 	 */
-	private static List<FieldDescriptor> generateResponseDescriptors(ResultActions result) {
-		JsonNode tree = JsonParser.readTree(() -> result.andReturn().getResponse().getContentAsString());
-		Objects.requireNonNull(tree, "Response Cannot Be NULL");
+	private static List<FieldDescriptor> generateResponseDescriptors(MockHttpServletResponse response) {
+		JsonNode tree = JsonParser.readTree(response::getContentAsString);
+		Objects.requireNonNull(tree, "Response Tree Cannot Be NULL");
 		return generateDescriptors(tree, INITIAL_PATH);
 	}
 
@@ -125,15 +124,15 @@ public class DocsGenerator {
 		};
 	}
 
-	private static List<ParameterDescriptorWithType> generateQueryParameters(ResultActions result) {
-		Map<String, String[]> parameterMap = result.andReturn().getRequest().getParameterMap();
+	private static List<ParameterDescriptorWithType> generateQueryParameters(MockHttpServletRequest request) {
+		Map<String, String[]> parameterMap = request.getParameterMap();
 		return parameterMap.entrySet().stream()
 			.map(entry -> parameterWithName(entry.getKey()).description(String.join("", entry.getValue())))
 			.toList();
 	}
 
-	private static List<ParameterDescriptorWithType> generatePathVariables(ResultActions result) {
-		Object attribute = result.andReturn().getRequest().getAttribute(URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+	private static List<ParameterDescriptorWithType> generatePathVariables(MockHttpServletRequest request) {
+		Object attribute = request.getAttribute(URI_TEMPLATE_VARIABLES_ATTRIBUTE);
 		return ((Map<?, ?>)attribute).entrySet().stream()
 			.map(entry -> parameterWithName(String.valueOf(entry.getKey())).description(entry.getValue()))
 			.toList();
