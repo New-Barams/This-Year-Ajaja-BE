@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -27,6 +28,7 @@ class FindPlanAdapterTest extends MockTestSupport {
 	}
 
 	@Test
+	@DisplayName("유저와 계획 id에 맞는 계획 정보를 불러온다.")
 	void findByUserIdAndPlanId_Success_WithNoException() {
 		// given
 		given(loadPlanService.loadByUserIdAndPlanId(anyLong(), anyLong())).willReturn(plan);

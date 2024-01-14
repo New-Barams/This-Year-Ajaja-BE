@@ -6,6 +6,7 @@ import static org.mockito.BDDMockito.*;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -29,7 +30,8 @@ class FindPlanInfoAdapterTest extends MockTestSupport {
 	}
 
 	@Test
-	void findAllPlanByUserId() {
+	@DisplayName("계획 Id에 맞는 정보를 불러온다.")
+	void findAllPlanByUserId_Success_WithNoException() {
 		// given
 		given(planQueryRepository.findAllPlanByUserId(anyLong())).willReturn(planInfos);
 

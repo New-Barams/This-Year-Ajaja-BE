@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -30,7 +31,8 @@ class FindRemindablePlanAdapterTest extends MockTestSupport {
 	}
 
 	@Test
-	void findAllRemindablePlan() {
+	@DisplayName("현재 리마인드 가능한 모든 계획들을 불러온다.")
+	void findAllRemindablePlan_Success_WithNoException() {
 		// given
 		given(planQueryRepository.findAllRemindablePlan(anyString(), any())).willReturn(remindMessageInfos);
 

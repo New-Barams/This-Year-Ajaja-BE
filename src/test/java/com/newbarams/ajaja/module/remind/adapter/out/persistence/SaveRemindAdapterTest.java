@@ -2,6 +2,7 @@ package com.newbarams.ajaja.module.remind.adapter.out.persistence;
 
 import static org.assertj.core.api.Assertions.*;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -25,6 +26,7 @@ class SaveRemindAdapterTest extends JpaTestSupport {
 	private RemindMapper mapper;
 
 	@Test
+	@DisplayName("보낸 리마인드 정보를 저장한다.")
 	void save_Success_WithNoException() {
 		// given
 		Info info = new Info("화이팅");
