@@ -33,11 +33,11 @@ import com.newbarams.ajaja.module.feedback.application.LoadTotalAchieveService;
 import com.newbarams.ajaja.module.feedback.application.UpdateFeedbackService;
 import com.newbarams.ajaja.module.plan.application.CreatePlanService;
 import com.newbarams.ajaja.module.plan.application.DeletePlanService;
-import com.newbarams.ajaja.module.plan.application.LoadPlanInfoService;
 import com.newbarams.ajaja.module.plan.application.LoadPlanService;
 import com.newbarams.ajaja.module.plan.application.UpdatePlanService;
-import com.newbarams.ajaja.module.plan.application.UpdateRemindInfoService;
-import com.newbarams.ajaja.module.remind.application.LoadRemindInfoService;
+import com.newbarams.ajaja.module.remind.application.port.in.GetPlanInfoUseCase;
+import com.newbarams.ajaja.module.remind.application.port.in.GetRemindInfoUseCase;
+import com.newbarams.ajaja.module.remind.application.port.in.UpdateRemindInfoUseCase;
 import com.newbarams.ajaja.module.user.application.port.in.ChangeReceiveTypeUseCase;
 import com.newbarams.ajaja.module.user.application.port.in.LogoutUseCase;
 import com.newbarams.ajaja.module.user.application.port.in.RenewNicknameUseCase;
@@ -122,10 +122,6 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 	@MockBean
 	protected UpdatePlanService updatePlanService;
 	@MockBean
-	protected LoadPlanInfoService loadPlanInfoService;
-	@MockBean
-	protected UpdateRemindInfoService updateRemindInfoService;
-	@MockBean
 	protected SwitchAjajaService switchAjajaService;
 
 	// Feedback
@@ -138,5 +134,9 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 
 	// Remind
 	@MockBean
-	protected LoadRemindInfoService loadRemindInfoService;
+	protected GetPlanInfoUseCase getPlanInfoUseCase;
+	@MockBean
+	private GetRemindInfoUseCase getRemindInfoUseCase;
+	@MockBean
+	private UpdateRemindInfoUseCase updateRemindInfoUseCase;
 }
