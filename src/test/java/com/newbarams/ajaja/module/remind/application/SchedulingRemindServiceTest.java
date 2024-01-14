@@ -15,19 +15,22 @@ import com.newbarams.ajaja.global.common.TimeValue;
 import com.newbarams.ajaja.module.plan.domain.Message;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.domain.RemindInfo;
-import com.newbarams.ajaja.module.plan.infra.PlanQueryRepository;
 import com.newbarams.ajaja.module.remind.application.model.RemindMessageInfo;
+import com.newbarams.ajaja.module.remind.application.port.in.CreateRemindUseCase;
+import com.newbarams.ajaja.module.remind.application.port.out.FindRemindablePlanPort;
+import com.newbarams.ajaja.module.remind.application.port.out.SendPlanInfoRemindPort;
 
 class SchedulingRemindServiceTest extends MockTestSupport {
 	@InjectMocks
 	private SchedulingRemindService schedulingRemindService;
 
 	@Mock
-	private CreateRemindService createRemindService;
+	private FindRemindablePlanPort findRemindablePlanPort;
 	@Mock
-	private SendPlanRemindService sendPlanRemindService;
+	private SendPlanInfoRemindPort sendPlanInfoRemindPort;
 	@Mock
-	private PlanQueryRepository planQueryRepository;
+	private CreateRemindUseCase createRemindUseCase;
+
 	@Mock
 	private Plan plan;
 
@@ -50,7 +53,7 @@ class SchedulingRemindServiceTest extends MockTestSupport {
 			.set("plan", plan)
 			.sampleList(5);
 
-		given(planQueryRepository.findAllRemindablePlan(anyString(), any())).willReturn(remindMessage);
+		given(findRemindablePlanPort.findAllRemindablePlan(anyString(), any())).willReturn(remindMessage);
 
 		// when,then
 		if (new TimeValue().getMonth() == 1) {
@@ -59,7 +62,7 @@ class SchedulingRemindServiceTest extends MockTestSupport {
 			});
 		} else {
 			schedulingRemindService.scheduleMorningRemind();
-			then(sendPlanRemindService).should(times(5)).send(any(), any(), any(), anyLong());
+			then(sendPlanInfoRemindPort).should(times(5)).send(any(), any(), any(), anyLong());
 		}
 
 	}

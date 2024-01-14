@@ -8,8 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.newbarams.ajaja.global.common.TimeValue;
 import com.newbarams.ajaja.module.plan.domain.Plan;
-import com.newbarams.ajaja.module.plan.infra.PlanQueryRepository;
 import com.newbarams.ajaja.module.remind.application.model.RemindMessageInfo;
+import com.newbarams.ajaja.module.remind.application.port.in.CreateRemindUseCase;
+import com.newbarams.ajaja.module.remind.application.port.out.FindRemindablePlanPort;
+import com.newbarams.ajaja.module.remind.application.port.out.SendPlanInfoRemindPort;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,43 +19,48 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 @RequiredArgsConstructor
 public class SchedulingRemindService {
-	private final CreateRemindService createRemindService;
-	private final SendPlanRemindService sendPlanRemindService;
-	private final PlanQueryRepository planQueryRepository;
+	private static final String MORNING = "0 0 9 * 2-12 *";
+	private static final String AFTERNOON = "0 0 13 * 2-12 *";
+	private static final String EVENING = "0 0 22 * 2-12 *";
 
-	@Scheduled(cron = "0 0 9 * 2-12 *")
+	private final FindRemindablePlanPort findRemindablePlanPort;
+	private final SendPlanInfoRemindPort sendPlanInfoRemindPort;
+	private final CreateRemindUseCase createRemindUseCase;
+
+	@Scheduled(cron = MORNING)
 	public void scheduleMorningRemind() {
 		sendRemindsOnScheduledTime("MORNING");
 	}
 
-	@Scheduled(cron = "0 0 13 * 2-12 *")
+	@Scheduled(cron = AFTERNOON)
 	public void scheduleAfternoonRemind() {
 		sendRemindsOnScheduledTime("AFTERNOON");
 	}
 
-	@Scheduled(cron = "0 0 22 * 2-12 *")
+	@Scheduled(cron = EVENING)
 	public void scheduleEveningRemind() {
 		sendRemindsOnScheduledTime("EVENING");
 	}
 
 	private void sendRemindsOnScheduledTime(String remindTime) {
 		TimeValue time = new TimeValue();
-		List<RemindMessageInfo> remindablePlans = planQueryRepository.findAllRemindablePlan(remindTime, time);
-		sendEmail(remindablePlans, time); // todo : method 수정
+		List<RemindMessageInfo> remindablePlans = findRemindablePlanPort.findAllRemindablePlan(remindTime, time);
+		sendEmail(remindablePlans, time);
 	}
 
 	private void sendEmail(List<RemindMessageInfo> remindMessageInfos, TimeValue time) {
 		for (RemindMessageInfo remindInfo : remindMessageInfos) {
 			Plan plan = remindInfo.plan();
+			String message = plan.getMessage(time.getMonth());
 
-			sendPlanRemindService.send(
+			sendPlanInfoRemindPort.send(
 				remindInfo.email(),
 				plan.getPlanTitle(),
-				plan.getMessage(time.getMonth()),
+				message,
 				plan.getId()
 			);
 
-			createRemindService.createRemind(plan, time);
+			createRemindUseCase.save(plan, message, time);
 		}
 	}
 }

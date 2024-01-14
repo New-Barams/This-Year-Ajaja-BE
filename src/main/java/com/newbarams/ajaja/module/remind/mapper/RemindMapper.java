@@ -5,8 +5,8 @@ import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import com.newbarams.ajaja.module.remind.adapter.out.persistence.model.RemindEntity;
 import com.newbarams.ajaja.module.remind.domain.Remind;
-import com.newbarams.ajaja.module.remind.infra.RemindEntity;
 
 @Mapper(componentModel = "spring")
 public interface RemindMapper {
