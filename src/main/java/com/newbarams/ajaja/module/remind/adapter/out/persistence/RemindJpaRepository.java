@@ -4,5 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.newbarams.ajaja.module.remind.adapter.out.persistence.model.RemindEntity;
 
-public interface RemindJpaRepository extends JpaRepository<RemindEntity, Long> {
+interface RemindJpaRepository extends JpaRepository<RemindEntity, Long> {
 }
