@@ -1,18 +1,18 @@
-package com.newbarams.ajaja.module.remind.adapter.out.persistence;
+package com.newbarams.ajaja.module.remind.application;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import com.newbarams.ajaja.global.common.TimeValue;
 import com.newbarams.ajaja.module.plan.domain.Plan;
-import com.newbarams.ajaja.module.remind.application.port.in.CreateRemindUseCase;
+import com.newbarams.ajaja.module.remind.adapter.out.persistence.SaveRemindAdapter;
 import com.newbarams.ajaja.module.remind.domain.Info;
 import com.newbarams.ajaja.module.remind.domain.Remind;
 
 import lombok.RequiredArgsConstructor;
 
-@Repository
+@Service
 @RequiredArgsConstructor
-public class CreateRemindAdapter implements CreateRemindUseCase {
+public class CreateRemindService {
 	private final SaveRemindAdapter saveRemindAdapter;
 
 	public void save(Plan plan, String message, TimeValue time) { // todo: plan 의존성

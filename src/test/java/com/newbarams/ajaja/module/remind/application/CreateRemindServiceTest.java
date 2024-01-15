@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.remind.adapter.out.persistence;
+package com.newbarams.ajaja.module.remind.application;
 
 import static org.mockito.BDDMockito.*;
 
@@ -14,10 +14,11 @@ import com.newbarams.ajaja.global.common.TimeValue;
 import com.newbarams.ajaja.module.plan.domain.Message;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.plan.domain.RemindInfo;
+import com.newbarams.ajaja.module.remind.adapter.out.persistence.SaveRemindAdapter;
 
-class CreateRemindAdapterTest extends MockTestSupport {
+class CreateRemindServiceTest extends MockTestSupport {
 	@InjectMocks
-	private CreateRemindAdapter createRemindAdapter;
+	private CreateRemindService createRemindService;
 
 	@Mock
 	private SaveRemindAdapter saveRemindAdapter;
@@ -34,7 +35,7 @@ class CreateRemindAdapterTest extends MockTestSupport {
 			.sample();
 
 		// when
-		createRemindAdapter.save(plan, "message", new TimeValue());
+		createRemindService.save(plan, "message", new TimeValue());
 
 		// then
 		then(saveRemindAdapter).should(times(1)).save(any());

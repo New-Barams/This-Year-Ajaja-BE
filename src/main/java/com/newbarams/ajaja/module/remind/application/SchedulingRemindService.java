@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.newbarams.ajaja.global.common.TimeValue;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.remind.application.model.RemindMessageInfo;
-import com.newbarams.ajaja.module.remind.application.port.in.CreateRemindUseCase;
 import com.newbarams.ajaja.module.remind.application.port.out.FindRemindablePlanPort;
 import com.newbarams.ajaja.module.remind.application.port.out.SendPlanInfoRemindPort;
 
@@ -25,7 +24,7 @@ public class SchedulingRemindService {
 
 	private final FindRemindablePlanPort findRemindablePlanPort;
 	private final SendPlanInfoRemindPort sendPlanInfoRemindPort;
-	private final CreateRemindUseCase createRemindUseCase;
+	private final CreateRemindService createRemindService;
 
 	@Scheduled(cron = MORNING)
 	public void scheduleMorningRemind() {
@@ -60,7 +59,7 @@ public class SchedulingRemindService {
 				plan.getId()
 			);
 
-			createRemindUseCase.save(plan, message, time);
+			createRemindService.save(plan, message, time);
 		}
 	}
 }
