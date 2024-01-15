@@ -36,7 +36,7 @@ class FindPlanInfoAdapterTest extends MockTestSupport {
 		given(planQueryRepository.findAllPlanByUserId(anyLong())).willReturn(planInfos);
 
 		// when
-		List<PlanResponse.PlanInfo> responses = findPlanInfoAdapter.findAllPlanByUserId(1L);
+		List<PlanResponse.PlanInfo> responses = findPlanInfoAdapter.findAllPlanInfosByUserId(1L);
 
 		// then
 		assertThat(responses).isEqualTo(planInfos);

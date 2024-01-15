@@ -42,7 +42,7 @@ class LoadPlanInfoServiceTest extends MockTestSupport {
 
 		int execute = 2023 - 2021 + 1;
 
-		given(findPlanInfoPort.findAllPlanByUserId(any())).willReturn(List.of(planInfo1, planInfo2));
+		given(findPlanInfoPort.findAllPlanInfosByUserId(any())).willReturn(List.of(planInfo1, planInfo2));
 		given(mapper.toResponse(anyInt(), anyInt(), anyList())).willReturn(response);
 
 		//when
@@ -56,7 +56,7 @@ class LoadPlanInfoServiceTest extends MockTestSupport {
 	@DisplayName("만약 조회된 계획들이 없다면 기본값들을 반환한다.")
 	void getNoPlanInfo_Success_WithNoException() {
 		// given
-		given(findPlanInfoPort.findAllPlanByUserId(any())).willReturn(Collections.emptyList());
+		given(findPlanInfoPort.findAllPlanInfosByUserId(any())).willReturn(Collections.emptyList());
 
 		//when
 		List<PlanResponse.MainInfo> planInfoResponses = loadPlanInfoService.load(1L);

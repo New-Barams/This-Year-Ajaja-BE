@@ -16,7 +16,7 @@ public class FindPlanInfoAdapter implements FindPlanInfoPort {
 	private final PlanQueryRepository planQueryRepository;
 
 	@Override
-	public List<PlanResponse.PlanInfo> findAllPlanByUserId(Long userId) {
+	public List<PlanResponse.PlanInfo> findAllPlanInfosByUserId(Long userId) {
 		return planQueryRepository.findAllPlanByUserId(userId);
 	}
 }

@@ -24,7 +24,7 @@ public class GetPlanInfoService implements GetPlanInfoUseCase {
 	private final PlanMapper mapper;
 
 	public List<PlanResponse.MainInfo> load(Long userId) {
-		List<PlanResponse.PlanInfo> planInfos = findPlanInfoPort.findAllPlanByUserId(userId);
+		List<PlanResponse.PlanInfo> planInfos = findPlanInfoPort.findAllPlanInfosByUserId(userId);
 
 		if (planInfos.isEmpty()) {
 			return Collections.emptyList();
