@@ -94,7 +94,7 @@ public class Plan {
 	}
 
 	public void updateRemind(RemindInfo info, List<Message> messages) {
-		if (new TimeValue().getMonth() != MODIFIABLE_MONTH) {
+		if (TimeValue.now().getMonth() != MODIFIABLE_MONTH) {
 			throw new AjajaException(INVALID_UPDATABLE_DATE);
 		}
 

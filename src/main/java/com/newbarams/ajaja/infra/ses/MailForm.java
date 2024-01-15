@@ -32,7 +32,7 @@ class MailForm {
 	}
 
 	public static MailForm remind(String to, String title, String message, String feedbackUrl) {
-		ZonedDateTime deadLine = new TimeValue().oneMonthLater();
+		ZonedDateTime deadLine = TimeValue.now().oneMonthLater();
 		return new MailForm(
 			to,
 			REMIND.subject(title),

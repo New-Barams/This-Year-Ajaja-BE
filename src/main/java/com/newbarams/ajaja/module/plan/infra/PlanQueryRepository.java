@@ -64,7 +64,7 @@ public class PlanQueryRepository {
 	}
 
 	private BooleanExpression isCurrentYear() {
-		return planEntity.createdAt.year().eq(new TimeValue().getYear());
+		return planEntity.createdAt.year().eq(TimeValue.now().getYear());
 	}
 
 	public Optional<PlanResponse.Detail> findPlanDetailByIdAndOptionalUser(Long userId, Long id) {
@@ -136,7 +136,7 @@ public class PlanQueryRepository {
 	}
 
 	private BooleanExpression isEqualsYear(boolean isNewYear) {
-		int currentYear = new TimeValue().getYear();
+		int currentYear = TimeValue.now().getYear();
 		return isNewYear ? planEntity.createdAt.year().eq(currentYear) : planEntity.createdAt.year().ne(currentYear);
 	}
 

@@ -28,7 +28,7 @@ public class SchedulingAjajaRemindService {
 	@Scheduled(cron = WEEKLY_REMIND_TIME)
 	public void scheduleMorningRemind() {
 		List<RemindableAjaja> remindableAjajas = ajajaQueryRepository.findRemindableAjaja();
-		TimeValue time = new TimeValue();
+		TimeValue now = TimeValue.now();
 		for (RemindableAjaja remindableAjaja : remindableAjajas) {
 			String email = remindableAjaja.email();
 			String title = remindableAjaja.title();
@@ -36,7 +36,7 @@ public class SchedulingAjajaRemindService {
 			Long ajajaCount = remindableAjaja.count();
 
 			sendAjajaRemindService.send(email, title, ajajaCount, planId);
-			saveAjajaRemind(remindableAjaja, time);
+			saveAjajaRemind(remindableAjaja, now);
 		}
 	}
 

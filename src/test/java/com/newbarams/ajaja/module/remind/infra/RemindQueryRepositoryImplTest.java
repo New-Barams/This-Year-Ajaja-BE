@@ -1,8 +1,9 @@
 package com.newbarams.ajaja.module.remind.infra;
 
+import static org.assertj.core.api.Assertions.*;
+
 import java.util.List;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -49,14 +50,14 @@ class RemindQueryRepositoryImplTest extends MockTestSupport {
 			.set("isPublic", true)
 			.set("icon", 1)
 			.set("messages", messages)
-			.set("createdAt", new TimeValue())
+			.set("createdAt", TimeValue.now())
 			.sample();
 
 		// when
 		RemindResponse.RemindInfo reminds = remindQueryRepositoryImpl.findAllReminds(plan);
 
 		// then
-		Assertions.assertThat(reminds.getMessageResponses().size()).isEqualTo(1);
+		assertThat(reminds.getMessageResponses()).hasSize(1);
 	}
 
 	@Test
@@ -70,7 +71,7 @@ class RemindQueryRepositoryImplTest extends MockTestSupport {
 			.sample();
 
 		// when, then
-		Assertions.assertThatNoException().isThrownBy(() ->
+		assertThatNoException().isThrownBy(() ->
 			remindQueryRepositoryImpl.findAllReminds(plan)
 		);
 	}

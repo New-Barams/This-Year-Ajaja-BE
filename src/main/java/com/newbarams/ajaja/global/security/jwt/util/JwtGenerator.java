@@ -37,11 +37,11 @@ public class JwtGenerator {
 	}
 
 	private AuthResponse.Token generate(Long userId, RefreshTokenGenerator generator) {
-		final TimeValue time = new TimeValue();
-		String accessToken = generateAccessToken(userId, time);
-		String refreshToken = generator.generate(userId, time);
+		final TimeValue now = TimeValue.now();
+		String accessToken = generateAccessToken(userId, now);
+		String refreshToken = generator.generate(userId, now);
 
-		return new AuthResponse.Token(accessToken, refreshToken, time.getTimeMillis() + ACCESS_TOKEN_VALID_TIME);
+		return new AuthResponse.Token(accessToken, refreshToken, now.getTimeMillis() + ACCESS_TOKEN_VALID_TIME);
 	}
 
 	private String generateAccessToken(Long userId, TimeValue time) {

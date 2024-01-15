@@ -13,7 +13,7 @@ class TimeValueTest {
 		Date threeDaysBefore = new Date(new Date().getTime() - 60 * 60 * 24 * 3 * 1000L);
 
 		// when
-		boolean withinThreeDays = new TimeValue().isWithinThreeDays(threeDaysBefore);
+		boolean withinThreeDays = TimeValue.now().isWithinThreeDays(threeDaysBefore);
 
 		// then
 		assertThat(withinThreeDays).isTrue();
@@ -25,7 +25,7 @@ class TimeValueTest {
 		Date fourDaysBefore = new Date(new Date().getTime() - 60 * 60 * 24 * 4 * 1000L);
 
 		// when
-		boolean withinThreeDays = new TimeValue().isWithinThreeDays(fourDaysBefore);
+		boolean withinThreeDays = TimeValue.now().isWithinThreeDays(fourDaysBefore);
 
 		// then
 		assertThat(withinThreeDays).isFalse();

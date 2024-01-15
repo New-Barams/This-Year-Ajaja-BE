@@ -37,9 +37,9 @@ public class SchedulingRemindService {
 	}
 
 	private void sendRemindsOnScheduledTime(String remindTime) {
-		TimeValue time = new TimeValue();
-		List<RemindMessageInfo> remindablePlans = planQueryRepository.findAllRemindablePlan(remindTime, time);
-		sendEmail(remindablePlans, time); // todo : method 수정
+		TimeValue now = TimeValue.now();
+		List<RemindMessageInfo> remindablePlans = planQueryRepository.findAllRemindablePlan(remindTime, now);
+		sendEmail(remindablePlans, now); // todo : method 수정
 	}
 
 	private void sendEmail(List<RemindMessageInfo> remindMessageInfos, TimeValue time) {

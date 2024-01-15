@@ -53,7 +53,7 @@ class SchedulingRemindServiceTest extends MockTestSupport {
 		given(planQueryRepository.findAllRemindablePlan(anyString(), any())).willReturn(remindMessage);
 
 		// when,then
-		if (new TimeValue().getMonth() == 1) {
+		if (TimeValue.now().getMonth() == 1) {
 			Assertions.assertThatException().isThrownBy(() -> {
 				schedulingRemindService.scheduleMorningRemind();
 			});
