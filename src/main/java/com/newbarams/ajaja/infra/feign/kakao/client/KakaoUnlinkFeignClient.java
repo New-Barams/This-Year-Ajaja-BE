@@ -1,6 +1,7 @@
 package com.newbarams.ajaja.infra.feign.kakao.client;
 
 import static org.springframework.http.HttpHeaders.*;
+import static org.springframework.http.MediaType.*;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,7 +13,7 @@ import com.newbarams.ajaja.infra.feign.kakao.model.KakaoUnlinkRequest;
 
 @FeignClient(name = "KakaoDisconnectFeignClient", url = "https://kapi.kakao.com")
 public interface KakaoUnlinkFeignClient {
-	@PostMapping(value = "/v1/user/unlink", consumes = "application/x-www-form-urlencoded")
+	@PostMapping(value = "/v1/user/unlink", consumes = APPLICATION_FORM_URLENCODED_VALUE)
 	KakaoResponse.Withdraw unlink(
 		@RequestHeader(AUTHORIZATION) String adminKey,
 		@RequestBody KakaoUnlinkRequest request
