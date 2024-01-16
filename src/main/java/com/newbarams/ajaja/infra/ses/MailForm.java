@@ -13,8 +13,10 @@ import com.amazonaws.services.simpleemail.model.SendEmailRequest;
 import com.newbarams.ajaja.global.common.TimeValue;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 
+@Builder
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 class MailForm {
 	private static final String FROM_AJAJA = "no-reply@ajaja.me";
@@ -24,28 +26,28 @@ class MailForm {
 	private final String content;
 
 	public static MailForm verification(String to, String certification) {
-		return new MailForm(
-			to,
-			EMAIL_VERIFICATION.subject(),
-			EMAIL_VERIFICATION.content(certification)
-		);
+		return MailForm.builder()
+			.to(to)
+			.subject(EMAIL_VERIFICATION.subject())
+			.content(EMAIL_VERIFICATION.content(certification))
+			.build();
 	}
 
 	public static MailForm remind(String to, String title, String message, String feedbackUrl) {
 		ZonedDateTime deadLine = TimeValue.now().oneMonthLater();
-		return new MailForm(
-			to,
-			REMIND.subject(title),
-			REMIND.content(title, message, deadLine.getMonthValue(), deadLine.getDayOfMonth(), feedbackUrl)
-		);
+		return MailForm.builder()
+			.to(to)
+			.subject(REMIND.subject(title))
+			.content(REMIND.content(title, message, deadLine.getMonthValue(), deadLine.getDayOfMonth(), feedbackUrl))
+			.build();
 	}
 
 	public static MailForm ajaja(String to, String title, Long ajajaCount, Long planId) {
-		return new MailForm(
-			to,
-			AJAJA.subject(title),
-			AJAJA.content(title, ajajaCount, planId)
-		);
+		return MailForm.builder()
+			.to(to)
+			.subject(AJAJA.subject(title))
+			.content(AJAJA.content(title, ajajaCount, planId))
+			.build();
 	}
 
 	public SendEmailRequest toSesForm() {
