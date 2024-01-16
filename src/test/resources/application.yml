@@ -40,6 +40,11 @@ secret:
     client-secret: thisisfortest
     logout-redirect-url: thisisfortest
 
+  naver:
+    service-id: thisisfortest
+    access-key: thisisfortest
+    secret-key: thisisfortest
+
 ses:
   credentials:
     access-key: thisisfortest
