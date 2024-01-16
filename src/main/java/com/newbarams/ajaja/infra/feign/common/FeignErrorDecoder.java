@@ -23,23 +23,29 @@ public class FeignErrorDecoder implements ErrorDecoder {
 	@Override
 	public Exception decode(String methodKey, Response response) {
 		return switch (response.status()) {
-			case TOO_MANY_REQUEST, SERVER_UNAVAILABLE -> generateRetryableException(response);
+			case TOO_MANY_REQUEST, SERVER_UNAVAILABLE -> retry(response);
 			default -> decodeFeignException(response);
 		};
 	}
 
+	/**
+	 * todo: NPE occurs depends on platform
+	 * naver : {"error": {"errorCode": "...", "message": "..."}}
+	 * kauth : {"error": "...", "error_description": "..."}
+	 * kapi : {"msg": "...", "code": "..."}
+	 */
 	private Exception decodeFeignException(Response response) {
 		String requestBody = feignResponseEncoder.encodeRequestBody(response.request());
 		String responseBody = feignResponseEncoder.encodeResponseBody(response.body());
 
-		log.info("[Feign] API Request Fail To {} By {}.", response.request().url(), response.reason());
+		log.info("[Feign] API Request Fail To {} By '{}'.", response.request().url(), response.reason());
 		log.info("[Feign] Failed Request Body : {}", requestBody);
 		log.info("[Feign] Response From API : {}", responseBody);
 
 		return new AjajaException(EXTERNAL_API_FAIL);
 	}
 
-	private RuntimeException generateRetryableException(Response response) {
+	private RuntimeException retry(Response response) {
 		log.info("[Feign] Retrying API Request To {}", response.request().url());
 
 		return new RetryableException(
