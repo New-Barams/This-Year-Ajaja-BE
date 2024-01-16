@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import com.newbarams.ajaja.infra.feign.kakao.client.KakaoAuthorizeFeignClient;
 import com.newbarams.ajaja.infra.feign.kakao.client.KakaoProfileFeignClient;
 import com.newbarams.ajaja.infra.feign.kakao.client.KakaoProperties;
-import com.newbarams.ajaja.infra.feign.kakao.model.KakaoTokenRequest;
+import com.newbarams.ajaja.infra.feign.kakao.model.KakaoRequest;
 import com.newbarams.ajaja.module.auth.application.model.AccessToken;
 import com.newbarams.ajaja.module.auth.application.model.Profile;
 import com.newbarams.ajaja.module.auth.application.port.out.AuthorizePort;
@@ -23,13 +23,13 @@ class KakaoAuthorizeAdapter implements AuthorizePort {
 
 	@Override
 	public Profile authorize(String authorizationCode, String redirectUri) {
-		KakaoTokenRequest request = generateRequest(authorizationCode, redirectUri);
+		KakaoRequest.Token request = generateRequest(authorizationCode, redirectUri);
 		AccessToken accessToken = kakaoAuthorizeFeignClient.authorize(request);
 		return kakaoProfileFeignClient.getKakaoProfile(toBearer(accessToken.getContent()));
 	}
 
-	private KakaoTokenRequest generateRequest(String authorizationCode, String redirectUri) {
-		return new KakaoTokenRequest(
+	private KakaoRequest.Token generateRequest(String authorizationCode, String redirectUri) {
+		return new KakaoRequest.Token(
 			kakaoProperties.getClientId(),
 			redirectUri,
 			authorizationCode,

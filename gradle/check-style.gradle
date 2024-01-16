@@ -9,6 +9,6 @@ checkstyle {
 }
 
 checkstyleMain
-        .exclude('com/newbarams/ajaja/infra/feign/kakao/model/KakaoTokenRequest.java')
-        .exclude('com/newbarams/ajaja/infra/feign/kakao/model/KakaoUnlinkRequest.java')
+        .exclude('com/newbarams/ajaja/infra/feign/kakao/model/KakaoRequest.java')
+        .exclude('com/newbarams/ajaja/infra/feign/ncp/model/AlimtalkTemplate.java')
         .exclude('com/newbarams/ajaja/infra/ses/HtmlEmailTemplate.java')
