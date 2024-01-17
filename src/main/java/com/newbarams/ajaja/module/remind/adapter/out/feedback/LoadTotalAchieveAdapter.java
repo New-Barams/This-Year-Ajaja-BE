@@ -14,6 +14,6 @@ public class LoadTotalAchieveAdapter implements LoadTotalAchievePort {
 
 	@Override
 	public int load(Long userId, int year) {
-		return loadTotalAchieveService.loadTotalAchieve(userId, year);
+		return loadTotalAchieveService.loadTotalAchieveByUserId(userId, year);
 	}
 }

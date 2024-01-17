@@ -22,7 +22,7 @@ class LoadTotalAchieveAdapterTest extends MockTestSupport {
 	@DisplayName("해당 유저id에 맞는 피드백 달성률 정보를 받는다.")
 	void load_Success_WithNoException() {
 		// given
-		given(loadTotalAchieveService.loadTotalAchieve(anyLong(), anyInt())).willReturn(50);
+		given(loadTotalAchieveService.loadTotalAchieveByUserId(anyLong(), anyInt())).willReturn(50);
 
 		// when
 		int achieve = loadTotalAchieveAdapter.load(1L, 2024);
