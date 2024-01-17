@@ -10,9 +10,9 @@ import org.mockito.Mock;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
 import com.newbarams.ajaja.common.support.MockTestSupport;
 
-class SesSendPlanRemindAdapterTest extends MockTestSupport {
+class SesSendPlanRemindServiceTest extends MockTestSupport {
 	@InjectMocks
-	private SesSendPlanRemindAdapter planRemindService;
+	private SesSendPlanRemindService planRemindService;
 
 	@Mock
 	private AmazonSimpleEmailService amazonSimpleEmailService;
