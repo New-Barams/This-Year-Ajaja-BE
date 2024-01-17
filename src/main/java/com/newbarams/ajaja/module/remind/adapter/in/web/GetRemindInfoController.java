@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.newbarams.ajaja.global.common.AjajaResponse;
 import com.newbarams.ajaja.global.exception.ErrorResponse;
 import com.newbarams.ajaja.global.security.common.UserId;
-import com.newbarams.ajaja.module.remind.application.port.in.GetRemindInfoUseCase;
+import com.newbarams.ajaja.module.remind.application.port.out.FindPlanRemindQuery;
 import com.newbarams.ajaja.module.remind.dto.RemindResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 public class GetRemindInfoController {
-	private final GetRemindInfoUseCase getRemindInfoUseCase;
+	private final FindPlanRemindQuery findPlanRemindQuery;
 
 	@Operation(summary = "[토큰 필요] 리마인드 정보 조회 API", description = "<b>url에 플랜id 값이 필요합니다.</b>",
 		responses = {
@@ -41,7 +41,7 @@ public class GetRemindInfoController {
 		@UserId Long userId,
 		@PathVariable Long planId
 	) {
-		RemindResponse.RemindInfo response = getRemindInfoUseCase.load(userId, planId);
+		RemindResponse.RemindInfo response = findPlanRemindQuery.findByUserIdAndPlanId(userId, planId);
 		return AjajaResponse.ok(response);
 	}
 }

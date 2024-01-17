@@ -8,8 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
 import com.newbarams.ajaja.common.support.JpaTestSupport;
-import com.newbarams.ajaja.module.remind.domain.Info;
+import com.newbarams.ajaja.module.remind.domain.PlanInfo;
 import com.newbarams.ajaja.module.remind.domain.Remind;
+import com.newbarams.ajaja.module.remind.domain.UserInfo;
 import com.newbarams.ajaja.module.remind.mapper.RemindMapper;
 import com.newbarams.ajaja.module.remind.mapper.RemindMapperImpl;
 
@@ -29,13 +30,12 @@ class SaveRemindAdapterTest extends JpaTestSupport {
 	@DisplayName("보낸 리마인드 정보를 저장한다.")
 	void save_Success_WithNoException() {
 		// given
-		Info info = new Info("화이팅");
-		Remind remind = new Remind(1L, 1L, info, Remind.Type.PLAN, 2, 17);
+		Remind remind = new Remind(new UserInfo(1L, null), new PlanInfo(1L, null), "화이팅", Remind.Type.PLAN, 2, 17);
 
 		// when
 		Remind save = saveRemindAdapter.save(remind);
 
 		// then
-		assertThat(save.getContent()).isEqualTo(remind.getContent());
+		assertThat(save.getMessage()).isEqualTo(remind.getMessage());
 	}
 }
