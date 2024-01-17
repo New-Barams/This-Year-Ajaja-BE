@@ -32,7 +32,7 @@ class LoadTotalAchieveServiceTest extends MockTestSupport {
 		int calculatedAchieve = 50;
 
 		// when
-		int totalAchieve = loadTotalAchieveService.loadTotalAchieve(1L, 2023);
+		int totalAchieve = loadTotalAchieveService.loadTotalAchieveByUserId(1L, 2023);
 
 		// then
 		Assertions.assertThat(totalAchieve).isEqualTo(calculatedAchieve);
@@ -48,7 +48,7 @@ class LoadTotalAchieveServiceTest extends MockTestSupport {
 		given(feedbackQueryRepository.findAchievesByUserIdAndYear(anyLong(), anyInt())).willReturn(achieveInfos);
 
 		// then
-		int totalAchieve = loadTotalAchieveService.loadTotalAchieve(1L, 203);
+		int totalAchieve = loadTotalAchieveService.loadTotalAchieveByUserId(1L, 203);
 
 		Assertions.assertThat(totalAchieve).isZero();
 	}

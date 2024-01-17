@@ -1,16 +1,15 @@
-package com.newbarams.ajaja.module.remind.presentation;
+package com.newbarams.ajaja.module.remind.adapter.in.web;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.newbarams.ajaja.global.common.AjajaResponse;
 import com.newbarams.ajaja.global.exception.ErrorResponse;
 import com.newbarams.ajaja.global.security.common.UserId;
-import com.newbarams.ajaja.module.remind.application.LoadRemindInfoService;
+import com.newbarams.ajaja.module.remind.application.port.out.FindPlanRemindQuery;
 import com.newbarams.ajaja.module.remind.dto.RemindResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,9 +22,8 @@ import lombok.RequiredArgsConstructor;
 @Tag(name = "remind")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/reminds")
-public class RemindController {
-	private final LoadRemindInfoService loadRemindInfoService;
+public class GetRemindInfoController {
+	private final FindPlanRemindQuery findPlanRemindQuery;
 
 	@Operation(summary = "[토큰 필요] 리마인드 정보 조회 API", description = "<b>url에 플랜id 값이 필요합니다.</b>",
 		responses = {
@@ -37,12 +35,13 @@ public class RemindController {
 			@ApiResponse(responseCode = "500", description = "서버 내부 문제입니다. 관리자에게 문의 바랍니다.",
 				content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
 		})
-	@GetMapping("/{planId}")
+	@GetMapping("/reminds/{planId}")
 	@ResponseStatus(HttpStatus.OK)
 	public AjajaResponse<RemindResponse.RemindInfo> getRemindResponse(
 		@UserId Long userId,
 		@PathVariable Long planId
 	) {
-		return AjajaResponse.ok(loadRemindInfoService.loadRemindInfoResponse(userId, planId));
+		RemindResponse.RemindInfo response = findPlanRemindQuery.findByUserIdAndPlanId(userId, planId);
+		return AjajaResponse.ok(response);
 	}
 }

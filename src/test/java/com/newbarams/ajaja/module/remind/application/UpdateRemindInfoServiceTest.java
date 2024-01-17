@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.plan.application;
+package com.newbarams.ajaja.module.remind.application;
 
 import static org.mockito.BDDMockito.*;
 
@@ -15,20 +15,20 @@ import com.newbarams.ajaja.common.support.MockTestSupport;
 import com.newbarams.ajaja.global.exception.AjajaException;
 import com.newbarams.ajaja.module.plan.domain.Message;
 import com.newbarams.ajaja.module.plan.domain.Plan;
-import com.newbarams.ajaja.module.plan.domain.PlanRepository;
 import com.newbarams.ajaja.module.plan.domain.RemindInfo;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
-import com.newbarams.ajaja.module.plan.infra.PlanQueryRepository;
 import com.newbarams.ajaja.module.plan.mapper.MessageMapper;
+import com.newbarams.ajaja.module.remind.application.port.out.FindPlanPort;
+import com.newbarams.ajaja.module.remind.application.port.out.SavePlanPort;
 
 class UpdateRemindInfoServiceTest extends MockTestSupport {
 	@InjectMocks
 	private UpdateRemindInfoService updateRemindInfoService;
 
 	@Mock
-	private PlanRepository repository;
+	private FindPlanPort findPlanPort;
 	@Mock
-	private PlanQueryRepository planQueryRepository;
+	private SavePlanPort savePlanPort;
 	@Mock
 	private MessageMapper mapper;
 	@Mock
@@ -51,13 +51,13 @@ class UpdateRemindInfoServiceTest extends MockTestSupport {
 		// given
 		Long userId = 1L;
 		Long planId = 1L;
-		given(planQueryRepository.findByUserIdAndPlanId(anyLong(), anyLong())).willReturn(mockPlan);
+		given(findPlanPort.findByUserIdAndPlanId(anyLong(), anyLong())).willReturn(mockPlan);
 		given(mapper.toDomain(dto.getMessages())).willReturn(messages);
 		given(mapper.toDomain(dto)).willReturn(info);
 		doNothing().when(mockPlan).updateRemind(any(), any());
 
 		// when
-		updateRemindInfoService.updateRemindInfo(userId, planId, dto);
+		updateRemindInfoService.update(userId, planId, dto);
 
 		// then
 		then(mockPlan).should(times(1)).updateRemind(any(), any());
@@ -69,11 +69,11 @@ class UpdateRemindInfoServiceTest extends MockTestSupport {
 		// given
 		Long userId = 2L;
 		Long planId = 2L;
-		doThrow(AjajaException.class).when(planQueryRepository).findByUserIdAndPlanId(anyLong(), anyLong());
+		doThrow(AjajaException.class).when(findPlanPort).findByUserIdAndPlanId(anyLong(), anyLong());
 
 		// when,then
 		Assertions.assertThatException().isThrownBy(
-			() -> updateRemindInfoService.updateRemindInfo(userId, planId, dto)
+			() -> updateRemindInfoService.update(userId, planId, dto)
 		);
 	}
 
@@ -83,12 +83,12 @@ class UpdateRemindInfoServiceTest extends MockTestSupport {
 		// given
 		Long userId = 1L;
 		Long planId = 1L;
-		given(planQueryRepository.findByUserIdAndPlanId(anyLong(), anyLong())).willReturn(mockPlan);
+		given(findPlanPort.findByUserIdAndPlanId(anyLong(), anyLong())).willReturn(mockPlan);
 		doThrow(AjajaException.class).when(mockPlan).updateRemind(any(), any());
 
 		// when,then
 		Assertions.assertThatException().isThrownBy(
-			() -> updateRemindInfoService.updateRemindInfo(userId, planId, dto)
+			() -> updateRemindInfoService.update(userId, planId, dto)
 		);
 	}
 }

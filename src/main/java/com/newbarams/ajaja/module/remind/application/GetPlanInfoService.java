@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.plan.application;
+package com.newbarams.ajaja.module.remind.application;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,23 +7,24 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.newbarams.ajaja.module.feedback.application.LoadTotalAchieveService;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
-import com.newbarams.ajaja.module.plan.infra.PlanQueryRepository;
 import com.newbarams.ajaja.module.plan.mapper.PlanMapper;
+import com.newbarams.ajaja.module.remind.application.port.in.GetPlanInfoUseCase;
+import com.newbarams.ajaja.module.remind.application.port.out.FindPlanInfoPort;
+import com.newbarams.ajaja.module.remind.application.port.out.LoadTotalAchievePort;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class LoadPlanInfoService {
-	private final PlanQueryRepository planQueryRepository;
-	private final LoadTotalAchieveService loadTotalAchieveService;
+public class GetPlanInfoService implements GetPlanInfoUseCase {
+	private final LoadTotalAchievePort loadTotalAchievePort;
+	private final FindPlanInfoPort findPlanInfoPort;
 	private final PlanMapper mapper;
 
-	public List<PlanResponse.MainInfo> loadPlanInfo(Long userId) {
-		List<PlanResponse.PlanInfo> planInfos = planQueryRepository.findAllPlanByUserId(userId);
+	public List<PlanResponse.MainInfo> load(Long userId) {
+		List<PlanResponse.PlanInfo> planInfos = findPlanInfoPort.findAllPlanInfosByUserId(userId);
 
 		if (planInfos.isEmpty()) {
 			return Collections.emptyList();
@@ -44,9 +45,8 @@ public class LoadPlanInfoService {
 		List<PlanResponse.MainInfo> planInfoResponses = new ArrayList<>();
 
 		for (int planYear = currentYear; planYear >= firstYear; planYear--) {
-			int totalAchieve = loadTotalAchieveService.loadTotalAchieve(userId, planYear);
-			PlanResponse.MainInfo planInfoResponse
-				= mapper.toResponse(planYear, totalAchieve, planInfos);
+			int totalAchieve = loadTotalAchievePort.load(userId, planYear);
+			PlanResponse.MainInfo planInfoResponse = mapper.toResponse(planYear, totalAchieve, planInfos);
 			planInfoResponses.add(planInfoResponse);
 		}
 

@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.plan.application;
+package com.newbarams.ajaja.module.remind.application;
 
 import static org.mockito.BDDMockito.*;
 
@@ -12,19 +12,19 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import com.newbarams.ajaja.common.support.MockTestSupport;
-import com.newbarams.ajaja.module.feedback.application.LoadTotalAchieveService;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
-import com.newbarams.ajaja.module.plan.infra.PlanQueryRepository;
 import com.newbarams.ajaja.module.plan.mapper.PlanMapper;
+import com.newbarams.ajaja.module.remind.application.port.out.FindPlanInfoPort;
+import com.newbarams.ajaja.module.remind.application.port.out.LoadTotalAchievePort;
 
 class LoadPlanInfoServiceTest extends MockTestSupport {
 	@InjectMocks
-	private LoadPlanInfoService loadPlanInfoService;
+	private GetPlanInfoService loadPlanInfoService;
 
 	@Mock
-	private PlanQueryRepository planQueryRepository;
+	private LoadTotalAchievePort loadTotalAchievePort;
 	@Mock
-	private LoadTotalAchieveService loadTotalAchieveService;
+	private FindPlanInfoPort findPlanInfoPort;
 	@Mock
 	private PlanMapper mapper;
 
@@ -42,24 +42,24 @@ class LoadPlanInfoServiceTest extends MockTestSupport {
 
 		int execute = 2023 - 2021 + 1;
 
-		given(planQueryRepository.findAllPlanByUserId(any())).willReturn(List.of(planInfo1, planInfo2));
+		given(findPlanInfoPort.findAllPlanInfosByUserId(any())).willReturn(List.of(planInfo1, planInfo2));
 		given(mapper.toResponse(anyInt(), anyInt(), anyList())).willReturn(response);
 
 		//when
-		loadPlanInfoService.loadPlanInfo(1L);
+		loadPlanInfoService.load(1L);
 
 		// then
-		then(loadTotalAchieveService).should(times(execute)).loadTotalAchieve(anyLong(), anyInt());
+		then(loadTotalAchievePort).should(times(execute)).load(anyLong(), anyInt());
 	}
 
 	@Test
 	@DisplayName("만약 조회된 계획들이 없다면 기본값들을 반환한다.")
 	void getNoPlanInfo_Success_WithNoException() {
 		// given
-		given(planQueryRepository.findAllPlanByUserId(any())).willReturn(Collections.emptyList());
+		given(findPlanInfoPort.findAllPlanInfosByUserId(any())).willReturn(Collections.emptyList());
 
 		//when
-		List<PlanResponse.MainInfo> planInfoResponses = loadPlanInfoService.loadPlanInfo(1L);
+		List<PlanResponse.MainInfo> planInfoResponses = loadPlanInfoService.load(1L);
 
 		// then
 		Assertions.assertThat(planInfoResponses).isEmpty();
