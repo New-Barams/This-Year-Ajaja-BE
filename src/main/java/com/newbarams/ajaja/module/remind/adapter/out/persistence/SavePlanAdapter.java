@@ -14,7 +14,7 @@ public class SavePlanAdapter implements SavePlanPort {
 	private final PlanRepository planRepository;
 
 	@Override
-	public void save(Plan plan) {
+	public void update(Plan plan) {
 		planRepository.save(plan);
 	}
 }

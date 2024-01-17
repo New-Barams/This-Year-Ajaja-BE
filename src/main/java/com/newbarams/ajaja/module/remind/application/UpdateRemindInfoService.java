@@ -23,6 +23,6 @@ public class UpdateRemindInfoService implements UpdateRemindInfoUseCase {
 	public void update(Long userId, Long planId, PlanRequest.UpdateRemind request) {
 		Plan plan = findPlanPort.findByUserIdAndPlanId(userId, planId);
 		plan.updateRemind(mapper.toDomain(request), mapper.toDomain(request.getMessages()));
-		savePlanPort.save(plan);
+		savePlanPort.update(plan);
 	}
 }
