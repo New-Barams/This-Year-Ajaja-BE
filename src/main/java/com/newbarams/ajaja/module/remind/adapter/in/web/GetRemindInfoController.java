@@ -41,6 +41,7 @@ public class GetRemindInfoController {
 		@UserId Long userId,
 		@PathVariable Long planId
 	) {
-		return AjajaResponse.ok(getRemindInfoUseCase.load(userId, planId));
+		RemindResponse.RemindInfo response = getRemindInfoUseCase.load(userId, planId);
+		return AjajaResponse.ok(response);
 	}
 }
