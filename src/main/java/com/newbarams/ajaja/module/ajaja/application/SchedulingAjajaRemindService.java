@@ -10,7 +10,6 @@ import com.newbarams.ajaja.global.common.TimeValue;
 import com.newbarams.ajaja.module.ajaja.domain.AjajaQueryRepository;
 import com.newbarams.ajaja.module.remind.application.model.RemindableAjaja;
 import com.newbarams.ajaja.module.remind.application.port.out.SaveRemindPort;
-import com.newbarams.ajaja.module.remind.domain.Info;
 import com.newbarams.ajaja.module.remind.domain.Remind;
 
 import lombok.RequiredArgsConstructor;
@@ -42,8 +41,7 @@ public class SchedulingAjajaRemindService {
 
 	private void saveAjajaRemind(RemindableAjaja remindableAjaja, TimeValue time) {
 		String message = createAjajaMessage(remindableAjaja.title(), remindableAjaja.count());
-		Info info = new Info(message);
-		Remind remind = Remind.ajaja(remindableAjaja.userId(), remindableAjaja.planId(), info, time.getMonth(),
+		Remind remind = Remind.ajaja(remindableAjaja.userId(), remindableAjaja.planId(), message, time.getMonth(),
 			time.getDate());
 		saveRemindPort.save(remind);
 	}

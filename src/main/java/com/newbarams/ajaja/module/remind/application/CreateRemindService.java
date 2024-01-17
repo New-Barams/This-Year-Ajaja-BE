@@ -4,9 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.newbarams.ajaja.global.common.TimeValue;
-import com.newbarams.ajaja.module.plan.domain.Plan;
-import com.newbarams.ajaja.module.remind.adapter.out.persistence.SaveRemindAdapter;
-import com.newbarams.ajaja.module.remind.domain.Info;
+import com.newbarams.ajaja.module.remind.application.port.out.SaveRemindPort;
 import com.newbarams.ajaja.module.remind.domain.Remind;
 
 import lombok.RequiredArgsConstructor;
@@ -15,11 +13,11 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 @RequiredArgsConstructor
 public class CreateRemindService {
-	private final SaveRemindAdapter saveRemindAdapter;
+	private final SaveRemindPort saveRemindPort;
 
-	public void save(Plan plan, String message, TimeValue time) { // todo: plan 의존성
-		Info info = new Info(message);
-		Remind remind = Remind.plan(plan.getUserId(), plan.getId(), info, time.getMonth(), time.getDate());
-		saveRemindAdapter.save(remind);
+	public void create(Remind send, TimeValue time) {
+		Remind remind
+			= Remind.plan(send.getUserId(), send.getPlanId(), send.getMessage(), time.getMonth(), time.getDate());
+		saveRemindPort.save(remind);
 	}
 }

@@ -7,10 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.newbarams.ajaja.global.common.TimeValue;
-import com.newbarams.ajaja.module.plan.domain.Plan;
-import com.newbarams.ajaja.module.remind.application.model.RemindMessageInfo;
 import com.newbarams.ajaja.module.remind.application.port.out.FindRemindablePlanPort;
 import com.newbarams.ajaja.module.remind.application.port.out.SendPlanInfoRemindPort;
+import com.newbarams.ajaja.module.remind.domain.Remind;
 
 import lombok.RequiredArgsConstructor;
 
@@ -43,23 +42,21 @@ public class SchedulingRemindService {
 
 	private void sendRemindsOnScheduledTime(String remindTime) {
 		TimeValue time = new TimeValue();
-		List<RemindMessageInfo> remindablePlans = findRemindablePlanPort.findAllRemindablePlan(remindTime, time);
+		List<Remind> remindablePlans = findRemindablePlanPort.findAllRemindablePlan(remindTime, time);
 		sendEmail(remindablePlans, time);
 	}
 
-	private void sendEmail(List<RemindMessageInfo> remindMessageInfos, TimeValue time) {
-		for (RemindMessageInfo remindInfo : remindMessageInfos) {
-			Plan plan = remindInfo.plan();
-			String message = plan.getMessage(time.getMonth());
+	private void sendEmail(List<Remind> remindMessageInfos, TimeValue time) {
+		for (Remind remindInfo : remindMessageInfos) {
 
 			sendPlanInfoRemindPort.send(
-				remindInfo.email(),
-				plan.getPlanTitle(),
-				message,
-				plan.getId()
+				remindInfo.getEmail(),
+				remindInfo.getTitle(),
+				remindInfo.getMessage(),
+				remindInfo.getPlanId()
 			);
 
-			createRemindService.save(plan, message, time);
+			createRemindService.create(remindInfo, time);
 		}
 	}
 }
