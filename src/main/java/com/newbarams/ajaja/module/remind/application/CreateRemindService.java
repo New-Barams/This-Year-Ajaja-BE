@@ -1,6 +1,7 @@
 package com.newbarams.ajaja.module.remind.application;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.newbarams.ajaja.global.common.TimeValue;
 import com.newbarams.ajaja.module.plan.domain.Plan;
@@ -11,6 +12,7 @@ import com.newbarams.ajaja.module.remind.domain.Remind;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class CreateRemindService {
 	private final SaveRemindAdapter saveRemindAdapter;
