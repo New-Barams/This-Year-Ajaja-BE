@@ -7,10 +7,11 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import com.newbarams.ajaja.infra.feign.kakao.client.KakaoProperties;
+import com.newbarams.ajaja.infra.feign.ncp.client.NaverCloudProperties;
 
 @EnableCaching
 @EnableScheduling
-@EnableConfigurationProperties(KakaoProperties.class)
+@EnableConfigurationProperties(value = {NaverCloudProperties.class, KakaoProperties.class})
 @SpringBootApplication
 public class AjajaApplication {
 	public static void main(String[] args) {

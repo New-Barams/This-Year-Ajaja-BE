@@ -27,8 +27,8 @@ public interface RemindInfoMapper {
 	RemindResponse.Message toMessage(Message message);
 
 	default boolean isReminded(RemindDate date) {
-		TimeValue current = new TimeValue();
+		TimeValue now = TimeValue.now();
 		TimeValue sendDate = TimeValue.parse(2024, date.getRemindMonth(), date.getRemindDay(), 9); // todo:수정
-		return current.isAfter(sendDate);
+		return now.isAfter(sendDate);
 	}
 }

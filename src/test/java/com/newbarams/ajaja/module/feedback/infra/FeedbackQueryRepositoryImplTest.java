@@ -30,7 +30,7 @@ class FeedbackQueryRepositoryImplTest {
 
 	@BeforeEach
 	void setUp() {
-		feedback = new Feedback(1L, 1L, 1L, Achieve.GOOD, "아좌좌", new TimeValue(), new TimeValue());
+		feedback = new Feedback(1L, 1L, 1L, Achieve.GOOD, "아좌좌", TimeValue.now(), TimeValue.now());
 		feedbackRepository.save(feedback);
 	}
 
@@ -66,7 +66,7 @@ class FeedbackQueryRepositoryImplTest {
 		Long planId = 2L;
 
 		// when
-		boolean isFeedbacked = feedbackQueryRepository.existByPlanIdAndPeriod(planId, new TimeValue());
+		boolean isFeedbacked = feedbackQueryRepository.existByPlanIdAndPeriod(planId, TimeValue.now());
 
 		// then
 		Assertions.assertThat(isFeedbacked).isFalse();
@@ -82,6 +82,6 @@ class FeedbackQueryRepositoryImplTest {
 		List<FeedbackInfo> feedbackInfos = feedbackQueryRepository.findFeedbackInfosByPlanId(planId);
 
 		// then
-		assertThat(feedbackInfos.size()).isEqualTo(1);
+		assertThat(feedbackInfos).hasSize(1);
 	}
 }

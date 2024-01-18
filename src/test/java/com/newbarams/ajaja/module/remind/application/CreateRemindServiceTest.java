@@ -31,7 +31,7 @@ class CreateRemindServiceTest extends MockTestSupport {
 		Remind remind = new Remind(userInfo, planInfo, message, Remind.Type.AJAJA, 3, 1);
 
 		// when
-		createRemindService.create(remind, new TimeValue());
+		createRemindService.create(remind, TimeValue.now());
 
 		// then
 		then(saveRemindAdapter).should(times(1)).save(any());

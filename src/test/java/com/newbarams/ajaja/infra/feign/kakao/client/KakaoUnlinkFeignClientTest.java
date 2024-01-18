@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.newbarams.ajaja.infra.feign.kakao.model.KakaoRequest;
 import com.newbarams.ajaja.infra.feign.kakao.model.KakaoResponse;
-import com.newbarams.ajaja.infra.feign.kakao.model.KakaoUnlinkRequest;
 
 @Disabled
 @SpringBootTest
@@ -22,7 +22,7 @@ class KakaoUnlinkFeignClientTest {
 	void unlink_Success_WithRealApiCall() {
 		// given
 		Long targetId = -1L;
-		KakaoUnlinkRequest request = new KakaoUnlinkRequest(targetId);
+		KakaoRequest.Unlink request = new KakaoRequest.Unlink(targetId);
 
 		// when
 		KakaoResponse.Withdraw response =
