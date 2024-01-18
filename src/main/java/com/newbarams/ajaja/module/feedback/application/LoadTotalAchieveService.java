@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 public class LoadTotalAchieveService {
 	private final FeedbackQueryRepository feedbackQueryRepository;
 
-	public int loadTotalAchieve(Long userId, int year) {
+	public int loadTotalAchieveByUserId(Long userId, int year) {
 		List<AchieveInfo> achieves = feedbackQueryRepository.findAchievesByUserIdAndYear(userId, year);
 
 		return (int)achieves.stream()

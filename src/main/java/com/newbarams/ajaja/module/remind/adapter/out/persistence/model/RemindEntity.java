@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.module.remind.infra;
+package com.newbarams.ajaja.module.remind.adapter.out.persistence.model;
 
 import org.hibernate.annotations.Where;
 

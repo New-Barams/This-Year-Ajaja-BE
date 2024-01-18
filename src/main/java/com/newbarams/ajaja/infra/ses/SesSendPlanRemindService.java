@@ -4,7 +4,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
-import com.newbarams.ajaja.module.remind.application.SendPlanRemindService;
+import com.newbarams.ajaja.module.remind.application.port.out.SendPlanInfoRemindPort;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-class SesSendPlanRemindService implements SendPlanRemindService {
+class SesSendPlanRemindService implements SendPlanInfoRemindPort {
 	private static final String FEEDBACK_URL = "https://www.ajaja.me/plans/";
 
 	private final AmazonSimpleEmailService amazonSimpleEmailService;

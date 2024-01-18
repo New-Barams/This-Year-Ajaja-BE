@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.newbarams.ajaja.global.common.AjajaResponse;
 import com.newbarams.ajaja.global.exception.ErrorResponse;
-import com.newbarams.ajaja.global.security.common.UserId;
 import com.newbarams.ajaja.module.feedback.application.LoadFeedbackInfoService;
 import com.newbarams.ajaja.module.feedback.application.UpdateFeedbackService;
 import com.newbarams.ajaja.module.feedback.dto.FeedbackRequest;
@@ -51,11 +50,10 @@ public class FeedbackController {
 	@PostMapping("/{planId}")
 	@ResponseStatus(OK)
 	public AjajaResponse<Void> updateFeedback(
-		@UserId Long userId,
 		@PathVariable Long planId,
 		@RequestBody FeedbackRequest.UpdateFeedback updateFeedback
 	) {
-		updateFeedbackService.updateFeedback(userId, planId, updateFeedback.getRate(), updateFeedback.getMessage());
+		updateFeedbackService.updateFeedback(2L, planId, updateFeedback.getRate(), updateFeedback.getMessage());
 		return AjajaResponse.ok();
 	}
 
@@ -72,10 +70,9 @@ public class FeedbackController {
 	@GetMapping("/{planId}")
 	@ResponseStatus(OK)
 	public AjajaResponse<FeedbackResponse.FeedbackInfo> getFeedbackInfo(
-		@UserId Long userId,
 		@PathVariable Long planId
 	) {
-		FeedbackResponse.FeedbackInfo feedbackInfo = loadFeedbackInfoService.loadFeedbackInfoByPlanId(userId, planId);
+		FeedbackResponse.FeedbackInfo feedbackInfo = loadFeedbackInfoService.loadFeedbackInfoByPlanId(1L, planId);
 		return AjajaResponse.ok(feedbackInfo);
 	}
 }
