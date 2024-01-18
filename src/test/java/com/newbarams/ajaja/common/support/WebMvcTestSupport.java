@@ -45,7 +45,7 @@ import com.newbarams.ajaja.module.user.application.port.in.RenewNicknameUseCase;
 import com.newbarams.ajaja.module.user.application.port.in.SendVerificationEmailUseCase;
 import com.newbarams.ajaja.module.user.application.port.in.VerifyCertificationUseCase;
 import com.newbarams.ajaja.module.user.application.port.in.WithdrawUseCase;
-import com.newbarams.ajaja.module.user.application.port.out.GetMyPagePort;
+import com.newbarams.ajaja.module.user.application.port.out.GetMyPageQuery;
 
 /**
  * Supports Cached Context On WebMvcTest with Monkey <br>
@@ -111,7 +111,7 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 	@MockBean
 	protected WithdrawUseCase withdrawUseCase;
 	@MockBean
-	protected GetMyPagePort getMyPagePort;
+	protected GetMyPageQuery getMyPageQuery;
 
 	// Plan
 	@MockBean

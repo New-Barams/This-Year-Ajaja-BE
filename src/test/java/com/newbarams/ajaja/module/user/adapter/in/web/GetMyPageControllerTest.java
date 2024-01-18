@@ -21,7 +21,7 @@ class GetMyPageControllerTest extends WebMvcTestSupport {
 		UserResponse.MyPage response
 			= new UserResponse.MyPage("공부하는 돼지", "ajaja@me.com", "ajaja@me.com", true, "KAKAO");
 
-		given(getMyPagePort.findUserInfoById(anyLong())).willReturn(response);
+		given(getMyPageQuery.findUserInfoById(anyLong())).willReturn(response);
 
 		// when
 		var result = mockMvc.perform(get(USER_END_POINT)

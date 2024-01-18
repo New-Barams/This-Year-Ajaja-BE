@@ -2,8 +2,9 @@ package com.newbarams.ajaja.module.user.application.port.out;
 
 import com.newbarams.ajaja.module.user.dto.UserResponse;
 
-public interface GetMyPagePort {
+public interface GetMyPageQuery {
 	/**
+	 * Query port can be used on in coming adapter
 	 * @param id target to query
 	 * @return
 	 */
