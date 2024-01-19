@@ -52,9 +52,9 @@ class WithdrawControllerTest extends WebMvcTestSupport {
 	@DisplayName("요청 시 인증에 실패하면 400에러를 반환한다.")
 	void withdraw_Fail_ByAuthentication(ErrorCode errorCode, String identifier) throws Exception {
 		// given
-		RuntimeException notBearerToken = new AjajaException(errorCode);
+		RuntimeException authenticationFailed = new AjajaException(errorCode);
 
-		willThrow(notBearerToken).given(withdrawUseCase).withdraw(anyLong());
+		willThrow(authenticationFailed).given(withdrawUseCase).withdraw(anyLong());
 
 		// when
 		var result = mockMvc.perform(delete(USER_END_POINT)
@@ -72,7 +72,7 @@ class WithdrawControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier(identifier)
+				.identifier("withdraw-fail-" + identifier)
 				.tag(ApiTag.USER)
 				.secured(true)
 				.result(result)
