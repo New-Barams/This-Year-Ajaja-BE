@@ -62,8 +62,8 @@ class RestDocsGenerator {
 			preprocessResponse(prettyPrint()),
 			resource(ResourceSnippetParameters.builder()
 				.tag(tag)
-				.summary(secured ? TOKEN_REQUIRED.concat(summary) : summary)
-				.description(secured ? TOKEN_REQUIRED.concat(description) : description)
+				.summary(addPrefixIfSecured(secured, summary))
+				.description(addPrefixIfSecured(secured, description))
 				.requestHeaders(requestHeaders)
 				.requestFields(requestFields)
 				.responseFields(responseFields)
@@ -72,6 +72,10 @@ class RestDocsGenerator {
 				.build()
 			)
 		);
+	}
+
+	private static String addPrefixIfSecured(boolean secured, String target) {
+		return target != null && secured ? TOKEN_REQUIRED.concat(target) : target;
 	}
 
 	private static List<FieldDescriptor> generateRequestFields(MockHttpServletRequest request) {
