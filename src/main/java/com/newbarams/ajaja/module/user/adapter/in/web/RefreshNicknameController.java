@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.newbarams.ajaja.global.common.AjajaResponse;
 import com.newbarams.ajaja.global.security.common.UserId;
-import com.newbarams.ajaja.module.user.application.port.in.RenewNicknameUseCase;
+import com.newbarams.ajaja.module.user.application.port.in.RefreshNicknameUseCase;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -18,8 +18,8 @@ import lombok.RequiredArgsConstructor;
 @Tag(name = "user", description = "사용자 API")
 @RestController
 @RequiredArgsConstructor
-class RenewNicknameController {
-	private final RenewNicknameUseCase renewNicknameUseCase;
+class RefreshNicknameController {
+	private final RefreshNicknameUseCase refreshNicknameUseCase;
 
 	@Operation(summary = "[토큰 필요] 닉네임 새로고침 API", description = "새로운 랜덤 닉네임을 생성합니다.", responses = {
 		@ApiResponse(responseCode = "200", description = "성공적으로 새로운 닉네임으로 변경했습니다."),
@@ -28,8 +28,8 @@ class RenewNicknameController {
 	})
 	@PostMapping("/users/refresh")
 	@ResponseStatus(OK)
-	public AjajaResponse<Void> renewNickname(@UserId Long id) {
-		renewNicknameUseCase.renew(id);
+	public AjajaResponse<Void> refreshNickname(@UserId Long id) {
+		refreshNicknameUseCase.refresh(id);
 		return AjajaResponse.ok();
 	}
 }

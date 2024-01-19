@@ -19,34 +19,33 @@ import com.newbarams.ajaja.common.util.ApiTag;
 import com.newbarams.ajaja.common.util.RestDocument;
 import com.newbarams.ajaja.global.exception.AjajaException;
 import com.newbarams.ajaja.global.exception.ErrorCode;
-import com.newbarams.ajaja.module.user.dto.UserRequest;
 
-class SendVerificationControllerTest extends WebMvcTestSupport {
-	private static final String SEND_VERIFICATION_END_POINT = USER_END_POINT + "/send-verification";
-
-	private final UserRequest.EmailVerification request = new UserRequest.EmailVerification("ajaja@me.com");
+class RefreshNicknameControllerTest extends WebMvcTestSupport {
+	private static final String REFRESH_NICKNAME_END_POINT = USER_END_POINT + "/refresh";
 
 	@ApiTest
-	@DisplayName("검증 요청 가능한 이메일로 이메일 검증 요청을 보내면 요청에 성공한다.")
-	void sendVerification_Success() throws Exception {
+	@DisplayName("유효한 토큰으로 닉네임 변경 요청을 보내면 성공한다.")
+	void renewNickname_Success() throws Exception {
 		// given
 
 		// when
-		var result = mockMvc.perform(post(SEND_VERIFICATION_END_POINT)
+		var result = mockMvc.perform(post(REFRESH_NICKNAME_END_POINT)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
-			.contentType(MediaType.APPLICATION_JSON)
-			.content(objectMapper.writeValueAsString(request)));
+			.contentType(MediaType.APPLICATION_JSON));
 
 		// then
-		result.andExpect(status().isNoContent());
+		result.andExpectAll(
+			status().isOk(),
+			jsonPath("$.success").value(Boolean.TRUE)
+		);
 
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("send-verify-email-success")
+				.identifier("renew-nickname-success")
+				.summary("닉네임 새로고침 API")
+				.description("사용자의 닉네임은 랜덤한 닉네임으로 변경합니다.")
 				.tag(ApiTag.USER)
-				.summary("이메일 검증 요청 API")
-				.description("리마인드를 받을 이메일을 검증하기 위해 인증을 요청합니다.")
 				.secured(true)
 				.result(result)
 				.generateDocs()
@@ -60,13 +59,12 @@ class SendVerificationControllerTest extends WebMvcTestSupport {
 		// given
 		RuntimeException authenticationFailed = new AjajaException(errorCode);
 
-		willThrow(authenticationFailed).given(sendVerificationEmailUseCase).sendVerification(anyLong(), anyString());
+		willThrow(authenticationFailed).given(refreshNicknameUseCase).refresh(anyLong());
 
 		// when
-		var result = mockMvc.perform(post(SEND_VERIFICATION_END_POINT)
+		var result = mockMvc.perform(post(REFRESH_NICKNAME_END_POINT)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
-			.contentType(MediaType.APPLICATION_JSON)
-			.content(objectMapper.writeValueAsString(request)));
+			.contentType(MediaType.APPLICATION_JSON));
 
 		// then
 		result.andExpectAll(
@@ -79,7 +77,7 @@ class SendVerificationControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("send-verification-fail-" + identifier)
+				.identifier("refresh-nickname-fail-" + identifier)
 				.tag(ApiTag.USER)
 				.secured(true)
 				.result(result)
@@ -93,13 +91,12 @@ class SendVerificationControllerTest extends WebMvcTestSupport {
 		// given
 		RuntimeException useNotFound = new AjajaException(USER_NOT_FOUND);
 
-		willThrow(useNotFound).given(sendVerificationEmailUseCase).sendVerification(anyLong(), anyString());
+		willThrow(useNotFound).given(refreshNicknameUseCase).refresh(anyLong());
 
 		// when
-		var result = mockMvc.perform(post(SEND_VERIFICATION_END_POINT)
+		var result = mockMvc.perform(post(REFRESH_NICKNAME_END_POINT)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
-			.contentType(MediaType.APPLICATION_JSON)
-			.content(objectMapper.writeValueAsString(request)));
+			.contentType(MediaType.APPLICATION_JSON));
 
 		// then
 		result.andExpectAll(
@@ -112,40 +109,7 @@ class SendVerificationControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("send-verification-fail-not-exist-user")
-				.tag(ApiTag.USER)
-				.secured(true)
-				.result(result)
-				.generateDocs()
-		);
-	}
-
-	@ApiTest
-	@DisplayName("이미 인증된 완료된 이메일로 요청하면 409에러를 반환한다.")
-	void sendVerification_Fail_ByAlreadyVerified() throws Exception {
-		// given
-		RuntimeException alreadyVerified = new AjajaException(ALREADY_VERIFY_EMAIL);
-
-		willThrow(alreadyVerified).given(sendVerificationEmailUseCase).sendVerification(anyLong(), anyString());
-
-		// when
-		var result = mockMvc.perform(post(SEND_VERIFICATION_END_POINT)
-			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
-			.contentType(MediaType.APPLICATION_JSON)
-			.content(objectMapper.writeValueAsString(request)));
-
-		// then
-		result.andExpectAll(
-			status().isConflict(),
-			jsonPath("$.httpStatus").value(CONFLICT.name()),
-			jsonPath("$.errorName").value(ALREADY_VERIFY_EMAIL.name()),
-			jsonPath("$.errorMessage").value(ALREADY_VERIFY_EMAIL.getMessage())
-		);
-
-		// docs
-		result.andDo(
-			RestDocument.builder()
-				.identifier("send-verification-fail-already-verified")
+				.identifier("refresh-nickname-fail-not-exist-user")
 				.tag(ApiTag.USER)
 				.secured(true)
 				.result(result)
