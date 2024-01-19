@@ -36,7 +36,7 @@ public enum ErrorCode {
 
 	// 409
 	ALREADY_FEEDBACK(CONFLICT, "이미 평가된 피드백 정보가 있습니다."),
-	UNABLE_TO_VERIFY_EMAIL(CONFLICT, "이메일 인증을 할 수 없습니다. 인증이 완료된 상태라면 기존 리마인드 이메일과 다른 이메일을 입력해야 합니다."),
+	ALREADY_VERIFY_EMAIL(CONFLICT, "이메일 인증을 할 수 없습니다. 인증이 완료된 상태라면 기존 리마인드 이메일과 다른 이메일을 입력해야 합니다."),
 	CERTIFICATION_NOT_MATCH(CONFLICT, "인증 번호가 일치하지 않습니다."),
 
 	// 500
