@@ -5,7 +5,6 @@ import static org.apache.commons.codec.CharEncoding.*;
 import static org.springframework.context.annotation.ComponentScan.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 
@@ -27,6 +26,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.newbarams.ajaja.common.annotation.ApiTest;
+import com.newbarams.ajaja.common.annotation.ParameterizedApiTest;
 import com.newbarams.ajaja.global.mock.MockController;
 import com.newbarams.ajaja.global.security.jwt.util.JwtParser;
 import com.newbarams.ajaja.module.ajaja.application.SwitchAjajaService;
@@ -53,8 +53,9 @@ import com.newbarams.ajaja.module.user.application.port.out.GetMyPageQuery;
 
 /**
  * Supports Cached Context On WebMvcTest with Monkey <br>
- * When Authentication is required USE @ApiTest
+ * When Authentication is required USE @ApiTest, @ParameterizedApiTest
  * @see ApiTest
+ * @see ParameterizedApiTest
  * @author hejow
  */
 @WebMvcTest(excludeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, classes = MockController.class))
@@ -79,7 +80,6 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 	) {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
 			.alwaysDo(print())
-			.apply(springSecurity())
 			.apply(documentationConfiguration(restDocumentation))
 			.addFilter(new CharacterEncodingFilter(UTF_8, true))
 			.defaultRequest(post(ANY_END_POINT).with(csrf().asHeader()))
