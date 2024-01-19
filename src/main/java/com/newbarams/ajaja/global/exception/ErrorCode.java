@@ -25,7 +25,7 @@ public enum ErrorCode {
 	NOT_SUPPORT_RECEIVE_TYPE(BAD_REQUEST, "지원하는 리마인드 수신 방법이 아닙니다."),
 	EXCEED_MAX_NUMBER_OF_PLANS(BAD_REQUEST, "유저가 가질 수 있는 최대 계획 개수를 초과하였습니다."),
 	EMPTY_MESSAGES_LIST(BAD_REQUEST, "작성된 리마인드 메세지가 없습니다."),
-	EXPIRED_FEEDBACK(CONFLICT, "피드백 기간이 아닙니다."),
+	EXPIRED_FEEDBACK(BAD_REQUEST, "피드백 기간이 아닙니다."),
 
 	// 404
 	USER_NOT_FOUND(NOT_FOUND, "사용자가 존재하지 않습니다."),
