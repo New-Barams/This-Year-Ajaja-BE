@@ -36,7 +36,7 @@ public class User {
 		this.nickname = Nickname.refresh();
 	}
 
-	public void updateReceive(ReceiveType receiveType) {
+	public void changeReceive(ReceiveType receiveType) {
 		this.receiveType = receiveType;
 	}
 

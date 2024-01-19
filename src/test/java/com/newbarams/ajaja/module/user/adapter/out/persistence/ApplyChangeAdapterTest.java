@@ -49,7 +49,7 @@ class ApplyChangeAdapterTest extends JpaTestSupport {
 	@DisplayName("리마인드 타입 변경 요청이 정상적으로 반영되어야 한다.")
 	void apply_Success_OnReceiveTypeChange(User.ReceiveType type) {
 		// given
-		user.updateReceive(type);
+		user.changeReceive(type);
 
 		// when
 		applyChangeAdapter.apply(user);

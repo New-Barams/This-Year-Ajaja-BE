@@ -43,7 +43,7 @@ import com.newbarams.ajaja.module.remind.application.port.in.GetPlanInfoUseCase;
 import com.newbarams.ajaja.module.remind.application.port.in.GetRemindInfoUseCase;
 import com.newbarams.ajaja.module.remind.application.port.in.UpdateRemindInfoUseCase;
 import com.newbarams.ajaja.module.remind.application.port.out.FindPlanRemindQuery;
-import com.newbarams.ajaja.module.user.application.port.in.ChangeReceiveTypeUseCase;
+import com.newbarams.ajaja.module.user.application.port.in.ChangeRemindTypeUseCase;
 import com.newbarams.ajaja.module.user.application.port.in.LogoutUseCase;
 import com.newbarams.ajaja.module.user.application.port.in.RefreshNicknameUseCase;
 import com.newbarams.ajaja.module.user.application.port.in.SendVerificationEmailUseCase;
@@ -114,7 +114,7 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 
 	// User
 	@MockBean
-	protected ChangeReceiveTypeUseCase changeReceiveTypeUseCase;
+	protected ChangeRemindTypeUseCase changeRemindTypeUseCase;
 	@MockBean
 	protected LogoutUseCase logoutUseCase;
 	@MockBean
