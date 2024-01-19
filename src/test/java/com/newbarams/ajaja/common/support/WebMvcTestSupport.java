@@ -1,5 +1,6 @@
 package com.newbarams.ajaja.common.support;
 
+import static com.newbarams.ajaja.global.exception.ErrorCode.*;
 import static org.apache.commons.codec.CharEncoding.*;
 import static org.springframework.context.annotation.ComponentScan.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
@@ -8,8 +9,11 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 
+import java.util.stream.Stream;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.provider.Arguments;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -83,6 +87,17 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 			.defaultRequest(put(ANY_END_POINT).with(csrf().asHeader()))
 			.defaultRequest(delete(ANY_END_POINT).with(csrf().asHeader()))
 			.build();
+	}
+
+	protected static Stream<Arguments> authenticationResults() {
+		return Stream.of(
+			Arguments.of(INVALID_BEARER_TOKEN, "invalid-bearer-token"),
+			Arguments.of(INVALID_SIGNATURE, "bad-signature"),
+			Arguments.of(INVALID_TOKEN, "malformed-jwt"),
+			Arguments.of(EXPIRED_TOKEN, "expired-jwt"),
+			Arguments.of(UNSUPPORTED_TOKEN, "unsupported-jwt"),
+			Arguments.of(EMPTY_TOKEN, "empty-jwt")
+		);
 	}
 
 	/**
