@@ -25,7 +25,7 @@ class RefreshNicknameControllerTest extends WebMvcTestSupport {
 
 	@ApiTest
 	@DisplayName("유효한 토큰으로 닉네임 변경 요청을 보내면 성공한다.")
-	void renewNickname_Success() throws Exception {
+	void refreshNickname_Success() throws Exception {
 		// given
 
 		// when
@@ -42,7 +42,7 @@ class RefreshNicknameControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("renew-nickname-success")
+				.identifier("refresh-nickname-success")
 				.summary("닉네임 새로고침 API")
 				.description("사용자의 닉네임은 랜덤한 닉네임으로 변경합니다.")
 				.tag(ApiTag.USER)
@@ -53,9 +53,9 @@ class RefreshNicknameControllerTest extends WebMvcTestSupport {
 	}
 
 	@ParameterizedApiTest
-	@MethodSource("authenticationResults")
+	@MethodSource("authenticationFailResults")
 	@DisplayName("요청 시 인증에 실패하면 400에러를 반환한다.")
-	void sendVerification_Fail_ByAuthentication(ErrorCode errorCode, String identifier) throws Exception {
+	void refreshNickname_Fail_ByAuthentication(ErrorCode errorCode, String identifier) throws Exception {
 		// given
 		RuntimeException authenticationFailed = new AjajaException(errorCode);
 
@@ -87,7 +87,7 @@ class RefreshNicknameControllerTest extends WebMvcTestSupport {
 
 	@ApiTest
 	@DisplayName("존재하지 않는 회원으로 요청하면 404에러를 반환한다.")
-	void sendVerification_Fail_ByNotExistUser() throws Exception {
+	void refreshNickname_Fail_ByNotExistUser() throws Exception {
 		// given
 		RuntimeException useNotFound = new AjajaException(USER_NOT_FOUND);
 

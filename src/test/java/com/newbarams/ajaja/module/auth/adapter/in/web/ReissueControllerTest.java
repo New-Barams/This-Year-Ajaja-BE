@@ -78,7 +78,7 @@ class ReissueControllerTest extends WebMvcTestSupport {
 	}
 
 	@ParameterizedApiTest
-	@MethodSource("authenticationResults")
+	@MethodSource("authenticationFailResults")
 	@DisplayName("토큰 검증에 실패하면 400에러를 반환한다.")
 	void reissue_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
 		// given

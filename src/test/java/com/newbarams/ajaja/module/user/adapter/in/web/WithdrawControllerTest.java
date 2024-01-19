@@ -48,7 +48,7 @@ class WithdrawControllerTest extends WebMvcTestSupport {
 	}
 
 	@ParameterizedApiTest
-	@MethodSource("authenticationResults")
+	@MethodSource("authenticationFailResults")
 	@DisplayName("요청 시 인증에 실패하면 400에러를 반환한다.")
 	void withdraw_Fail_ByAuthentication(ErrorCode errorCode, String identifier) throws Exception {
 		// given

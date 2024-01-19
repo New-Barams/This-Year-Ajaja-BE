@@ -28,7 +28,7 @@ class ChangeRemindTypeControllerTest extends WebMvcTestSupport {
 
 	@ApiTest
 	@DisplayName("지원하는 타입으로 리마인드 수신 타입 변경 요청을 보내면 성공한다.")
-	void changeReceiveType_Success() throws Exception {
+	void changeRemindType_Success() throws Exception {
 		// given
 		willDoNothing().given(changeRemindTypeUseCase).change(anyLong(), any());
 
@@ -46,7 +46,7 @@ class ChangeRemindTypeControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("update-receive-type")
+				.identifier("update-remind-type-success")
 				.tag(ApiTag.USER)
 				.summary("수신 방법 변경 API")
 				.description("리마인드를 수신할 방법을 변경합니다. 지원하는 타입은 [KAKAO, EMAIL, BOTH] 입니다.")
@@ -57,9 +57,9 @@ class ChangeRemindTypeControllerTest extends WebMvcTestSupport {
 	}
 
 	@ParameterizedApiTest
-	@MethodSource("authenticationResults")
+	@MethodSource("authenticationFailResults")
 	@DisplayName("요청 시 인증에 실패하면 400에러를 반환한다.")
-	void changeReceiveType_Fail_ByAuthentication(ErrorCode errorCode, String identifier) throws Exception {
+	void changeRemindType_Fail_ByAuthentication(ErrorCode errorCode, String identifier) throws Exception {
 		// given
 		RuntimeException authenticationFailed = new AjajaException(errorCode);
 
@@ -92,7 +92,7 @@ class ChangeRemindTypeControllerTest extends WebMvcTestSupport {
 
 	@ApiTest
 	@DisplayName("존재하지 않는 회원으로 요청하면 404에러를 반환한다.")
-	void changeReceiveType_Fail_ByNotExistUser() throws Exception {
+	void changeRemindType_Fail_ByNotExistUser() throws Exception {
 		// given
 		RuntimeException useNotFound = new AjajaException(USER_NOT_FOUND);
 

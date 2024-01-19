@@ -44,7 +44,7 @@ class LoginControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("login")
+				.identifier("login-success")
 				.tag(ApiTag.AUTH)
 				.summary("로그인 API")
 				.description("인증 서버로부터 발급 받은 인가 코드로 로그인을 시도합니다.")

@@ -39,7 +39,7 @@ class LogoutControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("logout")
+				.identifier("logout-success")
 				.tag(ApiTag.USER)
 				.summary("로그아웃 API")
 				.description("발급된 사용자의 토큰을 만료시킵니다.")
@@ -50,7 +50,7 @@ class LogoutControllerTest extends WebMvcTestSupport {
 	}
 
 	@ParameterizedApiTest
-	@MethodSource("authenticationResults")
+	@MethodSource("authenticationFailResults")
 	@DisplayName("요청 시 인증에 실패하면 400에러를 반환한다.")
 	void logout_Fail_ByAuthentication(ErrorCode errorCode, String identifier) throws Exception {
 		// given

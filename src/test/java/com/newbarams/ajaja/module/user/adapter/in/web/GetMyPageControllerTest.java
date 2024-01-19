@@ -49,7 +49,7 @@ class GetMyPageControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("get-my-page")
+				.identifier("get-my-page-success")
 				.tag(ApiTag.USER)
 				.summary("마이페이지 API")
 				.description("마이페이지에서 사용될 사용자의 정보를 불러옵니다.")
@@ -60,7 +60,7 @@ class GetMyPageControllerTest extends WebMvcTestSupport {
 	}
 
 	@ParameterizedApiTest
-	@MethodSource("authenticationResults")
+	@MethodSource("authenticationFailResults")
 	@DisplayName("요청 시 인증에 실패하면 400에러를 반환한다.")
 	void getMyPage_Fail_ByAuthentication(ErrorCode errorCode, String identifier) throws Exception {
 		// given

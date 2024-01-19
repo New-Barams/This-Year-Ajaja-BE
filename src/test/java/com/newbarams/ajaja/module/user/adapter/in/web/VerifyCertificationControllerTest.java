@@ -43,7 +43,7 @@ class VerifyCertificationControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("verify-email")
+				.identifier("verify-certification-success")
 				.tag(ApiTag.USER)
 				.summary("인증 번호 검증 API")
 				.description("발송된 인증 번호를 검증합니다. 인증번호는 6자리 숫자로 이루어져 있습니다.")
@@ -54,7 +54,7 @@ class VerifyCertificationControllerTest extends WebMvcTestSupport {
 	}
 
 	@ParameterizedApiTest
-	@MethodSource("authenticationResults")
+	@MethodSource("authenticationFailResults")
 	@DisplayName("요청 시 인증에 실패하면 400에러를 반환한다.")
 	void verifyCertification_Fail_ByAuthentication(ErrorCode errorCode, String identifier) throws Exception {
 		// given

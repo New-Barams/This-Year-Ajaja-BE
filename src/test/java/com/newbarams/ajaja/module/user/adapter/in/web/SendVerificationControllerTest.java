@@ -43,7 +43,7 @@ class SendVerificationControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("send-verify-email-success")
+				.identifier("send-verification-success")
 				.tag(ApiTag.USER)
 				.summary("이메일 검증 요청 API")
 				.description("리마인드를 받을 이메일을 검증하기 위해 인증을 요청합니다.")
@@ -54,7 +54,7 @@ class SendVerificationControllerTest extends WebMvcTestSupport {
 	}
 
 	@ParameterizedApiTest
-	@MethodSource("authenticationResults")
+	@MethodSource("authenticationFailResults")
 	@DisplayName("요청 시 인증에 실패하면 400에러를 반환한다.")
 	void sendVerification_Fail_ByAuthentication(ErrorCode errorCode, String identifier) throws Exception {
 		// given

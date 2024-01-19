@@ -89,7 +89,7 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 			.build();
 	}
 
-	protected static Stream<Arguments> authenticationResults() {
+	protected static Stream<Arguments> authenticationFailResults() {
 		return Stream.of(
 			Arguments.of(INVALID_BEARER_TOKEN, "invalid-bearer-token"),
 			Arguments.of(INVALID_SIGNATURE, "bad-signature"),
