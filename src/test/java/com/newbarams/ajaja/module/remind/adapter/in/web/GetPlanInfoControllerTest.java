@@ -63,7 +63,7 @@ class GetPlanInfoControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("get-my-plans")
+				.identifier("get-my-all-plans")
 				.tag(ApiTag.PLAN)
 				.summary("내 계획 전체보기 API")
 				.description("메인페이지에서 사용자의 계획 정보들을 불러옵니다.")
