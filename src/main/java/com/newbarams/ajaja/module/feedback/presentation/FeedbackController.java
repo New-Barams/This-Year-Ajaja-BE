@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.newbarams.ajaja.global.common.AjajaResponse;
 import com.newbarams.ajaja.global.exception.ErrorResponse;
+import com.newbarams.ajaja.global.security.common.UserId;
 import com.newbarams.ajaja.module.feedback.application.LoadFeedbackInfoService;
 import com.newbarams.ajaja.module.feedback.application.UpdateFeedbackService;
 import com.newbarams.ajaja.module.feedback.dto.FeedbackRequest;
@@ -50,10 +51,11 @@ public class FeedbackController {
 	@PostMapping("/{planId}")
 	@ResponseStatus(OK)
 	public AjajaResponse<Void> updateFeedback(
+		@UserId Long userId,
 		@PathVariable Long planId,
 		@RequestBody FeedbackRequest.UpdateFeedback updateFeedback
 	) {
-		updateFeedbackService.updateFeedback(2L, planId, updateFeedback.getRate(), updateFeedback.getMessage());
+		updateFeedbackService.updateFeedback(userId, planId, updateFeedback.getRate(), updateFeedback.getMessage());
 		return AjajaResponse.ok();
 	}
 
@@ -62,7 +64,7 @@ public class FeedbackController {
 			@ApiResponse(responseCode = "200", description = "성공적으로 피드백에 대한 정보를 불러왔습니다."),
 			@ApiResponse(responseCode = "400", description = "유효하지 않은 토큰입니다.",
 				content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-			@ApiResponse(responseCode = "404", description = "평가할 피드백에 대한 정보가 존재하지 않습니다.",
+			@ApiResponse(responseCode = "404", description = "계획 정보가 존재하지 않습니다.",
 				content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
 			@ApiResponse(responseCode = "500", description = "서버 내부 문제입니다. 관리자에게 문의 바랍니다.",
 				content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
@@ -70,9 +72,10 @@ public class FeedbackController {
 	@GetMapping("/{planId}")
 	@ResponseStatus(OK)
 	public AjajaResponse<FeedbackResponse.FeedbackInfo> getFeedbackInfo(
+		@UserId Long userId,
 		@PathVariable Long planId
 	) {
-		FeedbackResponse.FeedbackInfo feedbackInfo = loadFeedbackInfoService.loadFeedbackInfoByPlanId(1L, planId);
+		FeedbackResponse.FeedbackInfo feedbackInfo = loadFeedbackInfoService.loadFeedbackInfoByPlanId(userId, planId);
 		return AjajaResponse.ok(feedbackInfo);
 	}
 }
