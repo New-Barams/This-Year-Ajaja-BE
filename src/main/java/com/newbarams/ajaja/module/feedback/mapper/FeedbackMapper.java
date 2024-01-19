@@ -52,6 +52,7 @@ public interface FeedbackMapper {
 	@Mapping(target = "remindDate", expression = "java(sendDate.getDate())")
 	@Mapping(target = "endMonth", expression = "java(endDate.getMonthValue())")
 	@Mapping(target = "endDate", expression = "java(endDate.getDayOfMonth())")
+	@Mapping(target = "achieve", ignore = true)
 	FeedbackResponse.RemindFeedback toEmptyResponse(TimeValue sendDate, Integer remindTime, ZonedDateTime endDate);
 
 	default boolean isReminded(TimeValue sendDate) {
