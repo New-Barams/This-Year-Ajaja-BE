@@ -1,15 +1,18 @@
 package com.newbarams.ajaja.common.support;
 
+import static com.newbarams.ajaja.global.exception.ErrorCode.*;
 import static org.apache.commons.codec.CharEncoding.*;
 import static org.springframework.context.annotation.ComponentScan.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 
+import java.util.stream.Stream;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.provider.Arguments;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -23,6 +26,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.newbarams.ajaja.common.annotation.ApiTest;
+import com.newbarams.ajaja.common.annotation.ParameterizedApiTest;
 import com.newbarams.ajaja.global.mock.MockController;
 import com.newbarams.ajaja.global.security.jwt.util.JwtParser;
 import com.newbarams.ajaja.module.ajaja.application.SwitchAjajaService;
@@ -39,18 +43,19 @@ import com.newbarams.ajaja.module.remind.application.port.in.GetPlanInfoUseCase;
 import com.newbarams.ajaja.module.remind.application.port.in.GetRemindInfoUseCase;
 import com.newbarams.ajaja.module.remind.application.port.in.UpdateRemindInfoUseCase;
 import com.newbarams.ajaja.module.remind.application.port.out.FindPlanRemindQuery;
-import com.newbarams.ajaja.module.user.application.port.in.ChangeReceiveTypeUseCase;
+import com.newbarams.ajaja.module.user.application.port.in.ChangeRemindTypeUseCase;
 import com.newbarams.ajaja.module.user.application.port.in.LogoutUseCase;
-import com.newbarams.ajaja.module.user.application.port.in.RenewNicknameUseCase;
+import com.newbarams.ajaja.module.user.application.port.in.RefreshNicknameUseCase;
 import com.newbarams.ajaja.module.user.application.port.in.SendVerificationEmailUseCase;
 import com.newbarams.ajaja.module.user.application.port.in.VerifyCertificationUseCase;
 import com.newbarams.ajaja.module.user.application.port.in.WithdrawUseCase;
-import com.newbarams.ajaja.module.user.application.port.out.GetMyPagePort;
+import com.newbarams.ajaja.module.user.application.port.out.GetMyPageQuery;
 
 /**
  * Supports Cached Context On WebMvcTest with Monkey <br>
- * When Authentication is required USE @ApiTest
+ * When Authentication is required USE @ApiTest, @ParameterizedApiTest
  * @see ApiTest
+ * @see ParameterizedApiTest
  * @author hejow
  */
 @WebMvcTest(excludeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, classes = MockController.class))
@@ -75,7 +80,6 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 	) {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
 			.alwaysDo(print())
-			.apply(springSecurity())
 			.apply(documentationConfiguration(restDocumentation))
 			.addFilter(new CharacterEncodingFilter(UTF_8, true))
 			.defaultRequest(post(ANY_END_POINT).with(csrf().asHeader()))
@@ -83,6 +87,17 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 			.defaultRequest(put(ANY_END_POINT).with(csrf().asHeader()))
 			.defaultRequest(delete(ANY_END_POINT).with(csrf().asHeader()))
 			.build();
+	}
+
+	protected static Stream<Arguments> authenticationFailResults() {
+		return Stream.of(
+			Arguments.of(INVALID_BEARER_TOKEN, "invalid-bearer-token"),
+			Arguments.of(INVALID_SIGNATURE, "bad-signature"),
+			Arguments.of(INVALID_TOKEN, "malformed-jwt"),
+			Arguments.of(EXPIRED_TOKEN, "expired-jwt"),
+			Arguments.of(UNSUPPORTED_TOKEN, "unsupported-jwt"),
+			Arguments.of(EMPTY_TOKEN, "empty-jwt")
+		);
 	}
 
 	/**
@@ -99,11 +114,11 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 
 	// User
 	@MockBean
-	protected ChangeReceiveTypeUseCase changeReceiveTypeUseCase;
+	protected ChangeRemindTypeUseCase changeRemindTypeUseCase;
 	@MockBean
 	protected LogoutUseCase logoutUseCase;
 	@MockBean
-	protected RenewNicknameUseCase renewNicknameUseCase;
+	protected RefreshNicknameUseCase refreshNicknameUseCase;
 	@MockBean
 	protected SendVerificationEmailUseCase sendVerificationEmailUseCase;
 	@MockBean
@@ -111,7 +126,7 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 	@MockBean
 	protected WithdrawUseCase withdrawUseCase;
 	@MockBean
-	protected GetMyPagePort getMyPagePort;
+	protected GetMyPageQuery getMyPageQuery;
 
 	// Plan
 	@MockBean

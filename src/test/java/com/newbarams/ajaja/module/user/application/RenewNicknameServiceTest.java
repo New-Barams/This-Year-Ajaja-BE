@@ -16,7 +16,7 @@ import com.newbarams.ajaja.module.user.domain.User;
 
 class RenewNicknameServiceTest extends MockTestSupport {
 	@InjectMocks
-	private RenewNicknameService renewNicknameService;
+	private RefreshNicknameService renewNicknameService;
 
 	@Mock
 	private RetrieveUserService retrieveUserService;
@@ -37,7 +37,7 @@ class RenewNicknameServiceTest extends MockTestSupport {
 		willDoNothing().given(applyChangePort).apply(any());
 
 		// when
-		renewNicknameService.renew(user.getId());
+		renewNicknameService.refresh(user.getId());
 
 		// then
 		assertThat(oldNickname).isNotEqualTo(user.getNickname());

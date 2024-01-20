@@ -4,7 +4,7 @@ import static com.newbarams.ajaja.module.user.adapter.out.persistence.model.QUse
 
 import org.springframework.stereotype.Repository;
 
-import com.newbarams.ajaja.module.user.application.port.out.GetMyPagePort;
+import com.newbarams.ajaja.module.user.application.port.out.GetMyPageQuery;
 import com.newbarams.ajaja.module.user.dto.QUserResponse_MyPage;
 import com.newbarams.ajaja.module.user.dto.UserResponse;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-class GetMyPageAdapter implements GetMyPagePort {
+class GetMyPageAdapter implements GetMyPageQuery {
 	private final JPAQueryFactory queryFactory;
 
 	@Override

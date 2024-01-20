@@ -17,7 +17,7 @@ public class User {
 	private boolean deleted;
 
 	public static User init(String email, Long oauthId) {
-		return new User(UserId.from(oauthId), Nickname.renew(), new Email(email), ReceiveType.KAKAO, false);
+		return new User(UserId.from(oauthId), Nickname.init(), new Email(email), ReceiveType.KAKAO, false);
 	}
 
 	public void delete() {
@@ -32,11 +32,11 @@ public class User {
 		this.email = email.verified(validatedEmail);
 	}
 
-	public void updateNickname() {
-		this.nickname = Nickname.renew();
+	public void refreshNickname() {
+		this.nickname = Nickname.refresh();
 	}
 
-	public void updateReceive(ReceiveType receiveType) {
+	public void changeReceive(ReceiveType receiveType) {
 		this.receiveType = receiveType;
 	}
 
