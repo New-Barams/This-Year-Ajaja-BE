@@ -24,7 +24,8 @@ import com.newbarams.ajaja.module.feedback.dto.FeedbackResponse;
 public class GetFeedbackInfoControllerTest extends WebMvcTestSupport {
 
 	@ApiTest
-	void getFeedbackInfo_Success() throws Exception {
+	@DisplayName("유저의 피드백 정보들을 가져온다.")
+	void getFeedbackInfo_Success_WithNoException() throws Exception {
 		// given
 		List<FeedbackResponse.RemindFeedback> feedbacks = List.of(
 			new FeedbackResponse.RemindFeedback(
@@ -83,7 +84,7 @@ public class GetFeedbackInfoControllerTest extends WebMvcTestSupport {
 	@ParameterizedApiTest
 	@MethodSource("authenticationFailResults")
 	@DisplayName("토큰 검증에 실패하면 400에러를 반환한다.")
-	void getFeedbackInfo_Fail_InvalidToken(ErrorCode errorCode, String identifier) throws Exception {
+	void getFeedbackInfo_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
 		// given
 		AjajaException tokenException = new AjajaException(errorCode);
 		doThrow(tokenException).when(loadFeedbackInfoService).loadFeedbackInfoByPlanId(anyLong(), anyLong());
@@ -109,7 +110,8 @@ public class GetFeedbackInfoControllerTest extends WebMvcTestSupport {
 	}
 
 	@ApiTest
-	void getFeedbackInfo_Fail_PlanNotFound() throws Exception {
+	@DisplayName("만일 조회된 계획이 없다면 예외를 던진다.")
+	void getFeedbackInfo_Fail_ByPlanNotFound() throws Exception {
 		// given
 		AjajaException notFoundException = new AjajaException(NOT_FOUND_PLAN);
 		doThrow(notFoundException).when(loadFeedbackInfoService).loadFeedbackInfoByPlanId(anyLong(), anyLong());

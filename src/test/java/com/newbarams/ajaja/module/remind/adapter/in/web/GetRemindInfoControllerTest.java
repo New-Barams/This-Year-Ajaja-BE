@@ -25,7 +25,8 @@ import com.newbarams.ajaja.module.remind.dto.RemindResponse;
 class GetRemindInfoControllerTest extends WebMvcTestSupport {
 
 	@ApiTest
-	void getRemindResponse_Success() throws Exception {
+	@DisplayName("해당 계획의 리마인드 정보들을 가져온다.")
+	void getRemindResponse_Success_WithNoException() throws Exception {
 		// given
 		List<RemindResponse.Message> messages = List.of(
 			new RemindResponse.Message("화이팅", 12, 1, true)
@@ -77,7 +78,7 @@ class GetRemindInfoControllerTest extends WebMvcTestSupport {
 	@ParameterizedApiTest
 	@MethodSource("authenticationFailResults")
 	@DisplayName("토큰 검증에 실패하면 400에러를 반환한다.")
-	void getRemindResponse_Fail_InvalidToken(ErrorCode errorCode, String identifier) throws Exception {
+	void getRemindResponse_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
 		// given
 		AjajaException tokenException = new AjajaException(errorCode);
 		doThrow(tokenException).when(findPlanRemindQuery).findByUserIdAndPlanId(anyLong(), anyLong());
@@ -104,7 +105,8 @@ class GetRemindInfoControllerTest extends WebMvcTestSupport {
 	}
 
 	@ApiTest
-	void getRemindResponse_Fail_PlanNotFound() throws Exception {
+	@DisplayName("만일 조회되는 계획이 없다면 예외를 던진다.")
+	void getRemindResponse_Fail_ByPlanNotFound() throws Exception {
 		// given
 		AjajaException notFoundException = new AjajaException(NOT_FOUND_PLAN);
 		doThrow(notFoundException).when(findPlanRemindQuery).findByUserIdAndPlanId(anyLong(), anyLong());

@@ -33,7 +33,8 @@ class UpdateRemindInfoControllerTest extends WebMvcTestSupport {
 		new PlanRequest.UpdateRemind(12, 3, 1, "MORNING", messages);
 
 	@ApiTest
-	void modifyRemindInfo_Success() throws Exception {
+	@DisplayName("해당 계획의 리마인드 정보들을 수정한다.")
+	void modifyRemindInfo_Success_WithNoException() throws Exception {
 		// given
 		doNothing().when(updateRemindInfoUseCase).update(anyLong(), anyLong(), any());
 
@@ -62,7 +63,7 @@ class UpdateRemindInfoControllerTest extends WebMvcTestSupport {
 	@ParameterizedApiTest
 	@MethodSource("authenticationFailResults")
 	@DisplayName("토큰 검증에 실패하면 400에러를 반환한다.")
-	void modifyRemindInfo_Fail_InvalidToken(ErrorCode errorCode, String identifier) throws Exception {
+	void modifyRemindInfo_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
 		// given
 		AjajaException tokenException = new AjajaException(errorCode);
 		doThrow(tokenException).when(updateRemindInfoUseCase).update(anyLong(), anyLong(), any());
@@ -90,7 +91,8 @@ class UpdateRemindInfoControllerTest extends WebMvcTestSupport {
 	}
 
 	@ApiTest
-	void modifyRemindInfo_Fail_NotUpdatableDate() throws Exception {
+	@DisplayName("변경 가능한 기간이 아니라면 예외를 던진다.")
+	void modifyRemindInfo_Fail_ByNotUpdatableDate() throws Exception {
 		// given
 		doNothing().when(updateRemindInfoUseCase).update(anyLong(), anyLong(), any());
 
@@ -120,7 +122,8 @@ class UpdateRemindInfoControllerTest extends WebMvcTestSupport {
 	}
 
 	@ApiTest
-	void modifyRemindInfo_Fail_NotFoundPlan() throws Exception {
+	@DisplayName("만일 조회된 계획이 없다면 예외를 던진다.")
+	void modifyRemindInfo_Fail_ByNotFoundPlan() throws Exception {
 		// given
 		doNothing().when(updateRemindInfoUseCase).update(anyLong(), anyLong(), any());
 

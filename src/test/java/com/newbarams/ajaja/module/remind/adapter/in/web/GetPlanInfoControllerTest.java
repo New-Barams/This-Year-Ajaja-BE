@@ -24,7 +24,8 @@ import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 class GetPlanInfoControllerTest extends WebMvcTestSupport {
 
 	@ApiTest
-	void getPlanInfo_Success() throws Exception {
+	@DisplayName("메인 페이지에서 유저의 모든 계획 정보들을 가져온다.")
+	void getPlanInfo_Success_WithNoException() throws Exception {
 		// given
 		List<PlanResponse.PlanInfo> infos = List.of(
 			new PlanResponse.PlanInfo(2023, 1L, "이력서 완성", true, 50, 1),
@@ -80,7 +81,7 @@ class GetPlanInfoControllerTest extends WebMvcTestSupport {
 	@ParameterizedApiTest
 	@MethodSource("authenticationFailResults")
 	@DisplayName("토큰 검증에 실패하면 400에러를 반환한다.")
-	void getPlanInfo_Fail_InvalidToken(ErrorCode errorCode, String identifier) throws Exception {
+	void getPlanInfo_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
 		// given
 		AjajaException tokenException = new AjajaException(errorCode);
 		when(getPlanInfoUseCase.load(anyLong())).thenThrow(tokenException);
@@ -107,7 +108,8 @@ class GetPlanInfoControllerTest extends WebMvcTestSupport {
 	}
 
 	@ApiTest
-	void getPlanInfo_Fail_UserNotFound() throws Exception {
+	@DisplayName("존재하지 않는 회원으로 요청하면 404에러를 반환한다.")
+	void getPlanInfo_Fail_ByUserNotFound() throws Exception {
 		// given
 		AjajaException notFoundException = new AjajaException(USER_NOT_FOUND);
 		when(getPlanInfoUseCase.load(anyLong())).thenThrow(notFoundException);

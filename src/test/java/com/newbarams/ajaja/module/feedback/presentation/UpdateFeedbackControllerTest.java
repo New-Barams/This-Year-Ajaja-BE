@@ -24,7 +24,8 @@ class UpdateFeedbackControllerTest extends WebMvcTestSupport {
 		= new FeedbackRequest.UpdateFeedback(50, "fighting");
 
 	@ApiTest
-	void updateFeedback_Success() throws Exception {
+	@DisplayName("요청 받은 값으로 유저의 피드백을 실행한다.")
+	void updateFeedback_Success_WithNoException() throws Exception {
 		// given
 		doNothing().when(updateFeedbackService).updateFeedback(anyLong(), anyLong(), anyInt(), anyString());
 
@@ -53,7 +54,7 @@ class UpdateFeedbackControllerTest extends WebMvcTestSupport {
 	@ParameterizedApiTest
 	@MethodSource("authenticationFailResults")
 	@DisplayName("토큰 검증에 실패하면 400에러를 반환한다.")
-	void updateFeedback_Fail_InvalidToken(ErrorCode errorCode, String identifier) throws Exception {
+	void updateFeedback_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
 		// given
 		AjajaException tokenException = new AjajaException(errorCode);
 		doThrow(tokenException).when(updateFeedbackService)
@@ -82,7 +83,8 @@ class UpdateFeedbackControllerTest extends WebMvcTestSupport {
 	}
 
 	@ApiTest
-	void updateFeedback_Fail_ExpiredFeedback() throws Exception {
+	@DisplayName("만일 피드백 기간이 아니라면 예외를 던진다.")
+	void updateFeedback_Fail_ByExpiredFeedback() throws Exception {
 		// given
 		AjajaException expiredException = new AjajaException(EXPIRED_FEEDBACK);
 		doThrow(expiredException).when(updateFeedbackService)
@@ -111,7 +113,8 @@ class UpdateFeedbackControllerTest extends WebMvcTestSupport {
 	}
 
 	@ApiTest
-	void updateFeedback_Fail_PlanNotFound() throws Exception {
+	@DisplayName("만일 피드백 대상 계획이 조회되지 않는다면 예외를 던진다.")
+	void updateFeedback_Fail_ByPlanNotFound() throws Exception {
 		// given
 		AjajaException notFoundException = new AjajaException(NOT_FOUND_PLAN);
 		doThrow(notFoundException).when(updateFeedbackService)
@@ -140,7 +143,8 @@ class UpdateFeedbackControllerTest extends WebMvcTestSupport {
 	}
 
 	@ApiTest
-	void updateFeedback_Fail_alreadyFeedback() throws Exception {
+	@DisplayName("해당 기간에 이미 피드백 했다면 예외를 던진다.")
+	void updateFeedback_Fail_ByAlreadyFeedback() throws Exception {
 		// given
 		AjajaException alreadyFeedbackException = new AjajaException(ALREADY_FEEDBACK);
 		doThrow(alreadyFeedbackException).when(updateFeedbackService)
