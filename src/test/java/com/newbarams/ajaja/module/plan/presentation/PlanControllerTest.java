@@ -19,6 +19,8 @@ import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 
 class PlanControllerTest extends WebMvcTestSupport {
 	private static final List<String> TAG_FIXTURE = List.of("올해도", "아좌좌");
+	private static final List<PlanRequest.Message> MESSAGE_FIXTURE = List.of(new PlanRequest.Message("content1", 6, 1),
+		new PlanRequest.Message("content2", 12, 1));
 	private static final PlanResponse.Detail DETAIL_RESPONSE_FIXTURE = new PlanResponse.Detail(
 		new PlanResponse.Writer("공부하는 돼지", true, true),
 		1L, "올해도 아좌좌", "아좌좌 마이 라이프", 1, true, true, true, 15000,
@@ -143,4 +145,199 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
+	@ApiTest
+	void deletePlan_Success() throws Exception {
+		// given
+		doNothing().when(deletePlanService).delete(anyLong(), anyLong(), anyInt());
+
+		// when
+		var result = mockMvc.perform(RestDocumentationRequestBuilders.delete(PLAN_END_POINT.concat("/{id}"), 1)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
+			.header("Month", 1));
+
+		// then
+		result.andExpect(status().isOk());
+
+		// docs
+		result.andDo(
+			RestDocument.builder()
+				.identifier("plan-delete")
+				.tag(ApiTag.PLAN)
+				.summary("계획 삭제 API")
+				.description("해당 ID의 계획을 삭제합니다.")
+				.secured(true)
+				.result(result)
+				.generateDocs()
+		);
+	}
+
+	@ApiTest
+	void getPlan_Success() throws Exception {
+		// given
+		PlanResponse.Detail response = DETAIL_RESPONSE_FIXTURE;
+
+		given(getPlanService.loadByIdAndOptionalUser(anyLong(), anyLong())).willReturn(response);
+
+		// when
+		var result = mockMvc.perform(RestDocumentationRequestBuilders.get(PLAN_END_POINT.concat("/{id}"), 1)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
+			.header("Month", 1));
+
+		// then
+		result.andExpectAll(
+			status().isOk(),
+			jsonPath("$.success").value(Boolean.TRUE),
+			jsonPath("$.data.writer.nickname").value(response.getWriter().getNickname()),
+			jsonPath("$.data.writer.owner").value(response.getWriter().isOwner()),
+			jsonPath("$.data.writer.ajajaPressed").value(response.getWriter().isAjajaPressed()),
+			jsonPath("$.data.id").value(response.getId()),
+			jsonPath("$.data.title").value(response.getTitle()),
+			jsonPath("$.data.description").value(response.getDescription()),
+			jsonPath("$.data.icon").value(response.getIcon()),
+			jsonPath("$.data.public").value(response.isPublic()),
+			jsonPath("$.data.canRemind").value(response.isCanRemind()),
+			jsonPath("$.data.canAjaja").value(response.isCanAjaja()),
+			jsonPath("$.data.ajajas").value(response.getAjajas()),
+			jsonPath("$.data.tags[0]").value(response.getTags().get(0)),
+			jsonPath("$.data.createdAt").value(String.valueOf(response.getCreatedAt()))
+		);
+
+		// docs
+		result.andDo(
+			RestDocument.builder()
+				.identifier("plan-get")
+				.tag(ApiTag.PLAN)
+				.summary("계획 단건 조회 API")
+				.description("해당 ID의 계획을 조회합니다.")
+				.secured(true)
+				.result(result)
+				.generateDocs()
+		);
+	}
+
+	@ApiTest
+	void createPlan_Success() throws Exception {
+		// given
+		PlanRequest.Create request = new PlanRequest.Create("올해도 아좌좌", "아좌좌 마이 라이프", 12, 6, 1, "MORNING", true, true, 1,
+			TAG_FIXTURE, MESSAGE_FIXTURE);
+		PlanResponse.Create response = new PlanResponse.Create(1L, 1L, "올해도 아좌좌", "아좌좌 마이 라이프", 1, true, true, true,
+			TAG_FIXTURE);
+
+		given(createPlanService.create(anyLong(), any(), anyInt())).willReturn(response);
+
+		// when
+		var result = mockMvc.perform(RestDocumentationRequestBuilders.post(PLAN_END_POINT)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
+			.header("Month", 1)
+			.content(objectMapper.writeValueAsString(request)));
+
+		// then
+		result.andExpectAll(
+			status().isCreated(),
+			jsonPath("$.success").value(Boolean.TRUE),
+			jsonPath("$.data.id").value(response.getId()),
+			jsonPath("$.data.userId").value(response.getUserId()),
+			jsonPath("$.data.title").value(response.getTitle()),
+			jsonPath("$.data.description").value(response.getDescription()),
+			jsonPath("$.data.iconNumber").value(response.getIconNumber()),
+			jsonPath("$.data.public").value(response.isPublic()),
+			jsonPath("$.data.canRemind").value(response.isCanRemind()),
+			jsonPath("$.data.canAjaja").value(response.isCanAjaja()),
+			jsonPath("$.data.ajajas").value(response.getAjajas()),
+			jsonPath("$.data.tags[0]").value(response.getTags().get(0))
+		);
+
+		// docs
+		result.andDo(
+			RestDocument.builder()
+				.identifier("plan-create")
+				.tag(ApiTag.PLAN)
+				.summary("계획 생성 API")
+				.description("요청한 데이터로 계획을 생성합니다.")
+				.secured(true)
+				.result(result)
+				.generateDocs()
+		);
+	}
+
+	@ApiTest
+	void updatePlanPublicStatus_Success() throws Exception {
+		// given
+		doNothing().when(updatePlanService).updatePublicStatus(anyLong(), anyLong());
+
+		// when
+		var result = mockMvc.perform(RestDocumentationRequestBuilders.put(PLAN_END_POINT.concat("/{id}/public"), 1)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN));
+
+		// then
+		result.andExpect(status().isOk());
+
+		// docs
+		result.andDo(
+			RestDocument.builder()
+				.identifier("plan-update-public-status")
+				.tag(ApiTag.PLAN)
+				.summary("계획 공개 여부 변경 API")
+				.description("계획의 공개 여부를 변경합니다.")
+				.secured(true)
+				.result(result)
+				.generateDocs()
+		);
+	}
+
+	@ApiTest
+	void updatePlanRemindStatus_Success() throws Exception {
+		// given
+		doNothing().when(updatePlanService).updateRemindStatus(anyLong(), anyLong());
+
+		// when
+		var result = mockMvc.perform(RestDocumentationRequestBuilders.put(PLAN_END_POINT.concat("/{id}/remindable"), 1)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN));
+
+		// then
+		result.andExpect(status().isOk());
+
+		// docs
+		result.andDo(
+			RestDocument.builder()
+				.identifier("plan-update-remind-status")
+				.tag(ApiTag.PLAN)
+				.summary("계획 리마인드 알림 여부 변경 API")
+				.description("계획의 리마인드 알림 여부를 변경합니다.")
+				.secured(true)
+				.result(result)
+				.generateDocs()
+		);
+	}
+
+	@ApiTest
+	void updatePlanAjajaStatus_Success() throws Exception {
+		// given
+		doNothing().when(updatePlanService).updateAjajaStatus(anyLong(), anyLong());
+
+		// when
+		var result = mockMvc.perform(RestDocumentationRequestBuilders.put(PLAN_END_POINT.concat("/{id}/ajaja"), 1)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN));
+
+		// then
+		result.andExpect(status().isOk());
+
+		// docs
+		result.andDo(
+			RestDocument.builder()
+				.identifier("plan-update-ajaja-status")
+				.tag(ApiTag.PLAN)
+				.summary("계획 응원 메시지 알림 여부 변경 API")
+				.description("계획의 응원 메시지 알림 여부를 변경합니다.")
+				.secured(true)
+				.result(result)
+				.generateDocs()
+		);
+	}
 }
