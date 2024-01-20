@@ -5,14 +5,18 @@ import static org.mockito.BDDMockito.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
 import com.newbarams.ajaja.common.annotation.ApiTest;
+import com.newbarams.ajaja.common.annotation.ParameterizedApiTest;
 import com.newbarams.ajaja.common.support.WebMvcTestSupport;
 import com.newbarams.ajaja.common.util.ApiTag;
 import com.newbarams.ajaja.common.util.RestDocument;
 import com.newbarams.ajaja.global.exception.AjajaException;
+import com.newbarams.ajaja.global.exception.ErrorCode;
 import com.newbarams.ajaja.module.feedback.dto.FeedbackRequest;
 
 class UpdateFeedbackControllerTest extends WebMvcTestSupport {
@@ -46,10 +50,12 @@ class UpdateFeedbackControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
-	void updateFeedback_Fail_InvalidToken() throws Exception {
+	@ParameterizedApiTest
+	@MethodSource("authenticationFailResults")
+	@DisplayName("토큰 검증에 실패하면 400에러를 반환한다.")
+	void updateFeedback_Fail_InvalidToken(ErrorCode errorCode, String identifier) throws Exception {
 		// given
-		AjajaException tokenException = new AjajaException(INVALID_TOKEN);
+		AjajaException tokenException = new AjajaException(errorCode);
 		doThrow(tokenException).when(updateFeedbackService)
 			.updateFeedback(anyLong(), anyLong(), anyInt(), anyString());
 
