@@ -340,4 +340,30 @@ class PlanControllerTest extends WebMvcTestSupport {
 				.generateDocs()
 		);
 	}
+
+	@ApiTest
+	void switchAjaja_Success() throws Exception {
+		// given
+		doNothing().when(switchAjajaService).switchOrAddIfNotExist(anyLong(), anyLong());
+
+		// when
+		var result = mockMvc.perform(RestDocumentationRequestBuilders.post(PLAN_END_POINT.concat("/{id}/ajaja"), 1)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN));
+
+		// then
+		result.andExpect(status().isOk());
+
+		// docs
+		result.andDo(
+			RestDocument.builder()
+				.identifier("plan-ajaja-switch")
+				.tag(ApiTag.PLAN)
+				.summary("아좌좌 추가 or 취소 API")
+				.description("유저의 아좌좌 누름 여부를 변경합니다.")
+				.secured(true)
+				.result(result)
+				.generateDocs()
+		);
+	}
 }
