@@ -28,7 +28,7 @@ class RenewNicknameServiceTest extends MockTestSupport {
 	void renew_Success_WithNewNickname() {
 		// given
 		User user = sut.giveMeBuilder(User.class)
-			.set("email", new Email("Ajaja@me.com"))
+			.set("email", Email.init("ajaja@me.com"))
 			.sample();
 
 		Nickname oldNickname = user.getNickname();

@@ -29,7 +29,7 @@ class ChangeRemindTypeServiceTest extends MockTestSupport {
 	void change_Success(User.RemindType type) {
 		// given
 		User user = sut.giveMeBuilder(User.class)
-			.set("email", new Email("Ajaja@me.com"))
+			.set("email", Email.init("ajaja@me.com"))
 			.sample();
 
 		given(retrieveUserService.loadExistById(anyLong())).willReturn(user);

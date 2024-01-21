@@ -30,8 +30,8 @@ public class Email extends SelfValidating<Email> {
 		this.validateSelf();
 	}
 
-	public Email(String email) {
-		this(email, email, false);
+	public static Email init(String email) {
+		return new Email(email, email, false);
 	}
 
 	void validateVerifiable(String email) {

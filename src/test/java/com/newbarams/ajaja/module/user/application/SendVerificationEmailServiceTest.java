@@ -36,7 +36,7 @@ class SendVerificationEmailServiceTest extends MonkeySupport {
 		String email = "Ajaja@me.com";
 
 		User user = sut.giveMeBuilder(User.class)
-			.set("email", new Email(email))
+			.set("email", Email.init(email))
 			.sample();
 
 		given(retrieveUserService.loadExistById(any())).willReturn(user);

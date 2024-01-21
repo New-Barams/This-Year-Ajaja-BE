@@ -37,7 +37,7 @@ class ApplyChangeAdapterTest extends JpaTestSupport {
 	@BeforeEach
 	void setup() {
 		UserEntity entity = userMapper.toEntity(sut.giveMeBuilder(User.class)
-			.set("email", new Email("ajaja@me.com"))
+			.set("email", Email.init("ajaja@me.com"))
 			.set("deleted", false)
 			.sample());
 

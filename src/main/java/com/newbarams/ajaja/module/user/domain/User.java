@@ -17,7 +17,7 @@ public class User {
 	private boolean deleted;
 
 	public static User init(String email, Long oauthId) {
-		return new User(UserId.from(oauthId), Nickname.init(), new Email(email), RemindType.KAKAO, false);
+		return new User(UserId.from(oauthId), Nickname.init(), Email.init(email), RemindType.KAKAO, false);
 	}
 
 	public void delete() {

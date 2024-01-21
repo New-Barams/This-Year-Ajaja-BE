@@ -37,7 +37,7 @@ class VerifyCertificationServiceTest extends MockTestSupport {
 	@BeforeEach
 	void setup() {
 		user = sut.giveMeBuilder(User.class)
-			.set("email", new Email(DEFAULT_EMAIL))
+			.set("email", Email.init(DEFAULT_EMAIL))
 			.set("deleted", false)
 			.sample();
 	}

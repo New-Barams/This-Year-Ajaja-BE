@@ -31,7 +31,7 @@ class WithdrawServiceTest extends MockTestSupport {
 	void withdraw_Success() {
 		// given
 		User user = sut.giveMeBuilder(User.class)
-			.set("email", new Email("Ajaja@me.com"))
+			.set("email", Email.init("ajaja@me.com"))
 			.set("deleted", false)
 			.sample();
 
