@@ -41,7 +41,7 @@ public class UserEntity extends BaseEntity<UserEntity> {
 	private boolean verified;
 
 	@Column(nullable = false, length = 20)
-	private String receiveType;
+	private String remindType;
 
 	@Embedded
 	private OauthInfo oauthInfo;

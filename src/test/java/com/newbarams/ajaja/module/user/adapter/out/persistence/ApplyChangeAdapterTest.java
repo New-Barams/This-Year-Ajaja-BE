@@ -59,7 +59,7 @@ class ApplyChangeAdapterTest extends JpaTestSupport {
 		assertThat(entities).isNotEmpty();
 
 		UserEntity userEntity = entities.get(0);
-		assertThat(userEntity.getReceiveType()).isEqualTo(type.name());
+		assertThat(userEntity.getRemindType()).isEqualTo(type.name());
 	}
 
 	@RepeatedTest(3)
