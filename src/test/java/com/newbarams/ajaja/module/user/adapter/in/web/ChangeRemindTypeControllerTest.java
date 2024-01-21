@@ -24,7 +24,7 @@ import com.newbarams.ajaja.module.user.dto.UserRequest;
 class ChangeRemindTypeControllerTest extends WebMvcTestSupport {
 	private static final String CHANGE_RECEIVE_END_POINT = USER_END_POINT + "/receive";
 
-	private final UserRequest.Receive request = new UserRequest.Receive(User.ReceiveType.BOTH);
+	private final UserRequest.Receive request = new UserRequest.Receive(User.RemindType.BOTH);
 
 	@ApiTest
 	@DisplayName("지원하는 타입으로 리마인드 수신 타입 변경 요청을 보내면 성공한다.")

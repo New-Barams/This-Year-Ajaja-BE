@@ -45,11 +45,11 @@ class ApplyChangeAdapterTest extends JpaTestSupport {
 	}
 
 	@ParameterizedTest
-	@EnumSource(User.ReceiveType.class)
+	@EnumSource(User.RemindType.class)
 	@DisplayName("리마인드 타입 변경 요청이 정상적으로 반영되어야 한다.")
-	void apply_Success_OnReceiveTypeChange(User.ReceiveType type) {
+	void apply_Success_OnReceiveTypeChange(User.RemindType type) {
 		// given
-		user.changeReceive(type);
+		user.changeRemind(type);
 
 		// when
 		applyChangeAdapter.apply(user);

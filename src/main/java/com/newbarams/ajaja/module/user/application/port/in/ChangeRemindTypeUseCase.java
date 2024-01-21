@@ -5,9 +5,9 @@ import com.newbarams.ajaja.module.user.domain.User;
 public interface ChangeRemindTypeUseCase {
 	/**
 	 * Change remind receive type use case
-	 * @see User.ReceiveType
+	 * @see User.RemindType
 	 * @param userId target to change
-	 * @param receiveType support three type : KAKAO, EMAIL, BOTH
+	 * @param remindType support three type : KAKAO, EMAIL, BOTH
 	 */
-	void change(Long userId, User.ReceiveType receiveType);
+	void change(Long userId, User.RemindType remindType);
 }

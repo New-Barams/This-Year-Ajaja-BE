@@ -6,18 +6,18 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class User {
-	public enum ReceiveType {
+	public enum RemindType {
 		KAKAO, EMAIL, BOTH
 	}
 
 	private final UserId userId;
 	private Nickname nickname;
 	private Email email;
-	private ReceiveType receiveType;
+	private RemindType remindType;
 	private boolean deleted;
 
 	public static User init(String email, Long oauthId) {
-		return new User(UserId.from(oauthId), Nickname.init(), new Email(email), ReceiveType.KAKAO, false);
+		return new User(UserId.from(oauthId), Nickname.init(), new Email(email), RemindType.KAKAO, false);
 	}
 
 	public void delete() {
@@ -36,8 +36,8 @@ public class User {
 		this.nickname = Nickname.refresh();
 	}
 
-	public void changeReceive(ReceiveType receiveType) {
-		this.receiveType = receiveType;
+	public void changeRemind(RemindType remindType) {
+		this.remindType = remindType;
 	}
 
 	public Long getId() {
