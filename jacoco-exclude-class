@@ -13,6 +13,8 @@ exclude com/newbarams/ajaja/global/util/*
 exclude com/newbarams/ajaja/infra/feign/common/*
 exclude com/newbarams/ajaja/infra/feign/kakao/client/*
 exclude com/newbarams/ajaja/infra/feign/kakao/model/*
+exclude com/newbarams/ajaja/infra/feign/ncp/client/*
+exclude com/newbarams/ajaja/infra/feign/ncp/model/*
 exclude com/newbarams/ajaja/infra/ses/*
 exclude com/newbarams/ajaja/module/auth/dto/*
 exclude com/newbarams/ajaja/module/feedback/dto/*
