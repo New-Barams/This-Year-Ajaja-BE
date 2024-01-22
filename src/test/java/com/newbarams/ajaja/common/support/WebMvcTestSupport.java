@@ -66,6 +66,7 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 	protected static final String USER_END_POINT = "/users";
 	protected static final String PLAN_END_POINT = "/plans";
 	protected static final String FEEDBACK_END_POINT = "/feedbacks";
+	protected static final String REMIND_END_POINT = "/reminds";
 	protected static final String BEARER_TOKEN = "Bearer eyJhbGxMiJ9.eyJzWpvdyJ9.avFKonhbIIhEg8H1dycQkhQ";
 
 	@Autowired
@@ -152,9 +153,9 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 	@MockBean
 	protected GetPlanInfoUseCase getPlanInfoUseCase;
 	@MockBean
-	private GetRemindInfoUseCase getRemindInfoUseCase;
+	protected GetRemindInfoUseCase getRemindInfoUseCase;
 	@MockBean
-	private UpdateRemindInfoUseCase updateRemindInfoUseCase;
+	protected UpdateRemindInfoUseCase updateRemindInfoUseCase;
 	@MockBean
-	FindPlanRemindQuery findPlanRemindQuery;
+	protected FindPlanRemindQuery findPlanRemindQuery;
 }

@@ -47,11 +47,11 @@ public class PlanRequest {
 
 	@Data
 	public static class UpdateRemind {
-		int remindTotalPeriod;
-		int remindTerm;
-		int remindDate;
-		String remindTime;
-		List<Message> messages;
+		private final int remindTotalPeriod;
+		private final int remindTerm;
+		private final int remindDate;
+		private final String remindTime;
+		private final List<Message> messages;
 	}
 
 	@Data
