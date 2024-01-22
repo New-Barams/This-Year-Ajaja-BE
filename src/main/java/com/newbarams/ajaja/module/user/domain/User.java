@@ -17,14 +17,15 @@ public class User {
 	private RemindType remindType;
 	private boolean deleted;
 
-	public static User init(String email, Long oauthId) {
+	public static User init(Long oauthId, String contact, String email) {
 		return new User(
 			UserId.from(oauthId),
 			Nickname.init(),
-			new PhoneNumber("01012345678"), // todo: update after change login
+			PhoneNumber.init(contact),
 			Email.init(email),
 			RemindType.KAKAO,
-			false);
+			false
+		);
 	}
 
 	public void delete() {

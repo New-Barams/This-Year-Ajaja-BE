@@ -3,6 +3,7 @@ package com.newbarams.ajaja.module.user.domain;
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -13,6 +14,16 @@ import com.newbarams.ajaja.global.exception.ErrorCode;
 import jakarta.validation.ConstraintViolationException;
 
 class PhoneNumberTest {
+
+	@Test
+	@DisplayName("국제 번호로 초기화하면 국내 휴대폰 번호 형식으로 변경되어야 한다.")
+	void init_Success_ToMobileFormat() {
+		// given
+		String contact = "+82 1012345678";
+
+		// when, then
+		assertThatNoException().isThrownBy(() -> PhoneNumber.init(contact));
+	}
 
 	@ParameterizedTest
 	@ValueSource(strings = {"01012345678", "0101234567"})

@@ -15,7 +15,7 @@ import com.newbarams.ajaja.module.user.adapter.out.persistence.model.UserEntity;
 
 class FindUserIdByEmailAdapterTest extends MockTestSupport {
 	@InjectMocks
-	private FindUserIdByEmailAdapter findUserIdByEmailAdapter;
+	private FindUserIdAdapter findUserIdByEmailAdapter;
 
 	@Mock
 	private UserJpaRepository userJpaRepository;
@@ -30,7 +30,7 @@ class FindUserIdByEmailAdapterTest extends MockTestSupport {
 		given(userJpaRepository.findBySignUpEmail(anyString())).willReturn(Optional.of(userEntity));
 
 		// when
-		Optional<Long> userId = findUserIdByEmailAdapter.findUserIdByEmail(email);
+		Optional<Long> userId = findUserIdByEmailAdapter.findByEmail(email);
 
 		// then
 		assertThat(userId).isPresent();
@@ -44,7 +44,7 @@ class FindUserIdByEmailAdapterTest extends MockTestSupport {
 		given(userJpaRepository.findBySignUpEmail(anyString())).willReturn(Optional.empty());
 
 		// when
-		Optional<Long> userId = findUserIdByEmailAdapter.findUserIdByEmail(email);
+		Optional<Long> userId = findUserIdByEmailAdapter.findByEmail(email);
 
 		// then
 		assertThat(userId).isEmpty();

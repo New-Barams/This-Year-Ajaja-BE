@@ -16,6 +16,9 @@ import lombok.Getter;
 public class PhoneNumber extends SelfValidating<PhoneNumber> {
 	private static final Pattern NUMERIC_PATTERN = Pattern.compile("\\d+");
 
+	private static final String GLOBAL_CONTACT_PREFIX = "+82 10";
+	private static final String KOREA_CONTACT_PREFIX = "010";
+
 	@NotBlank
 	@Size(max = 11, min = 10) // min : 010-123-4567, max : 010-1234-5678
 	private final String phoneNumber;
@@ -25,6 +28,16 @@ public class PhoneNumber extends SelfValidating<PhoneNumber> {
 		this.phoneNumber = phoneNumber;
 		this.validateSelf();
 		validateNumeric(phoneNumber);
+	}
+
+	public static PhoneNumber init(String contact) {
+		String phoneNumber = toStandardFormat(contact);
+		return new PhoneNumber(phoneNumber);
+	}
+
+	private static String toStandardFormat(String contact) {
+		String phoneNumber = contact.substring(GLOBAL_CONTACT_PREFIX.length()).replace("-", "");
+		return KOREA_CONTACT_PREFIX.concat(phoneNumber);
 	}
 
 	private void validateNumeric(String phoneNumber) {

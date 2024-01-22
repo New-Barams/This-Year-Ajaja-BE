@@ -1,11 +1,13 @@
 package com.newbarams.ajaja.module.auth.application.model;
 
 /**
- * Get Profile Information only needed to issue Token OR sign-up
+ * Interface that has user profile information from provider.
  * @author hejow
  */
 public interface Profile {
 	Long getOauthId();
+
+	String getContact();
 
 	String getEmail();
 }

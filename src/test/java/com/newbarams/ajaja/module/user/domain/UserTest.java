@@ -30,7 +30,7 @@ class UserTest extends MonkeySupport {
 		// given
 
 		// when, then
-		assertThatNoException().isThrownBy(() -> User.init(input, 1L));
+		assertThatNoException().isThrownBy(() -> User.init(1L, "+82 1012345678", input));
 	}
 
 	@Test
