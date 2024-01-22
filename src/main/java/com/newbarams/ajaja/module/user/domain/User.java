@@ -12,12 +12,19 @@ public class User {
 
 	private final UserId userId;
 	private Nickname nickname;
+	private PhoneNumber phoneNumber;
 	private Email email;
 	private RemindType remindType;
 	private boolean deleted;
 
 	public static User init(String email, Long oauthId) {
-		return new User(UserId.from(oauthId), Nickname.init(), Email.init(email), RemindType.KAKAO, false);
+		return new User(
+			UserId.from(oauthId),
+			Nickname.init(),
+			new PhoneNumber("01012345678"), // todo: update after change login
+			Email.init(email),
+			RemindType.KAKAO,
+			false);
 	}
 
 	public void delete() {
@@ -46,6 +53,10 @@ public class User {
 
 	public Long getOauthId() {
 		return userId.getOauthId();
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber.getPhoneNumber();
 	}
 
 	public String getEmail() {

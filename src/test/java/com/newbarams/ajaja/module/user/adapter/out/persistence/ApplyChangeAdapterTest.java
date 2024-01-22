@@ -16,6 +16,7 @@ import org.springframework.test.context.ContextConfiguration;
 import com.newbarams.ajaja.common.support.JpaTestSupport;
 import com.newbarams.ajaja.module.user.adapter.out.persistence.model.UserEntity;
 import com.newbarams.ajaja.module.user.domain.Email;
+import com.newbarams.ajaja.module.user.domain.PhoneNumber;
 import com.newbarams.ajaja.module.user.domain.User;
 import com.newbarams.ajaja.module.user.mapper.UserMapper;
 import com.newbarams.ajaja.module.user.mapper.UserMapperImpl;
@@ -37,6 +38,7 @@ class ApplyChangeAdapterTest extends JpaTestSupport {
 	@BeforeEach
 	void setup() {
 		UserEntity entity = userMapper.toEntity(sut.giveMeBuilder(User.class)
+			.set("phoneNumber", new PhoneNumber("01012345678"))
 			.set("email", Email.init("ajaja@me.com"))
 			.set("deleted", false)
 			.sample());

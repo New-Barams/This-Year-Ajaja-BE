@@ -101,9 +101,10 @@ class LoginServiceTest extends MonkeySupport {
 			// given
 			UserEntity userEntity = sut.giveMeBuilder(UserEntity.class)
 				.set("nickname", "nickname")
+				.set("phoneNumber", "01012345678")
 				.set("signUpEmail", email)
 				.set("remindEmail", email)
-				.set("receiveType", "KAKAO")
+				.set("remindType", "KAKAO")
 				.set("deleted", true)
 				.sample();
 

@@ -18,6 +18,7 @@ class UserTest extends MonkeySupport {
 	@BeforeEach
 	void init() {
 		user = sut.giveMeBuilder(User.class)
+			.set("phoneNumber", new PhoneNumber("01012345678"))
 			.set("email", Email.init(DEFAULT_EMAIL))
 			.sample();
 	}

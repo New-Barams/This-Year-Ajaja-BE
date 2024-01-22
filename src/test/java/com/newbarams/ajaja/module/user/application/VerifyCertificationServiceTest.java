@@ -16,6 +16,7 @@ import com.newbarams.ajaja.global.cache.CacheUtil;
 import com.newbarams.ajaja.global.exception.AjajaException;
 import com.newbarams.ajaja.module.user.application.port.out.ApplyChangePort;
 import com.newbarams.ajaja.module.user.domain.Email;
+import com.newbarams.ajaja.module.user.domain.PhoneNumber;
 import com.newbarams.ajaja.module.user.domain.User;
 
 @RedisBasedTest
@@ -37,6 +38,7 @@ class VerifyCertificationServiceTest extends MockTestSupport {
 	@BeforeEach
 	void setup() {
 		user = sut.giveMeBuilder(User.class)
+			.set("phoneNumber", new PhoneNumber("01012345678"))
 			.set("email", Email.init(DEFAULT_EMAIL))
 			.set("deleted", false)
 			.sample();
