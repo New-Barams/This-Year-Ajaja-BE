@@ -8,8 +8,9 @@ import com.newbarams.ajaja.module.auth.application.model.Profile;
 import com.newbarams.ajaja.module.auth.application.port.in.LoginUseCase;
 import com.newbarams.ajaja.module.auth.application.port.out.AuthorizePort;
 import com.newbarams.ajaja.module.auth.dto.AuthResponse;
+import com.newbarams.ajaja.module.user.application.port.out.ApplyChangePort;
 import com.newbarams.ajaja.module.user.application.port.out.CreateUserPort;
-import com.newbarams.ajaja.module.user.application.port.out.FindUserIdPort;
+import com.newbarams.ajaja.module.user.application.port.out.RetrieveUserPort;
 import com.newbarams.ajaja.module.user.domain.User;
 
 import lombok.RequiredArgsConstructor;
@@ -19,8 +20,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 class LoginService implements LoginUseCase {
 	private final AuthorizePort authorizePort;
-	private final FindUserIdPort findUserIdPort;
 	private final CreateUserPort createUserPort;
+	private final ApplyChangePort applyChangePort;
+	private final RetrieveUserPort retrieveUserPort;
 	private final JwtGenerator jwtGenerator;
 
 	@Override
@@ -31,9 +33,16 @@ class LoginService implements LoginUseCase {
 	}
 
 	private Long findIdOrCreateIfNotExists(Profile profile) {
-		return findUserIdPort.findByEmail(profile.getEmail())
+		return retrieveUserPort.loadByEmail(profile.getEmail())
+			.map(user -> upToDateContact(user, profile.getContact()))
 			.orElseGet(() -> createUserPort.create(
-				User.init(profile.getOauthId(), profile.getContact(), profile.getEmail())
-			));
+				User.init(profile.getOauthId(), profile.getContact(), profile.getEmail()))
+			);
+	}
+
+	private Long upToDateContact(User user, String contact) {
+		user.upToDateNumber(contact);
+		applyChangePort.apply(user);
+		return user.getId();
 	}
 }

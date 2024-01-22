@@ -40,6 +40,10 @@ public class PhoneNumber extends SelfValidating<PhoneNumber> {
 		return KOREA_CONTACT_PREFIX.concat(phoneNumber);
 	}
 
+	public PhoneNumber update(String contact) {
+		return PhoneNumber.init(contact);
+	}
+
 	private void validateNumeric(String phoneNumber) {
 		Matcher isNumeric = NUMERIC_PATTERN.matcher(phoneNumber);
 

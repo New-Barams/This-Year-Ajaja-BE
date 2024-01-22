@@ -40,6 +40,10 @@ public class User {
 		this.email = email.verified(validatedEmail);
 	}
 
+	public void upToDateNumber(String contact) {
+		this.phoneNumber = phoneNumber.update(contact);
+	}
+
 	public void refreshNickname() {
 		this.nickname = Nickname.refresh();
 	}

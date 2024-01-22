@@ -23,8 +23,11 @@ import com.newbarams.ajaja.module.auth.application.model.Profile;
 import com.newbarams.ajaja.module.auth.application.port.out.AuthorizePort;
 import com.newbarams.ajaja.module.user.adapter.out.persistence.UserJpaRepository;
 import com.newbarams.ajaja.module.user.adapter.out.persistence.model.UserEntity;
+import com.newbarams.ajaja.module.user.application.port.out.ApplyChangePort;
 import com.newbarams.ajaja.module.user.application.port.out.CreateUserPort;
-import com.newbarams.ajaja.module.user.application.port.out.FindUserIdPort;
+import com.newbarams.ajaja.module.user.application.port.out.RetrieveUserPort;
+import com.newbarams.ajaja.module.user.domain.Email;
+import com.newbarams.ajaja.module.user.domain.PhoneNumber;
 import com.newbarams.ajaja.module.user.domain.User;
 
 @Transactional
@@ -36,9 +39,11 @@ class LoginServiceTest extends MonkeySupport {
 	private UserJpaRepository userRepository;
 
 	@SpyBean
-	private FindUserIdPort findUserIdPort;
+	private RetrieveUserPort retrieveUserPort;
 	@SpyBean
 	private CreateUserPort createUserPort;
+	@SpyBean
+	private ApplyChangePort applyChangePort;
 
 	@MockBean
 	private AuthorizePort authorizePort;
@@ -60,13 +65,13 @@ class LoginServiceTest extends MonkeySupport {
 		.sample();
 
 	@Test
-	@DisplayName("새로운 유저가 로그인하면 새롭게 유저 정보를 생성해야 한다.")
-	void login_Success_WithNewUser() {
+	@DisplayName("요청한 이메일로 어떤 기록도 존재하지 않으면 새로운 사용자를 생성해야 한다.")
+	void login_Success_AndCreateUser() {
 		// given
-		User user = User.init(1L, "+82 1012345678", "ajaja@me.com");
+		User user = User.init(1L, "+82 1012345678", email);
 
 		given(authorizePort.authorize(any(), any())).willReturn(profile);
-		given(findUserIdPort.findByEmail(any())).willReturn(Optional.empty());
+		given(retrieveUserPort.loadByEmail(anyString())).willReturn(Optional.empty());
 		given(createUserPort.create(user)).willReturn(1L);
 
 		// when
@@ -74,26 +79,65 @@ class LoginServiceTest extends MonkeySupport {
 
 		// then
 		then(authorizePort).should(times(1)).authorize(any(), any());
-		then(findUserIdPort).should(times(1)).findByEmail(any());
+		then(retrieveUserPort).should(times(1)).loadByEmail(anyString());
 		then(createUserPort).should(times(1)).create(any());
 		then(jwtGenerator).should(times(1)).login(any());
 	}
 
 	@Test
-	@DisplayName("기존에 가입된 고객이 로그인하면 생성하는 로직이 호출되지 않아야 한다.")
-	void login_Success_WithOldUser() {
+	@DisplayName("가입 이력이 존재하는 고객이 로그인하면 회원가입되지 않아야 한다.")
+	void login_Success_WithoutCreateUser() {
 		// given
+		User user = sut.giveMeBuilder(User.class) // when using static method id will be null
+			.set("phoneNumber", new PhoneNumber("01012345678"))
+			.set("email", Email.init(email))
+			.sample();
+
 		given(authorizePort.authorize(any(), any())).willReturn(profile);
-		given(findUserIdPort.findByEmail(any())).willReturn(Optional.of(1L));
+		given(retrieveUserPort.loadByEmail(anyString())).willReturn(Optional.of(user));
 
 		// when
 		loginService.login(authorizationCode, redirectUrl);
 
 		// then
 		then(authorizePort).should(times(1)).authorize(any(), any());
-		then(findUserIdPort).should(times(1)).findByEmail(any());
+		then(retrieveUserPort).should(times(1)).loadByEmail(anyString());
+		then(applyChangePort).should(times(1)).apply(any());
 		then(createUserPort).shouldHaveNoMoreInteractions();
 		then(jwtGenerator).should(times(1)).login(any());
+	}
+
+	@Test
+	@DisplayName("가입 이력이 존재하는 사용자가 새로운 번호로 로그인하면 번호가 최신화되어야 한다.")
+	void login_Success_WithUpdatedPhoneNumber() {
+		// given
+		String oldNumber = "01000000000";
+		String expected = "01012345678";
+
+		userRepository.save(sut.giveMeBuilder(UserEntity.class)
+			.set("nickname", "nickname")
+			.set("phoneNumber", oldNumber)
+			.set("signUpEmail", email)
+			.set("remindEmail", email)
+			.set("remindType", "KAKAO")
+			.set("deleted", false)
+			.sample());
+
+		given(authorizePort.authorize(any(), any())).willReturn(profile);
+
+		// when
+		loginService.login(authorizationCode, redirectUrl);
+
+		// then
+		then(authorizePort).should(times(1)).authorize(any(), any());
+		then(createUserPort).shouldHaveNoMoreInteractions();
+
+		List<UserEntity> entities = userRepository.findAll();
+		assertThat(entities).isNotEmpty();
+
+		UserEntity saved = entities.get(0);
+		assertThat(saved.getPhoneNumber()).isNotEqualTo(oldNumber);
+		assertThat(saved.getPhoneNumber()).isEqualTo(expected);
 	}
 
 	@Test
@@ -110,7 +154,6 @@ class LoginServiceTest extends MonkeySupport {
 			.sample();
 
 		userRepository.save(entity);
-
 		given(authorizePort.authorize(any(), any())).willReturn(profile);
 
 		// when

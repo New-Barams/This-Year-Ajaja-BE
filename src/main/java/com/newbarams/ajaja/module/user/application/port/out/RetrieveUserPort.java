@@ -6,9 +6,17 @@ import com.newbarams.ajaja.module.user.domain.User;
 
 public interface RetrieveUserPort {
 	/**
-	 * Find user domain from DB
+	 * Find user which wrapped with Optional by identifier
 	 * @param id
-	 * @return User optional which is nullable
+	 * @return Optional user
 	 */
-	Optional<User> load(Long id);
+	Optional<User> loadById(Long id);
+
+	/**
+	 * Find user which wrapped with Optional by email <br>
+	 * If "Optional" is empty it means that never Sign-up with given email.
+	 * @param email Email that used on sign-up
+	 * @return Optional user
+	 */
+	Optional<User> loadByEmail(String email);
 }
