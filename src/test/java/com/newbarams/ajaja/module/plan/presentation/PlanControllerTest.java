@@ -8,15 +8,18 @@ import java.time.Instant;
 import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 
 import com.newbarams.ajaja.common.annotation.ApiTest;
+import com.newbarams.ajaja.common.annotation.ParameterizedApiTest;
 import com.newbarams.ajaja.common.support.WebMvcTestSupport;
 import com.newbarams.ajaja.common.util.ApiTag;
 import com.newbarams.ajaja.common.util.RestDocument;
 import com.newbarams.ajaja.global.exception.AjajaException;
+import com.newbarams.ajaja.global.exception.ErrorCode;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 
@@ -173,14 +176,15 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@ParameterizedApiTest
+	@MethodSource("authenticationFailResults")
 	@DisplayName("토큰 검증에 실패할 경우 400 에러를 반환한다.")
-	void updatePlan_Fail_By_Invalid_Token() throws Exception {
+	void updatePlan_Fail_By_Invalid_Token(ErrorCode errorCode, String identifier) throws Exception {
 		// given
 		PlanRequest.Update request = new PlanRequest.Update(1, "올해도 아좌좌", "아좌좌 마이 라이프", true, true, TAG_FIXTURE);
 
 		given(updatePlanService.update(anyLong(), anyLong(), any(), anyInt()))
-			.willThrow(new AjajaException(INVALID_TOKEN));
+			.willThrow(new AjajaException(errorCode));
 
 		// when
 		var result = mockMvc.perform(RestDocumentationRequestBuilders.put(PLAN_END_POINT.concat("/{id}"), 1)
@@ -195,7 +199,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("plan-update-invalidToken")
+				.identifier(identifier)
 				.tag(ApiTag.PLAN)
 				.summary("계획 수정 API")
 				.description("요청한 데이터로 계획을 수정합니다.")
@@ -388,11 +392,12 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@ParameterizedApiTest
+	@MethodSource("authenticationFailResults")
 	@DisplayName("토큰 검증에 실패할 경우 400 에러를 반환한다.")
-	void deletePlan_Fail_By_Invalid_Token() throws Exception {
+	void deletePlan_Fail_By_Invalid_Token(ErrorCode errorCode, String identifier) throws Exception {
 		// given
-		doThrow(new AjajaException(INVALID_TOKEN)).when(deletePlanService).delete(anyLong(), anyLong(), anyInt());
+		doThrow(new AjajaException(errorCode)).when(deletePlanService).delete(anyLong(), anyLong(), anyInt());
 
 		// when
 		var result = mockMvc.perform(RestDocumentationRequestBuilders.delete(PLAN_END_POINT.concat("/{id}"), 1)
@@ -406,7 +411,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("plan-delete-invalidToken")
+				.identifier(identifier)
 				.tag(ApiTag.PLAN)
 				.summary("계획 삭제 API")
 				.description("해당 ID의 계획을 삭제합니다.")
@@ -461,12 +466,13 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@ParameterizedApiTest
+	@MethodSource("authenticationFailResults")
 	@DisplayName("토큰 검증에 실패할 경우 400 에러를 반환한다.")
-	void getPlan_Fail_By_Invalid_Token() throws Exception {
+	void getPlan_Fail_By_Invalid_Token(ErrorCode errorCode, String identifier) throws Exception {
 		// given
 		given(getPlanService.loadByIdAndOptionalUser(anyLong(), anyLong()))
-			.willThrow(new AjajaException(INVALID_TOKEN));
+			.willThrow(new AjajaException(errorCode));
 
 		// when
 		var result = mockMvc.perform(RestDocumentationRequestBuilders.get(PLAN_END_POINT.concat("/{id}"), 1)
@@ -480,7 +486,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("plan-get-invalidToken")
+				.identifier(identifier)
 				.tag(ApiTag.PLAN)
 				.summary("계획 단건 조회 API")
 				.description("해당 ID의 계획을 조회합니다.")
@@ -569,14 +575,15 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@ParameterizedApiTest
+	@MethodSource("authenticationFailResults")
 	@DisplayName("토큰 검증에 실패할 경우 400 에러를 반환한다.")
-	void createPlan_Fail_By_Invalid_Token() throws Exception {
+	void createPlan_Fail_By_Invalid_Token(ErrorCode errorCode, String identifier) throws Exception {
 		// given
 		PlanRequest.Create request = new PlanRequest.Create("올해도 아좌좌", "아좌좌 마이 라이프", 12, 6, 1, "MORNING", true, true, 1,
 			TAG_FIXTURE, MESSAGE_FIXTURE);
 
-		given(createPlanService.create(anyLong(), any(), anyInt())).willThrow(new AjajaException(INVALID_TOKEN));
+		given(createPlanService.create(anyLong(), any(), anyInt())).willThrow(new AjajaException(errorCode));
 
 		// when
 		var result = mockMvc.perform(RestDocumentationRequestBuilders.post(PLAN_END_POINT)
@@ -591,7 +598,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("plan-create-invalidToken")
+				.identifier(identifier)
 				.tag(ApiTag.PLAN)
 				.summary("계획 생성 API")
 				.description("요청한 데이터로 계획을 생성합니다.")
@@ -682,11 +689,12 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@ParameterizedApiTest
+	@MethodSource("authenticationFailResults")
 	@DisplayName("토큰 검증에 실패할 경우 400 에러를 반환한다.")
-	void updatePlanPublicStatus_Fail_By_Invalid_Token() throws Exception {
+	void updatePlanPublicStatus_Fail_By_Invalid_Token(ErrorCode errorCode, String identifier) throws Exception {
 		// given
-		doThrow(new AjajaException(INVALID_TOKEN)).when(updatePlanService).updatePublicStatus(anyLong(), anyLong());
+		doThrow(new AjajaException(errorCode)).when(updatePlanService).updatePublicStatus(anyLong(), anyLong());
 
 		// when
 		var result = mockMvc.perform(RestDocumentationRequestBuilders.put(PLAN_END_POINT.concat("/{id}/public"), 1)
@@ -699,7 +707,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("planPublicStatus-update-invalidToken")
+				.identifier(identifier)
 				.tag(ApiTag.PLAN)
 				.summary("계획 공개 여부 변경 API")
 				.description("계획의 공개 여부를 변경합니다.")
@@ -790,11 +798,12 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@ParameterizedApiTest
+	@MethodSource("authenticationFailResults")
 	@DisplayName("토큰 검증에 실패할 경우 400 에러를 반환한다.")
-	void updatePlanRemindStatus_Fail_By_Invalid_Token() throws Exception {
+	void updatePlanRemindStatus_Fail_By_Invalid_Token(ErrorCode errorCode, String identifier) throws Exception {
 		// given
-		doThrow(new AjajaException(INVALID_TOKEN))
+		doThrow(new AjajaException(errorCode))
 			.when(updatePlanService).updateRemindStatus(anyLong(), anyLong());
 
 		// when
@@ -808,7 +817,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("planRemindStatus-update-invalidToken")
+				.identifier(identifier)
 				.tag(ApiTag.PLAN)
 				.summary("계획 리마인드 알림 여부 변경 API")
 				.description("계획의 리마인드 알림 여부를 변경합니다.")
@@ -900,11 +909,12 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@ParameterizedApiTest
+	@MethodSource("authenticationFailResults")
 	@DisplayName("토큰 검증에 실패할 경우 400 에러를 반환한다.")
-	void updatePlanAjajaStatus_Fail_By_Invalid_Token() throws Exception {
+	void updatePlanAjajaStatus_Fail_By_Invalid_Token(ErrorCode errorCode, String identifier) throws Exception {
 		// given
-		doThrow(new AjajaException(INVALID_TOKEN))
+		doThrow(new AjajaException(errorCode))
 			.when(updatePlanService).updateAjajaStatus(anyLong(), anyLong());
 
 		// when
@@ -918,7 +928,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("planAjajaStatus-update-invalidToken")
+				.identifier(identifier)
 				.tag(ApiTag.PLAN)
 				.summary("계획 응원 메시지 알림 여부 변경 API")
 				.description("계획의 응원 메시지 알림 여부를 변경합니다.")
@@ -982,11 +992,12 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@ParameterizedApiTest
+	@MethodSource("authenticationFailResults")
 	@DisplayName("토큰 검증에 실패할 경우 400 에러를 반환한다.")
-	void switchAjaja_Fail_By_Invalid_Token() throws Exception {
+	void switchAjaja_Fail_By_Invalid_Token(ErrorCode errorCode, String identifier) throws Exception {
 		// given
-		doThrow(new AjajaException(INVALID_TOKEN))
+		doThrow(new AjajaException(errorCode))
 			.when(switchAjajaService).switchOrAddIfNotExist(anyLong(), anyLong());
 
 		// when
@@ -1000,7 +1011,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("ajaja-switch-invalidToken")
+				.identifier(identifier)
 				.tag(ApiTag.PLAN)
 				.summary("아좌좌 추가 or 취소 API")
 				.description("유저의 아좌좌 누름 여부를 변경합니다.")
