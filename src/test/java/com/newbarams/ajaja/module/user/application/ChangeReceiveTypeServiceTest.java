@@ -16,7 +16,7 @@ import com.newbarams.ajaja.module.user.domain.User;
 
 class ChangeReceiveTypeServiceTest extends MockTestSupport {
 	@InjectMocks
-	private ChangeReceiveTypeService changeReceiveTypeService;
+	private ChangeRemindTypeService changeReceiveTypeService;
 
 	@Mock
 	private RetrieveUserService retrieveUserService;

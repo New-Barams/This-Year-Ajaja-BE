@@ -20,7 +20,11 @@ public class Nickname extends SelfValidating<Nickname> {
 		this.validateSelf();
 	}
 
-	public static Nickname renew() {
+	static Nickname init() {
+		return new Nickname(RandomNicknameGenerator.generate());
+	}
+
+	public static Nickname refresh() {
 		return new Nickname(RandomNicknameGenerator.generate());
 	}
 }

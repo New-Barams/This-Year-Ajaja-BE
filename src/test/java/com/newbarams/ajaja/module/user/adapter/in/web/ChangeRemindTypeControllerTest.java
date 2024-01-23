@@ -1,7 +1,6 @@
 package com.newbarams.ajaja.module.user.adapter.in.web;
 
 import static com.newbarams.ajaja.global.exception.ErrorCode.*;
-import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
@@ -19,30 +18,38 @@ import com.newbarams.ajaja.common.util.ApiTag;
 import com.newbarams.ajaja.common.util.RestDocument;
 import com.newbarams.ajaja.global.exception.AjajaException;
 import com.newbarams.ajaja.global.exception.ErrorCode;
+import com.newbarams.ajaja.module.user.domain.User;
+import com.newbarams.ajaja.module.user.dto.UserRequest;
 
-class LogoutControllerTest extends WebMvcTestSupport {
-	private static final String LOGOUT_END_POINT = USER_END_POINT + "/logout";
+class ChangeRemindTypeControllerTest extends WebMvcTestSupport {
+	private static final String CHANGE_RECEIVE_END_POINT = USER_END_POINT + "/receive";
+
+	private final UserRequest.Receive request = new UserRequest.Receive(User.ReceiveType.BOTH);
 
 	@ApiTest
-	@DisplayName("유효한 토큰으로 로그아웃 요청을 보내면 성공한다.")
-	void logout_Success() throws Exception {
+	@DisplayName("지원하는 타입으로 리마인드 수신 타입 변경 요청을 보내면 성공한다.")
+	void changeRemindType_Success() throws Exception {
 		// given
+		willDoNothing().given(changeRemindTypeUseCase).change(anyLong(), any());
 
 		// when
-		var result = mockMvc.perform(post(LOGOUT_END_POINT)
+		var result = mockMvc.perform(put(CHANGE_RECEIVE_END_POINT)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
-			.contentType(MediaType.APPLICATION_JSON));
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(objectMapper.writeValueAsString(request)));
 
 		// then
-		result.andExpect(status().isNoContent());
+		result.andExpectAll(
+			status().isOk()
+		);
 
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("logout-success")
+				.identifier("update-remind-type-success")
 				.tag(ApiTag.USER)
-				.summary("로그아웃 API")
-				.description("발급된 사용자의 토큰을 만료시킵니다.")
+				.summary("수신 방법 변경 API")
+				.description("리마인드를 수신할 방법을 변경합니다. 지원하는 타입은 [KAKAO, EMAIL, BOTH] 입니다.")
 				.secured(true)
 				.result(result)
 				.generateDocs()
@@ -52,16 +59,17 @@ class LogoutControllerTest extends WebMvcTestSupport {
 	@ParameterizedApiTest
 	@MethodSource("authenticationFailResults")
 	@DisplayName("요청 시 인증에 실패하면 400에러를 반환한다.")
-	void logout_Fail_ByAuthentication(ErrorCode errorCode, String identifier) throws Exception {
+	void changeRemindType_Fail_ByAuthentication(ErrorCode errorCode, String identifier) throws Exception {
 		// given
 		RuntimeException authenticationFailed = new AjajaException(errorCode);
 
-		willThrow(authenticationFailed).given(logoutUseCase).logout(anyLong());
+		willThrow(authenticationFailed).given(changeRemindTypeUseCase).change(anyLong(), any());
 
 		// when
-		var result = mockMvc.perform(post(LOGOUT_END_POINT)
+		var result = mockMvc.perform(put(CHANGE_RECEIVE_END_POINT)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
-			.contentType(MediaType.APPLICATION_JSON));
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(objectMapper.writeValueAsString(request)));
 
 		// then
 		result.andExpectAll(
@@ -74,7 +82,7 @@ class LogoutControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("logout-fail-" + identifier)
+				.identifier("change-receive-fail-" + identifier)
 				.tag(ApiTag.USER)
 				.secured(true)
 				.result(result)
@@ -84,16 +92,17 @@ class LogoutControllerTest extends WebMvcTestSupport {
 
 	@ApiTest
 	@DisplayName("존재하지 않는 회원으로 요청하면 404에러를 반환한다.")
-	void logout_Fail_ByNotExistUser() throws Exception {
+	void changeRemindType_Fail_ByNotExistUser() throws Exception {
 		// given
 		RuntimeException useNotFound = new AjajaException(USER_NOT_FOUND);
 
-		willThrow(useNotFound).given(logoutUseCase).logout(anyLong());
+		willThrow(useNotFound).given(changeRemindTypeUseCase).change(anyLong(), any());
 
 		// when
-		var result = mockMvc.perform(post(LOGOUT_END_POINT)
+		var result = mockMvc.perform(put(CHANGE_RECEIVE_END_POINT)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
-			.contentType(MediaType.APPLICATION_JSON));
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(objectMapper.writeValueAsString(request)));
 
 		// then
 		result.andExpectAll(
@@ -106,7 +115,7 @@ class LogoutControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("logout-fail-not-exist-user")
+				.identifier("change-receive-fail-not-exist-user")
 				.tag(ApiTag.USER)
 				.secured(true)
 				.result(result)

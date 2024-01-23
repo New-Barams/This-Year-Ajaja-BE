@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.newbarams.ajaja.global.common.AjajaResponse;
 import com.newbarams.ajaja.global.security.common.UserId;
-import com.newbarams.ajaja.module.user.application.port.in.ChangeReceiveTypeUseCase;
+import com.newbarams.ajaja.module.user.application.port.in.ChangeRemindTypeUseCase;
 import com.newbarams.ajaja.module.user.dto.UserRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,8 +22,8 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
-class ChangeReceiveController {
-	private final ChangeReceiveTypeUseCase changeReceiveTypeUseCase;
+class ChangeRemindTypeController {
+	private final ChangeRemindTypeUseCase changeRemindTypeUseCase;
 
 	@Operation(summary = "[토큰 필요] 수신 종류 변경 API", description = "리마인드를 수신 방법을 변경합니다.", responses = {
 		@ApiResponse(responseCode = "200", description = "성공적으로 수신 방법이 변경되었습니다."),
@@ -32,8 +32,8 @@ class ChangeReceiveController {
 	})
 	@PutMapping("/receive")
 	@ResponseStatus(OK)
-	public AjajaResponse<Void> changeReceiveType(@UserId Long id, @RequestBody UserRequest.Receive request) {
-		changeReceiveTypeUseCase.change(id, request.getType());
+	public AjajaResponse<Void> changeRemindType(@UserId Long id, @RequestBody UserRequest.Receive request) {
+		changeRemindTypeUseCase.change(id, request.getType());
 		return AjajaResponse.ok();
 	}
 }
