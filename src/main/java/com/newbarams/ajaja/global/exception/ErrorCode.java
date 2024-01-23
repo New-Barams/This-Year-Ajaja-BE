@@ -26,6 +26,7 @@ public enum ErrorCode {
 	EXCEED_MAX_NUMBER_OF_PLANS(BAD_REQUEST, "유저가 가질 수 있는 최대 계획 개수를 초과하였습니다."),
 	EMPTY_MESSAGES_LIST(BAD_REQUEST, "작성된 리마인드 메세지가 없습니다."),
 	EXPIRED_FEEDBACK(BAD_REQUEST, "피드백 기간이 아닙니다."),
+	NON_NUMERIC_INPUT(BAD_REQUEST, "휴대폰 번호로 숫자 이외의 값을 입력할 수 없습니다."),
 
 	// 404
 	USER_NOT_FOUND(NOT_FOUND, "사용자가 존재하지 않습니다."),

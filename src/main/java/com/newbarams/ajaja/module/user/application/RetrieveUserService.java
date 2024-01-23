@@ -18,7 +18,7 @@ class RetrieveUserService {
 	private final RetrieveUserPort retrieveUserPort;
 
 	public User loadExistById(Long id) {
-		return retrieveUserPort.load(id)
+		return retrieveUserPort.loadById(id)
 			.orElseThrow(() -> AjajaException.withId(id, USER_NOT_FOUND));
 	}
 }

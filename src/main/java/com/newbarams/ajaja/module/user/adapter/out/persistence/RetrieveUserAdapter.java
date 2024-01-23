@@ -17,8 +17,14 @@ class RetrieveUserAdapter implements RetrieveUserPort {
 	private final UserMapper userMapper;
 
 	@Override
-	public Optional<User> load(Long id) {
+	public Optional<User> loadById(Long id) {
 		return userJpaRepository.findById(id)
+			.map(userMapper::toDomain);
+	}
+
+	@Override
+	public Optional<User> loadByEmail(String email) {
+		return userJpaRepository.findBySignUpEmail(email)
 			.map(userMapper::toDomain);
 	}
 }

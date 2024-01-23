@@ -18,7 +18,8 @@ class UserTest extends MonkeySupport {
 	@BeforeEach
 	void init() {
 		user = sut.giveMeBuilder(User.class)
-			.set("email", new Email(DEFAULT_EMAIL))
+			.set("phoneNumber", new PhoneNumber("01012345678"))
+			.set("email", Email.init(DEFAULT_EMAIL))
 			.sample();
 	}
 
@@ -29,7 +30,7 @@ class UserTest extends MonkeySupport {
 		// given
 
 		// when, then
-		assertThatNoException().isThrownBy(() -> User.init(input, 1L));
+		assertThatNoException().isThrownBy(() -> User.init(1L, "+82 1012345678", input));
 	}
 
 	@Test

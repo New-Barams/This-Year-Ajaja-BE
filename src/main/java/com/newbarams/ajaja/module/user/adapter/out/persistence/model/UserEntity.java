@@ -31,6 +31,9 @@ public class UserEntity extends BaseEntity<UserEntity> {
 	@Column(nullable = false, length = 20)
 	private String nickname;
 
+	@Column(nullable = false, length = 11)
+	private String phoneNumber;
+
 	@Column(nullable = false, name = "email", length = 50)
 	private String signUpEmail;
 
@@ -41,7 +44,7 @@ public class UserEntity extends BaseEntity<UserEntity> {
 	private boolean verified;
 
 	@Column(nullable = false, length = 20)
-	private String receiveType;
+	private String remindType;
 
 	@Embedded
 	private OauthInfo oauthInfo;

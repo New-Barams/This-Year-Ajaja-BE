@@ -24,7 +24,7 @@ class EmailTest extends MonkeySupport {
 		// given
 
 		// when, then
-		assertThatNoException().isThrownBy(() -> new Email(email));
+		assertThatNoException().isThrownBy(() -> Email.init(email));
 	}
 
 	@ParameterizedTest
@@ -35,14 +35,14 @@ class EmailTest extends MonkeySupport {
 
 		// when, then
 		assertThatExceptionOfType(ConstraintViolationException.class)
-			.isThrownBy(() -> new Email(email));
+			.isThrownBy(() -> Email.init(email));
 	}
 
 	@Test
 	@DisplayName("같은 이메일로 검증 완료하면 검증 상태만 변경된 새로운 객체를 생성해야 한다.")
 	void verified_Success_WithNewInstanceAndOnlyVerifiedChange() {
 		// given
-		Email email = new Email(DEFAULT_EMAIL);
+		Email email = Email.init(DEFAULT_EMAIL);
 
 		// when
 		Email verifiedEmail = email.verified(DEFAULT_EMAIL);
@@ -59,7 +59,7 @@ class EmailTest extends MonkeySupport {
 		// given
 		String old = "gmlwh124@naver.com";
 		String young = "hejow124@naver.com";
-		Email email = new Email(old);
+		Email email = Email.init(old);
 
 		// when
 		Email verifiedWithNewRemind = email.verified(young);
@@ -76,7 +76,7 @@ class EmailTest extends MonkeySupport {
 	@DisplayName("유효하지 않은 이메일로 인증을 완료하려고 하면 예외를 던져야 한다.")
 	void verified_Fail_ByBadEmails(String requestEmail) {
 		// given
-		Email email = new Email(DEFAULT_EMAIL);
+		Email email = Email.init(DEFAULT_EMAIL);
 
 		// when, then
 		assertThatThrownBy(() -> email.verified(requestEmail))
@@ -87,7 +87,7 @@ class EmailTest extends MonkeySupport {
 	@DisplayName("같은 리마인드 이메일이지만 미인증 상태라면 검증을 진행할 수 있다.")
 	void validateVerifiable_Success_WithSameRemindEmail() {
 		// given
-		Email email = new Email(DEFAULT_EMAIL);
+		Email email = Email.init(DEFAULT_EMAIL);
 
 		// when, then
 		assertThatNoException().isThrownBy(() -> email.validateVerifiable(DEFAULT_EMAIL));

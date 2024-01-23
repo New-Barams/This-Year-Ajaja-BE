@@ -23,7 +23,7 @@ class GetMyPageAdapter implements GetMyPageQuery {
 				userEntity.signUpEmail,
 				userEntity.remindEmail,
 				userEntity.verified,
-				userEntity.receiveType.stringValue().toLowerCase()))
+				userEntity.remindType.stringValue().toLowerCase()))
 			.from(userEntity)
 			.where(userEntity.id.eq(id))
 			.fetchOne();

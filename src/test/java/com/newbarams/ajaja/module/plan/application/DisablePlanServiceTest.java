@@ -33,11 +33,12 @@ class DisablePlanServiceTest extends MockTestSupport {
 
 		// then
 		then(planQueryRepository).should(times(1)).findAllCurrentPlansByUserId(any());
-		plans.stream().map(Plan::getStatus)
-				.forEach(status -> {
-					assertThat(status.isCanRemind()).isFalse();
-					assertThat(status.isCanAjaja()).isFalse();
-					assertThat(status.isDeleted()).isTrue();
-				});
+		plans.stream()
+			.map(Plan::getStatus)
+			.forEach(status -> {
+				assertThat(status.isCanRemind()).isFalse();
+				assertThat(status.isCanAjaja()).isFalse();
+				assertThat(status.isDeleted()).isTrue();
+			});
 	}
 }

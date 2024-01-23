@@ -12,6 +12,7 @@ import com.newbarams.ajaja.common.support.MockTestSupport;
 import com.newbarams.ajaja.module.user.application.port.out.ApplyChangePort;
 import com.newbarams.ajaja.module.user.domain.Email;
 import com.newbarams.ajaja.module.user.domain.Nickname;
+import com.newbarams.ajaja.module.user.domain.PhoneNumber;
 import com.newbarams.ajaja.module.user.domain.User;
 
 class RenewNicknameServiceTest extends MockTestSupport {
@@ -28,7 +29,8 @@ class RenewNicknameServiceTest extends MockTestSupport {
 	void renew_Success_WithNewNickname() {
 		// given
 		User user = sut.giveMeBuilder(User.class)
-			.set("email", new Email("Ajaja@me.com"))
+			.set("phoneNumber", new PhoneNumber("01012345678"))
+			.set("email", Email.init("ajaja@me.com"))
 			.sample();
 
 		Nickname oldNickname = user.getNickname();

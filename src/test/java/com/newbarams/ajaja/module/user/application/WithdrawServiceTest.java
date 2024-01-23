@@ -12,6 +12,7 @@ import com.newbarams.ajaja.module.user.application.port.out.ApplyChangePort;
 import com.newbarams.ajaja.module.user.application.port.out.DisablePlanPort;
 import com.newbarams.ajaja.module.user.application.port.out.DisconnectOauthPort;
 import com.newbarams.ajaja.module.user.domain.Email;
+import com.newbarams.ajaja.module.user.domain.PhoneNumber;
 import com.newbarams.ajaja.module.user.domain.User;
 
 class WithdrawServiceTest extends MockTestSupport {
@@ -31,7 +32,8 @@ class WithdrawServiceTest extends MockTestSupport {
 	void withdraw_Success() {
 		// given
 		User user = sut.giveMeBuilder(User.class)
-			.set("email", new Email("Ajaja@me.com"))
+			.set("phoneNumber", new PhoneNumber("01012345678"))
+			.set("email", Email.init("ajaja@me.com"))
 			.set("deleted", false)
 			.sample();
 

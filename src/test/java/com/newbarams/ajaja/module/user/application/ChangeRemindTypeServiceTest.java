@@ -12,9 +12,10 @@ import org.mockito.Mock;
 import com.newbarams.ajaja.common.support.MockTestSupport;
 import com.newbarams.ajaja.module.user.application.port.out.ApplyChangePort;
 import com.newbarams.ajaja.module.user.domain.Email;
+import com.newbarams.ajaja.module.user.domain.PhoneNumber;
 import com.newbarams.ajaja.module.user.domain.User;
 
-class ChangeReceiveTypeServiceTest extends MockTestSupport {
+class ChangeRemindTypeServiceTest extends MockTestSupport {
 	@InjectMocks
 	private ChangeRemindTypeService changeReceiveTypeService;
 
@@ -24,12 +25,13 @@ class ChangeReceiveTypeServiceTest extends MockTestSupport {
 	private ApplyChangePort applyChangePort;
 
 	@ParameterizedTest
-	@EnumSource(User.ReceiveType.class)
+	@EnumSource(User.RemindType.class)
 	@DisplayName("리마인드를 지원하는 종류로 변경할 수 있어야한다.")
-	void change_Success(User.ReceiveType type) {
+	void change_Success(User.RemindType type) {
 		// given
 		User user = sut.giveMeBuilder(User.class)
-			.set("email", new Email("Ajaja@me.com"))
+			.set("phoneNumber", new PhoneNumber("01012345678"))
+			.set("email", Email.init("ajaja@me.com"))
 			.sample();
 
 		given(retrieveUserService.loadExistById(anyLong())).willReturn(user);
@@ -39,7 +41,7 @@ class ChangeReceiveTypeServiceTest extends MockTestSupport {
 		changeReceiveTypeService.change(user.getId(), type);
 
 		// then
-		assertThat(user.getReceiveType()).isEqualTo(type);
+		assertThat(user.getRemindType()).isEqualTo(type);
 		then(retrieveUserService).should(times(1)).loadExistById(anyLong());
 		then(applyChangePort).should(times(1)).apply(any());
 	}

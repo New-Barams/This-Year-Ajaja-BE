@@ -17,9 +17,9 @@ class ChangeRemindTypeService implements ChangeRemindTypeUseCase {
 	private final ApplyChangePort applyChangePort;
 
 	@Override
-	public void change(Long userId, User.ReceiveType receiveType) {
+	public void change(Long userId, User.RemindType remindType) {
 		User user = retrieveUserService.loadExistById(userId);
-		user.changeReceive(receiveType);
+		user.changeRemind(remindType);
 		applyChangePort.apply(user);
 	}
 }
