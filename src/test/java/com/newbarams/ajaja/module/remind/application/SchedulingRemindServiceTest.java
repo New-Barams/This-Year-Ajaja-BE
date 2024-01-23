@@ -13,7 +13,7 @@ import com.newbarams.ajaja.common.support.MockTestSupport;
 import com.newbarams.ajaja.module.plan.domain.Plan;
 import com.newbarams.ajaja.module.remind.application.model.RemindMessageInfo;
 import com.newbarams.ajaja.module.remind.application.port.out.FindRemindablePlanPort;
-import com.newbarams.ajaja.module.remind.application.port.out.SendPlanInfoRemindPort;
+import com.newbarams.ajaja.module.remind.application.port.out.SendEmailRemindPort;
 import com.newbarams.ajaja.module.remind.domain.PlanInfo;
 import com.newbarams.ajaja.module.remind.domain.Remind;
 import com.newbarams.ajaja.module.remind.domain.UserInfo;
@@ -25,7 +25,7 @@ class SchedulingRemindServiceTest extends MockTestSupport {
 	@Mock
 	private FindRemindablePlanPort findRemindablePlanPort;
 	@Mock
-	private SendPlanInfoRemindPort sendPlanInfoRemindPort;
+	private SendEmailRemindPort sendEmailRemindPort;
 	@Mock
 	private CreateRemindService createRemindService;
 
@@ -35,7 +35,7 @@ class SchedulingRemindServiceTest extends MockTestSupport {
 	private List<RemindMessageInfo> remindMessage;
 
 	@Test
-	@DisplayName("1월을 제외하고 리마인드 가능한 계획만큼 리마인드를 보낸다.")
+	@DisplayName("리마인드 가능한 계획만큼 리마인드를 보낸다.")
 	void scheduleMorningRemind_Success_withNoException() {
 		// given
 		UserInfo userInfo = new UserInfo(1L, "yamsang2002@naver.com");
@@ -47,6 +47,7 @@ class SchedulingRemindServiceTest extends MockTestSupport {
 
 		// when,then
 		schedulingRemindService.scheduleMorningRemind();
-		then(sendPlanInfoRemindPort).should(times(2)).send(any(), any(), any(), anyLong());
+		then(sendEmailRemindPort).should(times(2))
+			.send(any(), any(), any(), anyString());
 	}
 }

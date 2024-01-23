@@ -21,7 +21,8 @@ class SesSendPlanRemindServiceTest extends MockTestSupport {
 	@DisplayName("아마존 ses를 통해 리마인드 될 정보들을 전송한다.")
 	void send_Success_WithNoException() {
 		// when
-		planRemindService.send("yamsang2002@naver.com", "계확", "화이팅", 1L);
+		planRemindService
+			.send("yamsang2002@naver.com", "계확", "화이팅", "https://www.ajaja.me/plans/1");
 
 		// then
 		then(amazonSimpleEmailService).should(times(1)).sendEmail(any());

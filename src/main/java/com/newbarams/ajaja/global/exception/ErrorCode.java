@@ -27,6 +27,7 @@ public enum ErrorCode {
 	EMPTY_MESSAGES_LIST(BAD_REQUEST, "작성된 리마인드 메세지가 없습니다."),
 	EXPIRED_FEEDBACK(BAD_REQUEST, "피드백 기간이 아닙니다."),
 	NON_NUMERIC_INPUT(BAD_REQUEST, "휴대폰 번호로 숫자 이외의 값을 입력할 수 없습니다."),
+	REMIND_TASK_FAILED(BAD_REQUEST, "리마인드 전송에 실패하였습니다."),
 
 	// 404
 	USER_NOT_FOUND(NOT_FOUND, "사용자가 존재하지 않습니다."),
@@ -39,6 +40,9 @@ public enum ErrorCode {
 	ALREADY_FEEDBACK(CONFLICT, "이미 평가된 피드백 정보가 있습니다."),
 	ALREADY_VERIFY_EMAIL(CONFLICT, "이메일 인증을 할 수 없습니다. 인증이 완료된 상태라면 기존 리마인드 이메일과 다른 이메일을 입력해야 합니다."),
 	CERTIFICATION_NOT_MATCH(CONFLICT, "인증 번호가 일치하지 않습니다."),
+
+	// 429
+	REQUEST_OVER_MAX(TOO_MANY_REQUESTS, "테스트 리마인드는 하루에 3회만 보낼 수 있습니다."),
 
 	// 500
 	AJAJA_SERVER_ERROR(INTERNAL_SERVER_ERROR, "서버 내부 오류입니다. 관리자에게 문의바랍니다."),
