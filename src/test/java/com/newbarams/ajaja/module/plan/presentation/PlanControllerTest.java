@@ -34,6 +34,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 	);
 
 	@ApiTest
+	@DisplayName("[계획 수정] 요청이 들어오면 요청된 데이터로 계획이 수정된다.")
 	void updatePlan_Success() throws Exception {
 		// given
 		PlanRequest.Update request = new PlanRequest.Update(1, "올해도 아좌좌", "아좌좌 마이 라이프", true, true, TAG_FIXTURE);
@@ -81,7 +82,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 	}
 
 	@ApiTest
-	@DisplayName("플랜이 존재하지 않을 경우 404 에러를 반환한다.")
+	@DisplayName("[계획 수정] 플랜이 존재하지 않을 경우 404 에러를 반환한다.")
 	void updatePlan_Fail_ByNotFoundPlan() throws Exception {
 		// given
 		PlanRequest.Update request = new PlanRequest.Update(1, "올해도 아좌좌", "아좌좌 마이 라이프", true, true, TAG_FIXTURE);
@@ -113,7 +114,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 	}
 
 	@ApiTest
-	@DisplayName("수정 가능한 기간이 아닌 경우 400 에러를 반환한다.")
+	@DisplayName("[계획 수정] 수정 가능한 기간이 아닌 경우 400 에러를 반환한다.")
 	void updatePlan_Fail_ByNotModifiableMonth() throws Exception {
 		// given
 		PlanRequest.Update request = new PlanRequest.Update(1, "올해도 아좌좌", "아좌좌 마이 라이프", true, true, TAG_FIXTURE);
@@ -145,7 +146,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 	}
 
 	@ApiTest
-	@DisplayName("잘못된 유저의 접근일 경우 400 에러를 반환한다.")
+	@DisplayName("[계획 수정] 잘못된 유저의 접근일 경우 400 에러를 반환한다.")
 	void updatePlan_Fail_ByInvalidUserAccess() throws Exception {
 		// given
 		PlanRequest.Update request = new PlanRequest.Update(1, "올해도 아좌좌", "아좌좌 마이 라이프", true, true, TAG_FIXTURE);
@@ -178,7 +179,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 
 	@ParameterizedApiTest
 	@MethodSource("authenticationFailResults")
-	@DisplayName("토큰 검증에 실패할 경우 400 에러를 반환한다.")
+	@DisplayName("[계획 수정] 토큰 검증에 실패할 경우 400 에러를 반환한다.")
 	void updatePlan_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
 		// given
 		PlanRequest.Update request = new PlanRequest.Update(1, "올해도 아좌좌", "아좌좌 마이 라이프", true, true, TAG_FIXTURE);
@@ -210,6 +211,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 	}
 
 	@ApiTest
+	@DisplayName("[계획 전체 조회] 요청이 들어오면 전체 계획을 조회할 수 있다.")
 	void getAllPlans_Success() throws Exception {
 		// given
 		PlanRequest.GetAll request = sut.giveMeOne(PlanRequest.GetAll.class);
@@ -281,6 +283,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 	}
 
 	@ApiTest
+	@DisplayName("[계획 삭제] 요청이 들어오면 계획이 삭제된다.")
 	void deletePlan_Success() throws Exception {
 		// given
 		doNothing().when(deletePlanService).delete(anyLong(), anyLong(), anyInt());
@@ -308,7 +311,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 	}
 
 	@ApiTest
-	@DisplayName("플랜이 존재하지 않을 경우 404 에러를 반환한다.")
+	@DisplayName("[계획 삭제] 플랜이 존재하지 않을 경우 404 에러를 반환한다.")
 	void deletePlan_Fail_ByNotFoundPlan() throws Exception {
 		// given
 		doThrow(new AjajaException(NOT_FOUND_PLAN)).when(deletePlanService).delete(anyLong(), anyLong(), anyInt());
@@ -336,7 +339,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 	}
 
 	@ApiTest
-	@DisplayName("삭제 가능한 기간이 아닌 경우 400 에러를 반환한다.")
+	@DisplayName("[계획 삭제] 삭제 가능한 기간이 아닌 경우 400 에러를 반환한다.")
 	void deletePlan_Fail_ByNotModifiableMonth() throws Exception {
 		// given
 		doThrow(new AjajaException(INVALID_UPDATABLE_DATE))
@@ -365,7 +368,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 	}
 
 	@ApiTest
-	@DisplayName("잘못된 유저의 접근일 경우 400 에러를 반환한다.")
+	@DisplayName("[계획 삭제] 잘못된 유저의 접근일 경우 400 에러를 반환한다.")
 	void deletePlan_Fail_ByInvalidUserAccess() throws Exception {
 		// given
 		doThrow(new AjajaException(INVALID_USER_ACCESS)).when(deletePlanService).delete(anyLong(), anyLong(), anyInt());
@@ -394,7 +397,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 
 	@ParameterizedApiTest
 	@MethodSource("authenticationFailResults")
-	@DisplayName("토큰 검증에 실패할 경우 400 에러를 반환한다.")
+	@DisplayName("[계획 삭제] 토큰 검증에 실패할 경우 400 에러를 반환한다.")
 	void deletePlan_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
 		// given
 		doThrow(new AjajaException(errorCode)).when(deletePlanService).delete(anyLong(), anyLong(), anyInt());
@@ -422,6 +425,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 	}
 
 	@ApiTest
+	@DisplayName("[계획 단건 조회] 요청이 들어오면 계획 정보를 조회할 수 있다.")
 	void getPlan_Success() throws Exception {
 		// given
 		PlanResponse.Detail response = DETAIL_RESPONSE_FIXTURE;
@@ -468,7 +472,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 
 	@ParameterizedApiTest
 	@MethodSource("authenticationFailResults")
-	@DisplayName("토큰 검증에 실패할 경우 400 에러를 반환한다.")
+	@DisplayName("[계획 단건 조회] 토큰 검증에 실패할 경우 400 에러를 반환한다.")
 	void getPlan_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
 		// given
 		given(getPlanService.loadByIdAndOptionalUser(anyLong(), anyLong()))
@@ -497,6 +501,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 	}
 
 	@ApiTest
+	@DisplayName("[계획 생성] 요청된 데이터로 계획을 생성한다.")
 	void createPlan_Success() throws Exception {
 		// given
 		PlanRequest.Create request = new PlanRequest.Create("올해도 아좌좌", "아좌좌 마이 라이프", 12, 6, 1, "MORNING", true, true, 1,
@@ -543,7 +548,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 	}
 
 	@ApiTest
-	@DisplayName("생성 가능한 기간이 아닌 경우 400 에러를 반환한다.")
+	@DisplayName("[계획 생성] 생성 가능한 기간이 아닌 경우 400 에러를 반환한다.")
 	void createPlan_Fail_ByNotCreatableMonth() throws Exception {
 		// given
 		PlanRequest.Create request = new PlanRequest.Create("올해도 아좌좌", "아좌좌 마이 라이프", 12, 6, 1, "MORNING", true, true, 1,
@@ -577,7 +582,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 
 	@ParameterizedApiTest
 	@MethodSource("authenticationFailResults")
-	@DisplayName("토큰 검증에 실패할 경우 400 에러를 반환한다.")
+	@DisplayName("[계획 생성] 토큰 검증에 실패할 경우 400 에러를 반환한다.")
 	void createPlan_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
 		// given
 		PlanRequest.Create request = new PlanRequest.Create("올해도 아좌좌", "아좌좌 마이 라이프", 12, 6, 1, "MORNING", true, true, 1,
@@ -609,6 +614,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 	}
 
 	@ApiTest
+	@DisplayName("[계획 공개 여부 변경] 요청이 들어오면 계획의 공개 여부가 변경된다.")
 	void updatePlanPublicStatus_Success() throws Exception {
 		// given
 		doNothing().when(updatePlanService).updatePublicStatus(anyLong(), anyLong());
@@ -635,7 +641,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 	}
 
 	@ApiTest
-	@DisplayName("플랜이 존재하지 않을 경우 404 에러를 반환한다.")
+	@DisplayName("[계획 공개 여부 변경] 플랜이 존재하지 않을 경우 404 에러를 반환한다.")
 	void updatePlanPublicStatus_Fail_ByNotFoundPlan() throws Exception {
 		// given
 		doThrow(new AjajaException(NOT_FOUND_PLAN)).when(updatePlanService).updatePublicStatus(anyLong(), anyLong());
@@ -662,7 +668,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 	}
 
 	@ApiTest
-	@DisplayName("잘못된 유저의 접근일 경우 400 에러를 반환한다.")
+	@DisplayName("[계획 공개 여부 변경] 잘못된 유저의 접근일 경우 400 에러를 반환한다.")
 	void updatePlanPublicStatus_Fail_ByInvalidUserAccess() throws Exception {
 		// given
 		doThrow(new AjajaException(INVALID_USER_ACCESS))
@@ -691,7 +697,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 
 	@ParameterizedApiTest
 	@MethodSource("authenticationFailResults")
-	@DisplayName("토큰 검증에 실패할 경우 400 에러를 반환한다.")
+	@DisplayName("[계획 공개 여부 변경] 토큰 검증에 실패할 경우 400 에러를 반환한다.")
 	void updatePlanPublicStatus_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
 		// given
 		doThrow(new AjajaException(errorCode)).when(updatePlanService).updatePublicStatus(anyLong(), anyLong());
@@ -718,6 +724,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 	}
 
 	@ApiTest
+	@DisplayName("[계획 리마인드 알림 여부 변경] 요청이 들어오면 리마인드 알림 여부가 변경된다.")
 	void updatePlanRemindStatus_Success() throws Exception {
 		// given
 		doNothing().when(updatePlanService).updateRemindStatus(anyLong(), anyLong());
@@ -744,7 +751,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 	}
 
 	@ApiTest
-	@DisplayName("플랜이 존재하지 않을 경우 404 에러를 반환한다.")
+	@DisplayName("[계획 리마인드 알림 여부 변경] 플랜이 존재하지 않을 경우 404 에러를 반환한다.")
 	void updatePlanRemindStatus_Fail_ByNotFoundPlan() throws Exception {
 		// given
 		doThrow(new AjajaException(NOT_FOUND_PLAN)).when(updatePlanService).updateRemindStatus(anyLong(), anyLong());
@@ -771,7 +778,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 	}
 
 	@ApiTest
-	@DisplayName("잘못된 유저의 접근일 경우 400 에러를 반환한다.")
+	@DisplayName("[계획 리마인드 알림 여부 변경] 잘못된 유저의 접근일 경우 400 에러를 반환한다.")
 	void updatePlanRemindStatus_Fail_ByInvalidUserAccess() throws Exception {
 		// given
 		doThrow(new AjajaException(INVALID_USER_ACCESS))
@@ -800,7 +807,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 
 	@ParameterizedApiTest
 	@MethodSource("authenticationFailResults")
-	@DisplayName("토큰 검증에 실패할 경우 400 에러를 반환한다.")
+	@DisplayName("[계획 리마인드 알림 여부 변경] 토큰 검증에 실패할 경우 400 에러를 반환한다.")
 	void updatePlanRemindStatus_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
 		// given
 		doThrow(new AjajaException(errorCode))
@@ -828,6 +835,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 	}
 
 	@ApiTest
+	@DisplayName("[응원 메시지 알림 여부 변경] 요청이 들어오면 응원 메시지 알림 여부가 변경된다.")
 	void updatePlanAjajaStatus_Success() throws Exception {
 		// given
 		doNothing().when(updatePlanService).updateAjajaStatus(anyLong(), anyLong());
@@ -854,7 +862,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 	}
 
 	@ApiTest
-	@DisplayName("플랜이 존재하지 않을 경우 404 에러를 반환한다.")
+	@DisplayName("[응원 메시지 알림 여부 변경] 플랜이 존재하지 않을 경우 404 에러를 반환한다.")
 	void updatePlanAjajaStatus_Fail_ByNotFoundPlan() throws Exception {
 		// given
 		doThrow(new AjajaException(NOT_FOUND_PLAN))
@@ -882,7 +890,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 	}
 
 	@ApiTest
-	@DisplayName("잘못된 유저의 접근일 경우 400 에러를 반환한다.")
+	@DisplayName("[응원 메시지 알림 여부 변경] 잘못된 유저의 접근일 경우 400 에러를 반환한다.")
 	void updatePlanAjajaStatus_Fail_ByInvalidUserAccess() throws Exception {
 		// given
 		doThrow(new AjajaException(INVALID_USER_ACCESS))
@@ -911,7 +919,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 
 	@ParameterizedApiTest
 	@MethodSource("authenticationFailResults")
-	@DisplayName("토큰 검증에 실패할 경우 400 에러를 반환한다.")
+	@DisplayName("[응원 메시지 알림 여부 변경] 토큰 검증에 실패할 경우 400 에러를 반환한다.")
 	void updatePlanAjajaStatus_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
 		// given
 		doThrow(new AjajaException(errorCode))
@@ -939,6 +947,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 	}
 
 	@ApiTest
+	@DisplayName("[아좌좌 추가 or 취소] 요청이 들어오면 아좌좌 누름 여부가 변경된다.")
 	void switchAjaja_Success() throws Exception {
 		// given
 		doNothing().when(switchAjajaService).switchOrAddIfNotExist(anyLong(), anyLong());
@@ -965,7 +974,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 	}
 
 	@ApiTest
-	@DisplayName("플랜이 존재하지 않을 경우 404 에러를 반환한다.")
+	@DisplayName("[아좌좌 추가 or 취소] 플랜이 존재하지 않을 경우 404 에러를 반환한다.")
 	void switchAjaja_Fail_ByNotFoundPlan() throws Exception {
 		// given
 		doThrow(new AjajaException(NOT_FOUND_PLAN))
@@ -994,7 +1003,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 
 	@ParameterizedApiTest
 	@MethodSource("authenticationFailResults")
-	@DisplayName("토큰 검증에 실패할 경우 400 에러를 반환한다.")
+	@DisplayName("[아좌좌 추가 or 취소] 토큰 검증에 실패할 경우 400 에러를 반환한다.")
 	void switchAjaja_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
 		// given
 		doThrow(new AjajaException(errorCode))
