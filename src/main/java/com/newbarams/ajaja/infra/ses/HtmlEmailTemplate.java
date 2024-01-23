@@ -119,23 +119,43 @@ class HtmlEmailTemplate {
 		private final String content;
 
 		public String subject() {
-			return subject;
+			if (this.equals(EMAIL_VERIFICATION)) {
+				return subject;
+			}
+
+			throw new UnsupportedOperationException("This method is for EMAIL VERIFICATION");
 		}
 
 		public String subject(String title) {
-			return subject.formatted(title);
+			if (!this.equals(EMAIL_VERIFICATION)) {
+				return subject.formatted(title);
+			}
+
+			throw new UnsupportedOperationException("This method is not allowed to EMAIL VERIFICATION");
 		}
 
 		public String content(String certification) {
-			return wrapBasicForm(content.formatted(certification));
+			if (this.equals(EMAIL_VERIFICATION)) {
+				return wrapBasicForm(content.formatted(certification));
+			}
+
+			throw new UnsupportedOperationException("This method is for EMAIL VERIFICATION");
 		}
 
 		public String content(String title, String message, int month, int day, String feedbackUrl) {
-			return wrapBasicForm(content.formatted(title, message, month, day, feedbackUrl));
+			if (this.equals(REMIND)) {
+				return wrapBasicForm(content.formatted(title, message, month, day, feedbackUrl));
+			}
+
+			throw new UnsupportedOperationException("This method is for REMIND");
 		}
 
 		public String content(String title, Long ajajaCount, Long planId) {
-			return wrapBasicForm(content.formatted(title, ajajaCount, planId));
+			if (this.equals(AJAJA)) {
+				return wrapBasicForm(content.formatted(title, ajajaCount, planId));
+			}
+
+			throw new UnsupportedOperationException("This method is for AJAJA");
 		}
 
 		private String wrapBasicForm(String content) {

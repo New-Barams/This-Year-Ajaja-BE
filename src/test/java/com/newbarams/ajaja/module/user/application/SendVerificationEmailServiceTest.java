@@ -14,6 +14,7 @@ import com.newbarams.ajaja.global.cache.CacheUtil;
 import com.newbarams.ajaja.module.user.application.model.Verification;
 import com.newbarams.ajaja.module.user.application.port.out.SendCertificationPort;
 import com.newbarams.ajaja.module.user.domain.Email;
+import com.newbarams.ajaja.module.user.domain.PhoneNumber;
 import com.newbarams.ajaja.module.user.domain.User;
 
 @RedisBasedTest
@@ -36,7 +37,8 @@ class SendVerificationEmailServiceTest extends MonkeySupport {
 		String email = "Ajaja@me.com";
 
 		User user = sut.giveMeBuilder(User.class)
-			.set("email", new Email(email))
+			.set("phoneNumber", new PhoneNumber("01012345678"))
+			.set("email", Email.init(email))
 			.sample();
 
 		given(retrieveUserService.loadExistById(any())).willReturn(user);

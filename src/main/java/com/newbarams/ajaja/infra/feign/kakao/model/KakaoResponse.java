@@ -37,6 +37,11 @@ public final class KakaoResponse {
 		public String getEmail() {
 			return kakaoAccount.email();
 		}
+
+		@Override
+		public String getContact() {
+			return kakaoAccount.phoneNumber();
+		}
 	}
 
 	@Data

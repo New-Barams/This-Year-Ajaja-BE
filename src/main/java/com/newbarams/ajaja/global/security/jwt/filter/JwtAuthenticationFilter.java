@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-	private static final Pattern GET_ONE_PLAN = Pattern.compile("^/plans/\\d+$");
+	private static final Pattern PLAN_END_POINT_PATTERN = Pattern.compile("^/plans/\\d+$");
 	private static final String PLAN_URI = "/plans";
 
 	private final List<String> allowList;
@@ -64,7 +64,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	}
 
 	private boolean isGetOnePlan(String requestUri, String httpMethod) {
-		Matcher matcher = GET_ONE_PLAN.matcher(requestUri);
+		Matcher matcher = PLAN_END_POINT_PATTERN.matcher(requestUri);
 		return matcher.matches() && GET.matches(httpMethod);
 	}
 

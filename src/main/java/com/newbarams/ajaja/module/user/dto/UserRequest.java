@@ -25,6 +25,6 @@ public final class UserRequest {
 	@Data
 	public static class Receive {
 		@Schema(description = "변경할 인증번호 타입", allowableValues = {"kakao", "email", "both"})
-		private final User.ReceiveType type;
+		private final User.RemindType type;
 	}
 }

@@ -30,13 +30,13 @@ public class Email extends SelfValidating<Email> {
 		this.validateSelf();
 	}
 
-	public Email(String email) {
-		this(email, email, false);
+	public static Email init(String email) {
+		return new Email(email, email, false);
 	}
 
 	void validateVerifiable(String email) {
 		if (this.verified && isSameRemindEmail(email)) {
-			throw new AjajaException(UNABLE_TO_VERIFY_EMAIL);
+			throw new AjajaException(ALREADY_VERIFY_EMAIL);
 		}
 	}
 

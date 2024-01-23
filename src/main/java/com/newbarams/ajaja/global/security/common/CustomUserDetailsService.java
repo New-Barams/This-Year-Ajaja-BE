@@ -19,7 +19,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String id) {
-		return retrieveUserPort.load(Long.valueOf(id))
+		return retrieveUserPort.loadById(Long.valueOf(id))
 			.map(this::toAdapter)
 			.orElseThrow(() -> new AjajaException(USER_NOT_FOUND));
 	}

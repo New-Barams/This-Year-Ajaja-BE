@@ -24,9 +24,9 @@ public class UpdateFeedbackService {
 
 	public void updateFeedback(Long userId, Long planId, int rate, String message) {
 		Plan plan = loadPlanService.loadByUserIdAndPlanId(userId, planId);
-		TimeValue current = new TimeValue();
+		TimeValue now = TimeValue.now();
 
-		TimeValue period = plan.getFeedbackPeriod(current);
+		TimeValue period = plan.getFeedbackPeriod(now);
 		checkExistFeedback(planId, period);
 
 		Feedback feedback = Feedback.create(userId, planId, rate, message);

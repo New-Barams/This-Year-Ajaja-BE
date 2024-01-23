@@ -45,7 +45,7 @@ class PlanQueryRepositoryTest extends MonkeySupport {
 
 	@BeforeEach
 	void deleteAll() {
-		UserEntity entity = userMapper.toEntity(User.init("email@naver.com", sut.giveMeOne(Long.class)));
+		UserEntity entity = userMapper.toEntity(User.init(1L, "+82 1012345678", "ajaja@me.com"));
 		user = userMapper.toDomain(userRepository.save(entity));
 
 		plan = sut.giveMeBuilder(Plan.class)
@@ -213,7 +213,7 @@ class PlanQueryRepositoryTest extends MonkeySupport {
 	void findAllRemindablePlan_Success_WithNoException() {
 		// when,then
 		Assertions.assertThatNoException().isThrownBy(
-			() -> planQueryRepository.findAllRemindablePlan("MORNING", new TimeValue())
+			() -> planQueryRepository.findAllRemindablePlan("MORNING", TimeValue.now())
 		);
 	}
 }

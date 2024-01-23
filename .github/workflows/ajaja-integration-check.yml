@@ -39,7 +39,7 @@ jobs:
         run: gradle check
 
       - name: Check Tests w/ Test Coverage
-        run: gradle testWithCoverage
+        run: gradle testWithJacoco
 
       - name: Add Coverage on Pull Request
         id: jacoco

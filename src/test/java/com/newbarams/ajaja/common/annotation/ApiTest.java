@@ -7,12 +7,14 @@ import java.lang.annotation.Target;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithSecurityContext;
+import org.springframework.security.test.context.support.WithUserDetails;
 
-import com.newbarams.ajaja.common.config.ApiTestSecurityContextFactory;
+import com.newbarams.ajaja.common.config.UserDetailsSecurityContextFactory;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-@WithSecurityContext(factory = ApiTestSecurityContextFactory.class)
+@WithUserDetails
+@WithSecurityContext(factory = UserDetailsSecurityContextFactory.class)
 @Test
 public @interface ApiTest {
 }

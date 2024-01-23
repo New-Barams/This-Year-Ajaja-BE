@@ -23,8 +23,8 @@ public class TimeValue {
 		zonedDateTime = ZonedDateTime.ofInstant(instant, ZoneId.of(DEFAULT_TIME_ZONE));
 	}
 
-	public TimeValue() {
-		this(Instant.now());
+	public static TimeValue now() {
+		return new TimeValue(Instant.now());
 	}
 
 	public int getYear() {

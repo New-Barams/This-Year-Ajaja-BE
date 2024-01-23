@@ -16,6 +16,7 @@ import org.springframework.test.context.ContextConfiguration;
 import com.newbarams.ajaja.common.support.JpaTestSupport;
 import com.newbarams.ajaja.module.user.adapter.out.persistence.model.UserEntity;
 import com.newbarams.ajaja.module.user.domain.Email;
+import com.newbarams.ajaja.module.user.domain.PhoneNumber;
 import com.newbarams.ajaja.module.user.domain.User;
 import com.newbarams.ajaja.module.user.mapper.UserMapper;
 import com.newbarams.ajaja.module.user.mapper.UserMapperImpl;
@@ -37,7 +38,8 @@ class ApplyChangeAdapterTest extends JpaTestSupport {
 	@BeforeEach
 	void setup() {
 		UserEntity entity = userMapper.toEntity(sut.giveMeBuilder(User.class)
-			.set("email", new Email("ajaja@me.com"))
+			.set("phoneNumber", new PhoneNumber("01012345678"))
+			.set("email", Email.init("ajaja@me.com"))
 			.set("deleted", false)
 			.sample());
 
@@ -45,11 +47,11 @@ class ApplyChangeAdapterTest extends JpaTestSupport {
 	}
 
 	@ParameterizedTest
-	@EnumSource(User.ReceiveType.class)
+	@EnumSource(User.RemindType.class)
 	@DisplayName("리마인드 타입 변경 요청이 정상적으로 반영되어야 한다.")
-	void apply_Success_OnReceiveTypeChange(User.ReceiveType type) {
+	void apply_Success_OnReceiveTypeChange(User.RemindType type) {
 		// given
-		user.updateReceive(type);
+		user.changeRemind(type);
 
 		// when
 		applyChangeAdapter.apply(user);
@@ -59,14 +61,14 @@ class ApplyChangeAdapterTest extends JpaTestSupport {
 		assertThat(entities).isNotEmpty();
 
 		UserEntity userEntity = entities.get(0);
-		assertThat(userEntity.getReceiveType()).isEqualTo(type.name());
+		assertThat(userEntity.getRemindType()).isEqualTo(type.name());
 	}
 
 	@RepeatedTest(3)
 	@DisplayName("닉네임 수정 시 정상적으로 반영되어야 한다.")
 	void apply_Success_OnNicknameChange() {
 		// given
-		user.updateNickname();
+		user.refreshNickname();
 		String expect = user.getNickname().getNickname();
 
 		// when

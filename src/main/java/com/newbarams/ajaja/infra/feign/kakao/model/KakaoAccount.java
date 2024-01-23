@@ -7,8 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record KakaoAccount(
-		String email,
-		boolean isEmailValid,
-		boolean isEmailVerified
+	String email,
+	String phoneNumber
 ) {
 }
