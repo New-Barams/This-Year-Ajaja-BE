@@ -27,6 +27,7 @@ class FindUserAddressAdapterTest extends JpaTestSupport {
 		user = userJpaRepository.save(new UserEntity(
 			null,
 			"nickname",
+			"01012345678",
 			"email",
 			"email",
 			false,
