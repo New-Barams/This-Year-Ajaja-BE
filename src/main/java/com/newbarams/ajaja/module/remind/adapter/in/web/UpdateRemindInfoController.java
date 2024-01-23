@@ -12,10 +12,8 @@ import com.newbarams.ajaja.global.security.common.UserId;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.remind.application.port.in.UpdateRemindInfoUseCase;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
-@Tag(name = "plan")
 @RestController
 @RequiredArgsConstructor
 public class UpdateRemindInfoController {
