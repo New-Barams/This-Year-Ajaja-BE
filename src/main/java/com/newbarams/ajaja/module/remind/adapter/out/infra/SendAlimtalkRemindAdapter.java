@@ -12,8 +12,8 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class SendAlimtalkRemindAdapter implements SendAlimtalkRemindPort {
-	private NaverSendAlimtalkFeignClient naverSendAlimtalkFeignClient;
-	private NaverCloudProperties naverCloudProperties;
+	private final NaverSendAlimtalkFeignClient naverSendAlimtalkFeignClient;
+	private final NaverCloudProperties naverCloudProperties;
 
 	@Override
 	public void send(String to, String planName, String message, String feedbackUrl) {

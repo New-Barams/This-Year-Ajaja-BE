@@ -20,9 +20,9 @@ public class FindUserAddressAdapter implements FindUserAddressPort {
 	public RemindAddress findUserAddressByUserId(Long userId) {
 		return queryFactory.select(Projections.constructor(RemindAddress.class,
 				userEntity.signUpEmail,
-				userEntity.receiveType,
+				userEntity.remindType,
 				userEntity.remindEmail,
-				userEntity.remindEmail
+				userEntity.phoneNumber
 			))
 			.from(userEntity)
 			.fetchFirst();
