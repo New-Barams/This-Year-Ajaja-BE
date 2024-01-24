@@ -30,6 +30,7 @@ import com.newbarams.ajaja.module.plan.application.UpdatePlanService;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
@@ -71,13 +72,16 @@ public class PlanController {
 
 	@PostMapping
 	@ResponseStatus(CREATED)
-	public AjajaResponse<PlanResponse.Create> createPlan(
+	public AjajaResponse<Void> createPlan(
 		@UserId Long userId,
 		@RequestBody PlanRequest.Create request,
-		@RequestHeader(name = "Month") @Min(1) @Max(12) int month
+		@RequestHeader(name = "Month") @Min(1) @Max(12) int month,
+		HttpServletResponse response
 	) {
-		PlanResponse.Create response = createPlanService.create(userId, request, month);
-		return AjajaResponse.ok(response);
+		Long planId = createPlanService.create(userId, request, month);
+		response.addHeader("Location", "plans/" + planId);
+
+		return AjajaResponse.ok();
 	}
 
 	@DeleteMapping("/{id}")

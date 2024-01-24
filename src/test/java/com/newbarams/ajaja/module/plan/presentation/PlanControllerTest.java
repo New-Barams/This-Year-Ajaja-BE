@@ -506,10 +506,8 @@ class PlanControllerTest extends WebMvcTestSupport {
 		// given
 		PlanRequest.Create request = new PlanRequest.Create("올해도 아좌좌", "아좌좌 마이 라이프", 12, 6, 1, "MORNING", true, true, 1,
 			TAG_FIXTURE, MESSAGE_FIXTURE);
-		PlanResponse.Create response = new PlanResponse.Create(1L, 1L, "올해도 아좌좌", "아좌좌 마이 라이프", 1, true, true, true,
-			TAG_FIXTURE);
 
-		given(createPlanService.create(anyLong(), any(), anyInt())).willReturn(response);
+		given(createPlanService.create(anyLong(), any(), anyInt())).willReturn(1L);
 
 		// when
 		var result = mockMvc.perform(RestDocumentationRequestBuilders.post(PLAN_END_POINT)
@@ -519,20 +517,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 			.content(objectMapper.writeValueAsString(request)));
 
 		// then
-		result.andExpectAll(
-			status().isCreated(),
-			jsonPath("$.success").value(Boolean.TRUE),
-			jsonPath("$.data.id").value(response.getId()),
-			jsonPath("$.data.userId").value(response.getUserId()),
-			jsonPath("$.data.title").value(response.getTitle()),
-			jsonPath("$.data.description").value(response.getDescription()),
-			jsonPath("$.data.iconNumber").value(response.getIconNumber()),
-			jsonPath("$.data.public").value(response.isPublic()),
-			jsonPath("$.data.canRemind").value(response.isCanRemind()),
-			jsonPath("$.data.canAjaja").value(response.isCanAjaja()),
-			jsonPath("$.data.ajajas").value(response.getAjajas()),
-			jsonPath("$.data.tags[0]").value(response.getTags().get(0))
-		);
+		result.andExpect(status().isCreated());
 
 		// docs
 		result.andDo(

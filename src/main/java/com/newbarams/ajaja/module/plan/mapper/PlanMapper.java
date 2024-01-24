@@ -86,13 +86,6 @@ public interface PlanMapper {
 		return new PlanStatus(request.isPublic(), request.isCanAjaja());
 	}
 
-	@Mapping(source = "plan.content.title", target = "title")
-	@Mapping(source = "plan.content.description", target = "description")
-	@Mapping(source = "plan.status.public", target = "isPublic")
-	@Mapping(source = "plan.status.canRemind", target = "canRemind")
-	@Mapping(source = "plan.status.canAjaja", target = "canAjaja")
-	PlanResponse.Create toResponse(Plan plan, List<String> tags);
-
 	@Mapping(source = "plan.ajajas", target = "ajajas", qualifiedByName = "toAjajaCount")
 	PlanResponse.GetAll toResponse(PlanEntity plan, String nickname, List<String> tags);
 
