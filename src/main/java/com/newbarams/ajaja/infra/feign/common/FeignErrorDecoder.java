@@ -39,6 +39,13 @@ public class FeignErrorDecoder implements ErrorDecoder {
 		String responseBody = feignResponseEncoder.encodeResponseBody(response.body());
 
 		log.info("[Feign] API Request Fail To {} By '{}'.", response.request().url(), response.reason());
+		log.info("[Feign] Failed Request Header -> timestamp : {}"
+			, response.request().headers().get("x-ncp-apigw-timestamp"));
+		log.info("[Feign] Failed Request Header -> accessKey : {}"
+			, response.request().headers().get("x-ncp-iam-access-key"));
+		log.info("[Feign] Failed Request Header -> signature : {}"
+			, response.request().headers().get("x-ncp-apigw-signature-v2"));
+
 		log.info("[Feign] Failed Request Body : {}", requestBody);
 		log.info("[Feign] Response From API : {}", responseBody);
 
