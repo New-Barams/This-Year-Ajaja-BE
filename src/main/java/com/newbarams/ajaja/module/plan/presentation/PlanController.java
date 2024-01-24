@@ -3,8 +3,10 @@ package com.newbarams.ajaja.module.plan.presentation;
 import static org.springframework.http.HttpHeaders.*;
 import static org.springframework.http.HttpStatus.*;
 
+import java.net.URI;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +32,6 @@ import com.newbarams.ajaja.module.plan.application.UpdatePlanService;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
@@ -72,16 +73,15 @@ public class PlanController {
 
 	@PostMapping
 	@ResponseStatus(CREATED)
-	public AjajaResponse<Void> createPlan(
+	public ResponseEntity<AjajaResponse<Void>> createPlan(
 		@UserId Long userId,
 		@RequestBody PlanRequest.Create request,
-		@RequestHeader(name = "Month") @Min(1) @Max(12) int month,
-		HttpServletResponse response
+		@RequestHeader(name = "Month") @Min(1) @Max(12) int month
 	) {
 		Long planId = createPlanService.create(userId, request, month);
-		response.addHeader("Location", "plans/" + planId);
+		URI uri = URI.create("plans/" + planId);
 
-		return AjajaResponse.ok();
+		return ResponseEntity.created(uri).body(AjajaResponse.ok());
 	}
 
 	@DeleteMapping("/{id}")
