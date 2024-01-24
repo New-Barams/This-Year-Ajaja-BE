@@ -79,7 +79,7 @@ class DeletePlanServiceTest {
 		// when, then
 		assertThatThrownBy(() -> deletePlanService.delete(plan.getId(), userId, 12))
 			.isInstanceOf(AjajaException.class)
-			.hasMessage(INVALID_UPDATABLE_DATE.getMessage());
+			.hasMessage(UNMODIFIABLE_DURATION.getMessage());
 	}
 
 	@Test
@@ -91,6 +91,6 @@ class DeletePlanServiceTest {
 		// when, then
 		assertThatThrownBy(() -> deletePlanService.delete(plan.getId(), strangerId, 1))
 			.isInstanceOf(AjajaException.class)
-			.hasMessage(INVALID_USER_ACCESS.getMessage());
+			.hasMessage(NOT_AUTHOR.getMessage());
 	}
 }

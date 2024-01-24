@@ -43,7 +43,7 @@ class PlanTest extends MonkeySupport {
 
 		assertThatThrownBy(() -> plan.delete(plan.getUserId(), 12))
 			.isInstanceOf(AjajaException.class)
-			.hasMessage(INVALID_UPDATABLE_DATE.getMessage());
+			.hasMessage(UNMODIFIABLE_DURATION.getMessage());
 	}
 
 	@Test
@@ -97,7 +97,7 @@ class PlanTest extends MonkeySupport {
 			plan.update(new PlanParam.Update(12, 1, plan.getUserId(), new Content("title", "des"),
 				true, true)))
 			.isInstanceOf(AjajaException.class)
-			.hasMessage(INVALID_UPDATABLE_DATE.getMessage());
+			.hasMessage(UNMODIFIABLE_DURATION.getMessage());
 	}
 
 	@Test
