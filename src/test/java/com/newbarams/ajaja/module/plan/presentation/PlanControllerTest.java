@@ -516,8 +516,13 @@ class PlanControllerTest extends WebMvcTestSupport {
 			.header("Month", 1)
 			.content(objectMapper.writeValueAsString(request)));
 
+		String expectedPath = "plans/1";
+
 		// then
-		result.andExpect(status().isCreated());
+		result.andExpectAll(
+			status().isCreated(),
+			header().string(HttpHeaders.LOCATION, expectedPath)
+		);
 
 		// docs
 		result.andDo(
