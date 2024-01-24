@@ -3,8 +3,10 @@ package com.newbarams.ajaja.module.plan.presentation;
 import static org.springframework.http.HttpHeaders.*;
 import static org.springframework.http.HttpStatus.*;
 
+import java.net.URI;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -71,13 +73,15 @@ public class PlanController {
 
 	@PostMapping
 	@ResponseStatus(CREATED)
-	public AjajaResponse<PlanResponse.Create> createPlan(
+	public ResponseEntity<AjajaResponse<Void>> createPlan(
 		@UserId Long userId,
 		@RequestBody PlanRequest.Create request,
 		@RequestHeader(name = "Month") @Min(1) @Max(12) int month
 	) {
-		PlanResponse.Create response = createPlanService.create(userId, request, month);
-		return AjajaResponse.ok(response);
+		Long planId = createPlanService.create(userId, request, month);
+		URI uri = URI.create("plans/" + planId);
+
+		return ResponseEntity.created(uri).body(AjajaResponse.ok());
 	}
 
 	@DeleteMapping("/{id}")

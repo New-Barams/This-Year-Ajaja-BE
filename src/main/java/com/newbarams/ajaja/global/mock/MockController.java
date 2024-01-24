@@ -32,7 +32,6 @@ import com.newbarams.ajaja.module.ajaja.application.SchedulingAjajaRemindService
 import com.newbarams.ajaja.module.auth.dto.AuthRequest;
 import com.newbarams.ajaja.module.auth.dto.AuthResponse;
 import com.newbarams.ajaja.module.feedback.dto.FeedbackRequest;
-import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 import com.newbarams.ajaja.module.remind.application.SchedulingRemindService;
 import com.newbarams.ajaja.module.remind.dto.RemindResponse;
@@ -299,18 +298,6 @@ public class MockController {
 		return AjajaResponse.ok(feedbackInfo);
 	}
 
-	@Operation(summary = "[테스트] 계획 생성 API")
-	@PostMapping("/plans")
-	@ResponseStatus(CREATED)
-	public AjajaResponse<PlanResponse.Create> createPlan(@RequestBody PlanRequest.Create request,
-		@RequestHeader(name = "Date") String date) {
-		List<String> tags = List.of("tag1", "tag2", "tag3");
-		PlanResponse.Create response = new PlanResponse.Create(1L, 1L, "title", "des",
-			1, true, true, true, tags);
-
-		return new AjajaResponse<>(true, response);
-	}
-
 	@Operation(summary = "[테스트] 계획 전체 조회 API")
 	@GetMapping("/plans")
 	@ResponseStatus(OK)
@@ -338,18 +325,6 @@ public class MockController {
 			Instant.parse("2023-01-04T04:14:14Z"));
 
 		return new AjajaResponse<>(true, response);
-	}
-
-	@Operation(summary = "[테스트] 계획 수정 API")
-	@PutMapping("/plans/{id}")
-	@ResponseStatus(OK)
-	public AjajaResponse<PlanResponse.Create> updatePlan(@PathVariable Long id,
-		@RequestBody PlanRequest.Update request, @RequestHeader(name = "Date") String date) {
-		List<String> tags = List.of("tag1", "tag2", "tag3");
-		PlanResponse.Create updated = new PlanResponse.Create(1L, 1L, "title", "des",
-			1, true, true, true, tags);
-
-		return new AjajaResponse<>(true, updated);
 	}
 
 	@Operation(summary = "[테스트] 계획 삭제 API")
