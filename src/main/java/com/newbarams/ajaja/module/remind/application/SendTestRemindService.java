@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 public class SendTestRemindService implements SendTestRemindUseCase {
 	private static final String TEST_PLAN_NAME = "테스트 계획입니다!";
 	private static final String TEST_REMIND_MESSAGE = "테스트 메세지입니다!";
-	private static final String MAIN_PAGE_URL = "https://www.ajaja.me/plans/main";
+	private static final String MAIN_PAGE_URL = "https://www.ajaja.me/home";
 	private static final int MAX_SEND_COUNT = 3;
 	private static final int INIT_COUNT_VALUE = 1;
 
