@@ -15,8 +15,10 @@ import com.newbarams.ajaja.module.remind.application.port.out.SendAlimtalkRemind
 import com.newbarams.ajaja.module.remind.application.port.out.SendEmailRemindPort;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class SendTestRemindService implements SendTestRemindUseCase {
 	private static final String TEST_PLAN_NAME = "테스트 계획입니다!";
@@ -48,6 +50,7 @@ public class SendTestRemindService implements SendTestRemindUseCase {
 				sendAlimtalkRemindPort.send(address.phoneNumber(), TEST_PLAN_NAME, TEST_REMIND_MESSAGE, MAIN_PAGE_URL);
 			}
 		} catch (RuntimeException e) {
+			log.warn("Send Error {} Occurs : {}", e.getCause(), e.getMessage());
 			throw new AjajaException(REMIND_TASK_FAILED);
 		}
 		increaseCount(address.userEmail(), sendCount);
