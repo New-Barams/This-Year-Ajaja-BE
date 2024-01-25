@@ -23,7 +23,6 @@ swaggerSources {
 
 tasks.withType(project.GenerateSwaggerUI).configureEach {
     dependsOn ':openapi3'
-    printActive()
 }
 
 tasks.register("duplicateSwaggerUiIntoJar", Copy) {
