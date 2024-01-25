@@ -41,7 +41,7 @@ class UpdateFeedbackControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("update-feedback")
+				.identifier("update-feedback-success")
 				.tag(ApiTag.FEEDBACK)
 				.summary("피드백 평가 하기 API")
 				.description("해당 계획의 피드백을 진행합니다.")
@@ -72,10 +72,8 @@ class UpdateFeedbackControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("update-feedback-invalid-token")
+				.identifier("update-feedback-fail-" + identifier)
 				.tag(ApiTag.FEEDBACK)
-				.summary("피드백 평가 하기 API")
-				.description("해당 계획의 피드백을 진행합니다.")
 				.secured(true)
 				.result(result)
 				.generateDocs()
@@ -87,7 +85,7 @@ class UpdateFeedbackControllerTest extends WebMvcTestSupport {
 	void updateFeedback_Fail_ByExpiredFeedback() throws Exception {
 		// given
 		AjajaException expiredException = new AjajaException(EXPIRED_FEEDBACK);
-		doThrow(expiredException).when(updateFeedbackService)
+		willThrow(expiredException).given(updateFeedbackService)
 			.updateFeedback(anyLong(), anyLong(), anyInt(), anyString());
 
 		// when
@@ -102,10 +100,8 @@ class UpdateFeedbackControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("update-feedback-expired-feedback")
+				.identifier("update-feedback-fail-expired-feedback")
 				.tag(ApiTag.FEEDBACK)
-				.summary("피드백 평가 하기 API")
-				.description("해당 계획의 피드백을 진행합니다.")
 				.secured(true)
 				.result(result)
 				.generateDocs()
@@ -117,7 +113,7 @@ class UpdateFeedbackControllerTest extends WebMvcTestSupport {
 	void updateFeedback_Fail_ByPlanNotFound() throws Exception {
 		// given
 		AjajaException notFoundException = new AjajaException(NOT_FOUND_PLAN);
-		doThrow(notFoundException).when(updateFeedbackService)
+		willThrow(notFoundException).given(updateFeedbackService)
 			.updateFeedback(anyLong(), anyLong(), anyInt(), anyString());
 
 		// when
@@ -132,10 +128,8 @@ class UpdateFeedbackControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("update-feedback-plan-not-found")
+				.identifier("update-feedback-fail-plan-not-found")
 				.tag(ApiTag.FEEDBACK)
-				.summary("피드백 평가 하기 API")
-				.description("해당 계획의 피드백을 진행합니다.")
 				.secured(true)
 				.result(result)
 				.generateDocs()
@@ -162,10 +156,8 @@ class UpdateFeedbackControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("update-feedback-already-feedback")
+				.identifier("update-feedback-fail-already-feedback")
 				.tag(ApiTag.FEEDBACK)
-				.summary("피드백 평가 하기 API")
-				.description("해당 계획의 피드백을 진행합니다.")
 				.secured(true)
 				.result(result)
 				.generateDocs()

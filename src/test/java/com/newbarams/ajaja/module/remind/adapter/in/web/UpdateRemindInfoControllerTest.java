@@ -50,7 +50,7 @@ class UpdateRemindInfoControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("get-my-plans")
+				.identifier("get-plan-reminds-success")
 				.tag(ApiTag.PLAN)
 				.summary("계획 리마인드 정보 수정 API")
 				.description("리마인드 정보들을 수정합니다.")
@@ -80,10 +80,8 @@ class UpdateRemindInfoControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("get-my-plans-invalid_token")
+				.identifier("get-plan-reminds-fail-" + identifier)
 				.tag(ApiTag.PLAN)
-				.summary("계획 리마인드 정보 수정 API")
-				.description("리마인드 정보들을 수정합니다.")
 				.secured(true)
 				.result(result)
 				.generateDocs()
@@ -96,7 +94,7 @@ class UpdateRemindInfoControllerTest extends WebMvcTestSupport {
 		// given
 		doNothing().when(updateRemindInfoUseCase).update(anyLong(), anyLong(), any());
 
-		AjajaException notUpdatableException = new AjajaException(INVALID_UPDATABLE_DATE);
+		AjajaException notUpdatableException = new AjajaException(UNMODIFIABLE_DURATION);
 		doThrow(notUpdatableException).when(updateRemindInfoUseCase).update(anyLong(), anyLong(), any());
 
 		// when
@@ -111,10 +109,8 @@ class UpdateRemindInfoControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("get-my-plans-not-updatable-date")
+				.identifier("get-plan-reminds-fail-not-updatable-date")
 				.tag(ApiTag.PLAN)
-				.summary("계획 리마인드 정보 수정 API")
-				.description("리마인드 정보들을 수정합니다.")
 				.secured(true)
 				.result(result)
 				.generateDocs()
@@ -142,10 +138,8 @@ class UpdateRemindInfoControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("get-my-plans-not-found-plan")
+				.identifier("get-plan-reminds-fail-not-found-plan")
 				.tag(ApiTag.PLAN)
-				.summary("계획 리마인드 정보 수정 API")
-				.description("리마인드 정보들을 수정합니다.")
 				.secured(true)
 				.result(result)
 				.generateDocs()

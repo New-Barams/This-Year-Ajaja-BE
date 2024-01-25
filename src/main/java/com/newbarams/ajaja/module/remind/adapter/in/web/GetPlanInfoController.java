@@ -13,10 +13,8 @@ import com.newbarams.ajaja.global.security.common.UserId;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 import com.newbarams.ajaja.module.remind.application.port.in.GetPlanInfoUseCase;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
-@Tag(name = "plan")
 @RestController
 @RequiredArgsConstructor
 public class GetPlanInfoController {

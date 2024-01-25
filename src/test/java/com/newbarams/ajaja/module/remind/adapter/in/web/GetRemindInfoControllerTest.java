@@ -65,7 +65,7 @@ class GetRemindInfoControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("get-reminds")
+				.identifier("get-reminds-success")
 				.tag(ApiTag.REMIND)
 				.summary("리마인드 정보 보기 API")
 				.description("리마인드 페이지에서 리마인드 정보들을 불러옵니다.")
@@ -94,10 +94,8 @@ class GetRemindInfoControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("get-reminds-invalid-token")
+				.identifier("get-reminds-fail-" + identifier)
 				.tag(ApiTag.REMIND)
-				.summary("리마인드 정보 보기 API")
-				.description("리마인드 페이지에서 리마인드 정보들을 불러옵니다.")
 				.secured(true)
 				.result(result)
 				.generateDocs()
@@ -122,10 +120,8 @@ class GetRemindInfoControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("get-reminds-plan-not-found")
+				.identifier("get-reminds-fail-plan-not-found")
 				.tag(ApiTag.REMIND)
-				.summary("리마인드 정보 보기 API")
-				.description("리마인드 페이지에서 리마인드 정보들을 불러옵니다.")
 				.secured(true)
 				.result(result)
 				.generateDocs()

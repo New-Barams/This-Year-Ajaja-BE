@@ -17,10 +17,8 @@ import com.newbarams.ajaja.module.feedback.application.UpdateFeedbackService;
 import com.newbarams.ajaja.module.feedback.dto.FeedbackRequest;
 import com.newbarams.ajaja.module.feedback.dto.FeedbackResponse;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
-@Tag(name = "feedback", description = "피드백 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/feedbacks")

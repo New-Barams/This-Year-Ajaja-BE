@@ -28,17 +28,15 @@ public class GetFeedbackInfoControllerTest extends WebMvcTestSupport {
 	void getFeedbackInfo_Success_WithNoException() throws Exception {
 		// given
 		List<FeedbackResponse.RemindFeedback> feedbacks = List.of(
-			new FeedbackResponse.RemindFeedback(
-				50, "잘하고 있어", 6, 1, 7, 1, true
-			),
-			new FeedbackResponse.RemindFeedback(
-				0, "", 12, 1, 12, 31, false
-			)
+			new FeedbackResponse.RemindFeedback(50, "잘하고 있어", 6, 1, 7, 1, true),
+			new FeedbackResponse.RemindFeedback(0, "", 12, 1, 12, 31, false)
 		);
+
 		FeedbackResponse.FeedbackInfo response
 			= new FeedbackResponse.FeedbackInfo(2023, 50, "1일 1커밋", 9, feedbacks);
 
 		given(loadFeedbackInfoService.loadFeedbackInfoByPlanId(anyLong(), anyLong())).willReturn(response);
+
 		// when
 		var result = mockMvc.perform(get(FEEDBACK_END_POINT + "/{planId}", 1)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
@@ -71,7 +69,7 @@ public class GetFeedbackInfoControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("get-feedbacks")
+				.identifier("get-feedbacks-success")
 				.tag(ApiTag.FEEDBACK)
 				.summary("피드백 정보 불러오기 API")
 				.description("해당 계획의 피드백 정보들을 불러옵니다.")
@@ -100,10 +98,8 @@ public class GetFeedbackInfoControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("get-feedbacks-invalid-token")
+				.identifier("get-feedbacks-fail-" + identifier)
 				.tag(ApiTag.FEEDBACK)
-				.summary("피드백 정보 불러오기 API")
-				.description("해당 계획의 피드백 정보들을 불러옵니다.")
 				.secured(true)
 				.result(result)
 				.generateDocs());
@@ -127,10 +123,8 @@ public class GetFeedbackInfoControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("get-feedbacks-plan-not-found")
+				.identifier("get-feedbacks-fail-plan-not-found")
 				.tag(ApiTag.FEEDBACK)
-				.summary("피드백 정보 불러오기 API")
-				.description("해당 계획의 피드백 정보들을 불러옵니다.")
 				.secured(true)
 				.result(result)
 				.generateDocs());

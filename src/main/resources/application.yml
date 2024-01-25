@@ -20,9 +20,6 @@ spring:
     enabled: true
     baseline-on-migrate: true
 
-springdoc:
-  use-fqn: true
-
 logging:
   level:
     com.newbarams.ajaja: DEBUG

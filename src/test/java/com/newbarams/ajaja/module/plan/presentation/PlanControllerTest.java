@@ -1,24 +1,32 @@
 package com.newbarams.ajaja.module.plan.presentation;
 
+import static com.newbarams.ajaja.global.exception.ErrorCode.*;
 import static org.mockito.BDDMockito.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.time.Instant;
 import java.util.List;
 
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 
 import com.newbarams.ajaja.common.annotation.ApiTest;
+import com.newbarams.ajaja.common.annotation.ParameterizedApiTest;
 import com.newbarams.ajaja.common.support.WebMvcTestSupport;
 import com.newbarams.ajaja.common.util.ApiTag;
 import com.newbarams.ajaja.common.util.RestDocument;
+import com.newbarams.ajaja.global.exception.AjajaException;
+import com.newbarams.ajaja.global.exception.ErrorCode;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 
 class PlanControllerTest extends WebMvcTestSupport {
 	private static final List<String> TAG_FIXTURE = List.of("올해도", "아좌좌");
+	private static final List<PlanRequest.Message> MESSAGE_FIXTURE = List.of(new PlanRequest.Message("content1", 6, 1),
+		new PlanRequest.Message("content2", 12, 1));
 	private static final PlanResponse.Detail DETAIL_RESPONSE_FIXTURE = new PlanResponse.Detail(
 		new PlanResponse.Writer("공부하는 돼지", true, true),
 		1L, "올해도 아좌좌", "아좌좌 마이 라이프", 1, true, true, true, 15000,
@@ -26,6 +34,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 	);
 
 	@ApiTest
+	@DisplayName("[계획 수정] 요청이 들어오면 요청된 데이터로 계획이 수정된다.")
 	void updatePlan_Success() throws Exception {
 		// given
 		PlanRequest.Update request = new PlanRequest.Update(1, "올해도 아좌좌", "아좌좌 마이 라이프", true, true, TAG_FIXTURE);
@@ -34,7 +43,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		given(updatePlanService.update(anyLong(), anyLong(), any(), anyInt())).willReturn(response);
 
 		// when
-		var result = mockMvc.perform(RestDocumentationRequestBuilders.put(PLAN_END_POINT.concat("/{id}"), 1)
+		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}"), 1)
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.header("Month", 12)
@@ -62,7 +71,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("plan-update")
+				.identifier("plan-update-success")
 				.tag(ApiTag.PLAN)
 				.summary("계획 수정 API")
 				.description("요청한 데이터로 계획을 수정합니다.")
@@ -73,16 +82,137 @@ class PlanControllerTest extends WebMvcTestSupport {
 	}
 
 	@ApiTest
+	@DisplayName("[계획 수정] 플랜이 존재하지 않을 경우 404 에러를 반환한다.")
+	void updatePlan_Fail_ByNotFoundPlan() throws Exception {
+		// given
+		PlanRequest.Update request = new PlanRequest.Update(1, "올해도 아좌좌", "아좌좌 마이 라이프", true, true, TAG_FIXTURE);
+
+		given(updatePlanService.update(anyLong(), anyLong(), any(), anyInt())).willThrow(
+			new AjajaException(NOT_FOUND_PLAN));
+
+		// when
+		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}"), 1)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
+			.header("Month", 1)
+			.content(objectMapper.writeValueAsString(request)));
+
+		// then
+		result.andExpect(status().isNotFound());
+
+		// docs
+		result.andDo(
+			RestDocument.builder()
+				.identifier("plan-update-fail-plan-not-found")
+				.tag(ApiTag.PLAN)
+				.secured(true)
+				.result(result)
+				.generateDocs()
+		);
+	}
+
+	@ApiTest
+	@DisplayName("[계획 수정] 수정 가능한 기간이 아닌 경우 400 에러를 반환한다.")
+	void updatePlan_Fail_ByNotModifiableMonth() throws Exception {
+		// given
+		PlanRequest.Update request = new PlanRequest.Update(1, "올해도 아좌좌", "아좌좌 마이 라이프", true, true, TAG_FIXTURE);
+
+		given(updatePlanService.update(anyLong(), anyLong(), any(), anyInt())).willThrow(
+			new AjajaException(UNMODIFIABLE_DURATION));
+
+		// when
+		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}"), 1)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
+			.header("Month", 1)
+			.content(objectMapper.writeValueAsString(request)));
+
+		// then
+		result.andExpect(status().isBadRequest());
+
+		// docs
+		result.andDo(
+			RestDocument.builder()
+				.identifier("plan-update-fail-not-modifiable-month")
+				.tag(ApiTag.PLAN)
+				.secured(true)
+				.result(result)
+				.generateDocs()
+		);
+	}
+
+	@ApiTest
+	@DisplayName("[계획 수정] 잘못된 유저의 접근일 경우 400 에러를 반환한다.")
+	void updatePlan_Fail_ByInvalidUserAccess() throws Exception {
+		// given
+		PlanRequest.Update request = new PlanRequest.Update(1, "올해도 아좌좌", "아좌좌 마이 라이프", true, true, TAG_FIXTURE);
+
+		given(updatePlanService.update(anyLong(), anyLong(), any(), anyInt())).willThrow(
+			new AjajaException(NOT_AUTHOR));
+
+		// when
+		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}"), 1)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
+			.header("Month", 1)
+			.content(objectMapper.writeValueAsString(request)));
+
+		// then
+		result.andExpect(status().isBadRequest());
+
+		// docs
+		result.andDo(
+			RestDocument.builder()
+				.identifier("plan-update-fail-invalid-user-Access")
+				.tag(ApiTag.PLAN)
+				.secured(true)
+				.result(result)
+				.generateDocs()
+		);
+	}
+
+	@ParameterizedApiTest
+	@MethodSource("authenticationFailResults")
+	@DisplayName("[계획 수정] 토큰 검증에 실패할 경우 400 에러를 반환한다.")
+	void updatePlan_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
+		// given
+		PlanRequest.Update request = new PlanRequest.Update(1, "올해도 아좌좌", "아좌좌 마이 라이프", true, true, TAG_FIXTURE);
+
+		given(updatePlanService.update(anyLong(), anyLong(), any(), anyInt())).willThrow(new AjajaException(errorCode));
+
+		// when
+		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}"), 1)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
+			.header("Month", 1)
+			.content(objectMapper.writeValueAsString(request)));
+
+		// then
+		result.andExpect(status().isBadRequest());
+
+		// docs
+		result.andDo(
+			RestDocument.builder()
+				.identifier("plan-update-fail-" + identifier)
+				.tag(ApiTag.PLAN)
+				.secured(true)
+				.result(result)
+				.generateDocs()
+		);
+	}
+
+	@ApiTest
+	@DisplayName("[계획 전체 조회] 요청이 들어오면 전체 계획을 조회할 수 있다.")
 	void getAllPlans_Success() throws Exception {
 		// given
-		PlanRequest.GetAll request = sut.giveMeOne(PlanRequest.GetAll.class);
+		PlanRequest.GetAll request = new PlanRequest.GetAll("latest", true, 1, 1L);
 		List<PlanResponse.GetAll> response =
 			List.of(new PlanResponse.GetAll(1L, 1L, "공부하는 돼지", "올해도 아좌좌", 1, 15000, TAG_FIXTURE, Instant.now()));
 
 		given(getPlanService.loadAllPlans(request)).willReturn(response);
 
 		// when
-		var result = mockMvc.perform(RestDocumentationRequestBuilders.get(PLAN_END_POINT)
+		var result = mockMvc.perform(get(PLAN_END_POINT)
 			.contentType(MediaType.APPLICATION_JSON)
 			.param("sort", request.getSort())
 			.param("current", String.valueOf(request.isCurrent()))
@@ -106,10 +236,10 @@ class PlanControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("plan-query-all")
+				.identifier("plan-query-all-success")
 				.tag(ApiTag.PLAN)
 				.summary("전체 계획 조회 API")
-				.description("커서 기반으로 계획을 가져온다")
+				.description("커서 기반으로 계획을 가져온다 <br>") // todo: 상세하게 적어주기
 				.result(result)
 				.generateDocs()
 			// MockMvcRestDocumentationWrapper.document("전체 계획 조회",
@@ -143,4 +273,697 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
+	@ApiTest
+	@DisplayName("[계획 삭제] 요청이 들어오면 계획이 삭제된다.")
+	void deletePlan_Success() throws Exception {
+		// given
+		doNothing().when(deletePlanService).delete(anyLong(), anyLong(), anyInt());
+
+		// when
+		var result = mockMvc.perform(delete(PLAN_END_POINT.concat("/{id}"), 1)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
+			.header("Month", 1));
+
+		// then
+		result.andExpect(status().isOk());
+
+		// docs
+		result.andDo(
+			RestDocument.builder()
+				.identifier("plan-delete-success")
+				.tag(ApiTag.PLAN)
+				.summary("계획 삭제 API")
+				.description("해당 ID의 계획을 삭제합니다.")
+				.secured(true)
+				.result(result)
+				.generateDocs()
+		);
+	}
+
+	@ApiTest
+	@DisplayName("[계획 삭제] 플랜이 존재하지 않을 경우 404 에러를 반환한다.")
+	void deletePlan_Fail_ByNotFoundPlan() throws Exception {
+		// given
+		doThrow(new AjajaException(NOT_FOUND_PLAN)).when(deletePlanService).delete(anyLong(), anyLong(), anyInt());
+
+		// when
+		var result = mockMvc.perform(delete(PLAN_END_POINT.concat("/{id}"), 1)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
+			.header("Month", 1));
+
+		// then
+		result.andExpect(status().isNotFound());
+
+		// docs
+		result.andDo(
+			RestDocument.builder()
+				.identifier("plan-delete-fail-not-found")
+				.tag(ApiTag.PLAN)
+				.secured(true)
+				.result(result)
+				.generateDocs()
+		);
+	}
+
+	@ApiTest
+	@DisplayName("[계획 삭제] 삭제 가능한 기간이 아닌 경우 400 에러를 반환한다.")
+	void deletePlan_Fail_ByNotModifiableMonth() throws Exception {
+		// given
+		AjajaException unmodifiableDuration = new AjajaException(UNMODIFIABLE_DURATION);
+		doThrow(unmodifiableDuration).when(deletePlanService).delete(anyLong(), anyLong(), anyInt());
+
+		// when
+		var result = mockMvc.perform(delete(PLAN_END_POINT.concat("/{id}"), 1)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
+			.header("Month", 1));
+
+		// then
+		result.andExpect(status().isBadRequest());
+
+		// docs
+		result.andDo(
+			RestDocument.builder()
+				.identifier("plan-delete-fail-not-modifiable-month")
+				.tag(ApiTag.PLAN)
+				.secured(true)
+				.result(result)
+				.generateDocs()
+		);
+	}
+
+	@ApiTest
+	@DisplayName("[계획 삭제] 잘못된 유저의 접근일 경우 400 에러를 반환한다.")
+	void deletePlan_Fail_ByInvalidUserAccess() throws Exception {
+		// given
+		doThrow(new AjajaException(NOT_AUTHOR)).when(deletePlanService).delete(anyLong(), anyLong(), anyInt());
+
+		// when
+		var result = mockMvc.perform(delete(PLAN_END_POINT.concat("/{id}"), 1)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
+			.header("Month", 1));
+
+		// then
+		result.andExpect(status().isBadRequest());
+
+		// docs
+		result.andDo(
+			RestDocument.builder()
+				.identifier("plan-delete-fail-invalid-user-access")
+				.tag(ApiTag.PLAN)
+				.secured(true)
+				.result(result)
+				.generateDocs()
+		);
+	}
+
+	@ParameterizedApiTest
+	@MethodSource("authenticationFailResults")
+	@DisplayName("[계획 삭제] 토큰 검증에 실패할 경우 400 에러를 반환한다.")
+	void deletePlan_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
+		// given
+		doThrow(new AjajaException(errorCode)).when(deletePlanService).delete(anyLong(), anyLong(), anyInt());
+
+		// when
+		var result = mockMvc.perform(delete(PLAN_END_POINT.concat("/{id}"), 1)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
+			.header("Month", 1));
+
+		// then
+		result.andExpect(status().isBadRequest());
+
+		// docs
+		result.andDo(
+			RestDocument.builder()
+				.identifier("plan-delete-fail-" + identifier)
+				.tag(ApiTag.PLAN)
+				.secured(true)
+				.result(result)
+				.generateDocs()
+		);
+	}
+
+	@ApiTest
+	@DisplayName("[계획 단건 조회] 요청이 들어오면 계획 정보를 조회할 수 있다.")
+	void getPlan_Success() throws Exception {
+		// given
+		PlanResponse.Detail response = DETAIL_RESPONSE_FIXTURE;
+
+		given(getPlanService.loadByIdAndOptionalUser(anyLong(), anyLong())).willReturn(response);
+
+		// when
+		var result = mockMvc.perform(get(PLAN_END_POINT.concat("/{id}"), 1)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
+			.header("Month", 1));
+
+		// then
+		result.andExpectAll(
+			status().isOk(),
+			jsonPath("$.success").value(Boolean.TRUE),
+			jsonPath("$.data.writer.nickname").value(response.getWriter().getNickname()),
+			jsonPath("$.data.writer.owner").value(response.getWriter().isOwner()),
+			jsonPath("$.data.writer.ajajaPressed").value(response.getWriter().isAjajaPressed()),
+			jsonPath("$.data.id").value(response.getId()),
+			jsonPath("$.data.title").value(response.getTitle()),
+			jsonPath("$.data.description").value(response.getDescription()),
+			jsonPath("$.data.icon").value(response.getIcon()),
+			jsonPath("$.data.public").value(response.isPublic()),
+			jsonPath("$.data.canRemind").value(response.isCanRemind()),
+			jsonPath("$.data.canAjaja").value(response.isCanAjaja()),
+			jsonPath("$.data.ajajas").value(response.getAjajas()),
+			jsonPath("$.data.tags[0]").value(response.getTags().get(0)),
+			jsonPath("$.data.createdAt").value(String.valueOf(response.getCreatedAt()))
+		);
+
+		// docs
+		result.andDo(
+			RestDocument.builder()
+				.identifier("plan-get-one-success")
+				.tag(ApiTag.PLAN)
+				.summary("계획 단건 조회 API")
+				.description("해당 ID의 계획을 조회합니다.")
+				.secured(true)
+				.result(result)
+				.generateDocs()
+		);
+	}
+
+	@ParameterizedApiTest
+	@MethodSource("authenticationFailResults")
+	@DisplayName("[계획 단건 조회] 토큰 검증에 실패할 경우 400 에러를 반환한다.")
+	void getPlan_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
+		// given
+		given(getPlanService.loadByIdAndOptionalUser(anyLong(), anyLong())).willThrow(new AjajaException(errorCode));
+
+		// when
+		var result = mockMvc.perform(get(PLAN_END_POINT.concat("/{id}"), 1)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
+			.header("Month", 1));
+
+		// then
+		result.andExpect(status().isBadRequest());
+
+		// docs
+		result.andDo(
+			RestDocument.builder()
+				.identifier("plan-get-one-fail-" + identifier)
+				.tag(ApiTag.PLAN)
+				.secured(true)
+				.result(result)
+				.generateDocs()
+		);
+	}
+
+	@ApiTest
+	@DisplayName("[계획 생성] 요청된 데이터로 계획을 생성한다.")
+	void createPlan_Success() throws Exception {
+		// given
+		PlanRequest.Create request = new PlanRequest.Create("올해도 아좌좌", "아좌좌 마이 라이프", 12, 6, 1, "MORNING", true, true, 1,
+			TAG_FIXTURE, MESSAGE_FIXTURE);
+
+		given(createPlanService.create(anyLong(), any(), anyInt())).willReturn(1L);
+
+		// when
+		var result = mockMvc.perform(post(PLAN_END_POINT)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
+			.header("Month", 1)
+			.content(objectMapper.writeValueAsString(request)));
+
+		String expectedPath = "plans/1";
+
+		// then
+		result.andExpectAll(
+			status().isCreated(),
+			header().string(HttpHeaders.LOCATION, expectedPath)
+		);
+
+		// docs
+		result.andDo(
+			RestDocument.builder()
+				.identifier("plan-create-success")
+				.tag(ApiTag.PLAN)
+				.summary("계획 생성 API")
+				.description("요청한 데이터로 계획을 생성합니다.")
+				.secured(true)
+				.result(result)
+				.generateDocs()
+		);
+	}
+
+	@ApiTest
+	@DisplayName("[계획 생성] 생성 가능한 기간이 아닌 경우 400 에러를 반환한다.")
+	void createPlan_Fail_ByNotCreatableMonth() throws Exception {
+		// given
+		PlanRequest.Create request = new PlanRequest.Create("올해도 아좌좌", "아좌좌 마이 라이프", 12, 6, 1, "MORNING", true, true, 1,
+			TAG_FIXTURE, MESSAGE_FIXTURE);
+
+		AjajaException unmodifiableDuration = new AjajaException(UNMODIFIABLE_DURATION);
+		willThrow(unmodifiableDuration).given(createPlanService).create(anyLong(), any(), anyInt());
+
+		// when
+		var result = mockMvc.perform(post(PLAN_END_POINT)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
+			.header("Month", 1)
+			.content(objectMapper.writeValueAsString(request)));
+
+		// then
+		result.andExpect(status().isBadRequest());
+
+		// docs
+		result.andDo(
+			RestDocument.builder()
+				.identifier("plan-create-fail-not-creatable-month")
+				.tag(ApiTag.PLAN)
+				.secured(true)
+				.result(result)
+				.generateDocs()
+		);
+	}
+
+	@ParameterizedApiTest
+	@MethodSource("authenticationFailResults")
+	@DisplayName("[계획 생성] 토큰 검증에 실패할 경우 400 에러를 반환한다.")
+	void createPlan_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
+		// given
+		PlanRequest.Create request = new PlanRequest.Create("올해도 아좌좌", "아좌좌 마이 라이프", 12, 6, 1, "MORNING", true, true, 1,
+			TAG_FIXTURE, MESSAGE_FIXTURE);
+
+		given(createPlanService.create(anyLong(), any(), anyInt())).willThrow(new AjajaException(errorCode));
+
+		// when
+		var result = mockMvc.perform(post(PLAN_END_POINT)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
+			.header("Month", 1)
+			.content(objectMapper.writeValueAsString(request)));
+
+		// then
+		result.andExpect(status().isBadRequest());
+
+		// docs
+		result.andDo(
+			RestDocument.builder()
+				.identifier("plan-create-fail-" + identifier)
+				.tag(ApiTag.PLAN)
+				.secured(true)
+				.result(result)
+				.generateDocs()
+		);
+	}
+
+	@ApiTest
+	@DisplayName("[계획 공개 여부 변경] 요청이 들어오면 계획의 공개 여부가 변경된다.")
+	void updatePlanPublicStatus_Success() throws Exception {
+		// given
+		doNothing().when(updatePlanService).updatePublicStatus(anyLong(), anyLong());
+
+		// when
+		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}/public"), 1)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN));
+
+		// then
+		result.andExpect(status().isOk());
+
+		// docs
+		result.andDo(
+			RestDocument.builder()
+				.identifier("plan-to-public-success")
+				.tag(ApiTag.PLAN)
+				.summary("계획 공개 여부 변경 API")
+				.description("계획의 공개 여부를 변경합니다.")
+				.secured(true)
+				.result(result)
+				.generateDocs()
+		);
+	}
+
+	@ApiTest
+	@DisplayName("[계획 공개 여부 변경] 플랜이 존재하지 않을 경우 404 에러를 반환한다.")
+	void updatePlanPublicStatus_Fail_ByNotFoundPlan() throws Exception {
+		// given
+		doThrow(new AjajaException(NOT_FOUND_PLAN)).when(updatePlanService).updatePublicStatus(anyLong(), anyLong());
+
+		// when
+		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}/public"), 1)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN));
+
+		// then
+		result.andExpect(status().isNotFound());
+
+		// docs
+		result.andDo(
+			RestDocument.builder()
+				.identifier("plan-to-public-fail-not-found")
+				.tag(ApiTag.PLAN)
+				.secured(true)
+				.result(result)
+				.generateDocs()
+		);
+	}
+
+	@ApiTest
+	@DisplayName("[계획 공개 여부 변경] 잘못된 유저의 접근일 경우 400 에러를 반환한다.")
+	void updatePlanPublicStatus_Fail_ByInvalidUserAccess() throws Exception {
+		// given
+		doThrow(new AjajaException(NOT_AUTHOR)).when(updatePlanService).updatePublicStatus(anyLong(), anyLong());
+
+		// when
+		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}/public"), 1)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN));
+
+		// then
+		result.andExpect(status().isBadRequest());
+
+		// docs
+		result.andDo(
+			RestDocument.builder()
+				.identifier("plan-to-public-fail-invalid-user-access")
+				.tag(ApiTag.PLAN)
+				.secured(true)
+				.result(result)
+				.generateDocs()
+		);
+	}
+
+	@ParameterizedApiTest
+	@MethodSource("authenticationFailResults")
+	@DisplayName("[계획 공개 여부 변경] 토큰 검증에 실패할 경우 400 에러를 반환한다.")
+	void updatePlanPublicStatus_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
+		// given
+		doThrow(new AjajaException(errorCode)).when(updatePlanService).updatePublicStatus(anyLong(), anyLong());
+
+		// when
+		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}/public"), 1)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN));
+
+		// then
+		result.andExpect(status().isBadRequest());
+
+		// docs
+		result.andDo(
+			RestDocument.builder()
+				.identifier("plan-to-public-fail-" + identifier)
+				.tag(ApiTag.PLAN)
+				.secured(true)
+				.result(result)
+				.generateDocs()
+		);
+	}
+
+	@ApiTest
+	@DisplayName("[계획 리마인드 알림 여부 변경] 요청이 들어오면 리마인드 알림 여부가 변경된다.")
+	void updatePlanRemindStatus_Success() throws Exception {
+		// given
+		doNothing().when(updatePlanService).updateRemindStatus(anyLong(), anyLong());
+
+		// when
+		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}/remindable"), 1)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN));
+
+		// then
+		result.andExpect(status().isOk());
+
+		// docs
+		result.andDo(
+			RestDocument.builder()
+				.identifier("plan-to-remindable-success")
+				.tag(ApiTag.PLAN)
+				.summary("계획 리마인드 알림 여부 변경 API")
+				.description("계획의 리마인드 알림 여부를 변경합니다.")
+				.secured(true)
+				.result(result)
+				.generateDocs()
+		);
+	}
+
+	@ApiTest
+	@DisplayName("[계획 리마인드 알림 여부 변경] 플랜이 존재하지 않을 경우 404 에러를 반환한다.")
+	void updatePlanRemindStatus_Fail_ByNotFoundPlan() throws Exception {
+		// given
+		doThrow(new AjajaException(NOT_FOUND_PLAN)).when(updatePlanService).updateRemindStatus(anyLong(), anyLong());
+
+		// when
+		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}/remindable"), 1)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN));
+
+		// then
+		result.andExpect(status().isNotFound());
+
+		// docs
+		result.andDo(
+			RestDocument.builder()
+				.identifier("plan-to-remindable-fail-not-found")
+				.tag(ApiTag.PLAN)
+				.secured(true)
+				.result(result)
+				.generateDocs()
+		);
+	}
+
+	@ApiTest
+	@DisplayName("[계획 리마인드 알림 여부 변경] 잘못된 유저의 접근일 경우 400 에러를 반환한다.")
+	void updatePlanRemindStatus_Fail_ByInvalidUserAccess() throws Exception {
+		// given
+		doThrow(new AjajaException(NOT_AUTHOR)).when(updatePlanService).updateRemindStatus(anyLong(), anyLong());
+
+		// when
+		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}/remindable"), 1)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN));
+
+		// then
+		result.andExpect(status().isBadRequest());
+
+		// docs
+		result.andDo(
+			RestDocument.builder()
+				.identifier("plan-to-remindable-fail-invalid-user-access")
+				.tag(ApiTag.PLAN)
+				.secured(true)
+				.result(result)
+				.generateDocs()
+		);
+	}
+
+	@ParameterizedApiTest
+	@MethodSource("authenticationFailResults")
+	@DisplayName("[계획 리마인드 알림 여부 변경] 토큰 검증에 실패할 경우 400 에러를 반환한다.")
+	void updatePlanRemindStatus_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
+		// given
+		doThrow(new AjajaException(errorCode)).when(updatePlanService).updateRemindStatus(anyLong(), anyLong());
+
+		// when
+		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}/remindable"), 1)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN));
+
+		// then
+		result.andExpect(status().isBadRequest());
+
+		// docs
+		result.andDo(
+			RestDocument.builder()
+				.identifier("plan-to-remindable-fail-" + identifier)
+				.tag(ApiTag.PLAN)
+				.secured(true)
+				.result(result)
+				.generateDocs()
+		);
+	}
+
+	@ApiTest
+	@DisplayName("[응원 메시지 알림 여부 변경] 요청이 들어오면 응원 메시지 알림 여부가 변경된다.")
+	void updatePlanAjajaStatus_Success() throws Exception {
+		// given
+		doNothing().when(updatePlanService).updateAjajaStatus(anyLong(), anyLong());
+
+		// when
+		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}/ajaja"), 1)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN));
+
+		// then
+		result.andExpect(status().isOk());
+
+		// docs
+		result.andDo(
+			RestDocument.builder()
+				.identifier("plan-to-ajajable-success")
+				.tag(ApiTag.PLAN)
+				.summary("계획 응원 메시지 알림 여부 변경 API")
+				.description("계획의 응원 메시지 알림 여부를 변경합니다.")
+				.secured(true)
+				.result(result)
+				.generateDocs()
+		);
+	}
+
+	@ApiTest
+	@DisplayName("[응원 메시지 알림 여부 변경] 플랜이 존재하지 않을 경우 404 에러를 반환한다.")
+	void updatePlanAjajaStatus_Fail_ByNotFoundPlan() throws Exception {
+		// given
+		doThrow(new AjajaException(NOT_FOUND_PLAN)).when(updatePlanService).updateAjajaStatus(anyLong(), anyLong());
+
+		// when
+		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}/ajaja"), 1)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN));
+
+		// then
+		result.andExpect(status().isNotFound());
+
+		// docs
+		result.andDo(
+			RestDocument.builder()
+				.identifier("plan-to-ajajable-fail-not-found")
+				.tag(ApiTag.PLAN)
+				.secured(true)
+				.result(result)
+				.generateDocs()
+		);
+	}
+
+	@ApiTest
+	@DisplayName("[응원 메시지 알림 여부 변경] 잘못된 유저의 접근일 경우 400 에러를 반환한다.")
+	void updatePlanAjajaStatus_Fail_ByInvalidUserAccess() throws Exception {
+		// given
+		doThrow(new AjajaException(NOT_AUTHOR)).when(updatePlanService).updateAjajaStatus(anyLong(), anyLong());
+
+		// when
+		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}/ajaja"), 1)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN));
+
+		// then
+		result.andExpect(status().isBadRequest());
+
+		// docs
+		result.andDo(
+			RestDocument.builder()
+				.identifier("plan-to-ajajable-fail-invalid-user-access")
+				.tag(ApiTag.PLAN)
+				.secured(true)
+				.result(result)
+				.generateDocs()
+		);
+	}
+
+	@ParameterizedApiTest
+	@MethodSource("authenticationFailResults")
+	@DisplayName("[응원 메시지 알림 여부 변경] 토큰 검증에 실패할 경우 400 에러를 반환한다.")
+	void updatePlanAjajaStatus_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
+		// given
+		doThrow(new AjajaException(errorCode)).when(updatePlanService).updateAjajaStatus(anyLong(), anyLong());
+
+		// when
+		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}/ajaja"), 1)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN));
+
+		// then
+		result.andExpect(status().isBadRequest());
+
+		// docs
+		result.andDo(
+			RestDocument.builder()
+				.identifier("plan-to-ajajable-fail-" + identifier)
+				.tag(ApiTag.PLAN)
+				.secured(true)
+				.result(result)
+				.generateDocs()
+		);
+	}
+
+	@ApiTest
+	@DisplayName("[아좌좌 추가 or 취소] 요청이 들어오면 아좌좌 누름 여부가 변경된다.")
+	void switchAjaja_Success() throws Exception {
+		// given
+		doNothing().when(switchAjajaService).switchOrAddIfNotExist(anyLong(), anyLong());
+
+		// when
+		var result = mockMvc.perform(post(PLAN_END_POINT.concat("/{id}/ajaja"), 1)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN));
+
+		// then
+		result.andExpect(status().isOk());
+
+		// docs
+		result.andDo(
+			RestDocument.builder()
+				.identifier("switch-ajaja-success")
+				.tag(ApiTag.PLAN)
+				.summary("아좌좌 추가 or 취소 API")
+				.description("유저의 아좌좌 누름 여부를 변경합니다.")
+				.secured(true)
+				.result(result)
+				.generateDocs()
+		);
+	}
+
+	@ApiTest
+	@DisplayName("[아좌좌 추가 or 취소] 플랜이 존재하지 않을 경우 404 에러를 반환한다.")
+	void switchAjaja_Fail_ByNotFoundPlan() throws Exception {
+		// given
+		AjajaException notFound = new AjajaException(NOT_FOUND_PLAN);
+		willThrow(notFound).given(switchAjajaService).switchOrAddIfNotExist(anyLong(), anyLong());
+
+		// when
+		var result = mockMvc.perform(post(PLAN_END_POINT.concat("/{id}/ajaja"), 1)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN));
+
+		// then
+		result.andExpect(status().isNotFound());
+
+		// docs
+		result.andDo(
+			RestDocument.builder()
+				.identifier("switch-ajaja-fail-not-found")
+				.tag(ApiTag.PLAN)
+				.secured(true)
+				.result(result)
+				.generateDocs()
+		);
+	}
+
+	@ParameterizedApiTest
+	@MethodSource("authenticationFailResults")
+	@DisplayName("[아좌좌 추가 or 취소] 토큰 검증에 실패할 경우 400 에러를 반환한다.")
+	void switchAjaja_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
+		// given
+		doThrow(new AjajaException(errorCode)).when(switchAjajaService).switchOrAddIfNotExist(anyLong(), anyLong());
+
+		// when
+		var result = mockMvc.perform(post(PLAN_END_POINT.concat("/{id}/ajaja"), 1)
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN));
+
+		// then
+		result.andExpect(status().isBadRequest());
+
+		// docs
+		result.andDo(
+			RestDocument.builder()
+				.identifier("switch-ajaja-fail-" + identifier)
+				.tag(ApiTag.PLAN)
+				.secured(true)
+				.result(result)
+				.generateDocs()
+		);
+	}
 }
