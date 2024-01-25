@@ -99,7 +99,7 @@ class UpdatePlanServiceTest extends MonkeySupport {
 		// when, then
 		assertThatThrownBy(() -> updatePlanService.update(plan.getId(), 1L, request, 12))
 			.isInstanceOf(AjajaException.class)
-			.hasMessage(INVALID_UPDATABLE_DATE.getMessage());
+			.hasMessage(UNMODIFIABLE_DURATION.getMessage());
 	}
 
 	@Test
@@ -114,6 +114,6 @@ class UpdatePlanServiceTest extends MonkeySupport {
 		// when, then
 		assertThatThrownBy(() -> updatePlanService.update(plan.getId(), strangerId, request, 1))
 			.isInstanceOf(AjajaException.class)
-			.hasMessage(INVALID_USER_ACCESS.getMessage());
+			.hasMessage(NOT_AUTHOR.getMessage());
 	}
 }

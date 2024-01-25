@@ -60,13 +60,13 @@ public class Plan {
 
 	private static void validateModifiableMonth(int month) {
 		if (month != MODIFIABLE_MONTH) {
-			throw new AjajaException(INVALID_UPDATABLE_DATE);
+			throw new AjajaException(UNMODIFIABLE_DURATION);
 		}
 	}
 
 	private void validateUser(Long userId) {
 		if (!this.userId.equals(userId)) {
-			throw new AjajaException(INVALID_USER_ACCESS);
+			throw new AjajaException(NOT_AUTHOR);
 		}
 	}
 
@@ -95,7 +95,7 @@ public class Plan {
 
 	public void updateRemind(RemindInfo info, List<Message> messages) {
 		if (TimeValue.now().getMonth() != MODIFIABLE_MONTH) {
-			throw new AjajaException(INVALID_UPDATABLE_DATE);
+			throw new AjajaException(UNMODIFIABLE_DURATION);
 		}
 
 		this.info = info;

@@ -41,7 +41,7 @@ class SendTestRemindControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("send-test-remind")
+				.identifier("send-test-remind-success")
 				.tag(ApiTag.REMIND)
 				.summary("리마인드 미리 보내보기 API")
 				.description("미래에 받아볼 리마인드 형식을 미리 받아볼 수 있습니다.")
@@ -70,7 +70,7 @@ class SendTestRemindControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("send-test-remind-invalid-token")
+				.identifier("send-test-remind-fail-" + identifier)
 				.tag(ApiTag.REMIND)
 				.secured(true)
 				.result(result)
@@ -95,7 +95,7 @@ class SendTestRemindControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("send-test-remind-request-over-max")
+				.identifier("send-test-remind-fail-request-over-max")
 				.tag(ApiTag.REMIND)
 				.secured(true)
 				.result(result)
@@ -120,7 +120,7 @@ class SendTestRemindControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("send-test-remind-task-failed")
+				.identifier("send-test-remind-fail-task-failed")
 				.tag(ApiTag.REMIND)
 				.secured(true)
 				.result(result)

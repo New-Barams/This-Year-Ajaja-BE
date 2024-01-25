@@ -25,6 +25,7 @@ public class FindUserAddressAdapter implements FindUserAddressPort {
 				userEntity.phoneNumber
 			))
 			.from(userEntity)
+			.where(userEntity.id.eq(userId))
 			.fetchFirst();
 	}
 }

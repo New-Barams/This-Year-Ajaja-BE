@@ -68,7 +68,7 @@ class GetPlanInfoControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("get-my-all-plans")
+				.identifier("get-my-all-plans-success")
 				.tag(ApiTag.PLAN)
 				.summary("내 계획 전체보기 API")
 				.description("메인페이지에서 사용자의 계획 정보들을 불러옵니다.")
@@ -97,10 +97,8 @@ class GetPlanInfoControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("get-my-plans-invalid-token")
+				.identifier("get-my-plans-fail-" + identifier)
 				.tag(ApiTag.PLAN)
-				.summary("내 계획 전체보기 API")
-				.description("메인페이지에서 사용자의 계획 정보들을 불러옵니다.")
 				.secured(true)
 				.result(result)
 				.generateDocs()
@@ -125,10 +123,8 @@ class GetPlanInfoControllerTest extends WebMvcTestSupport {
 		// docs
 		result.andDo(
 			RestDocument.builder()
-				.identifier("get-my-plans-user-not-found")
+				.identifier("get-my-plans-fail-user-not-found")
 				.tag(ApiTag.PLAN)
-				.summary("내 계획 전체보기 API")
-				.description("메인페이지에서 사용자의 계획 정보들을 불러옵니다.")
 				.secured(true)
 				.result(result)
 				.generateDocs()

@@ -2,7 +2,6 @@ package com.newbarams.ajaja.common.support;
 
 import static com.newbarams.ajaja.global.exception.ErrorCode.*;
 import static org.apache.commons.codec.CharEncoding.*;
-import static org.springframework.context.annotation.ComponentScan.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -16,7 +15,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -27,7 +25,6 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.newbarams.ajaja.common.annotation.ApiTest;
 import com.newbarams.ajaja.common.annotation.ParameterizedApiTest;
-import com.newbarams.ajaja.global.mock.MockController;
 import com.newbarams.ajaja.global.security.jwt.util.JwtParser;
 import com.newbarams.ajaja.module.ajaja.application.SwitchAjajaService;
 import com.newbarams.ajaja.module.auth.application.port.in.LoginUseCase;
@@ -59,7 +56,7 @@ import com.newbarams.ajaja.module.user.application.port.out.GetMyPageQuery;
  * @see ParameterizedApiTest
  * @author hejow
  */
-@WebMvcTest(excludeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, classes = MockController.class))
+@WebMvcTest
 @ExtendWith(RestDocumentationExtension.class)
 public abstract class WebMvcTestSupport extends MonkeySupport {
 	private static final String ANY_END_POINT = "/**";

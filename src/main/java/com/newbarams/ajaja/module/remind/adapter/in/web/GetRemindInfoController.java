@@ -11,10 +11,8 @@ import com.newbarams.ajaja.global.security.common.UserId;
 import com.newbarams.ajaja.module.remind.application.port.out.FindPlanRemindQuery;
 import com.newbarams.ajaja.module.remind.dto.RemindResponse;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
-@Tag(name = "remind")
 @RestController
 @RequiredArgsConstructor
 public class GetRemindInfoController {

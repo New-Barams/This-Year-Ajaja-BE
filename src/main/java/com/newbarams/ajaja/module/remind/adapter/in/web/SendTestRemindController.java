@@ -9,10 +9,8 @@ import com.newbarams.ajaja.global.common.AjajaResponse;
 import com.newbarams.ajaja.global.security.common.UserId;
 import com.newbarams.ajaja.module.remind.application.port.in.SendTestRemindUseCase;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
-@Tag(name = "remind")
 @RestController
 @RequiredArgsConstructor
 public class SendTestRemindController {
@@ -20,9 +18,7 @@ public class SendTestRemindController {
 
 	@PostMapping("/reminds/test")
 	@ResponseStatus(HttpStatus.OK)
-	public AjajaResponse<String> sendTestRemind(
-		@UserId Long userId
-	) {
+	public AjajaResponse<String> sendTestRemind(@UserId Long userId) {
 		String remindType = sendTestRemindUseCase.send(userId);
 		return AjajaResponse.ok(remindType);
 	}

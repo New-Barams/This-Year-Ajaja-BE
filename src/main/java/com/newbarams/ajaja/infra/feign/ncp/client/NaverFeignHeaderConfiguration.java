@@ -31,12 +31,13 @@ class NaverFeignHeaderConfiguration {
 
 	@Bean
 	RequestInterceptor naverCloudHeaderInterceptor() {
-		final String timestamp = epochTime();
+		return request -> {
+			String timestamp = epochTime();
 
-		return request -> request
-			.header(EPOCH_TIME_HEADER, timestamp)
-			.header(ACCESS_KEY_HEADER, properties.getAccessKey())
-			.header(SIGNATURE_HEADER, generateSignature(request, timestamp));
+			request.header(EPOCH_TIME_HEADER, timestamp)
+				.header(ACCESS_KEY_HEADER, properties.getAccessKey())
+				.header(SIGNATURE_HEADER, generateSignature(request, timestamp));
+		};
 	}
 
 	private String epochTime() {
