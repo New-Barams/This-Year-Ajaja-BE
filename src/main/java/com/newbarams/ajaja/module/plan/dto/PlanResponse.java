@@ -84,20 +84,6 @@ public final class PlanResponse {
 	}
 
 	@Data
-	public static class Create {
-		private final Long id;
-		private final Long userId;
-		private final String title;
-		private final String description;
-		private final int iconNumber;
-		private final boolean isPublic;
-		private final boolean canRemind;
-		private final boolean canAjaja;
-		private final int ajajas = 0;
-		private final List<String> tags;
-	}
-
-	@Data
 	public static class MainInfo {
 		private final int year;
 		private final int totalAchieveRate;
