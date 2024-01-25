@@ -5,13 +5,10 @@ dependencies {
 }
 
 openapi3 {
-    servers = [
-            { url = 'https://localhost:8080' },
-            { url = 'https://api.ajaja.me' }
-    ]
+    server = "https://api.ajaja.me"
     title = '올해도 아좌좌🔥'
-    description = '뉴바람스의 [올해도 아좌좌🔥] API 문서입니다.'
-    version = 'v1'
+    description = '뉴바람스의 [올해도 아좌좌🔥] API 문서입니다. <br> 문의가 있다면 `gmlwh124@naver.com` 메일 바랍니다.'
+    version = 'v1.0.0'
     outputFileNamePrefix = "ajaja-api-spec"
 }
 
@@ -26,6 +23,7 @@ swaggerSources {
 
 tasks.withType(project.GenerateSwaggerUI).configureEach {
     dependsOn ':openapi3'
+    printActive()
 }
 
 tasks.register("duplicateSwaggerUiIntoJar", Copy) {
