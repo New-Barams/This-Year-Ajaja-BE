@@ -227,7 +227,7 @@ class PlanQueryRepositoryTest extends MonkeySupport {
 		// when
 		user.delete();
 		userRepository.save(userMapper.toEntity(user));
-		
+
 		List<PlanResponse.GetAll> latestRes = planQueryRepository.findAllByCursorAndSorting(latestReq);
 
 		// then
