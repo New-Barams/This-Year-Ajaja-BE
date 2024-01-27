@@ -28,7 +28,7 @@ jobs:
       - name: Setup Gradle w/ caching
         uses: gradle/gradle-build-action@v2.9.0
         with:
-          arguments: clean build -x test -x check
+          arguments: clean build -x check
           gradle-version: ${{ env.GRADLE_VERSION }}
 
       - name: Login Docker Hub
@@ -37,7 +37,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push Docker image
+      - name: Push image
         uses: docker/build-push-action@v5
         with:
           push: true
