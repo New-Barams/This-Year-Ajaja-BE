@@ -3,7 +3,7 @@ package com.newbarams.ajaja.module.auth.application;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.newbarams.ajaja.global.security.jwt.util.JwtGenerator;
+import com.newbarams.ajaja.global.security.jwt.JwtGenerator;
 import com.newbarams.ajaja.module.auth.application.model.Profile;
 import com.newbarams.ajaja.module.auth.application.port.in.LoginUseCase;
 import com.newbarams.ajaja.module.auth.application.port.out.AuthorizePort;

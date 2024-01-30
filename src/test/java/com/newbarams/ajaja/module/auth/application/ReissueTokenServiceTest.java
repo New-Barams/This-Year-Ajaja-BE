@@ -8,8 +8,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import com.newbarams.ajaja.common.support.MockTestSupport;
-import com.newbarams.ajaja.global.security.jwt.util.JwtGenerator;
-import com.newbarams.ajaja.global.security.jwt.util.JwtValidator;
+import com.newbarams.ajaja.global.security.jwt.JwtGenerator;
+import com.newbarams.ajaja.global.security.jwt.JwtValidator;
 import com.newbarams.ajaja.module.auth.dto.AuthResponse;
 
 class ReissueTokenServiceTest extends MockTestSupport {

@@ -2,8 +2,8 @@ package com.newbarams.ajaja.module.auth.application;
 
 import org.springframework.stereotype.Service;
 
-import com.newbarams.ajaja.global.security.jwt.util.JwtGenerator;
-import com.newbarams.ajaja.global.security.jwt.util.JwtValidator;
+import com.newbarams.ajaja.global.security.jwt.JwtGenerator;
+import com.newbarams.ajaja.global.security.jwt.JwtValidator;
 import com.newbarams.ajaja.module.auth.application.port.in.ReissueTokenUseCase;
 import com.newbarams.ajaja.module.auth.dto.AuthResponse;
 

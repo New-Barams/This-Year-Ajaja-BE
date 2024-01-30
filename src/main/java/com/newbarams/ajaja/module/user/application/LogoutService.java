@@ -5,7 +5,7 @@ import static com.newbarams.ajaja.global.exception.ErrorCode.*;
 import org.springframework.stereotype.Service;
 
 import com.newbarams.ajaja.global.exception.AjajaException;
-import com.newbarams.ajaja.global.security.jwt.util.JwtRemover;
+import com.newbarams.ajaja.global.security.jwt.JwtRemover;
 import com.newbarams.ajaja.module.user.application.port.in.LogoutUseCase;
 import com.newbarams.ajaja.module.user.application.port.out.CheckExistUserPort;
 
