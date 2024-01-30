@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.global.security.common;
+package com.newbarams.ajaja.global.security.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -6,6 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+
+import com.newbarams.ajaja.global.security.common.UserAdapter;
 
 /**
  * Custom annotation of @AuthenticationPrincipal with SpEL(Spring Expression Language) <br>
