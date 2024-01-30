@@ -10,15 +10,16 @@ import jakarta.validation.Validator;
 public abstract class SelfValidating<T> {
 	private static final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
+	@SuppressWarnings("unchecked")
 	protected void validateSelf() {
 		Set<ConstraintViolation<T>> violations = validator.validate((T)this);
 
-		if (isValidateFail(violations)) {
+		if (isValidationFailed(violations)) {
 			throw new ConstraintViolationException(violations);
 		}
 	}
 
-	private boolean isValidateFail(Set<ConstraintViolation<T>> violations) {
+	private boolean isValidationFailed(Set<ConstraintViolation<T>> violations) {
 		return !violations.isEmpty();
 	}
 }
