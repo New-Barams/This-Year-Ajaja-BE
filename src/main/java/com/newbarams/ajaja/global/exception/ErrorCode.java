@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ErrorCode {
 	// 400
+	NOT_SUPPORT_END_POINT(BAD_REQUEST, "지원하지 않는 API 입니다."),
 	BEAN_VALIDATION_FAIL_EXCEPTION(BAD_REQUEST, "올바르지 않은 데이터입니다."),
 	INVALID_REQUEST(BAD_REQUEST, "올바른 형식의 데이터가 입력되지 않았습니다."),
 	INVALID_BEARER_TOKEN(BAD_REQUEST, "유효한 Bearer 토큰의 형식이 아닙니다."),
