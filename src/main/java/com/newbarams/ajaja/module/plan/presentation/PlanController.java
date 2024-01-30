@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.newbarams.ajaja.global.common.AjajaResponse;
 import com.newbarams.ajaja.global.security.common.UserId;
 import com.newbarams.ajaja.global.security.jwt.util.JwtParser;
-import com.newbarams.ajaja.global.util.BearerUtils;
+import com.newbarams.ajaja.global.util.BearerUtil;
 import com.newbarams.ajaja.module.ajaja.application.SwitchAjajaService;
 import com.newbarams.ajaja.module.plan.application.CreatePlanService;
 import com.newbarams.ajaja.module.plan.application.DeletePlanService;
@@ -61,14 +61,18 @@ public class PlanController {
 		@RequestHeader(value = AUTHORIZATION, required = false) String accessToken,
 		@PathVariable Long id
 	) {
-		Long userId = accessToken == null ? null : parseUserId(accessToken);
+		Long userId = parseUserId(accessToken);
 		PlanResponse.Detail response = getPlanService.loadByIdAndOptionalUser(userId, id);
 		return AjajaResponse.ok(response);
 	}
 
 	private Long parseUserId(String accessToken) {
-		BearerUtils.validate(accessToken);
-		return jwtParser.parseId(BearerUtils.resolve(accessToken));
+		if (accessToken == null) {
+			return null;
+		}
+
+		BearerUtil.validate(accessToken);
+		return jwtParser.parseId(BearerUtil.resolve(accessToken));
 	}
 
 	@PostMapping

@@ -13,7 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.newbarams.ajaja.global.security.jwt.util.JwtParser;
-import com.newbarams.ajaja.global.util.BearerUtils;
+import com.newbarams.ajaja.global.util.BearerUtil;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -40,14 +40,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	}
 
 	private void authenticateRequest(HttpServletRequest request) {
-		if (isSecureUri(request)) {
+		if (isNotAllowList(request)) {
 			String token = request.getHeader(AUTHORIZATION);
 			String jwt = resolveJwt(token);
 			authenticate(jwt);
 		}
 	}
 
-	private boolean isSecureUri(HttpServletRequest request) {
+	private boolean isNotAllowList(HttpServletRequest request) {
 		return isNotGetPlans(request.getRequestURI(), request.getMethod()) && isNotSecuredUri(request.getRequestURI());
 	}
 
@@ -69,8 +69,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	}
 
 	private String resolveJwt(String token) {
-		BearerUtils.validate(token);
-		return BearerUtils.resolve(token);
+		BearerUtil.validate(token);
+		return BearerUtil.resolve(token);
 	}
 
 	private void authenticate(String jwt) {
