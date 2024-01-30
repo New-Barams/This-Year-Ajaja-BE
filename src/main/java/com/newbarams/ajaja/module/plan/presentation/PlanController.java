@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.newbarams.ajaja.global.common.AjajaResponse;
+import com.newbarams.ajaja.global.security.annotation.Authorization;
 import com.newbarams.ajaja.global.security.annotation.UserId;
 import com.newbarams.ajaja.global.security.jwt.JwtParser;
 import com.newbarams.ajaja.global.util.BearerUtil;
@@ -49,7 +50,9 @@ public class PlanController {
 
 	private final JwtParser jwtParser; // todo: delete when authentication filtering update
 
+	@Authorization
 	@PostMapping("/{id}/ajaja")
+	@ResponseStatus(OK)
 	public AjajaResponse<Void> switchAjaja(@UserId Long userId, @PathVariable Long id) {
 		switchAjajaService.switchOrAddIfNotExist(userId, id);
 		return AjajaResponse.ok();
@@ -75,6 +78,7 @@ public class PlanController {
 		return jwtParser.parseId(BearerUtil.resolve(accessToken));
 	}
 
+	@Authorization
 	@PostMapping
 	@ResponseStatus(CREATED)
 	public ResponseEntity<AjajaResponse<Void>> createPlan(
@@ -88,6 +92,7 @@ public class PlanController {
 		return ResponseEntity.created(uri).body(AjajaResponse.ok());
 	}
 
+	@Authorization
 	@DeleteMapping("/{id}")
 	@ResponseStatus(OK)
 	public AjajaResponse<Void> deletePlan(
@@ -99,6 +104,7 @@ public class PlanController {
 		return AjajaResponse.ok();
 	}
 
+	@Authorization
 	@PutMapping("/{id}/public")
 	@ResponseStatus(OK)
 	public AjajaResponse<Void> updatePlanPublicStatus(@PathVariable Long id, @UserId Long userId) {
@@ -106,6 +112,7 @@ public class PlanController {
 		return AjajaResponse.ok();
 	}
 
+	@Authorization
 	@PutMapping("/{id}/remindable")
 	@ResponseStatus(OK)
 	public AjajaResponse<Void> updatePlanRemindStatus(@PathVariable Long id, @UserId Long userId) {
@@ -113,6 +120,7 @@ public class PlanController {
 		return AjajaResponse.ok();
 	}
 
+	@Authorization
 	@PutMapping("/{id}/ajaja")
 	@ResponseStatus(OK)
 	public AjajaResponse<Void> updatePlanAjajaStatus(@PathVariable Long id, @UserId Long userId) {
@@ -120,6 +128,7 @@ public class PlanController {
 		return AjajaResponse.ok();
 	}
 
+	@Authorization
 	@PutMapping("/{id}")
 	@ResponseStatus(OK)
 	public AjajaResponse<PlanResponse.Detail> updatePlan(
@@ -132,6 +141,7 @@ public class PlanController {
 		return AjajaResponse.ok(response);
 	}
 
+	@Authorization
 	@GetMapping
 	@ResponseStatus(OK)
 	public AjajaResponse<List<PlanResponse.GetAll>> getAllPlans(@ModelAttribute PlanRequest.GetAll request) {

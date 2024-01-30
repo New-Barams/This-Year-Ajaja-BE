@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.newbarams.ajaja.global.common.AjajaResponse;
+import com.newbarams.ajaja.global.security.annotation.Authorization;
 import com.newbarams.ajaja.global.security.annotation.UserId;
 import com.newbarams.ajaja.module.feedback.application.LoadFeedbackInfoService;
 import com.newbarams.ajaja.module.feedback.application.UpdateFeedbackService;
@@ -27,6 +28,7 @@ public class FeedbackController {
 	private final UpdateFeedbackService updateFeedbackService;
 	private final LoadFeedbackInfoService loadFeedbackInfoService;
 
+	@Authorization
 	@PostMapping("/{planId}")
 	@ResponseStatus(OK)
 	public AjajaResponse<Void> updateFeedback(
@@ -38,6 +40,7 @@ public class FeedbackController {
 		return AjajaResponse.ok();
 	}
 
+	@Authorization
 	@GetMapping("/{planId}")
 	@ResponseStatus(OK)
 	public AjajaResponse<FeedbackResponse.FeedbackInfo> getFeedbackInfo(

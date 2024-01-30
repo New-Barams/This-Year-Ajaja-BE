@@ -10,10 +10,13 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import com.newbarams.ajaja.global.security.common.UserAdapter;
 
 /**
- * Custom annotation of @AuthenticationPrincipal with SpEL(Spring Expression Language) <br>
+ * Custom annotation of @AuthenticationPrincipal with SpEL(Spring Expression Language).
  * This returns User ID which already authenticated from UserAdapter.
- * @author hejow
+ * <p>
+ * Should be used with @Authorization
  * @see UserAdapter
+ * @see Authorization
+ * @author hejow
  */
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
