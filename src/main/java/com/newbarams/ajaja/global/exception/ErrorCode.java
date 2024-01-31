@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ErrorCode {
 	// 400
-	NOT_SUPPORT_END_POINT(BAD_REQUEST, "지원하지 않는 API 입니다."),
 	BEAN_VALIDATION_FAIL_EXCEPTION(BAD_REQUEST, "올바르지 않은 데이터입니다."),
 	INVALID_REQUEST(BAD_REQUEST, "올바른 형식의 데이터가 입력되지 않았습니다."),
 	INVALID_BEARER_TOKEN(BAD_REQUEST, "유효한 Bearer 토큰의 형식이 아닙니다."),
@@ -31,6 +30,7 @@ public enum ErrorCode {
 	REMIND_TASK_FAILED(BAD_REQUEST, "리마인드 전송에 실패하였습니다."),
 
 	// 404
+	NOT_SUPPORT_END_POINT(NOT_FOUND, "지원하지 않는 API 입니다."),
 	USER_NOT_FOUND(NOT_FOUND, "사용자가 존재하지 않습니다."),
 	CERTIFICATION_NOT_FOUND(NOT_FOUND, "인증 요청 시간이 초과하였거나 인증을 요청한 적이 없습니다."),
 	NEVER_LOGIN(NOT_FOUND, "로그인한 이력을 찾을 수 없습니다. 다시 로그인 해주세요."),

@@ -28,8 +28,8 @@ class AuthorizeRequestFilterTest {
 
 		// then
 		result.andExpectAll(
-			status().isBadRequest(),
-			jsonPath("$.httpStatus").value(BAD_REQUEST.name()),
+			status().isNotFound(),
+			jsonPath("$.httpStatus").value(NOT_FOUND.name()),
 			jsonPath("$.errorName").value(NOT_SUPPORT_END_POINT.name()),
 			jsonPath("$.errorMessage").value(NOT_SUPPORT_END_POINT.getMessage())
 		);
