@@ -10,10 +10,8 @@ import com.newbarams.ajaja.module.plan.dto.BanWordValidationResult;
 
 @Component
 public class BanWordFilter {
-	private final WordBundle wordBundle = new WordBundle();
-
 	public BanWordValidationResult validate(String originSentence) {
-		Collection<Emit> badWordResult = wordBundle.getBanWord().parseText(originSentence);
+		Collection<Emit> badWordResult = WordBundle.banWord.parseText(originSentence);
 		return getResult(badWordResult, originSentence);
 	}
 
