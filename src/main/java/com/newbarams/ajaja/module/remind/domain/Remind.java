@@ -34,14 +34,12 @@ public class Remind extends SelfValidating<Remind> {
 	public static Remind plan(Long userId, Long planId, String message, int remindMonth, int remindDate) {
 		return new Remind(
 			new Receiver(userId, null, null, null),
-			new Target(planId, null), message, Type.PLAN, remindMonth,
-			remindDate);
+			new Target(planId, null), message, Type.PLAN, remindMonth, remindDate);
 	}
 
 	public static Remind ajaja(Long userId, Long planId, String message, int remindMonth, int remindDate) {
 		return new Remind(new Receiver(userId, null, null, null), new Target(planId, null), message, Type.AJAJA,
-			remindMonth,
-			remindDate);
+			remindMonth, remindDate);
 	}
 
 	public Long getUserId() {

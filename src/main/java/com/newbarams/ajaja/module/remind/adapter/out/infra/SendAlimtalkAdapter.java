@@ -28,7 +28,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class SendAlimtalkAdapter implements SendRemindPort {
 	private static final List<String> HANDLING_ERROR_CODES = List.of("400", "401", "403", "404", "500");
-	private static final String FEEDBACK_URL = "https://www.ajaja.me/plans/%d";
+	private static final String FEEDBACK_URL
+		= "https://www.ajaja.me/feedbacks/evaluate?title=%s&month=%d&day=%d&planId=%d";
 	private static final String END_POINT = "KAKAO";
 	private static final int RETRY_MAX_COUNT = 5;
 
@@ -42,7 +43,7 @@ public class SendAlimtalkAdapter implements SendRemindPort {
 	public String send(String remindTime, TimeValue now) {
 		List<Remind> reminds = findRemindablePlanPort.findAllRemindablePlan(remindTime, END_POINT, now);
 		reminds.forEach(remind -> {
-			String url = FEEDBACK_URL.formatted(remind.getPlanId());
+			String url = FEEDBACK_URL.formatted(remind.getTitle(), now.getMonth(), now.getDate(), remind.getPlanId());
 			sendAlimtalk(remind, url).exceptionally(e -> {
 				log.warn("[NCP] Remind Error Occur : {}", e.getMessage());
 				throw new AjajaException(ErrorCode.EXTERNAL_API_FAIL);
