@@ -13,8 +13,8 @@ public class Remind extends SelfValidating<Remind> {
 		AJAJA
 	}
 
-	private UserInfo userInfo;
-	private PlanInfo planInfo;
+	private final Receiver receiver;
+	private final Target target;
 	private final Type type;
 
 	@NotBlank
@@ -22,9 +22,9 @@ public class Remind extends SelfValidating<Remind> {
 	private final String message;
 	private final RemindDate remindDate;
 
-	public Remind(UserInfo userInfo, PlanInfo planInfo, String message, Type type, int remindMonth, int remindDay) {
-		this.userInfo = userInfo;
-		this.planInfo = planInfo;
+	public Remind(Receiver receiver, Target target, String message, Type type, int remindMonth, int remindDay) {
+		this.receiver = receiver;
+		this.target = target;
 		this.message = message;
 		this.type = type;
 		this.remindDate = new RemindDate(remindMonth, remindDay);
@@ -32,28 +32,39 @@ public class Remind extends SelfValidating<Remind> {
 	}
 
 	public static Remind plan(Long userId, Long planId, String message, int remindMonth, int remindDate) {
-		return new Remind(new UserInfo(userId, null), new PlanInfo(planId, null), message, Type.PLAN, remindMonth,
+		return new Remind(
+			new Receiver(userId, null, null, null),
+			new Target(planId, null), message, Type.PLAN, remindMonth,
 			remindDate);
 	}
 
 	public static Remind ajaja(Long userId, Long planId, String message, int remindMonth, int remindDate) {
-		return new Remind(new UserInfo(userId, null), new PlanInfo(planId, null), message, Type.AJAJA, remindMonth,
+		return new Remind(new Receiver(userId, null, null, null), new Target(planId, null), message, Type.AJAJA,
+			remindMonth,
 			remindDate);
 	}
 
 	public Long getUserId() {
-		return this.userInfo.getId();
+		return this.receiver.getId();
+	}
+
+	public String getRemindType() {
+		return this.receiver.getRemindType();
 	}
 
 	public String getEmail() {
-		return this.userInfo.getEmail();
+		return this.receiver.getEmail();
+	}
+
+	public String getPhoneNumber() {
+		return this.receiver.getPhoneNumber();
 	}
 
 	public String getTitle() {
-		return this.planInfo.getTitle();
+		return this.target.getTitle();
 	}
 
 	public Long getPlanId() {
-		return this.planInfo.getId();
+		return this.target.getId();
 	}
 }
