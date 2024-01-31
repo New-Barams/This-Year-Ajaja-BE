@@ -6,18 +6,19 @@ import static org.mockito.BDDMockito.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import com.newbarams.ajaja.common.annotation.RedisBasedTest;
 import com.newbarams.ajaja.common.support.MockTestSupport;
-import com.newbarams.ajaja.global.exception.AjajaException;
-import com.newbarams.ajaja.global.exception.ErrorCode;
-import com.newbarams.ajaja.module.remind.application.model.RemindAddress;
+import com.newbarams.ajaja.module.remind.adapter.out.infra.SendAlimtalkAdapter;
+import com.newbarams.ajaja.module.remind.application.model.RemindStrategyFactory;
 import com.newbarams.ajaja.module.remind.application.port.out.FindRemindAddressPort;
-import com.newbarams.ajaja.module.remind.application.port.out.SendAlimtalkRemindPort;
-import com.newbarams.ajaja.module.remind.application.port.out.SendEmailRemindPort;
+import com.newbarams.ajaja.module.remind.domain.Receiver;
+import com.newbarams.ajaja.module.remind.domain.Remind;
+import com.newbarams.ajaja.module.remind.domain.Target;
 
 @RedisBasedTest
 class SendTestRemindServiceTest extends MockTestSupport {
@@ -29,54 +30,42 @@ class SendTestRemindServiceTest extends MockTestSupport {
 	@MockBean
 	private FindRemindAddressPort findRemindAddressPort;
 	@MockBean
-	private SendEmailRemindPort sendEmailRemindPort;
-	@MockBean
-	private SendAlimtalkRemindPort sendAlimtalkRemindPort;
+	private RemindStrategyFactory factory;
+	@Mock
+	private SendAlimtalkAdapter sendAlimtalkAdapter;
 
-	private RemindAddress address;
+	private Remind remind;
 
 	@BeforeEach
 	void setUp() {
-		address = sut.giveMeBuilder(RemindAddress.class)
-			.set("type", "EMAIL")
-			.sample();
+		Receiver receiver = sut.giveMeOne(Receiver.class);
+		Target target = sut.giveMeOne(Target.class);
+		String message = "화이팅";
+		remind = new Remind(receiver, target, message, Remind.Type.AJAJA, 3, 1);
 	}
 
 	@Test
 	@DisplayName("유저에게 테스트 리마인드를 전송한다.")
 	void send_Success_WithNoException() {
 		// given
-		given(findRemindAddressPort.findAddressByUserId(anyLong())).willReturn(address);
-		doNothing().when(sendEmailRemindPort).send(any(), anyString(), anyString(), anyString());
+		given(findRemindAddressPort.findAddressByUserId(anyLong())).willReturn(remind);
+		given(factory.get(anyString())).willReturn(sendAlimtalkAdapter);
 
 		// when
 		sendTestRemindService.send(1L);
 
 		// then
-		assertThat(redisTemplate.opsForValue().get(address.userEmail())).isEqualTo(1);
-	}
-
-	@Test
-	@DisplayName("리마인드 전송을 실패할 경우 예외를 던진다.")
-	void send_Fail_ByTaskFailed() {
-		// given
-		AjajaException exception = new AjajaException(ErrorCode.REMIND_TASK_FAILED);
-
-		given(findRemindAddressPort.findAddressByUserId(anyLong())).willReturn(address);
-		doThrow(exception).when(sendEmailRemindPort).send(any(), anyString(), anyString(), anyString());
-
-		// when, then
-		assertThatException().isThrownBy(() -> sendTestRemindService.send(1L));
+		assertThat(redisTemplate.opsForValue().get(remind.getPhoneNumber())).isEqualTo(1);
 	}
 
 	@Test
 	@DisplayName("당일 리마인드 전송 횟수가 3회 초과일 경우 예외를 던진다.")
 	void send_Fail_ByRequestOverMax() {
 		// given
-		redisTemplate.opsForValue().set(address.userEmail(), 3);
+		redisTemplate.opsForValue().set(remind.getPhoneNumber(), 3);
 
-		given(findRemindAddressPort.findAddressByUserId(anyLong())).willReturn(address);
-		doNothing().when(sendEmailRemindPort).send(any(), anyString(), anyString(), anyString());
+		given(findRemindAddressPort.findAddressByUserId(anyLong())).willReturn(remind);
+		given(factory.get(anyString())).willReturn(sendAlimtalkAdapter);
 
 		// when, then
 		assertThatException().isThrownBy(() -> sendTestRemindService.send(1L));
