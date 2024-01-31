@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.global.security.jwt.util;
+package com.newbarams.ajaja.global.security.jwt;
 
 import static org.assertj.core.api.Assertions.*;
 

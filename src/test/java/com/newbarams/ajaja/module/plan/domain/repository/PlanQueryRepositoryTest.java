@@ -216,4 +216,21 @@ class PlanQueryRepositoryTest extends MonkeySupport {
 			() -> planQueryRepository.findAllRemindablePlan("MORNING", TimeValue.now())
 		);
 	}
+
+	@Test
+	@DisplayName("계획 전체 조회 시 탈퇴한 회원의 계획도 조회되어야 한다.")
+	void findAllByCursorAndSorting_Success_WithDeletedUser() {
+		// given
+		planRepository.save(plan);
+		PlanRequest.GetAll latestReq = new PlanRequest.GetAll("latest", true, null, null);
+
+		// when
+		user.delete();
+		userRepository.save(userMapper.toEntity(user));
+
+		List<PlanResponse.GetAll> latestRes = planQueryRepository.findAllByCursorAndSorting(latestReq);
+
+		// then
+		assertThat(latestRes).hasSize(1);
+	}
 }

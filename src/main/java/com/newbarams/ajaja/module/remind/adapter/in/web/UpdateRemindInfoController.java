@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.newbarams.ajaja.global.common.AjajaResponse;
-import com.newbarams.ajaja.global.security.common.UserId;
+import com.newbarams.ajaja.global.security.annotation.Authorization;
+import com.newbarams.ajaja.global.security.annotation.UserId;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.remind.application.port.in.UpdateRemindInfoUseCase;
 
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class UpdateRemindInfoController {
 	private final UpdateRemindInfoUseCase updateRemindInfoUseCase;
 
+	@Authorization
 	@PutMapping("/plans/{planId}/reminds")
 	@ResponseStatus(HttpStatus.OK)
 	public AjajaResponse<Void> modifyRemindInfo(

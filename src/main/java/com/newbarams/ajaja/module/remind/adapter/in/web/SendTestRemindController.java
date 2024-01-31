@@ -6,7 +6,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.newbarams.ajaja.global.common.AjajaResponse;
-import com.newbarams.ajaja.global.security.common.UserId;
+import com.newbarams.ajaja.global.security.annotation.Authorization;
+import com.newbarams.ajaja.global.security.annotation.UserId;
 import com.newbarams.ajaja.module.remind.application.port.in.SendTestRemindUseCase;
 
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class SendTestRemindController {
 	private final SendTestRemindUseCase sendTestRemindUseCase;
 
+	@Authorization
 	@PostMapping("/reminds/test")
 	@ResponseStatus(HttpStatus.OK)
 	public AjajaResponse<String> sendTestRemind(@UserId Long userId) {

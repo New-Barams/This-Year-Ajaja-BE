@@ -121,10 +121,11 @@ public class PlanQueryRepository {
 
 	public List<PlanResponse.GetAll> findAllByCursorAndSorting(PlanRequest.GetAll conditions) {
 		List<Tuple> tuples = queryFactory.select(planEntity, userEntity.nickname)
-			.from(planEntity, userEntity)
+			.from(planEntity)
 
-			.where(planEntity.userId.eq(userEntity.id),
-				planEntity.isPublic.eq(true),
+			.leftJoin(userEntity).on(userEntity.id.eq(planEntity.userId))
+
+			.where(planEntity.isPublic.eq(true),
 				isEqualsYear(conditions.isCurrent()),
 				cursorPagination(conditions))
 

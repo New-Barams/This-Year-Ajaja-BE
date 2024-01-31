@@ -25,7 +25,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.newbarams.ajaja.common.annotation.ApiTest;
 import com.newbarams.ajaja.common.annotation.ParameterizedApiTest;
-import com.newbarams.ajaja.global.security.jwt.util.JwtParser;
+import com.newbarams.ajaja.global.security.jwt.JwtParser;
 import com.newbarams.ajaja.module.ajaja.application.SwitchAjajaService;
 import com.newbarams.ajaja.module.auth.application.port.in.LoginUseCase;
 import com.newbarams.ajaja.module.auth.application.port.in.ReissueTokenUseCase;

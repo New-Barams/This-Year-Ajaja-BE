@@ -30,6 +30,7 @@ public enum ErrorCode {
 	REMIND_TASK_FAILED(BAD_REQUEST, "리마인드 전송에 실패하였습니다."),
 
 	// 404
+	NOT_SUPPORT_END_POINT(NOT_FOUND, "지원하지 않는 API 입니다."),
 	USER_NOT_FOUND(NOT_FOUND, "사용자가 존재하지 않습니다."),
 	CERTIFICATION_NOT_FOUND(NOT_FOUND, "인증 요청 시간이 초과하였거나 인증을 요청한 적이 없습니다."),
 	NEVER_LOGIN(NOT_FOUND, "로그인한 이력을 찾을 수 없습니다. 다시 로그인 해주세요."),

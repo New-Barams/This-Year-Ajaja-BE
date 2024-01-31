@@ -10,7 +10,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class BearerUtils {
+public class BearerUtil {
 	private static final String BEARER_PREFIX = "Bearer ";
 
 	public static String toBearer(String token) {
