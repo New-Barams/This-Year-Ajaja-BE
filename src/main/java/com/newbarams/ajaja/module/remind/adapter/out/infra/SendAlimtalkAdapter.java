@@ -1,6 +1,7 @@
 package com.newbarams.ajaja.module.remind.adapter.out.infra;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
@@ -42,7 +43,7 @@ public class SendAlimtalkAdapter implements SendRemindPort {
 	@Override
 	public String send(String remindTime, TimeValue now) {
 		List<Remind> reminds = findRemindablePlanPort.findAllRemindablePlan(remindTime, END_POINT, now);
-		reminds.forEach(remind -> {
+		reminds.stream().filter(remind -> !Objects.equals(remind.getPhoneNumber(), "01000000000")).forEach(remind -> {
 			String url = FEEDBACK_URL.formatted(remind.getTitle(), now.getMonth(), now.getDate(), remind.getPlanId());
 			sendAlimtalk(remind, url).exceptionally(e -> {
 				log.warn("[NCP] Remind Error Occur : {}", e.getMessage());
