@@ -15,14 +15,11 @@ import com.newbarams.ajaja.common.support.MockTestSupport;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 import com.newbarams.ajaja.module.plan.mapper.PlanMapper;
 import com.newbarams.ajaja.module.remind.application.port.out.FindPlanInfoPort;
-import com.newbarams.ajaja.module.remind.application.port.out.LoadTotalAchievePort;
 
 class LoadPlanInfoServiceTest extends MockTestSupport {
 	@InjectMocks
 	private GetPlanInfoService loadPlanInfoService;
 
-	@Mock
-	private LoadTotalAchievePort loadTotalAchievePort;
 	@Mock
 	private FindPlanInfoPort findPlanInfoPort;
 	@Mock
@@ -49,7 +46,7 @@ class LoadPlanInfoServiceTest extends MockTestSupport {
 		loadPlanInfoService.load(1L);
 
 		// then
-		then(loadTotalAchievePort).should(times(execute)).load(anyLong(), anyInt());
+		then(mapper).should(times(execute)).toResponse(anyInt(), anyInt(), anyList());
 	}
 
 	@Test
