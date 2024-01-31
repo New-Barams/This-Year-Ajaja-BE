@@ -201,14 +201,20 @@ public class PlanQueryRepository {
 			.fetch();
 	}
 
-	public List<RemindMessageInfo> findAllRemindablePlan(String remindTime, TimeValue time) {
-		return queryFactory.select(planEntity, userEntity.remindEmail)
+	public List<RemindMessageInfo> findAllRemindablePlan(String remindTime, String remindType, TimeValue time) {
+		return queryFactory.select(planEntity, userEntity.remindEmail, userEntity.phoneNumber, userEntity.remindType)
 			.from(planEntity)
 			.join(userEntity).on(userEntity.id.eq(planEntity.userId))
 			.where(planEntity.canRemind
-				.and(planEntity.remindTime.eq(remindTime).and(isRemindable(time))))
+				.and(planEntity.remindTime.eq(remindTime).and(isRemindable(time)))
+				.and(userEntity.remindType.eq(remindType).or(userEntity.remindType.eq("BOTH")))
+			)
 			.fetch().stream()
-			.map(t -> planMapper.toModel(t.get(planEntity), t.get(userEntity.remindEmail)))
+			.map(t -> planMapper.toModel(
+				t.get(planEntity),
+				t.get(userEntity.remindType),
+				t.get(userEntity.remindEmail),
+				t.get(userEntity.phoneNumber)))
 			.toList();
 	}
 

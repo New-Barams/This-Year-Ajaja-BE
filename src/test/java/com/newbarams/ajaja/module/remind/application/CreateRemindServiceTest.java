@@ -10,9 +10,9 @@ import org.mockito.Mock;
 import com.newbarams.ajaja.common.support.MockTestSupport;
 import com.newbarams.ajaja.global.common.TimeValue;
 import com.newbarams.ajaja.module.remind.adapter.out.persistence.SaveRemindAdapter;
-import com.newbarams.ajaja.module.remind.domain.PlanInfo;
+import com.newbarams.ajaja.module.remind.domain.Receiver;
 import com.newbarams.ajaja.module.remind.domain.Remind;
-import com.newbarams.ajaja.module.remind.domain.UserInfo;
+import com.newbarams.ajaja.module.remind.domain.Target;
 
 class CreateRemindServiceTest extends MockTestSupport {
 	@InjectMocks
@@ -25,10 +25,10 @@ class CreateRemindServiceTest extends MockTestSupport {
 	@DisplayName("보낸 리마인드 정보를 담은 리마인드 객체를 저장한다.")
 	void save_Success_WithNoException() {
 		// given
-		UserInfo userInfo = new UserInfo(1L, "yamsang2002@naver.com");
-		PlanInfo planInfo = new PlanInfo(1L, "화이팅");
+		Receiver receiver = new Receiver(1L, null, "yamsang2002@naver.com", null);
+		Target target = new Target(1L, "화이팅");
 		String message = "화이팅";
-		Remind remind = new Remind(userInfo, planInfo, message, Remind.Type.AJAJA, 3, 1);
+		Remind remind = new Remind(receiver, target, message, Remind.Type.AJAJA, 3, 1);
 
 		// when
 		createRemindService.create(remind, TimeValue.now());
