@@ -63,7 +63,7 @@ public class PlanRequest {
 	}
 
 	@Data
-	public static class BanWord {
+	public static class CheckBanWord {
 		private final String title;
 		private final String description;
 	}

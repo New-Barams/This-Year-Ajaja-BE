@@ -142,7 +142,7 @@ public class PlanController {
 	@PostMapping("/validate")
 	@ResponseStatus(OK)
 	public AjajaResponse<Map<String, BanWordValidationResult>> validateBanWord(
-		@RequestBody PlanRequest.BanWord request
+		@RequestBody PlanRequest.CheckBanWord request
 	) {
 		Map<String, BanWordValidationResult> response = validateContentService.check(request);
 		return AjajaResponse.ok(response);

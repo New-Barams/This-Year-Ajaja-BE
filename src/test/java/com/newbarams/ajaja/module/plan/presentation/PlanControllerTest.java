@@ -975,7 +975,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 	@DisplayName("[비속어 검증] 요청된 데이터에 대한 검증을 수행한다.")
 	void validateContent_Success() throws Exception {
 		// given
-		PlanRequest.BanWord request = new PlanRequest.BanWord("title", "description");
+		PlanRequest.CheckBanWord request = new PlanRequest.CheckBanWord("title", "description");
 
 		Map<String, BanWordValidationResult> response = new HashMap<>();
 		response.put("title", new BanWordValidationResult(true, "title", List.of(new Emit(0, 1, "ti"))));

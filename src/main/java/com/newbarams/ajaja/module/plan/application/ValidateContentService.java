@@ -22,7 +22,7 @@ public class ValidateContentService {
 
 	private final BanWordFilter banWordFilter;
 
-	public Map<String, BanWordValidationResult> check(PlanRequest.BanWord request) {
+	public Map<String, BanWordValidationResult> check(PlanRequest.CheckBanWord request) {
 		Map<String, BanWordValidationResult> result = new HashMap<>(MAP_CAPACITY);
 
 		result.put(CONTENT_TITLE, banWordFilter.validate(request.getTitle()));
