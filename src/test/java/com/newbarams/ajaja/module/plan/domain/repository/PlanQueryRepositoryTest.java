@@ -213,7 +213,7 @@ class PlanQueryRepositoryTest extends MonkeySupport {
 	void findAllRemindablePlan_Success_WithNoException() {
 		// when,then
 		Assertions.assertThatNoException().isThrownBy(
-			() -> planQueryRepository.findAllRemindablePlan("MORNING", TimeValue.now())
+			() -> planQueryRepository.findAllRemindablePlan("MORNING", "EMAIL", TimeValue.now())
 		);
 	}
 

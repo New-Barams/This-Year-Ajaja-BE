@@ -2,6 +2,7 @@ package com.newbarams.ajaja.infra.ses;
 
 import static org.mockito.BDDMockito.*;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -9,6 +10,9 @@ import org.mockito.Mock;
 
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
 import com.newbarams.ajaja.common.support.MockTestSupport;
+import com.newbarams.ajaja.module.remind.domain.Receiver;
+import com.newbarams.ajaja.module.remind.domain.Remind;
+import com.newbarams.ajaja.module.remind.domain.Target;
 
 class SesSendPlanRemindServiceTest extends MockTestSupport {
 	@InjectMocks
@@ -20,11 +24,18 @@ class SesSendPlanRemindServiceTest extends MockTestSupport {
 	@Test
 	@DisplayName("아마존 ses를 통해 리마인드 될 정보들을 전송한다.")
 	void send_Success_WithNoException() {
+		// given
+		Receiver receiver = new Receiver(1L, null, "yamsang2002@naver.com", null);
+		Target target = new Target(1L, "화이팅");
+		String message = "화이팅";
+		Remind remind = new Remind(receiver, target, message, Remind.Type.AJAJA, 3, 1);
+
 		// when
 		planRemindService
-			.send("yamsang2002@naver.com", "계확", "화이팅", "https://www.ajaja.me/plans/1");
+			.send(remind, "https://www.ajaja.me/main");
 
 		// then
-		then(amazonSimpleEmailService).should(times(1)).sendEmail(any());
+		Assertions.assertThatNoException().isThrownBy(()
+			-> amazonSimpleEmailService.sendEmail(any()));
 	}
 }

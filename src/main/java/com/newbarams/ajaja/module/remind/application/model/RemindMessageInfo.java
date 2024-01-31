@@ -4,6 +4,8 @@ import com.newbarams.ajaja.module.plan.domain.Plan;
 
 public record RemindMessageInfo(
 	Plan plan,
-	String email
+	String remindType,
+	String email,
+	String phoneNumber
 ) {
 }

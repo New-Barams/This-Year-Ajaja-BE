@@ -6,14 +6,18 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 @Getter
-public class UserInfo extends SelfValidating<UserInfo> {
+public class Receiver extends SelfValidating<Receiver> {
 	@NotNull
 	private final Long id;
 	private final String email;
+	private final String phoneNumber;
+	private final String remindType;
 
-	public UserInfo(Long id, String email) {
+	public Receiver(Long id, String remindType, String email, String phoneNumber) {
 		this.id = id;
+		this.remindType = remindType;
 		this.email = email;
+		this.phoneNumber = phoneNumber;
 		validateSelf();
 	}
 }

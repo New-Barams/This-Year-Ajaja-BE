@@ -1,5 +1,5 @@
 <included>
-    <appender name="FILE-DEBUG" class="ch.qos.logback.core.ConsoleAppender">
+    <appender name="FILE-DEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>./log/debug/${BY_DATE}-debug.log</file>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>DEBUG</level>
