@@ -45,7 +45,8 @@ public class GetPlanInfoService implements GetPlanInfoUseCase {
 		List<PlanResponse.MainInfo> planInfoResponses = new ArrayList<>();
 
 		for (int planYear = currentYear; planYear >= firstYear; planYear--) {
-			int totalAchieve = loadTotalAchievePort.load(userId, planYear);
+			int totalAchieve = (int)planInfos.stream().filter(plan -> plan.getYear() == currentYear).mapToDouble(
+				PlanResponse.PlanInfo::getAchieveRate).average().orElse(0);
 			PlanResponse.MainInfo planInfoResponse = mapper.toResponse(planYear, totalAchieve, planInfos);
 			planInfoResponses.add(planInfoResponse);
 		}
