@@ -6,8 +6,11 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.ahocorasick.trie.Emit;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +23,7 @@ import com.newbarams.ajaja.common.util.ApiTag;
 import com.newbarams.ajaja.common.util.RestDocument;
 import com.newbarams.ajaja.global.exception.AjajaException;
 import com.newbarams.ajaja.global.exception.ErrorCode;
+import com.newbarams.ajaja.module.plan.dto.BanWordValidationResult;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 
@@ -961,6 +965,49 @@ class PlanControllerTest extends WebMvcTestSupport {
 			RestDocument.builder()
 				.identifier("switch-ajaja-fail-" + identifier)
 				.tag(ApiTag.PLAN)
+				.secured(true)
+				.result(result)
+				.generateDocs()
+		);
+	}
+
+	@ApiTest
+	@DisplayName("[비속어 검증] 요청된 데이터에 대한 검증을 수행한다.")
+	void validateContent_Success() throws Exception {
+		// given
+		PlanRequest.BanWord request = new PlanRequest.BanWord("title", "description");
+
+		Map<String, BanWordValidationResult> response = new HashMap<>();
+		response.put("title", new BanWordValidationResult("title", List.of(new Emit(0, 1, "ti"))));
+		response.put("description", new BanWordValidationResult("description", List.of(new Emit(0, 1, "de"))));
+
+		given(validateContentService.check(request)).willReturn(response);
+
+		// when
+		var result = mockMvc.perform(post(PLAN_END_POINT.concat("/validate"))
+			.contentType(MediaType.APPLICATION_JSON)
+			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
+			.content(objectMapper.writeValueAsString(request)));
+
+		// then
+		result.andExpectAll(
+			status().isOk(),
+			jsonPath("$.success").value(Boolean.TRUE),
+			jsonPath("$.data.title.badWordResults[0].start").value(0),
+			jsonPath("$.data.title.badWordResults[0].end").value(1),
+			jsonPath("$.data.title.badWordResults[0].keyword").value("ti"),
+			jsonPath("$.data.description.badWordResults[0].start").value(0),
+			jsonPath("$.data.description.badWordResults[0].end").value(1),
+			jsonPath("$.data.description.badWordResults[0].keyword").value("de")
+		);
+
+		// docs
+		result.andDo(
+			RestDocument.builder()
+				.identifier("content-validate-success")
+				.tag(ApiTag.PLAN)
+				.summary("비속어 검증 API")
+				.description("요청한 데이터로 비속어를 검증합니다.")
 				.secured(true)
 				.result(result)
 				.generateDocs()

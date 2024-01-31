@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -29,6 +30,8 @@ import com.newbarams.ajaja.module.plan.application.CreatePlanService;
 import com.newbarams.ajaja.module.plan.application.DeletePlanService;
 import com.newbarams.ajaja.module.plan.application.LoadPlanService;
 import com.newbarams.ajaja.module.plan.application.UpdatePlanService;
+import com.newbarams.ajaja.module.plan.application.ValidateContentService;
+import com.newbarams.ajaja.module.plan.dto.BanWordValidationResult;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 
@@ -46,6 +49,7 @@ public class PlanController {
 	private final DeletePlanService deletePlanService;
 	private final UpdatePlanService updatePlanService;
 	private final SwitchAjajaService switchAjajaService;
+	private final ValidateContentService validateContentService;
 
 	private final JwtParser jwtParser; // todo: delete when authentication filtering update
 
@@ -133,5 +137,14 @@ public class PlanController {
 	public AjajaResponse<List<PlanResponse.GetAll>> getAllPlans(@ModelAttribute PlanRequest.GetAll request) {
 		List<PlanResponse.GetAll> responses = getPlanService.loadAllPlans(request);
 		return AjajaResponse.ok(responses);
+	}
+
+	@PostMapping("/validate")
+	@ResponseStatus(OK)
+	public AjajaResponse<Map<String, BanWordValidationResult>> validateBanWord(
+		@RequestBody PlanRequest.BanWord request
+	) {
+		Map<String, BanWordValidationResult> response = validateContentService.check(request);
+		return AjajaResponse.ok(response);
 	}
 }

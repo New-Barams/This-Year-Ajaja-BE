@@ -61,4 +61,10 @@ public class PlanRequest {
 		private final Integer ajaja;
 		private final Long start;
 	}
+
+	@Data
+	public static class BanWord {
+		private final String title;
+		private final String description;
+	}
 }

@@ -36,6 +36,7 @@ import com.newbarams.ajaja.module.plan.application.CreatePlanService;
 import com.newbarams.ajaja.module.plan.application.DeletePlanService;
 import com.newbarams.ajaja.module.plan.application.LoadPlanService;
 import com.newbarams.ajaja.module.plan.application.UpdatePlanService;
+import com.newbarams.ajaja.module.plan.application.ValidateContentService;
 import com.newbarams.ajaja.module.remind.application.port.in.GetPlanInfoUseCase;
 import com.newbarams.ajaja.module.remind.application.port.in.GetRemindInfoUseCase;
 import com.newbarams.ajaja.module.remind.application.port.in.SendTestRemindUseCase;
@@ -138,6 +139,8 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 	protected UpdatePlanService updatePlanService;
 	@MockBean
 	protected SwitchAjajaService switchAjajaService;
+	@MockBean
+	protected ValidateContentService validateContentService;
 
 	// Feedback
 	@MockBean
