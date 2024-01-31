@@ -14,7 +14,14 @@ public class BanWordFilter {
 
 	public BanWordValidationResult validate(String originSentence) {
 		Collection<Emit> badWordResult = wordBundle.getBanWord().parseText(originSentence);
+		return getResult(badWordResult, originSentence);
+	}
 
-		return new BanWordValidationResult(originSentence, List.copyOf(badWordResult));
+	private BanWordValidationResult getResult(Collection<Emit> result, String originSentence) {
+		if (result.isEmpty()) {
+			return new BanWordValidationResult(false, originSentence);
+		}
+
+		return new BanWordValidationResult(true, originSentence, List.copyOf(result));
 	}
 }

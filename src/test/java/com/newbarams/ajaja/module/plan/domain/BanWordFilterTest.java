@@ -24,7 +24,19 @@ class BanWordFilterTest {
 
 		// then
 		assertThat(result.getBadWordResults()).hasSize(2);  // 비속어 개수
+		assertThat(result.isExistBanWord()).isTrue();
 		assertThat(result.getBadWordResults().get(0)).isEqualByComparingTo(expected);
 		assertThat(result.getBadWordResults().get(1)).isEqualByComparingTo(expected2);
+	}
+
+	@Test
+	@DisplayName("문장에 비속어가 포함되지 않았을 경우, 비속어 존재 여부가 false로 반환된다.")
+	void badWordFilter_Success_WithoutBanWord() {
+		// given, when
+		BanWordValidationResult result = banWordFilter.validate("바른말 고운말");
+
+		// then
+		assertThat(result.getBadWordResults()).hasSize(0);  // 비속어 개수
+		assertThat(result.isExistBanWord()).isFalse();
 	}
 }
