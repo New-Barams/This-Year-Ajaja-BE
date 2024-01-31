@@ -1,6 +1,6 @@
 package com.newbarams.ajaja.module.auth.adapter.out.kakao;
 
-import static com.newbarams.ajaja.global.util.BearerUtils.*;
+import static com.newbarams.ajaja.global.util.BearerUtil.*;
 
 import org.springframework.stereotype.Component;
 

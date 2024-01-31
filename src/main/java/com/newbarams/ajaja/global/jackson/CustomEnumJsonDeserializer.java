@@ -19,6 +19,7 @@ class CustomEnumJsonDeserializer extends StdDeserializer<Enum<?>> implements Con
 		this(null);
 	}
 
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override
 	public Enum<?> deserialize(JsonParser parser, DeserializationContext ctxt) throws IOException {
 		String target = parser.getValueAsString();

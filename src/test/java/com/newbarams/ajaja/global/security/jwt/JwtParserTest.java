@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.global.security.jwt.util;
+package com.newbarams.ajaja.global.security.jwt;
 
 import static com.newbarams.ajaja.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;

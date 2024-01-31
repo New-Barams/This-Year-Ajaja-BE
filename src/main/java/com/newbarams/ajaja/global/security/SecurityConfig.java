@@ -2,8 +2,6 @@ package com.newbarams.ajaja.global.security;
 
 import static org.springframework.security.config.Customizer.*;
 
-import java.util.List;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,21 +11,16 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.newbarams.ajaja.global.security.jwt.filter.JwtAuthenticationFilter;
-import com.newbarams.ajaja.global.security.jwt.filter.JwtExceptionFilter;
-import com.newbarams.ajaja.global.security.jwt.util.JwtParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.newbarams.ajaja.global.security.filter.AuthorizationExceptionFilter;
+import com.newbarams.ajaja.global.security.filter.AuthorizeRequestFilter;
 
 import lombok.RequiredArgsConstructor;
 
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
-	private static final List<String> ALLOW_LIST = List.of(
-		"/index.html", "/swagger-spec", "/swagger-ui", "/api-docs", "favicon", // swagger, rest-docs
-		"/login", "/reissue", "/mock" // apis
-	);
-
-	private final JwtParser jwtParser;
+	private final ObjectMapper objectMapper;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -41,9 +34,10 @@ public class SecurityConfig {
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
 		http
-			.addFilterBefore(new JwtAuthenticationFilter(ALLOW_LIST, jwtParser),
-				UsernamePasswordAuthenticationFilter.class)
-			.addFilterBefore(new JwtExceptionFilter(), JwtAuthenticationFilter.class);
+			.addFilterBefore(new AuthorizeRequestFilter(), UsernamePasswordAuthenticationFilter.class)
+			.addFilterBefore(new AuthorizationExceptionFilter(objectMapper), AuthorizeRequestFilter.class);
+
+		http.authorizeHttpRequests(request -> request.anyRequest().permitAll());
 
 		return http.build();
 	}

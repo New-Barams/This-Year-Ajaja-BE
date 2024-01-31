@@ -16,7 +16,7 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.newbarams.ajaja.common.support.MonkeySupport;
-import com.newbarams.ajaja.global.security.jwt.util.JwtGenerator;
+import com.newbarams.ajaja.global.security.jwt.JwtGenerator;
 import com.newbarams.ajaja.infra.feign.kakao.model.KakaoAccount;
 import com.newbarams.ajaja.infra.feign.kakao.model.KakaoResponse;
 import com.newbarams.ajaja.module.auth.application.model.Profile;

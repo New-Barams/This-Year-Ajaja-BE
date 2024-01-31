@@ -7,7 +7,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.newbarams.ajaja.global.common.AjajaResponse;
-import com.newbarams.ajaja.global.security.common.UserId;
+import com.newbarams.ajaja.global.security.annotation.Authorization;
+import com.newbarams.ajaja.global.security.annotation.UserId;
 import com.newbarams.ajaja.module.remind.application.port.out.FindPlanRemindQuery;
 import com.newbarams.ajaja.module.remind.dto.RemindResponse;
 
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 public class GetRemindInfoController {
 	private final FindPlanRemindQuery findPlanRemindQuery;
 
+	@Authorization
 	@GetMapping("/reminds/{planId}")
 	@ResponseStatus(HttpStatus.OK)
 	public AjajaResponse<RemindResponse.RemindInfo> getRemindResponse(

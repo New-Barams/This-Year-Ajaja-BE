@@ -1,14 +1,12 @@
-package com.newbarams.ajaja.global.aop;
+package com.newbarams.ajaja.global.logging;
 
-import java.util.Objects;
+import static com.newbarams.ajaja.global.util.RequestUtil.*;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @Aspect
 @Slf4j
 @Component
-public class LoggingAspect {
+public class ApiTimeCheckAspect {
 	private static final String CONTROLLER_LOGGING_CONDITION = """
 		(within(@org.springframework.stereotype.Controller *)
 		|| within(@org.springframework.web.bind.annotation.RestController *))
@@ -28,15 +26,10 @@ public class LoggingAspect {
 
 	@Around(CONTROLLER_LOGGING_CONDITION)
 	public Object executeLogging(ProceedingJoinPoint joinPoint) throws Throwable {
-		HttpServletRequest request = extractRequest();
+		HttpServletRequest request = getRequest();
 		Process process = run(joinPoint);
 		log.info("[API] Call : {} {}, Processed : {}ms", request.getMethod(), request.getRequestURI(), process.proceed);
 		return process.result;
-	}
-
-	private HttpServletRequest extractRequest() {
-		ServletRequestAttributes attributes = (ServletRequestAttributes)RequestContextHolder.getRequestAttributes();
-		return Objects.requireNonNull(attributes).getRequest();
 	}
 
 	private Process run(ProceedingJoinPoint joinPoint) throws Throwable {

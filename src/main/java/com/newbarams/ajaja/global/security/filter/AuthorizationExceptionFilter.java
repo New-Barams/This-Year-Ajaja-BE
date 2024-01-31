@@ -1,4 +1,4 @@
-package com.newbarams.ajaja.global.security.jwt.filter;
+package com.newbarams.ajaja.global.security.filter;
 
 import static org.apache.commons.codec.CharEncoding.*;
 import static org.springframework.http.MediaType.*;
@@ -16,9 +16,11 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 
-public class JwtExceptionFilter extends OncePerRequestFilter {
-	private static final ObjectMapper mapper = new ObjectMapper();
+@RequiredArgsConstructor
+public class AuthorizationExceptionFilter extends OncePerRequestFilter {
+	private final ObjectMapper mapper;
 
 	@Override
 	protected void doFilterInternal(
@@ -29,13 +31,16 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
 		try {
 			filterChain.doFilter(request, response);
 		} catch (AjajaException exception) {
-			handleJwtException(response, exception);
+			handleAuthorizationException(response, exception);
 		}
 	}
 
-	private void handleJwtException(HttpServletResponse response, AjajaException exception) throws IOException {
+	private void handleAuthorizationException(
+		HttpServletResponse response,
+		AjajaException exception
+	) throws IOException {
 		setResponseHeader(response);
-		respondJwtException(response, exception);
+		respondException(response, exception);
 	}
 
 	private void setResponseHeader(HttpServletResponse response) {
@@ -43,12 +48,12 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
 		response.setCharacterEncoding(UTF_8);
 	}
 
-	private void respondJwtException(HttpServletResponse response, AjajaException exception) throws IOException {
+	private void respondException(HttpServletResponse response, AjajaException exception) throws IOException {
 		response.setStatus(exception.getHttpStatus());
-		response.getWriter().write(generateResponse(exception));
+		response.getWriter().write(generateBody(exception));
 	}
 
-	private String generateResponse(AjajaException exception) throws JsonProcessingException {
+	private String generateBody(AjajaException exception) throws JsonProcessingException {
 		ErrorResponse response = ErrorResponse.from(exception.getErrorCode());
 		return mapper.writeValueAsString(response);
 	}
