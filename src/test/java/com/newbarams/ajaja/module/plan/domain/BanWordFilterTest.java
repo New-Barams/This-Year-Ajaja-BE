@@ -23,10 +23,10 @@ class BanWordFilterTest {
 		BanWordValidationResult result = banWordFilter.validate("ㅁㅊ ㅈㄹ하네");
 
 		// then
-		assertThat(result.getBadWordResults()).hasSize(2);  // 비속어 개수
+		assertThat(result.getBanWordResults()).hasSize(2);  // 비속어 개수
 		assertThat(result.isExistBanWord()).isTrue();
-		assertThat(result.getBadWordResults().get(0)).isEqualByComparingTo(expected);
-		assertThat(result.getBadWordResults().get(1)).isEqualByComparingTo(expected2);
+		assertThat(result.getBanWordResults().get(0)).isEqualByComparingTo(expected);
+		assertThat(result.getBanWordResults().get(1)).isEqualByComparingTo(expected2);
 	}
 
 	@Test
@@ -36,7 +36,7 @@ class BanWordFilterTest {
 		BanWordValidationResult result = banWordFilter.validate("바른말 고운말");
 
 		// then
-		assertThat(result.getBadWordResults()).hasSize(0);  // 비속어 개수
+		assertThat(result.getBanWordResults()).hasSize(0);  // 비속어 개수
 		assertThat(result.isExistBanWord()).isFalse();
 	}
 }

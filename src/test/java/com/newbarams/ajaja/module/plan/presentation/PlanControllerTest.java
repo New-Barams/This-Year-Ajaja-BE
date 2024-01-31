@@ -994,13 +994,13 @@ class PlanControllerTest extends WebMvcTestSupport {
 			status().isOk(),
 			jsonPath("$.success").value(Boolean.TRUE),
 			jsonPath("$.data.title.existBanWord").value(Boolean.TRUE),
-			jsonPath("$.data.title.badWordResults[0].start").value(0),
-			jsonPath("$.data.title.badWordResults[0].end").value(1),
-			jsonPath("$.data.title.badWordResults[0].keyword").value("ti"),
+			jsonPath("$.data.title.banWordResults[0].start").value(0),
+			jsonPath("$.data.title.banWordResults[0].end").value(1),
+			jsonPath("$.data.title.banWordResults[0].keyword").value("ti"),
 			jsonPath("$.data.description.existBanWord").value(Boolean.TRUE),
-			jsonPath("$.data.description.badWordResults[0].start").value(0),
-			jsonPath("$.data.description.badWordResults[0].end").value(1),
-			jsonPath("$.data.description.badWordResults[0].keyword").value("de")
+			jsonPath("$.data.description.banWordResults[0].start").value(0),
+			jsonPath("$.data.description.banWordResults[0].end").value(1),
+			jsonPath("$.data.description.banWordResults[0].keyword").value("de")
 		);
 
 		// docs

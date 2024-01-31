@@ -13,11 +13,11 @@ import lombok.Getter;
 public class BanWordValidationResult {
 	private final boolean existBanWord;
 	private final String originSentence;
-	private final List<Emit> badWordResults;
+	private final List<Emit> banWordResults;
 
 	public BanWordValidationResult(boolean existBanWord, String originSentence) {
 		this.existBanWord = existBanWord;
 		this.originSentence = originSentence;
-		this.badWordResults = Collections.emptyList();
+		this.banWordResults = Collections.emptyList();
 	}
 }
