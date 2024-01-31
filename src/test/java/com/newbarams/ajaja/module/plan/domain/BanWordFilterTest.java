@@ -39,4 +39,21 @@ class BanWordFilterTest {
 		assertThat(result.getBanWordResults()).hasSize(0);  // 비속어 개수
 		assertThat(result.isExistBanWord()).isFalse();
 	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	@DisplayName("문장에 비속어가 겹치게 존재하는 경우, 길이가 긴 비속어가 반환된다.")
+	void badWordFilter_Success_WithIgnoreOverlaps() {
+		// given
+		Emit ignored = new Emit(0, 0, "썅");
+		Emit expected = new Emit(0, 1, "썅년");
+
+		// when
+		BanWordValidationResult result = banWordFilter.validate("썅년");
+
+		// then
+		assertThat(result.getBanWordResults()).hasSize(1);  // 비속어 개수
+		assertThat(result.isExistBanWord()).isTrue();
+		assertThat(result.getBanWordResults().get(0)).isEqualByComparingTo(expected);
+	}
 }
