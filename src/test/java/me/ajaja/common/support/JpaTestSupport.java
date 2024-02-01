@@ -13,7 +13,7 @@ import me.ajaja.global.config.QuerydslConfig;
  */
 @DataJpaTest
 @Import(QuerydslConfig.class)
-@EnableJpaRepositories(basePackages = "com.newbarams.ajaja")
-@EntityScan(basePackages = "com.newbarams.ajaja")
+@EnableJpaRepositories(basePackages = "me.ajaja")
+@EntityScan(basePackages = "me.ajaja")
 public abstract class JpaTestSupport extends MonkeySupport {
 }
