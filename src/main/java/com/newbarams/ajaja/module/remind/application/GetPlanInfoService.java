@@ -11,7 +11,6 @@ import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 import com.newbarams.ajaja.module.plan.mapper.PlanMapper;
 import com.newbarams.ajaja.module.remind.application.port.in.GetPlanInfoUseCase;
 import com.newbarams.ajaja.module.remind.application.port.out.FindPlanInfoPort;
-import com.newbarams.ajaja.module.remind.application.port.out.LoadTotalAchievePort;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class GetPlanInfoService implements GetPlanInfoUseCase {
-	private final LoadTotalAchievePort loadTotalAchievePort;
 	private final FindPlanInfoPort findPlanInfoPort;
 	private final PlanMapper mapper;
 
@@ -45,7 +43,8 @@ public class GetPlanInfoService implements GetPlanInfoUseCase {
 		List<PlanResponse.MainInfo> planInfoResponses = new ArrayList<>();
 
 		for (int planYear = currentYear; planYear >= firstYear; planYear--) {
-			int totalAchieve = loadTotalAchievePort.load(userId, planYear);
+			int totalAchieve = (int)planInfos.stream().filter(plan -> plan.getYear() == currentYear).mapToDouble(
+				PlanResponse.PlanInfo::getAchieveRate).average().orElse(0);
 			PlanResponse.MainInfo planInfoResponse = mapper.toResponse(planYear, totalAchieve, planInfos);
 			planInfoResponses.add(planInfoResponse);
 		}

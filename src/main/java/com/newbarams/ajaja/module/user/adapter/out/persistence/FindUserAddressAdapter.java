@@ -19,7 +19,7 @@ public class FindUserAddressAdapter implements FindUserAddressPort {
 	@Override
 	public RemindAddress findUserAddressByUserId(Long userId) {
 		return queryFactory.select(Projections.constructor(RemindAddress.class,
-				userEntity.signUpEmail,
+				userEntity.id,
 				userEntity.remindType,
 				userEntity.remindEmail,
 				userEntity.phoneNumber

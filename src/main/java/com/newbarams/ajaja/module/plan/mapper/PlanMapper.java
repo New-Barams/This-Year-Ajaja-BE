@@ -120,7 +120,7 @@ public interface PlanMapper {
 	}
 
 	@InheritConfiguration(name = "toDomain")
-	RemindMessageInfo toModel(PlanEntity plan, String email);
+	RemindMessageInfo toModel(PlanEntity plan, String remindType, String email, String phoneNumber);
 
 	@Mapping(target = "createdYear", expression = "java(plan.getCreatedAt().getYear())")
 	@Mapping(target = "remindMonth", expression = "java(plan.getRemindMonth())")

@@ -6,12 +6,12 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 @Getter
-public class PlanInfo extends SelfValidating<PlanInfo> {
+public class Target extends SelfValidating<Target> {
 	@NotNull
 	private final Long id;
 	private final String title;
 
-	public PlanInfo(Long id, String title) {
+	public Target(Long id, String title) {
 		this.id = id;
 		this.title = title;
 		validateSelf();

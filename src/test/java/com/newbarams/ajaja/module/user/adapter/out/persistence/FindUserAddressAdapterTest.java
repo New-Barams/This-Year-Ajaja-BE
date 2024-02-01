@@ -42,7 +42,7 @@ class FindUserAddressAdapterTest extends JpaTestSupport {
 		RemindAddress address = findUserAddressAdapter.findUserAddressByUserId(id);
 
 		// then
-		Assertions.assertThat(address.type()).isEqualTo("EMAIL");
-		Assertions.assertThat(address.userEmail()).isEqualTo("email");
+		Assertions.assertThat(address.remindType()).isEqualTo("EMAIL");
+		Assertions.assertThat(address.remindEmail()).isEqualTo("email");
 	}
 }

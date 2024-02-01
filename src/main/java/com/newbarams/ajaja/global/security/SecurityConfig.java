@@ -14,6 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.newbarams.ajaja.global.security.filter.AuthorizationExceptionFilter;
 import com.newbarams.ajaja.global.security.filter.AuthorizeRequestFilter;
+import com.newbarams.ajaja.global.security.jwt.JwtParser;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 	private final ObjectMapper objectMapper;
+	private final JwtParser jwtParser; // todo: tmp
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -34,7 +36,7 @@ public class SecurityConfig {
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
 		http
-			.addFilterBefore(new AuthorizeRequestFilter(), UsernamePasswordAuthenticationFilter.class)
+			.addFilterBefore(new AuthorizeRequestFilter(jwtParser), UsernamePasswordAuthenticationFilter.class)
 			.addFilterBefore(new AuthorizationExceptionFilter(objectMapper), AuthorizeRequestFilter.class);
 
 		http.authorizeHttpRequests(request -> request.anyRequest().permitAll());

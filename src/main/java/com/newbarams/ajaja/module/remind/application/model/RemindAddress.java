@@ -1,8 +1,8 @@
 package com.newbarams.ajaja.module.remind.application.model;
 
 public record RemindAddress(
-	String userEmail,
-	String type,
+	Long userId,
+	String remindType,
 	String remindEmail,
 	String phoneNumber
 ) {
