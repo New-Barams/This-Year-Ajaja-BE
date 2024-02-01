@@ -1,10 +1,8 @@
 package com.newbarams.ajaja.module.plan.application;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.ahocorasick.trie.Emit;
 import org.springframework.stereotype.Service;
 
 import com.newbarams.ajaja.module.plan.domain.BanWordFilter;
@@ -24,12 +22,12 @@ public class ValidateContentService {
 	}
 
 	private BanWordValidationResult.Common getResult(String origin) {
-		Collection<Emit> result = BanWordFilter.validate(origin);
+		List<String> result = BanWordFilter.validate(origin);
 
 		if (result.isEmpty()) {
-			return new BanWordValidationResult.Common(false, origin, Collections.emptyList());
+			return new BanWordValidationResult.Common(false, Collections.emptyList());
 		}
 
-		return new BanWordValidationResult.Common(true, origin, List.copyOf(result));
+		return new BanWordValidationResult.Common(true, result);
 	}
 }

@@ -2,8 +2,6 @@ package com.newbarams.ajaja.module.plan.dto;
 
 import java.util.List;
 
-import org.ahocorasick.trie.Emit;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -17,7 +15,6 @@ public final class BanWordValidationResult {
 	@Data
 	public static class Common {
 		private final boolean existBanWord;
-		private final String originSentence;
-		private final List<Emit> banWordResults;
+		private final List<String> banWords;
 	}
 }

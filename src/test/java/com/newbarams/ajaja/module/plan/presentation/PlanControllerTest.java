@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.time.Instant;
 import java.util.List;
 
-import org.ahocorasick.trie.Emit;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.http.HttpHeaders;
@@ -975,10 +974,8 @@ class PlanControllerTest extends WebMvcTestSupport {
 		// given
 		PlanRequest.CheckBanWord request = new PlanRequest.CheckBanWord("title", "description");
 
-		BanWordValidationResult.Common titleResult = new BanWordValidationResult.Common(true, "title",
-			List.of(new Emit(0, 1, "ti")));
-		BanWordValidationResult.Common descriptionResult = new BanWordValidationResult.Common(true, "description",
-			List.of(new Emit(0, 1, "de")));
+		BanWordValidationResult.Common titleResult = new BanWordValidationResult.Common(true, List.of("tit"));
+		BanWordValidationResult.Common descriptionResult = new BanWordValidationResult.Common(true, List.of("des"));
 		BanWordValidationResult response = new BanWordValidationResult(titleResult, descriptionResult);
 
 		given(validateContentService.check(request)).willReturn(response);
@@ -994,13 +991,9 @@ class PlanControllerTest extends WebMvcTestSupport {
 			status().isOk(),
 			jsonPath("$.success").value(Boolean.TRUE),
 			jsonPath("$.data.title.existBanWord").value(Boolean.TRUE),
-			jsonPath("$.data.title.banWordResults[0].start").value(0),
-			jsonPath("$.data.title.banWordResults[0].end").value(1),
-			jsonPath("$.data.title.banWordResults[0].keyword").value("ti"),
+			jsonPath("$.data.title.banWords[0]").value("tit"),
 			jsonPath("$.data.description.existBanWord").value(Boolean.TRUE),
-			jsonPath("$.data.description.banWordResults[0].start").value(0),
-			jsonPath("$.data.description.banWordResults[0].end").value(1),
-			jsonPath("$.data.description.banWordResults[0].keyword").value("de")
+			jsonPath("$.data.description.banWords[0]").value("des")
 		);
 
 		// docs
