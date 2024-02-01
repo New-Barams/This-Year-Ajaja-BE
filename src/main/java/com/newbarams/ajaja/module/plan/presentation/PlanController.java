@@ -30,9 +30,12 @@ import com.newbarams.ajaja.module.plan.application.CreatePlanService;
 import com.newbarams.ajaja.module.plan.application.DeletePlanService;
 import com.newbarams.ajaja.module.plan.application.LoadPlanService;
 import com.newbarams.ajaja.module.plan.application.UpdatePlanService;
+import com.newbarams.ajaja.module.plan.application.ValidateContentService;
+import com.newbarams.ajaja.module.plan.dto.BanWordValidationResult;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +50,7 @@ public class PlanController {
 	private final DeletePlanService deletePlanService;
 	private final UpdatePlanService updatePlanService;
 	private final SwitchAjajaService switchAjajaService;
+	private final ValidateContentService validateContentService;
 
 	private final JwtParser jwtParser; // todo: delete when authentication filtering update
 
@@ -147,5 +151,14 @@ public class PlanController {
 	public AjajaResponse<List<PlanResponse.GetAll>> getAllPlans(@ModelAttribute PlanRequest.GetAll request) {
 		List<PlanResponse.GetAll> responses = getPlanService.loadAllPlans(request);
 		return AjajaResponse.ok(responses);
+	}
+
+	@PostMapping("/validate")
+	@ResponseStatus(OK)
+	public AjajaResponse<BanWordValidationResult> validateBanWord(
+		@Valid @RequestBody PlanRequest.CheckBanWord request
+	) {
+		BanWordValidationResult response = validateContentService.check(request);
+		return AjajaResponse.ok(response);
 	}
 }
