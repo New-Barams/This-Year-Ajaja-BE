@@ -34,6 +34,7 @@ import com.newbarams.ajaja.module.plan.dto.BanWordValidationResult;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
@@ -141,7 +142,7 @@ public class PlanController {
 	@PostMapping("/validate")
 	@ResponseStatus(OK)
 	public AjajaResponse<BanWordValidationResult> validateBanWord(
-		@RequestBody PlanRequest.CheckBanWord request
+		@Valid @RequestBody PlanRequest.CheckBanWord request
 	) {
 		BanWordValidationResult response = validateContentService.check(request);
 		return AjajaResponse.ok(response);

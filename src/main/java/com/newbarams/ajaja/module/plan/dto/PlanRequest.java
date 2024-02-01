@@ -2,6 +2,7 @@ package com.newbarams.ajaja.module.plan.dto;
 
 import java.util.List;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 public class PlanRequest {
@@ -64,7 +65,9 @@ public class PlanRequest {
 
 	@Data
 	public static class CheckBanWord {
+		@NotBlank
 		private final String title;
+		@NotBlank
 		private final String description;
 	}
 }
