@@ -22,9 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.newbarams.ajaja.global.common.AjajaResponse;
 import com.newbarams.ajaja.global.security.annotation.Authorization;
-import com.newbarams.ajaja.global.security.annotation.UserId;
 import com.newbarams.ajaja.global.security.jwt.JwtParser;
 import com.newbarams.ajaja.global.util.BearerUtil;
+import com.newbarams.ajaja.global.util.SecurityUtil;
 import com.newbarams.ajaja.module.ajaja.application.SwitchAjajaService;
 import com.newbarams.ajaja.module.plan.application.CreatePlanService;
 import com.newbarams.ajaja.module.plan.application.DeletePlanService;
@@ -57,7 +57,8 @@ public class PlanController {
 	@Authorization
 	@PostMapping("/{id}/ajaja")
 	@ResponseStatus(OK)
-	public AjajaResponse<Void> switchAjaja(@UserId Long userId, @PathVariable Long id) {
+	public AjajaResponse<Void> switchAjaja(@PathVariable Long id) {
+		Long userId = SecurityUtil.getId();
 		switchAjajaService.switchOrAddIfNotExist(userId, id);
 		return AjajaResponse.ok();
 	}
@@ -86,10 +87,10 @@ public class PlanController {
 	@PostMapping
 	@ResponseStatus(CREATED)
 	public ResponseEntity<AjajaResponse<Void>> createPlan(
-		@UserId Long userId,
 		@RequestBody PlanRequest.Create request,
 		@RequestHeader(name = "Month") @Min(1) @Max(12) int month
 	) {
+		Long userId = SecurityUtil.getId();
 		Long planId = createPlanService.create(userId, request, month);
 		URI uri = URI.create("plans/" + planId);
 
@@ -101,9 +102,9 @@ public class PlanController {
 	@ResponseStatus(OK)
 	public AjajaResponse<Void> deletePlan(
 		@PathVariable Long id,
-		@UserId Long userId,
 		@RequestHeader(name = "Month") @Min(1) @Max(12) int month
 	) {
+		Long userId = SecurityUtil.getId();
 		deletePlanService.delete(id, userId, month);
 		return AjajaResponse.ok();
 	}
@@ -111,7 +112,8 @@ public class PlanController {
 	@Authorization
 	@PutMapping("/{id}/public")
 	@ResponseStatus(OK)
-	public AjajaResponse<Void> updatePlanPublicStatus(@PathVariable Long id, @UserId Long userId) {
+	public AjajaResponse<Void> updatePlanPublicStatus(@PathVariable Long id) {
+		Long userId = SecurityUtil.getId();
 		updatePlanService.updatePublicStatus(id, userId);
 		return AjajaResponse.ok();
 	}
@@ -119,7 +121,8 @@ public class PlanController {
 	@Authorization
 	@PutMapping("/{id}/remindable")
 	@ResponseStatus(OK)
-	public AjajaResponse<Void> updatePlanRemindStatus(@PathVariable Long id, @UserId Long userId) {
+	public AjajaResponse<Void> updatePlanRemindStatus(@PathVariable Long id) {
+		Long userId = SecurityUtil.getId();
 		updatePlanService.updateRemindStatus(id, userId);
 		return AjajaResponse.ok();
 	}
@@ -127,7 +130,8 @@ public class PlanController {
 	@Authorization
 	@PutMapping("/{id}/ajaja")
 	@ResponseStatus(OK)
-	public AjajaResponse<Void> updatePlanAjajaStatus(@PathVariable Long id, @UserId Long userId) {
+	public AjajaResponse<Void> updatePlanAjajaStatus(@PathVariable Long id) {
+		Long userId = SecurityUtil.getId();
 		updatePlanService.updateAjajaStatus(id, userId);
 		return AjajaResponse.ok();
 	}
@@ -137,15 +141,14 @@ public class PlanController {
 	@ResponseStatus(OK)
 	public AjajaResponse<PlanResponse.Detail> updatePlan(
 		@PathVariable Long id,
-		@UserId Long userId,
 		@RequestBody PlanRequest.Update request,
 		@RequestHeader(name = "Month") @Min(1) @Max(12) int month
 	) {
+		Long userId = SecurityUtil.getId();
 		PlanResponse.Detail response = updatePlanService.update(id, userId, request, month);
 		return AjajaResponse.ok(response);
 	}
 
-	@Authorization
 	@GetMapping
 	@ResponseStatus(OK)
 	public AjajaResponse<List<PlanResponse.GetAll>> getAllPlans(@ModelAttribute PlanRequest.GetAll request) {
@@ -153,6 +156,7 @@ public class PlanController {
 		return AjajaResponse.ok(responses);
 	}
 
+	@Authorization
 	@PostMapping("/validate")
 	@ResponseStatus(OK)
 	public AjajaResponse<BanWordValidationResult> validateBanWord(

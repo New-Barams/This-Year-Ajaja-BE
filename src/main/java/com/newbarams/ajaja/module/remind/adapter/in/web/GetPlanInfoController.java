@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.newbarams.ajaja.global.common.AjajaResponse;
 import com.newbarams.ajaja.global.security.annotation.Authorization;
-import com.newbarams.ajaja.global.security.annotation.UserId;
+import com.newbarams.ajaja.global.util.SecurityUtil;
 import com.newbarams.ajaja.module.plan.dto.PlanResponse;
 import com.newbarams.ajaja.module.remind.application.port.in.GetPlanInfoUseCase;
 
@@ -24,7 +24,8 @@ public class GetPlanInfoController {
 	@Authorization
 	@GetMapping("/plans/main")
 	@ResponseStatus(OK)
-	public AjajaResponse<List<PlanResponse.MainInfo>> getPlanInfo(@UserId Long userId) {
+	public AjajaResponse<List<PlanResponse.MainInfo>> getPlanInfo() {
+		Long userId = SecurityUtil.getId();
 		List<PlanResponse.MainInfo> response = getPlanInfoUseCase.load(userId);
 		return AjajaResponse.ok(response);
 	}

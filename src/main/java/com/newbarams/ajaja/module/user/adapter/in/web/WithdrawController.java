@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.newbarams.ajaja.global.common.AjajaResponse;
 import com.newbarams.ajaja.global.security.annotation.Authorization;
-import com.newbarams.ajaja.global.security.annotation.UserId;
+import com.newbarams.ajaja.global.util.SecurityUtil;
 import com.newbarams.ajaja.module.user.application.port.in.WithdrawUseCase;
 
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,8 @@ class WithdrawController {
 	@Authorization
 	@DeleteMapping("/users")
 	@ResponseStatus(OK)
-	public AjajaResponse<Void> withdraw(@UserId Long id) {
+	public AjajaResponse<Void> withdraw() {
+		Long id = SecurityUtil.getId();
 		withdrawUseCase.withdraw(id);
 		return AjajaResponse.ok();
 	}

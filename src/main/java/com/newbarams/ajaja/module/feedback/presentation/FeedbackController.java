@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.newbarams.ajaja.global.common.AjajaResponse;
 import com.newbarams.ajaja.global.security.annotation.Authorization;
-import com.newbarams.ajaja.global.security.annotation.UserId;
+import com.newbarams.ajaja.global.util.SecurityUtil;
 import com.newbarams.ajaja.module.feedback.application.LoadFeedbackInfoService;
 import com.newbarams.ajaja.module.feedback.application.UpdateFeedbackService;
 import com.newbarams.ajaja.module.feedback.dto.FeedbackRequest;
@@ -24,7 +24,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/feedbacks")
 public class FeedbackController {
-
 	private final UpdateFeedbackService updateFeedbackService;
 	private final LoadFeedbackInfoService loadFeedbackInfoService;
 
@@ -32,10 +31,10 @@ public class FeedbackController {
 	@PostMapping("/{planId}")
 	@ResponseStatus(OK)
 	public AjajaResponse<Void> updateFeedback(
-		@UserId Long userId,
 		@PathVariable Long planId,
 		@RequestBody FeedbackRequest.UpdateFeedback updateFeedback
 	) {
+		Long userId = SecurityUtil.getId();
 		updateFeedbackService.updateFeedback(userId, planId, updateFeedback.getRate(), updateFeedback.getMessage());
 		return AjajaResponse.ok();
 	}
@@ -43,10 +42,8 @@ public class FeedbackController {
 	@Authorization
 	@GetMapping("/{planId}")
 	@ResponseStatus(OK)
-	public AjajaResponse<FeedbackResponse.FeedbackInfo> getFeedbackInfo(
-		@UserId Long userId,
-		@PathVariable Long planId
-	) {
+	public AjajaResponse<FeedbackResponse.FeedbackInfo> getFeedbackInfo(@PathVariable Long planId) {
+		Long userId = SecurityUtil.getId();
 		FeedbackResponse.FeedbackInfo feedbackInfo = loadFeedbackInfoService.loadFeedbackInfoByPlanId(userId, planId);
 		return AjajaResponse.ok(feedbackInfo);
 	}

@@ -39,7 +39,7 @@ class UpdateRemindInfoControllerTest extends WebMvcTestSupport {
 		doNothing().when(updateRemindInfoUseCase).update(anyLong(), anyLong(), any());
 
 		// when
-		var result = mockMvc.perform(put(PLAN_END_POINT + "/{planId}/reminds", 1)
+		var result = mockMvc.perform(put(PLAN_END_POINT + "/{id}/reminds", 1)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(request)));
@@ -69,7 +69,7 @@ class UpdateRemindInfoControllerTest extends WebMvcTestSupport {
 		doThrow(tokenException).when(updateRemindInfoUseCase).update(anyLong(), anyLong(), any());
 
 		// when
-		var result = mockMvc.perform(put(PLAN_END_POINT + "/{planId}/reminds", 1)
+		var result = mockMvc.perform(put(PLAN_END_POINT + "/{id}/reminds", 1)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(request)));
@@ -98,7 +98,7 @@ class UpdateRemindInfoControllerTest extends WebMvcTestSupport {
 		doThrow(notUpdatableException).when(updateRemindInfoUseCase).update(anyLong(), anyLong(), any());
 
 		// when
-		var result = mockMvc.perform(put(PLAN_END_POINT + "/{planId}/reminds", 1)
+		var result = mockMvc.perform(put(PLAN_END_POINT + "/{id}/reminds", 1)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(request)));
@@ -127,7 +127,7 @@ class UpdateRemindInfoControllerTest extends WebMvcTestSupport {
 		doThrow(notFoundException).when(updateRemindInfoUseCase).update(anyLong(), anyLong(), any());
 
 		// when
-		var result = mockMvc.perform(put(PLAN_END_POINT + "/{planId}/reminds", 1)
+		var result = mockMvc.perform(put(PLAN_END_POINT + "/{id}/reminds", 1)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(request)));

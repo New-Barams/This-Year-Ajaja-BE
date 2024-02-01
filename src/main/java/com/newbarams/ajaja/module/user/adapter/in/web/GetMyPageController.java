@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.newbarams.ajaja.global.common.AjajaResponse;
 import com.newbarams.ajaja.global.security.annotation.Authorization;
-import com.newbarams.ajaja.global.security.annotation.UserId;
+import com.newbarams.ajaja.global.util.SecurityUtil;
 import com.newbarams.ajaja.module.user.application.port.out.GetMyPageQuery;
 import com.newbarams.ajaja.module.user.dto.UserResponse;
 
@@ -22,7 +22,8 @@ class GetMyPageController {
 	@Authorization
 	@GetMapping("/users")
 	@ResponseStatus(OK)
-	public AjajaResponse<UserResponse.MyPage> getMyPage(@UserId Long id) {
+	public AjajaResponse<UserResponse.MyPage> getMyPage() {
+		Long id = SecurityUtil.getId();
 		UserResponse.MyPage response = getMyPageQuery.findUserInfoById(id);
 		return AjajaResponse.ok(response);
 	}

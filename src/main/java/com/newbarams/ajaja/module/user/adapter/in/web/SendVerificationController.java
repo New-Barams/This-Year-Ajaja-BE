@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.newbarams.ajaja.global.security.annotation.Authorization;
-import com.newbarams.ajaja.global.security.annotation.UserId;
+import com.newbarams.ajaja.global.util.SecurityUtil;
 import com.newbarams.ajaja.module.user.application.port.in.SendVerificationEmailUseCase;
 import com.newbarams.ajaja.module.user.dto.UserRequest;
 
@@ -23,10 +23,8 @@ class SendVerificationController {
 	@Authorization
 	@PostMapping("/users/send-verification")
 	@ResponseStatus(NO_CONTENT)
-	public void sendVerification(
-		@UserId Long id,
-		@Valid @RequestBody UserRequest.EmailVerification request
-	) {
+	public void sendVerification(@Valid @RequestBody UserRequest.EmailVerification request) {
+		Long id = SecurityUtil.getId();
 		sendVerificationEmailUseCase.sendVerification(id, request.getEmail());
 	}
 }

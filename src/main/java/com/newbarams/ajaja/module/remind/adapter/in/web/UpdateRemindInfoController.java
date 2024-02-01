@@ -1,6 +1,7 @@
 package com.newbarams.ajaja.module.remind.adapter.in.web;
 
-import org.springframework.http.HttpStatus;
+import static org.springframework.http.HttpStatus.*;
+
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.newbarams.ajaja.global.common.AjajaResponse;
 import com.newbarams.ajaja.global.security.annotation.Authorization;
-import com.newbarams.ajaja.global.security.annotation.UserId;
+import com.newbarams.ajaja.global.util.SecurityUtil;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 import com.newbarams.ajaja.module.remind.application.port.in.UpdateRemindInfoUseCase;
 
@@ -21,14 +22,14 @@ public class UpdateRemindInfoController {
 	private final UpdateRemindInfoUseCase updateRemindInfoUseCase;
 
 	@Authorization
-	@PutMapping("/plans/{planId}/reminds")
-	@ResponseStatus(HttpStatus.OK)
+	@PutMapping("/plans/{id}/reminds")
+	@ResponseStatus(OK)
 	public AjajaResponse<Void> modifyRemindInfo(
-		@UserId Long userId,
-		@PathVariable Long planId,
+		@PathVariable Long id,
 		@RequestBody PlanRequest.UpdateRemind request
 	) {
-		updateRemindInfoUseCase.update(userId, planId, request);
+		Long userId = SecurityUtil.getId();
+		updateRemindInfoUseCase.update(userId, id, request);
 		return AjajaResponse.ok();
 	}
 }

@@ -36,7 +36,7 @@ public class SecurityConfig {
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
 		http
-			.addFilterBefore(new AuthorizeRequestFilter(jwtParser), UsernamePasswordAuthenticationFilter.class)
+			.addFilterBefore(new AuthorizeRequestFilter(), UsernamePasswordAuthenticationFilter.class)
 			.addFilterBefore(new AuthorizationExceptionFilter(objectMapper), AuthorizeRequestFilter.class);
 
 		http.authorizeHttpRequests(request -> request.anyRequest().permitAll());

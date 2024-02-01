@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.newbarams.ajaja.global.common.AjajaResponse;
 import com.newbarams.ajaja.global.security.annotation.Authorization;
-import com.newbarams.ajaja.global.security.annotation.UserId;
+import com.newbarams.ajaja.global.util.SecurityUtil;
 import com.newbarams.ajaja.module.user.application.port.in.ChangeRemindTypeUseCase;
 import com.newbarams.ajaja.module.user.dto.UserRequest;
 
@@ -23,7 +23,8 @@ class ChangeRemindTypeController {
 	@Authorization
 	@PutMapping("/users/receive")
 	@ResponseStatus(OK)
-	public AjajaResponse<Void> changeRemindType(@UserId Long id, @RequestBody UserRequest.Receive request) {
+	public AjajaResponse<Void> changeRemindType(@RequestBody UserRequest.Receive request) {
+		Long id = SecurityUtil.getId();
 		changeRemindTypeUseCase.change(id, request.getType());
 		return AjajaResponse.ok();
 	}
