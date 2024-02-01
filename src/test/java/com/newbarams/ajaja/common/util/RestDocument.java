@@ -34,7 +34,7 @@ public class RestDocument {
 		ResultActions result
 	) {
 		requireNonBlank(identifier);
-		requireNonNull(identifier, "Tag cannot be null");
+		requireNonNull(tag, "Tag cannot be null");
 		requireNonNull(result, "ResultActions cannot be null");
 		this.identifier = identifier;
 		this.tag = tag;

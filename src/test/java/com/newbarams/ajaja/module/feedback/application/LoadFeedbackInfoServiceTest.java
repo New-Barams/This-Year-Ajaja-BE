@@ -35,12 +35,14 @@ class LoadFeedbackInfoServiceTest extends MockTestSupport {
 	private List<FeedbackInfo> feedbacks;
 	private PlanFeedbackInfo planFeedbackInfo;
 	private FeedbackResponse.FeedbackInfo feedbackInfo;
+	private FeedbackResponse.RemindFeedback remindFeedback;
 
 	@BeforeEach
 	void setUp() {
 		feedbacks = sut.giveMeBuilder(FeedbackInfo.class)
 			.set("feedbackMonth", 3)
-			.set("feedbackDate", 15)
+			.set("feedbackDate", 16)
+			.set("feedbacked", true)
 			.sampleList(4);
 
 		List<FeedbackPeriod> periods = sut.giveMeBuilder(FeedbackPeriod.class)
@@ -59,6 +61,9 @@ class LoadFeedbackInfoServiceTest extends MockTestSupport {
 		feedbackInfo = sut.giveMeBuilder(FeedbackResponse.FeedbackInfo.class)
 			.set("title", "계획")
 			.sample();
+
+		remindFeedback = sut.giveMeBuilder(FeedbackResponse.RemindFeedback.class)
+			.sample();
 	}
 
 	@Test
@@ -70,6 +75,7 @@ class LoadFeedbackInfoServiceTest extends MockTestSupport {
 
 		given(loadPlanService.loadPlanFeedbackInfoByPlanId(anyLong(), anyLong())).willReturn(planFeedbackInfo);
 		given(feedbackQueryRepository.findFeedbackInfosByPlanId(planId)).willReturn(feedbacks);
+		given(mapper.toResponse(any(), any(), any())).willReturn(remindFeedback);
 		given(mapper.toResponse(any(), anyList())).willReturn(feedbackInfo);
 
 		// when

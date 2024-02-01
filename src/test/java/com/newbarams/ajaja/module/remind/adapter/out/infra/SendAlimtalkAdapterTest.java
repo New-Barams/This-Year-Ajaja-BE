@@ -49,7 +49,6 @@ class SendAlimtalkAdapterTest extends MockTestSupport {
 	void send_Success_WithNoException() {
 		// given
 		AlimTalk response = sut.giveMeBuilder(AlimTalk.class).set("statusCode", "200").sample();
-		given(feignClient.send(anyString(), any())).willReturn(response);
 		given(findRemindablePlanPort.findAllRemindablePlan(anyString(), anyString(), any()))
 			.willReturn(List.of(remind));
 
