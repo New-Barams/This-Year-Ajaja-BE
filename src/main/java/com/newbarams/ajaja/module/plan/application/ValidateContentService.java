@@ -1,8 +1,10 @@
 package com.newbarams.ajaja.module.plan.application;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
+import org.ahocorasick.trie.Emit;
 import org.springframework.stereotype.Service;
 
 import com.newbarams.ajaja.module.plan.domain.BanWordFilter;
@@ -14,18 +16,20 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class ValidateContentService {
-	private static final int MAP_CAPACITY = 2;
-	private static final String CONTENT_TITLE = "title";
-	private static final String CONTENT_DESCRIPTION = "description";
+	public BanWordValidationResult check(PlanRequest.CheckBanWord request) {
+		BanWordValidationResult.Common titleResult = getResult(request.getTitle());
+		BanWordValidationResult.Common descriptionResult = getResult(request.getDescription());
 
-	private final BanWordFilter banWordFilter;
+		return new BanWordValidationResult(titleResult, descriptionResult);
+	}
 
-	public Map<String, BanWordValidationResult> check(PlanRequest.CheckBanWord request) {
-		Map<String, BanWordValidationResult> result = new HashMap<>(MAP_CAPACITY);
+	private BanWordValidationResult.Common getResult(String origin) {
+		Collection<Emit> result = BanWordFilter.validate(origin);
 
-		result.put(CONTENT_TITLE, banWordFilter.validate(request.getTitle()));
-		result.put(CONTENT_DESCRIPTION, banWordFilter.validate(request.getDescription()));
+		if (result.isEmpty()) {
+			return new BanWordValidationResult.Common(false, origin, Collections.emptyList());
+		}
 
-		return result;
+		return new BanWordValidationResult.Common(true, origin, List.copyOf(result));
 	}
 }

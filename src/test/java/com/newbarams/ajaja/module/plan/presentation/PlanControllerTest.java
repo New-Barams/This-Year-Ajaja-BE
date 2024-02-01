@@ -6,9 +6,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.time.Instant;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.ahocorasick.trie.Emit;
 import org.junit.jupiter.api.DisplayName;
@@ -977,9 +975,11 @@ class PlanControllerTest extends WebMvcTestSupport {
 		// given
 		PlanRequest.CheckBanWord request = new PlanRequest.CheckBanWord("title", "description");
 
-		Map<String, BanWordValidationResult> response = new HashMap<>();
-		response.put("title", new BanWordValidationResult(true, "title", List.of(new Emit(0, 1, "ti"))));
-		response.put("description", new BanWordValidationResult(true, "description", List.of(new Emit(0, 1, "de"))));
+		BanWordValidationResult.Common titleResult = new BanWordValidationResult.Common(true, "title",
+			List.of(new Emit(0, 1, "ti")));
+		BanWordValidationResult.Common descriptionResult = new BanWordValidationResult.Common(true, "description",
+			List.of(new Emit(0, 1, "de")));
+		BanWordValidationResult response = new BanWordValidationResult(titleResult, descriptionResult);
 
 		given(validateContentService.check(request)).willReturn(response);
 

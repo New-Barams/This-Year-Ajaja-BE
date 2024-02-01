@@ -1,23 +1,23 @@
 package com.newbarams.ajaja.module.plan.dto;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.ahocorasick.trie.Emit;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class BanWordValidationResult {
-	private final boolean existBanWord;
-	private final String originSentence;
-	private final List<Emit> banWordResults;
+public final class BanWordValidationResult {
+	private final Common title;
+	private final Common description;
 
-	public BanWordValidationResult(boolean existBanWord, String originSentence) {
-		this.existBanWord = existBanWord;
-		this.originSentence = originSentence;
-		this.banWordResults = Collections.emptyList();
+	@Data
+	public static class Common {
+		private final boolean existBanWord;
+		private final String originSentence;
+		private final List<Emit> banWordResults;
 	}
 }

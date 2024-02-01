@@ -5,7 +5,6 @@ import static org.springframework.http.HttpStatus.*;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -141,10 +140,10 @@ public class PlanController {
 
 	@PostMapping("/validate")
 	@ResponseStatus(OK)
-	public AjajaResponse<Map<String, BanWordValidationResult>> validateBanWord(
+	public AjajaResponse<BanWordValidationResult> validateBanWord(
 		@RequestBody PlanRequest.CheckBanWord request
 	) {
-		Map<String, BanWordValidationResult> response = validateContentService.check(request);
+		BanWordValidationResult response = validateContentService.check(request);
 		return AjajaResponse.ok(response);
 	}
 }
