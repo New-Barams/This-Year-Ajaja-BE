@@ -23,7 +23,7 @@ class ChangeRemindTypeController {
 	@PutMapping("/users/receive")
 	@ResponseStatus(OK)
 	public AjajaResponse<Void> changeRemindType(@RequestBody UserRequest.Receive request) {
-		Long id = SecurityUtil.getId();
+		Long id = SecurityUtil.getUserId();
 		changeRemindTypeUseCase.change(id, request.getType());
 		return AjajaResponse.ok();
 	}

@@ -24,7 +24,7 @@ class VerifyCertificationController {
 	@PostMapping("/users/verify")
 	@ResponseStatus(OK)
 	public AjajaResponse<Void> verifyCertification(@Valid @RequestBody UserRequest.Certification request) {
-		Long id = SecurityUtil.getId();
+		Long id = SecurityUtil.getUserId();
 		verifyCertificationUseCase.verify(id, request.getCertification());
 		return AjajaResponse.ok();
 	}

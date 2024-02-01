@@ -23,7 +23,7 @@ class SendVerificationController {
 	@PostMapping("/users/send-verification")
 	@ResponseStatus(NO_CONTENT)
 	public void sendVerification(@Valid @RequestBody UserRequest.EmailVerification request) {
-		Long id = SecurityUtil.getId();
+		Long id = SecurityUtil.getUserId();
 		sendVerificationEmailUseCase.sendVerification(id, request.getEmail());
 	}
 }

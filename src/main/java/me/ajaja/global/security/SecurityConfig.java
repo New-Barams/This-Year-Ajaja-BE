@@ -16,13 +16,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import me.ajaja.global.security.filter.AuthorizationExceptionFilter;
 import me.ajaja.global.security.filter.AuthorizeRequestFilter;
-import me.ajaja.global.security.jwt.JwtParser;
 
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
 	private final ObjectMapper objectMapper;
-	private final JwtParser jwtParser; // todo: tmp
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

@@ -27,7 +27,7 @@ public class UpdateRemindInfoController {
 		@PathVariable Long id,
 		@RequestBody PlanRequest.UpdateRemind request
 	) {
-		Long userId = SecurityUtil.getId();
+		Long userId = SecurityUtil.getUserId();
 		updateRemindInfoUseCase.update(userId, id, request);
 		return AjajaResponse.ok();
 	}

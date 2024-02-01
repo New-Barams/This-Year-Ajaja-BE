@@ -10,7 +10,11 @@ import me.ajaja.global.security.common.UserAdapter;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SecurityUtil {
 
-	public static Long getId() {
+	/**
+	 * Get user ID from SecurityContext. To use this utility authentication should be done.
+	 * @see me.ajaja.global.security.annotation.Authorization
+	 */
+	public static Long getUserId() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		UserAdapter userAdapter = (UserAdapter)authentication.getPrincipal();
 		return userAdapter.id();

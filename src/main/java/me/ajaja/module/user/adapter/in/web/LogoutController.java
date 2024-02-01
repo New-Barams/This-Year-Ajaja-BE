@@ -20,7 +20,7 @@ class LogoutController {
 	@PostMapping("/users/logout")
 	@ResponseStatus(NO_CONTENT)
 	public void logout() {
-		Long id = SecurityUtil.getId();
+		Long id = SecurityUtil.getUserId();
 		logoutUseCase.logout(id);
 	}
 }

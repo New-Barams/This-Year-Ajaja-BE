@@ -24,7 +24,7 @@ public class GetPlanInfoController {
 	@GetMapping("/plans/main")
 	@ResponseStatus(OK)
 	public AjajaResponse<List<PlanResponse.MainInfo>> getPlanInfo() {
-		Long userId = SecurityUtil.getId();
+		Long userId = SecurityUtil.getUserId();
 		List<PlanResponse.MainInfo> response = getPlanInfoUseCase.load(userId);
 		return AjajaResponse.ok(response);
 	}

@@ -57,7 +57,7 @@ public class PlanController {
 	@PostMapping("/{id}/ajaja")
 	@ResponseStatus(OK)
 	public AjajaResponse<Void> switchAjaja(@PathVariable Long id) {
-		Long userId = SecurityUtil.getId();
+		Long userId = SecurityUtil.getUserId();
 		switchAjajaService.switchOrAddIfNotExist(userId, id);
 		return AjajaResponse.ok();
 	}
@@ -89,7 +89,7 @@ public class PlanController {
 		@RequestBody PlanRequest.Create request,
 		@RequestHeader(name = "Month") @Min(1) @Max(12) int month
 	) {
-		Long userId = SecurityUtil.getId();
+		Long userId = SecurityUtil.getUserId();
 		Long planId = createPlanService.create(userId, request, month);
 		URI uri = URI.create("plans/" + planId);
 
@@ -103,7 +103,7 @@ public class PlanController {
 		@PathVariable Long id,
 		@RequestHeader(name = "Month") @Min(1) @Max(12) int month
 	) {
-		Long userId = SecurityUtil.getId();
+		Long userId = SecurityUtil.getUserId();
 		deletePlanService.delete(id, userId, month);
 		return AjajaResponse.ok();
 	}
@@ -112,7 +112,7 @@ public class PlanController {
 	@PutMapping("/{id}/public")
 	@ResponseStatus(OK)
 	public AjajaResponse<Void> updatePlanPublicStatus(@PathVariable Long id) {
-		Long userId = SecurityUtil.getId();
+		Long userId = SecurityUtil.getUserId();
 		updatePlanService.updatePublicStatus(id, userId);
 		return AjajaResponse.ok();
 	}
@@ -121,7 +121,7 @@ public class PlanController {
 	@PutMapping("/{id}/remindable")
 	@ResponseStatus(OK)
 	public AjajaResponse<Void> updatePlanRemindStatus(@PathVariable Long id) {
-		Long userId = SecurityUtil.getId();
+		Long userId = SecurityUtil.getUserId();
 		updatePlanService.updateRemindStatus(id, userId);
 		return AjajaResponse.ok();
 	}
@@ -130,7 +130,7 @@ public class PlanController {
 	@PutMapping("/{id}/ajaja")
 	@ResponseStatus(OK)
 	public AjajaResponse<Void> updatePlanAjajaStatus(@PathVariable Long id) {
-		Long userId = SecurityUtil.getId();
+		Long userId = SecurityUtil.getUserId();
 		updatePlanService.updateAjajaStatus(id, userId);
 		return AjajaResponse.ok();
 	}
@@ -143,7 +143,7 @@ public class PlanController {
 		@RequestBody PlanRequest.Update request,
 		@RequestHeader(name = "Month") @Min(1) @Max(12) int month
 	) {
-		Long userId = SecurityUtil.getId();
+		Long userId = SecurityUtil.getUserId();
 		PlanResponse.Detail response = updatePlanService.update(id, userId, request, month);
 		return AjajaResponse.ok(response);
 	}

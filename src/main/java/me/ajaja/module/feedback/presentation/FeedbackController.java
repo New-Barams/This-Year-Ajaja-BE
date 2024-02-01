@@ -33,7 +33,7 @@ public class FeedbackController {
 		@PathVariable Long planId,
 		@RequestBody FeedbackRequest.UpdateFeedback updateFeedback
 	) {
-		Long userId = SecurityUtil.getId();
+		Long userId = SecurityUtil.getUserId();
 		updateFeedbackService.updateFeedback(userId, planId, updateFeedback.getRate(), updateFeedback.getMessage());
 		return AjajaResponse.ok();
 	}
@@ -42,7 +42,7 @@ public class FeedbackController {
 	@GetMapping("/{planId}")
 	@ResponseStatus(OK)
 	public AjajaResponse<FeedbackResponse.FeedbackInfo> getFeedbackInfo(@PathVariable Long planId) {
-		Long userId = SecurityUtil.getId();
+		Long userId = SecurityUtil.getUserId();
 		FeedbackResponse.FeedbackInfo feedbackInfo = loadFeedbackInfoService.loadFeedbackInfoByPlanId(userId, planId);
 		return AjajaResponse.ok(feedbackInfo);
 	}

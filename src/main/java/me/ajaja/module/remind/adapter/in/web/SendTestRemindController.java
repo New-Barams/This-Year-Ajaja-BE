@@ -21,7 +21,7 @@ public class SendTestRemindController {
 	@PostMapping("/reminds/test")
 	@ResponseStatus(OK)
 	public AjajaResponse<String> sendTestRemind() {
-		Long userId = SecurityUtil.getId();
+		Long userId = SecurityUtil.getUserId();
 		String remindType = sendTestRemindUseCase.send(userId);
 		return AjajaResponse.ok(remindType);
 	}

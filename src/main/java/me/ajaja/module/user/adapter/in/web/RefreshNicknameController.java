@@ -21,7 +21,7 @@ class RefreshNicknameController {
 	@PostMapping("/users/refresh")
 	@ResponseStatus(OK)
 	public AjajaResponse<Void> refreshNickname() {
-		Long id = SecurityUtil.getId();
+		Long id = SecurityUtil.getUserId();
 		refreshNicknameUseCase.refresh(id);
 		return AjajaResponse.ok();
 	}

@@ -21,7 +21,7 @@ class WithdrawController {
 	@DeleteMapping("/users")
 	@ResponseStatus(OK)
 	public AjajaResponse<Void> withdraw() {
-		Long id = SecurityUtil.getId();
+		Long id = SecurityUtil.getUserId();
 		withdrawUseCase.withdraw(id);
 		return AjajaResponse.ok();
 	}

@@ -22,7 +22,7 @@ public class GetRemindInfoController {
 	@GetMapping("/reminds/{planId}")
 	@ResponseStatus(HttpStatus.OK)
 	public AjajaResponse<RemindResponse.RemindInfo> getRemindResponse(@PathVariable Long planId) {
-		Long userId = SecurityUtil.getId();
+		Long userId = SecurityUtil.getUserId();
 		RemindResponse.RemindInfo response = findPlanRemindQuery.findByUserIdAndPlanId(userId, planId);
 		return AjajaResponse.ok(response);
 	}

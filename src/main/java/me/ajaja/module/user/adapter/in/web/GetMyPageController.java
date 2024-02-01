@@ -22,7 +22,7 @@ class GetMyPageController {
 	@GetMapping("/users")
 	@ResponseStatus(OK)
 	public AjajaResponse<UserResponse.MyPage> getMyPage() {
-		Long id = SecurityUtil.getId();
+		Long id = SecurityUtil.getUserId();
 		UserResponse.MyPage response = getMyPageQuery.findUserInfoById(id);
 		return AjajaResponse.ok(response);
 	}

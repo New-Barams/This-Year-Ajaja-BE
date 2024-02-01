@@ -11,10 +11,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import me.ajaja.global.exception.AjajaException;
 
-@RequiredArgsConstructor
 public class AuthorizeRequestFilter extends OncePerRequestFilter {
 	private static final List<String> ALLOW_LIST = List.of(
 		"/index.html", "/swagger-spec", "/swagger-ui", "/api-docs", "favicon", // swagger
