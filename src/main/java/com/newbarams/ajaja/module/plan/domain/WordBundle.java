@@ -2,7 +2,7 @@ package com.newbarams.ajaja.module.plan.domain;
 
 import org.ahocorasick.trie.Trie;
 
-public class WordBundle {
+class WordBundle {
 	static final Trie banWord = Trie.builder()
 		.ignoreOverlaps()
 		.addKeywords("ㅅㅂ", "시발", "지랄", "개새끼", "ㅈㄹ", "씨발", "씨바", "시바", "존나", "ㅈㄴ", "좆같", "ㅈ같", "ㅈㄹ", "미친놈",
