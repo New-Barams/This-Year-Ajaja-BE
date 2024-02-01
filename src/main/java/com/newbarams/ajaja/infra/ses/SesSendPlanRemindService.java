@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 public class SesSendPlanRemindService implements SendRemindPort {
 	private static final List<Integer> HANDLING_ERROR_CODES = List.of(400, 408, 500, 503);
 	private static final String FEEDBACK_URL = """
-		https://www.ajaja.me/feedbacks/evaluate?title=%s&month=%d&day=%d&planId=%d
+		https://www.ajaja.me/feedback/evaluate?title=%s&month=%d&day=%d&planId=%d
 		""";
 	private static final String END_POINT = "EMAIL";
 	private static final int RETRY_MAX_COUNT = 5;
