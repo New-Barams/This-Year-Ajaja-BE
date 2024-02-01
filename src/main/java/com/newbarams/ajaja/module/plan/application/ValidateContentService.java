@@ -9,11 +9,9 @@ import com.newbarams.ajaja.module.plan.domain.BanWordFilter;
 import com.newbarams.ajaja.module.plan.dto.BanWordValidationResult;
 import com.newbarams.ajaja.module.plan.dto.PlanRequest;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class ValidateContentService {
 	private static final int MAP_CAPACITY = 2;
