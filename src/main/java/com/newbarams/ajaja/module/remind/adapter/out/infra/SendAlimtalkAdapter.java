@@ -30,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 public class SendAlimtalkAdapter implements SendRemindPort {
 	private static final List<String> HANDLING_ERROR_CODES = List.of("400", "401", "403", "404", "500");
 	private static final String FEEDBACK_URL
-		= "https://www.ajaja.me/feedbacks/evaluate?title=%s&month=%d&day=%d&planId=%d";
+		= "https://www.ajaja.me/feedback/evaluate?title=%s&month=%d&day=%d&planId=%d";
 	private static final String END_POINT = "KAKAO";
 	private static final int RETRY_MAX_COUNT = 5;
 
