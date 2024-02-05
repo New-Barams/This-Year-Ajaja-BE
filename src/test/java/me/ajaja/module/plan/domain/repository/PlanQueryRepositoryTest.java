@@ -17,15 +17,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import me.ajaja.common.support.MonkeySupport;
 import me.ajaja.global.common.TimeValue;
-import me.ajaja.module.plan.application.port.out.FindAllPlansPort;
+import me.ajaja.module.plan.application.port.out.FindAllPlansQuery;
 import me.ajaja.module.plan.application.port.out.FindPlanDetailPort;
 import me.ajaja.module.plan.application.port.out.SavePlanPort;
 import me.ajaja.module.plan.domain.Plan;
 import me.ajaja.module.plan.domain.PlanStatus;
 import me.ajaja.module.plan.dto.PlanRequest;
 import me.ajaja.module.plan.dto.PlanResponse;
-import me.ajaja.module.remind.application.port.out.FindTargetRemindQuery;
 import me.ajaja.module.remind.application.port.out.FindRemindableTargetPort;
+import me.ajaja.module.remind.application.port.out.FindTargetRemindQuery;
 import me.ajaja.module.user.adapter.out.persistence.UserJpaRepository;
 import me.ajaja.module.user.adapter.out.persistence.model.UserEntity;
 import me.ajaja.module.user.domain.User;
@@ -37,7 +37,7 @@ class PlanQueryRepositoryTest extends MonkeySupport {
 	@Autowired
 	private SavePlanPort savePlanPort;
 	@Autowired
-	private FindAllPlansPort findAllPlansPort;
+	private FindAllPlansQuery findAllPlansQuery;
 	@Autowired
 	private FindPlanDetailPort findPlanDetailPort;
 	@Autowired
@@ -146,7 +146,7 @@ class PlanQueryRepositoryTest extends MonkeySupport {
 		savePlanPort.saveAll(plans);
 
 		// when
-		List<Plan> currentPlans = findAllPlansPort.findAllCurrentPlansByUserId(userId);
+		List<Plan> currentPlans = findAllPlansQuery.findAllCurrentPlansByUserId(userId);
 
 		// then
 		assertThat(currentPlans).isNotEmpty().hasSize(expectedSize);
@@ -188,8 +188,8 @@ class PlanQueryRepositoryTest extends MonkeySupport {
 		PlanRequest.GetAll latestReq = new PlanRequest.GetAll("latest", true, null, null);
 		PlanRequest.GetAll ajajaReq = new PlanRequest.GetAll("ajaja", true, null, null);
 
-		List<PlanResponse.GetAll> latestRes = findAllPlansPort.findAllByCursorAndSorting(latestReq);
-		List<PlanResponse.GetAll> ajajaRes = findAllPlansPort.findAllByCursorAndSorting(ajajaReq);
+		List<PlanResponse.GetAll> latestRes = findAllPlansQuery.findAllByCursorAndSorting(latestReq);
+		List<PlanResponse.GetAll> ajajaRes = findAllPlansQuery.findAllByCursorAndSorting(ajajaReq);
 
 		assertThat(latestRes).hasSize(pageSize);
 		assertThat(ajajaRes).hasSize(pageSize);
@@ -210,7 +210,7 @@ class PlanQueryRepositoryTest extends MonkeySupport {
 
 		PlanRequest.GetAll latestReq = new PlanRequest.GetAll("latest", true, null, null);
 
-		List<PlanResponse.GetAll> latestRes = findAllPlansPort.findAllByCursorAndSorting(latestReq);
+		List<PlanResponse.GetAll> latestRes = findAllPlansQuery.findAllByCursorAndSorting(latestReq);
 
 		for (int i = 0; i < pageSize - 1; i++) {
 			assertThat(latestRes.get(i).getId()).isGreaterThan(latestRes.get(i + 1).getId());
@@ -237,7 +237,7 @@ class PlanQueryRepositoryTest extends MonkeySupport {
 		user.delete();
 		userRepository.save(userMapper.toEntity(user));
 
-		List<PlanResponse.GetAll> latestRes = findAllPlansPort.findAllByCursorAndSorting(latestReq);
+		List<PlanResponse.GetAll> latestRes = findAllPlansQuery.findAllByCursorAndSorting(latestReq);
 
 		// then
 		assertThat(latestRes).hasSize(1);

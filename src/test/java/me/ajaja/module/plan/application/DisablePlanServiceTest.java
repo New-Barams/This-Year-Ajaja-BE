@@ -11,7 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import me.ajaja.common.support.MockTestSupport;
-import me.ajaja.module.plan.application.port.out.FindAllPlansPort;
+import me.ajaja.module.plan.application.port.out.FindAllPlansQuery;
 import me.ajaja.module.plan.domain.Plan;
 
 class DisablePlanServiceTest extends MockTestSupport {
@@ -19,20 +19,20 @@ class DisablePlanServiceTest extends MockTestSupport {
 	private DisablePlanService disablePlanService;
 
 	@Mock
-	private FindAllPlansPort findAllPlansPort;
+	private FindAllPlansQuery findAllPlansQuery;
 
 	@Test
 	void disable_Success() {
 		// given
 		Long userId = sut.giveMeOne(Long.class);
 		List<Plan> plans = sut.giveMe(Plan.class, 4);
-		given(findAllPlansPort.findAllCurrentPlansByUserId(any())).willReturn(plans);
+		given(findAllPlansQuery.findAllCurrentPlansByUserId(any())).willReturn(plans);
 
 		// when
 		disablePlanService.disable(userId);
 
 		// then
-		then(findAllPlansPort).should(times(1)).findAllCurrentPlansByUserId(any());
+		then(findAllPlansQuery).should(times(1)).findAllCurrentPlansByUserId(any());
 		plans.stream()
 			.map(Plan::getStatus)
 			.forEach(status -> {

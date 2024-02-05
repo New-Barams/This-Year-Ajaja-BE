@@ -6,7 +6,7 @@ import me.ajaja.module.plan.domain.Plan;
 import me.ajaja.module.plan.dto.PlanRequest;
 import me.ajaja.module.plan.dto.PlanResponse;
 
-public interface FindAllPlansPort {
+public interface FindAllPlansQuery {
 	List<PlanResponse.GetAll> findAllByCursorAndSorting(PlanRequest.GetAll conditions);
 
 	List<Plan> findAllCurrentPlansByUserId(Long userId);

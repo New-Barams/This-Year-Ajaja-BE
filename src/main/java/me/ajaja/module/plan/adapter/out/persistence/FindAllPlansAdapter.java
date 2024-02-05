@@ -17,7 +17,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import me.ajaja.global.common.TimeValue;
 import me.ajaja.module.plan.adapter.out.persistence.model.PlanEntity;
-import me.ajaja.module.plan.application.port.out.FindAllPlansPort;
+import me.ajaja.module.plan.application.port.out.FindAllPlansQuery;
 import me.ajaja.module.plan.domain.Plan;
 import me.ajaja.module.plan.dto.PlanRequest;
 import me.ajaja.module.plan.dto.PlanResponse;
@@ -27,7 +27,7 @@ import me.ajaja.module.tag.domain.QTag;
 
 @Repository
 @RequiredArgsConstructor
-class FindAllPlansAdapter implements FindAllPlansPort {
+class FindAllPlansAdapter implements FindAllPlansQuery {
 	private static final String LATEST = "latest";
 	private static final String AJAJA = "ajaja";
 	private static final int PAGE_SIZE = 3;
