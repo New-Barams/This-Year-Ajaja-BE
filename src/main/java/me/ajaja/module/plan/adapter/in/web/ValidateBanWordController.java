@@ -12,7 +12,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.ajaja.global.common.AjajaResponse;
 import me.ajaja.global.security.annotation.Authorization;
-import me.ajaja.module.plan.application.ValidateContentService;
+import me.ajaja.module.plan.application.port.in.ValidateContentUseCase;
 import me.ajaja.module.plan.dto.BanWordValidationResult;
 import me.ajaja.module.plan.dto.PlanRequest;
 
@@ -20,7 +20,7 @@ import me.ajaja.module.plan.dto.PlanRequest;
 @RestController
 @RequiredArgsConstructor
 public class ValidateBanWordController {
-	private final ValidateContentService validateContentService;
+	private final ValidateContentUseCase validateContentUseCase;
 
 	@Authorization
 	@PostMapping("/plans/validate")
@@ -28,7 +28,7 @@ public class ValidateBanWordController {
 	public AjajaResponse<BanWordValidationResult> validateBanWord(
 		@Valid @RequestBody PlanRequest.CheckBanWord request
 	) {
-		BanWordValidationResult response = validateContentService.check(request);
+		BanWordValidationResult response = validateContentUseCase.check(request);
 		return AjajaResponse.ok(response);
 	}
 }
