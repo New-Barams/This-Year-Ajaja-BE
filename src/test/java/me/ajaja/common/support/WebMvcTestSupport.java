@@ -37,13 +37,12 @@ import me.ajaja.module.feedback.application.UpdateFeedbackService;
 import me.ajaja.module.plan.application.ValidateContentService;
 import me.ajaja.module.plan.application.port.in.CreatePlanUseCase;
 import me.ajaja.module.plan.application.port.in.DeletePlanUseCase;
-import me.ajaja.module.plan.application.port.in.LoadAllPlansUseCase;
 import me.ajaja.module.plan.application.port.in.LoadPlanDetailUseCase;
-import me.ajaja.module.plan.application.port.in.LoadPlanUseCase;
 import me.ajaja.module.plan.application.port.in.UpdatePlanStatusUseCase;
 import me.ajaja.module.plan.application.port.in.UpdatePlanUseCase;
-import me.ajaja.module.remind.application.port.in.GetTargetInfoUseCase;
+import me.ajaja.module.plan.application.port.out.FindAllPlansQuery;
 import me.ajaja.module.remind.application.port.in.GetRemindInfoUseCase;
+import me.ajaja.module.remind.application.port.in.GetTargetInfoUseCase;
 import me.ajaja.module.remind.application.port.in.SendTestRemindUseCase;
 import me.ajaja.module.remind.application.port.in.UpdateRemindInfoUseCase;
 import me.ajaja.module.remind.application.port.out.FindTargetRemindQuery;
@@ -139,13 +138,11 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 	@MockBean
 	protected CreatePlanUseCase createPlanService;
 	@MockBean
-	protected LoadPlanUseCase getPlanService;
-	@MockBean
 	protected LoadPlanDetailUseCase loadPlanDetailUseCase;
 	@MockBean
-	protected LoadAllPlansUseCase loadAllPlansUseCase;
-	@MockBean
 	protected DeletePlanUseCase deletePlanService;
+	@MockBean
+	protected FindAllPlansQuery findAllPlansQuery;
 	@MockBean
 	protected UpdatePlanUseCase updatePlanService;
 	@MockBean

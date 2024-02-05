@@ -210,7 +210,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		List<PlanResponse.GetAll> response =
 			List.of(new PlanResponse.GetAll(1L, 1L, "공부하는 돼지", "올해도 아좌좌", 1, 15000, TAG_FIXTURE, Instant.now()));
 
-		given(loadAllPlansUseCase.loadAllPlans(request)).willReturn(response);
+		given(findAllPlansQuery.findAllByCursorAndSorting(request)).willReturn(response);
 
 		// when
 		var result = mockMvc.perform(get(PLAN_END_POINT)
