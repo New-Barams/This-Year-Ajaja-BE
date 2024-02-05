@@ -1,4 +1,4 @@
-package me.ajaja.module.plan.infra;
+package me.ajaja.module.plan.adapter.out.persistence.model;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -19,18 +19,21 @@ import me.ajaja.module.feedback.domain.FeedbackQueryRepository;
 import me.ajaja.module.feedback.dto.FeedbackResponse;
 import me.ajaja.module.feedback.infra.model.FeedbackInfo;
 import me.ajaja.module.feedback.mapper.FeedbackMapper;
-import me.ajaja.module.plan.application.LoadPlanService;
+import me.ajaja.module.plan.mapper.PlanMapper;
+import me.ajaja.module.remind.application.port.out.FindPlanRemindQuery;
 
 class LoadFeedbackInfoServiceTest extends MockTestSupport {
 	@InjectMocks
 	private LoadFeedbackInfoService loadFeedbackInfoService;
 
 	@Mock
-	private LoadPlanService loadPlanService;
+	private FindPlanRemindQuery findPlanRemindQuery;
 	@Mock
 	private FeedbackQueryRepository feedbackQueryRepository;
 	@Mock
 	private FeedbackMapper mapper;
+	@Mock
+	private PlanMapper planMapper;
 
 	private List<FeedbackInfo> feedbacks;
 	private PlanFeedbackInfo planFeedbackInfo;
@@ -73,7 +76,8 @@ class LoadFeedbackInfoServiceTest extends MockTestSupport {
 		Long userId = 1L;
 		Long planId = 1L;
 
-		given(loadPlanService.loadPlanFeedbackInfoByPlanId(anyLong(), anyLong())).willReturn(planFeedbackInfo);
+		given(planMapper.toModel(findPlanRemindQuery.loadByUserIdAndPlanId(anyLong(), anyLong()))).willReturn(
+			planFeedbackInfo);
 		given(feedbackQueryRepository.findFeedbackInfosByPlanId(planId)).willReturn(feedbacks);
 		given(mapper.toResponse(any(), any(), any())).willReturn(remindFeedback);
 		given(mapper.toResponse(any(), anyList())).willReturn(feedbackInfo);
@@ -89,7 +93,7 @@ class LoadFeedbackInfoServiceTest extends MockTestSupport {
 	@DisplayName("만일 계획 정보가 없다면 예외를 던진다.")
 	void loadFeedbackInfoByPlanId_Fail_ByNotFoundPlan() {
 		// given
-		doThrow(AjajaException.class).when(loadPlanService).loadPlanFeedbackInfoByPlanId(anyLong(), anyLong());
+		doThrow(AjajaException.class).when(findPlanRemindQuery).loadByUserIdAndPlanId(anyLong(), anyLong());
 
 		// when,then
 		Assertions.assertThatException().isThrownBy(

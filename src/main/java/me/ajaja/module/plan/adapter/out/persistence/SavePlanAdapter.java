@@ -1,18 +1,18 @@
-package me.ajaja.module.plan.infra;
+package me.ajaja.module.plan.adapter.out.persistence;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
 import lombok.RequiredArgsConstructor;
+import me.ajaja.module.plan.adapter.out.persistence.model.PlanEntity;
+import me.ajaja.module.plan.application.port.out.SavePlanPort;
 import me.ajaja.module.plan.domain.Plan;
-import me.ajaja.module.plan.domain.PlanRepository;
 import me.ajaja.module.plan.mapper.PlanMapper;
 
 @Repository
 @RequiredArgsConstructor
-public class PlanRepositoryImpl implements PlanRepository {
+class SavePlanAdapter implements SavePlanPort {
 	private final PlanJpaRepository planJpaRepository;
 	private final PlanMapper planMapper;
 
@@ -22,12 +22,6 @@ public class PlanRepositoryImpl implements PlanRepository {
 		PlanEntity saved = planJpaRepository.save(planEntity);
 
 		return planMapper.toDomain(saved);
-	}
-
-	@Override
-	public Optional<Plan> findById(Long id) {
-		return planJpaRepository.findById(id)
-			.map(planMapper::toDomain);
 	}
 
 	@Override

@@ -16,10 +16,10 @@ import net.jqwik.api.Arbitraries;
 
 import me.ajaja.common.support.MonkeySupport;
 import me.ajaja.global.exception.AjajaException;
+import me.ajaja.module.plan.application.port.out.SavePlanPort;
 import me.ajaja.module.plan.domain.Content;
 import me.ajaja.module.plan.domain.Message;
 import me.ajaja.module.plan.domain.Plan;
-import me.ajaja.module.plan.domain.PlanRepository;
 import me.ajaja.module.plan.domain.PlanStatus;
 import me.ajaja.module.plan.domain.RemindInfo;
 import me.ajaja.module.plan.dto.PlanParam;
@@ -35,7 +35,7 @@ class UpdatePlanServiceTest extends MonkeySupport {
 	@Autowired
 	private UpdatePlanService updatePlanService;
 	@Autowired
-	private PlanRepository planRepository;
+	private SavePlanPort savePlanPort;
 	@Autowired
 	private UserJpaRepository userRepository;
 	@Autowired
@@ -49,7 +49,7 @@ class UpdatePlanServiceTest extends MonkeySupport {
 		UserEntity entity = userMapper.toEntity(User.init(1L, "+82 1012345678", "ajaja@me.com"));
 		user = userMapper.toDomain(userRepository.save(entity));
 
-		plan = planRepository.save(Plan.create(
+		plan = savePlanPort.save(Plan.create(
 			new PlanParam.Create(
 				1,
 				user.getId(),

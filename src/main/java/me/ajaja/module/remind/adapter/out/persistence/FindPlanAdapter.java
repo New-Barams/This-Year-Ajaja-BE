@@ -4,18 +4,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import me.ajaja.module.plan.application.LoadPlanService;
 import me.ajaja.module.plan.domain.Plan;
-import me.ajaja.module.remind.application.port.out.FindPlanPort;
+import me.ajaja.module.remind.application.port.out.FindTargetPort;
 
 @Component
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class FindPlanAdapter implements FindPlanPort {
-	private final LoadPlanService loadPlanService;
-
+public class FindPlanAdapter implements FindTargetPort {
 	@Override
 	public Plan findByUserIdAndPlanId(Long userId, Long planId) {
-		return loadPlanService.loadByUserIdAndPlanId(userId, planId);
+		return null;
 	}
 }
