@@ -10,6 +10,4 @@ public interface FindAllPlansPort {
 	List<PlanResponse.GetAll> findAllByCursorAndSorting(PlanRequest.GetAll conditions);
 
 	List<Plan> findAllCurrentPlansByUserId(Long userId);
-
-	List<PlanResponse.PlanInfo> findAllPlanByUserId(Long userId);
 }

@@ -11,13 +11,11 @@ import org.springframework.stereotype.Repository;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
 import me.ajaja.global.common.TimeValue;
-import me.ajaja.module.feedback.infra.QFeedbackEntity;
 import me.ajaja.module.plan.adapter.out.persistence.model.PlanEntity;
 import me.ajaja.module.plan.application.port.out.FindAllPlansPort;
 import me.ajaja.module.plan.domain.Plan;
@@ -119,27 +117,5 @@ class FindAllPlansAdapter implements FindAllPlansPort {
 
 	private BooleanExpression isCurrentYear() {
 		return planEntity.createdAt.year().eq(TimeValue.now().getYear());
-	}
-
-	@Override
-	public List<PlanResponse.PlanInfo> findAllPlanByUserId(Long userId) {
-		return queryFactory.select(Projections.constructor(PlanResponse.PlanInfo.class,
-				planEntity.createdAt.year(),
-				planEntity.id,
-				planEntity.title,
-				planEntity.canRemind,
-				QFeedbackEntity.feedbackEntity.achieve.avg().intValue(),
-				planEntity.iconNumber
-			))
-			.from(planEntity)
-			.leftJoin(QFeedbackEntity.feedbackEntity).on(QFeedbackEntity.feedbackEntity.planId.eq(planEntity.id))
-			.groupBy(planEntity.createdAt.year(),
-				planEntity.id,
-				planEntity.title,
-				planEntity.canRemind,
-				planEntity.iconNumber)
-			.where(planEntity.userId.eq(userId))
-			.orderBy(planEntity.createdAt.year().desc())
-			.fetch();
 	}
 }
