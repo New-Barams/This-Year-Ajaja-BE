@@ -6,14 +6,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import me.ajaja.common.support.MockTestSupport;
-import me.ajaja.module.remind.adapter.out.persistence.FindPlanRemindAdapter;
+import me.ajaja.module.remind.adapter.out.persistence.FindTargetRemindAdapter;
 import me.ajaja.module.remind.mapper.RemindInfoMapper;
 
 class LoadRemindInfoServiceTest extends MockTestSupport {
 	@InjectMocks
 	private GetRemindInfoService getRemindInfoService;
 	@Mock
-	private FindPlanRemindAdapter findPlanPort;
+	private FindTargetRemindAdapter findPlanPort;
 	@Mock
 	private RemindInfoMapper mapper;
 

@@ -13,14 +13,14 @@ import me.ajaja.module.plan.application.port.out.FindPlanDetailPort;
 import me.ajaja.module.plan.domain.Plan;
 import me.ajaja.module.plan.dto.PlanResponse;
 import me.ajaja.module.plan.mapper.PlanMapper;
-import me.ajaja.module.remind.application.port.out.FindPlanRemindQuery;
+import me.ajaja.module.remind.application.port.out.FindTargetRemindQuery;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 class LoadPlanDetailService implements LoadPlanDetailUseCase {
 	private final FindPlanDetailPort findPlanDetailPort;
-	private final FindPlanRemindQuery findPlanRemindQuery;
+	private final FindTargetRemindQuery findTargetRemindQuery;
 	private final PlanMapper planMapper;
 
 	@Override
@@ -31,7 +31,7 @@ class LoadPlanDetailService implements LoadPlanDetailUseCase {
 
 	@Override
 	public Plan loadByUserIdAndPlanId(Long userId, Long id) {
-		return findPlanRemindQuery.loadByUserIdAndPlanId(userId, id);
+		return findTargetRemindQuery.loadByUserIdAndPlanId(userId, id);
 	}
 
 	@Override

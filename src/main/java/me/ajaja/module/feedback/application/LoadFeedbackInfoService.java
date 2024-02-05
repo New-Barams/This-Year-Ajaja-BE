@@ -17,7 +17,7 @@ import me.ajaja.module.feedback.mapper.FeedbackMapper;
 import me.ajaja.module.plan.application.port.out.FindPlanDetailPort;
 import me.ajaja.module.plan.domain.Plan;
 import me.ajaja.module.plan.mapper.PlanMapper;
-import me.ajaja.module.remind.application.port.out.FindPlanRemindQuery;
+import me.ajaja.module.remind.application.port.out.FindTargetRemindQuery;
 
 @Service
 @RequiredArgsConstructor
@@ -25,12 +25,12 @@ import me.ajaja.module.remind.application.port.out.FindPlanRemindQuery;
 public class LoadFeedbackInfoService {
 	private final FeedbackQueryRepository feedbackQueryRepository;
 	private final FindPlanDetailPort findPlanDetailPort;
-	private final FindPlanRemindQuery findPlanRemindQuery;
+	private final FindTargetRemindQuery findTargetRemindQuery;
 	private final FeedbackMapper feedbackMapper;
 	private final PlanMapper planMapper;
 
 	public FeedbackResponse.FeedbackInfo loadFeedbackInfoByPlanId(Long userId, Long planId) {
-		Plan plan = findPlanRemindQuery.loadByUserIdAndPlanId(userId, planId);
+		Plan plan = findTargetRemindQuery.loadByUserIdAndPlanId(userId, planId);
 		PlanFeedbackInfo planFeedbackInfo = planMapper.toModel(plan);
 
 		List<FeedbackInfo> feedbackInfos = feedbackQueryRepository.findFeedbackInfosByPlanId(planId);

@@ -10,18 +10,18 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import me.ajaja.module.plan.dto.PlanResponse;
 import me.ajaja.module.plan.mapper.PlanMapper;
-import me.ajaja.module.remind.application.port.in.GetPlanInfoUseCase;
-import me.ajaja.module.remind.application.port.out.FindPlanInfoPort;
+import me.ajaja.module.remind.application.port.in.GetTargetInfoUseCase;
+import me.ajaja.module.remind.application.port.out.FindTargetInfoPort;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class GetPlanInfoService implements GetPlanInfoUseCase {
-	private final FindPlanInfoPort findPlanInfoPort;
+public class GetTargetInfoService implements GetTargetInfoUseCase {
+	private final FindTargetInfoPort findTargetInfoPort;
 	private final PlanMapper mapper;
 
 	public List<PlanResponse.MainInfo> load(Long userId) {
-		List<PlanResponse.PlanInfo> planInfos = findPlanInfoPort.findAllPlanInfosByUserId(userId);
+		List<PlanResponse.PlanInfo> planInfos = findTargetInfoPort.findAllPlanInfosByUserId(userId);
 
 		if (planInfos.isEmpty()) {
 			return Collections.emptyList();

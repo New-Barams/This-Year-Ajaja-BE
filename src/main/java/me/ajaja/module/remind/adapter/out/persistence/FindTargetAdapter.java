@@ -10,7 +10,7 @@ import me.ajaja.module.remind.application.port.out.FindTargetPort;
 @Component
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class FindPlanAdapter implements FindTargetPort {
+public class FindTargetAdapter implements FindTargetPort {
 	@Override
 	public Plan findByUserIdAndPlanId(Long userId, Long planId) {
 		return null;

@@ -16,7 +16,7 @@ import me.ajaja.global.common.TimeValue;
 import me.ajaja.global.exception.AjajaException;
 import me.ajaja.global.exception.ErrorCode;
 import me.ajaja.module.remind.application.CreateRemindService;
-import me.ajaja.module.remind.application.port.out.FindRemindablePlanPort;
+import me.ajaja.module.remind.application.port.out.FindRemindableTargetPort;
 import me.ajaja.module.remind.application.port.out.SendRemindPort;
 import me.ajaja.module.remind.domain.Remind;
 import me.ajaja.module.remind.util.RemindExceptionHandler;
@@ -34,12 +34,12 @@ public class SesSendPlanRemindService implements SendRemindPort {
 
 	private final AmazonSimpleEmailService amazonSimpleEmailService;
 	private final RemindExceptionHandler exceptionHandler;
-	private final FindRemindablePlanPort findRemindablePlanPort;
+	private final FindRemindableTargetPort findRemindableTargetPort;
 	private final CreateRemindService createRemindService;
 
 	@Override
 	public String send(String remindTime, TimeValue now) {
-		List<Remind> reminds = findRemindablePlanPort.findAllRemindablePlan(remindTime, END_POINT, now);
+		List<Remind> reminds = findRemindableTargetPort.findAllRemindablePlan(remindTime, END_POINT, now);
 		reminds.forEach(remind -> {
 			String url = FEEDBACK_URL.formatted(remind.getTitle(), now.getMonth(), now.getDate(), remind.getPlanId());
 			send(remind, url)

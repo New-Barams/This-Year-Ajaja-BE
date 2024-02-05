@@ -11,18 +11,18 @@ import me.ajaja.module.feedback.domain.Feedback;
 import me.ajaja.module.feedback.domain.FeedbackQueryRepository;
 import me.ajaja.module.feedback.domain.FeedbackRepository;
 import me.ajaja.module.plan.domain.Plan;
-import me.ajaja.module.remind.application.port.out.FindPlanRemindQuery;
+import me.ajaja.module.remind.application.port.out.FindTargetRemindQuery;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class UpdateFeedbackService {
-	private final FindPlanRemindQuery findPlanRemindQuery;
+	private final FindTargetRemindQuery findTargetRemindQuery;
 	private final FeedbackQueryRepository feedbackQueryRepository;
 	private final FeedbackRepository feedbackRepository;
 
 	public void updateFeedback(Long userId, Long planId, int rate, String message) {
-		Plan plan = findPlanRemindQuery.loadByUserIdAndPlanId(userId, planId);
+		Plan plan = findTargetRemindQuery.loadByUserIdAndPlanId(userId, planId);
 		TimeValue now = TimeValue.now();
 
 		TimeValue period = plan.getFeedbackPeriod(now);

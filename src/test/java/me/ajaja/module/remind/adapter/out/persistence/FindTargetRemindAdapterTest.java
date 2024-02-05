@@ -14,10 +14,10 @@ import me.ajaja.global.exception.AjajaException;
 import me.ajaja.module.plan.domain.Plan;
 import me.ajaja.module.remind.mapper.RemindInfoMapper;
 
-class FindPlanRemindAdapterTest extends MockTestSupport {
+class FindTargetRemindAdapterTest extends MockTestSupport {
 	@Spy
 	@InjectMocks
-	private FindPlanRemindAdapter findPlanRemindAdapter;
+	private FindTargetRemindAdapter findTargetRemindAdapter;
 	@Mock
 	private RemindInfoMapper mapper;
 
@@ -50,11 +50,11 @@ class FindPlanRemindAdapterTest extends MockTestSupport {
 		Plan plan = null;
 
 		// when
-		doThrow(AjajaException.class).when(findPlanRemindAdapter).loadByUserIdAndPlanId(anyLong(), anyLong());
+		doThrow(AjajaException.class).when(findTargetRemindAdapter).loadByUserIdAndPlanId(anyLong(), anyLong());
 
 		// then
 		assertThatException().isThrownBy(
-			() -> findPlanRemindAdapter.findByUserIdAndPlanId(1L, 1L)
+			() -> findTargetRemindAdapter.findByUserIdAndPlanId(1L, 1L)
 		);
 
 	}

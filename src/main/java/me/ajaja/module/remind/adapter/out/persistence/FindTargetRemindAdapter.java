@@ -15,14 +15,14 @@ import me.ajaja.global.exception.AjajaException;
 import me.ajaja.module.plan.adapter.out.persistence.model.PlanEntity;
 import me.ajaja.module.plan.domain.Plan;
 import me.ajaja.module.plan.mapper.PlanMapper;
-import me.ajaja.module.remind.application.port.out.FindPlanRemindQuery;
+import me.ajaja.module.remind.application.port.out.FindTargetRemindQuery;
 import me.ajaja.module.remind.dto.RemindResponse;
 import me.ajaja.module.remind.mapper.RemindInfoMapper;
 
 @Component
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class FindPlanRemindAdapter implements FindPlanRemindQuery {
+public class FindTargetRemindAdapter implements FindTargetRemindQuery {
 	private final JPAQueryFactory queryFactory;
 	private final RemindInfoMapper mapper;
 	private final PlanMapper planMapper;

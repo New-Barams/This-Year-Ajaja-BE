@@ -4,6 +4,6 @@ import java.util.List;
 
 import me.ajaja.module.plan.dto.PlanResponse;
 
-public interface FindPlanInfoPort {
+public interface FindTargetInfoPort {
 	List<PlanResponse.PlanInfo> findAllPlanInfosByUserId(Long userId);
 }

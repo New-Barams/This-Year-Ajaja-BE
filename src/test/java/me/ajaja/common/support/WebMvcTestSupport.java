@@ -42,11 +42,11 @@ import me.ajaja.module.plan.application.port.in.LoadPlanDetailUseCase;
 import me.ajaja.module.plan.application.port.in.LoadPlanUseCase;
 import me.ajaja.module.plan.application.port.in.UpdatePlanStatusUseCase;
 import me.ajaja.module.plan.application.port.in.UpdatePlanUseCase;
-import me.ajaja.module.remind.application.port.in.GetPlanInfoUseCase;
+import me.ajaja.module.remind.application.port.in.GetTargetInfoUseCase;
 import me.ajaja.module.remind.application.port.in.GetRemindInfoUseCase;
 import me.ajaja.module.remind.application.port.in.SendTestRemindUseCase;
 import me.ajaja.module.remind.application.port.in.UpdateRemindInfoUseCase;
-import me.ajaja.module.remind.application.port.out.FindPlanRemindQuery;
+import me.ajaja.module.remind.application.port.out.FindTargetRemindQuery;
 import me.ajaja.module.user.application.port.in.ChangeRemindTypeUseCase;
 import me.ajaja.module.user.application.port.in.LogoutUseCase;
 import me.ajaja.module.user.application.port.in.RefreshNicknameUseCase;
@@ -165,13 +165,13 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 
 	// Remind
 	@MockBean
-	protected GetPlanInfoUseCase getPlanInfoUseCase;
+	protected GetTargetInfoUseCase getTargetInfoUseCase;
 	@MockBean
 	protected GetRemindInfoUseCase getRemindInfoUseCase;
 	@MockBean
 	protected UpdateRemindInfoUseCase updateRemindInfoUseCase;
 	@MockBean
-	protected FindPlanRemindQuery findPlanRemindQuery;
+	protected FindTargetRemindQuery findTargetRemindQuery;
 	@MockBean
 	protected SendTestRemindUseCase sendTestRemindUseCase;
 }

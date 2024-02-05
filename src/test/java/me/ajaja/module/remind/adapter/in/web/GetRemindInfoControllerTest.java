@@ -36,7 +36,7 @@ class GetRemindInfoControllerTest extends WebMvcTestSupport {
 			"MORNING", true, 12, 12, 1, messages
 		);
 
-		given(findPlanRemindQuery.findByUserIdAndPlanId(anyLong(), anyLong())).willReturn(response);
+		given(findTargetRemindQuery.findByUserIdAndPlanId(anyLong(), anyLong())).willReturn(response);
 
 		// when
 		var result = mockMvc.perform(get(REMIND_END_POINT + "/{planId}", 1)
@@ -81,7 +81,7 @@ class GetRemindInfoControllerTest extends WebMvcTestSupport {
 	void getRemindResponse_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
 		// given
 		AjajaException tokenException = new AjajaException(errorCode);
-		doThrow(tokenException).when(findPlanRemindQuery).findByUserIdAndPlanId(anyLong(), anyLong());
+		doThrow(tokenException).when(findTargetRemindQuery).findByUserIdAndPlanId(anyLong(), anyLong());
 
 		// when
 		var result = mockMvc.perform(get(REMIND_END_POINT + "/{planId}", 1)
@@ -107,7 +107,7 @@ class GetRemindInfoControllerTest extends WebMvcTestSupport {
 	void getRemindResponse_Fail_ByPlanNotFound() throws Exception {
 		// given
 		AjajaException notFoundException = new AjajaException(NOT_FOUND_PLAN);
-		doThrow(notFoundException).when(findPlanRemindQuery).findByUserIdAndPlanId(anyLong(), anyLong());
+		doThrow(notFoundException).when(findTargetRemindQuery).findByUserIdAndPlanId(anyLong(), anyLong());
 
 		// when
 		var result = mockMvc.perform(get(REMIND_END_POINT + "/{planId}", 1)

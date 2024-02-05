@@ -12,11 +12,11 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import me.ajaja.module.feedback.infra.QFeedbackEntity;
 import me.ajaja.module.plan.dto.PlanResponse;
-import me.ajaja.module.remind.application.port.out.FindPlanInfoPort;
+import me.ajaja.module.remind.application.port.out.FindTargetInfoPort;
 
 @Repository
 @RequiredArgsConstructor
-public class FindPlanInfoAdapter implements FindPlanInfoPort {
+public class FindTargetInfoAdapter implements FindTargetInfoPort {
 	private final JPAQueryFactory queryFactory;
 
 	@Override
