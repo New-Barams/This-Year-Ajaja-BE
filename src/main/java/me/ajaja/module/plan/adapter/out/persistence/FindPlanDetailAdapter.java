@@ -20,7 +20,6 @@ import me.ajaja.module.plan.application.port.out.FindPlanDetailPort;
 import me.ajaja.module.plan.dto.PlanResponse;
 import me.ajaja.module.plan.dto.QPlanResponse_Detail;
 import me.ajaja.module.plan.dto.QPlanResponse_Writer;
-import me.ajaja.module.plan.mapper.PlanMapper;
 import me.ajaja.module.tag.domain.QPlanTag;
 import me.ajaja.module.tag.domain.QTag;
 
@@ -28,7 +27,6 @@ import me.ajaja.module.tag.domain.QTag;
 @RequiredArgsConstructor
 class FindPlanDetailAdapter implements FindPlanDetailPort {
 	private final JPAQueryFactory queryFactory;
-	private final PlanMapper planMapper;
 
 	@Override
 	public Optional<PlanResponse.Detail> findPlanDetailByIdAndOptionalUser(Long userId, Long id) {
