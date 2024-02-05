@@ -18,7 +18,7 @@ import me.ajaja.module.plan.dto.PlanResponse;
 
 @RestController
 @RequiredArgsConstructor
-public class GetPlanController {
+class GetPlanController {
 	private final LoadPlanDetailUseCase loadPlanDetailUseCase;
 	private final JwtParser jwtParser; // todo: delete when authentication filtering update
 

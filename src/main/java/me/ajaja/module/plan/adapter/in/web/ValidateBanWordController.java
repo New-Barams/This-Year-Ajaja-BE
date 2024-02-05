@@ -19,7 +19,7 @@ import me.ajaja.module.plan.dto.PlanRequest;
 @Validated
 @RestController
 @RequiredArgsConstructor
-public class ValidateBanWordController {
+class ValidateBanWordController {
 	private final ValidateContentUseCase validateContentUseCase;
 
 	@Authorization

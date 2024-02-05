@@ -34,12 +34,12 @@ import me.ajaja.module.auth.application.port.in.ReissueTokenUseCase;
 import me.ajaja.module.feedback.application.LoadFeedbackInfoService;
 import me.ajaja.module.feedback.application.LoadTotalAchieveService;
 import me.ajaja.module.feedback.application.UpdateFeedbackService;
-import me.ajaja.module.plan.application.ValidateContentService;
 import me.ajaja.module.plan.application.port.in.CreatePlanUseCase;
 import me.ajaja.module.plan.application.port.in.DeletePlanUseCase;
 import me.ajaja.module.plan.application.port.in.LoadPlanDetailUseCase;
 import me.ajaja.module.plan.application.port.in.UpdatePlanStatusUseCase;
 import me.ajaja.module.plan.application.port.in.UpdatePlanUseCase;
+import me.ajaja.module.plan.application.port.in.ValidateContentUseCase;
 import me.ajaja.module.plan.application.port.out.FindAllPlansQuery;
 import me.ajaja.module.remind.application.port.in.GetRemindInfoUseCase;
 import me.ajaja.module.remind.application.port.in.GetTargetInfoUseCase;
@@ -150,7 +150,7 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 	@MockBean
 	protected SwitchAjajaService switchAjajaService;
 	@MockBean
-	protected ValidateContentService validateContentService;
+	protected ValidateContentUseCase validateContentUseCase;
 
 	// Feedback
 	@MockBean

@@ -15,7 +15,7 @@ import me.ajaja.module.ajaja.application.SwitchAjajaService;
 
 @RestController
 @RequiredArgsConstructor
-public class SwitchAjajaController {
+class SwitchAjajaController {
 	private final SwitchAjajaService switchAjajaService;
 
 	@Authorization

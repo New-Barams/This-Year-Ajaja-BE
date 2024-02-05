@@ -21,7 +21,7 @@ import me.ajaja.module.plan.dto.PlanResponse;
 
 @RestController
 @RequiredArgsConstructor
-public class UpdatePlanController {
+class UpdatePlanController {
 	private final UpdatePlanUseCase updatePlanUseCase;
 
 	@Authorization

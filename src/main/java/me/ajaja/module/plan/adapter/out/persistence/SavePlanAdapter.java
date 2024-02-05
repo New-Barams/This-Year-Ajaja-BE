@@ -9,10 +9,11 @@ import me.ajaja.module.plan.adapter.out.persistence.model.PlanEntity;
 import me.ajaja.module.plan.application.port.out.SavePlanPort;
 import me.ajaja.module.plan.domain.Plan;
 import me.ajaja.module.plan.mapper.PlanMapper;
+import me.ajaja.module.remind.application.port.out.SaveTargetPort;
 
 @Repository
 @RequiredArgsConstructor
-class SavePlanAdapter implements SavePlanPort {
+class SavePlanAdapter implements SavePlanPort, SaveTargetPort {
 	private final PlanJpaRepository planJpaRepository;
 	private final PlanMapper planMapper;
 
@@ -29,5 +30,10 @@ class SavePlanAdapter implements SavePlanPort {
 		return plans.stream()
 			.map(this::save)
 			.toList();
+	}
+
+	@Override
+	public void update(Plan plan) {
+		save(plan);
 	}
 }

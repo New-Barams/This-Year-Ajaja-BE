@@ -13,7 +13,7 @@ import me.ajaja.module.plan.dto.PlanRequest;
 
 @Service
 @RequiredArgsConstructor
-public class ValidateContentService implements ValidateContentUseCase {
+class ValidateContentService implements ValidateContentUseCase {
 	public BanWordValidationResult check(PlanRequest.CheckBanWord request) {
 		BanWordValidationResult.Common titleResult = getResult(request.getTitle());
 		BanWordValidationResult.Common descriptionResult = getResult(request.getDescription());

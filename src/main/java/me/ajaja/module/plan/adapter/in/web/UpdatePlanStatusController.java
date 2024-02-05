@@ -17,7 +17,7 @@ import me.ajaja.module.plan.application.port.in.UpdatePlanStatusUseCase;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/plans/{id}")
-public class UpdatePlanStatusController {
+class UpdatePlanStatusController {
 	private final UpdatePlanStatusUseCase updatePlanStatusUseCase;
 
 	@Authorization

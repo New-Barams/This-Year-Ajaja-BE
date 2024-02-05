@@ -17,7 +17,7 @@ import me.ajaja.module.plan.dto.PlanResponse;
 
 @RestController
 @RequiredArgsConstructor
-public class GetAllPlansController {
+class GetAllPlansController {
 	private final FindAllPlansQuery findAllPlansQuery;
 
 	@GetMapping("/plans")

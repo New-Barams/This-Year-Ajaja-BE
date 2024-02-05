@@ -982,7 +982,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		BanWordValidationResult.Common descriptionResult = new BanWordValidationResult.Common(true, List.of("des"));
 		BanWordValidationResult response = new BanWordValidationResult(titleResult, descriptionResult);
 
-		given(validateContentService.check(request)).willReturn(response);
+		given(validateContentUseCase.check(request)).willReturn(response);
 
 		// when
 		var result = mockMvc.perform(post(PLAN_END_POINT.concat("/validate"))

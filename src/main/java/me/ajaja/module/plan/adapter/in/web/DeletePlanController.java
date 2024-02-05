@@ -18,7 +18,7 @@ import me.ajaja.module.plan.application.port.in.DeletePlanUseCase;
 
 @RestController
 @RequiredArgsConstructor
-public class DeletePlanController {
+class DeletePlanController {
 	private final DeletePlanUseCase deletePlanUseCase;
 
 	@Authorization

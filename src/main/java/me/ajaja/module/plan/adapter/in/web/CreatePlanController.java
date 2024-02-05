@@ -22,7 +22,7 @@ import me.ajaja.module.plan.dto.PlanRequest;
 
 @RestController
 @RequiredArgsConstructor
-public class CreatePlanController {
+class CreatePlanController {
 	private final CreatePlanUseCase createPlanUseCase;
 
 	@Authorization
