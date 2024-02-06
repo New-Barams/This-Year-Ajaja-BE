@@ -12,20 +12,20 @@ import lombok.RequiredArgsConstructor;
 import me.ajaja.global.common.AjajaResponse;
 import me.ajaja.global.security.annotation.Authorization;
 import me.ajaja.global.util.SecurityUtil;
-import me.ajaja.module.plan.application.port.in.UpdatePlanStatusUseCase;
+import me.ajaja.module.plan.application.port.in.SwitchPlanStatusUseCase;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/plans/{id}")
-class UpdatePlanStatusController {
-	private final UpdatePlanStatusUseCase updatePlanStatusUseCase;
+class SwitchPlanStatusController {
+	private final SwitchPlanStatusUseCase switchPlanStatusUseCase;
 
 	@Authorization
 	@PutMapping("/public")
 	@ResponseStatus(OK)
-	public AjajaResponse<Void> updatePlanPublicStatus(@PathVariable Long id) {
+	public AjajaResponse<Void> switchPublicStatus(@PathVariable Long id) {
 		Long userId = SecurityUtil.getUserId();
-		updatePlanStatusUseCase.updatePublicStatus(id, userId);
+		switchPlanStatusUseCase.switchPublic(id, userId);
 
 		return AjajaResponse.ok();
 	}
@@ -33,9 +33,9 @@ class UpdatePlanStatusController {
 	@Authorization
 	@PutMapping("/remindable")
 	@ResponseStatus(OK)
-	public AjajaResponse<Void> updatePlanRemindStatus(@PathVariable Long id) {
+	public AjajaResponse<Void> switchRemindStatus(@PathVariable Long id) {
 		Long userId = SecurityUtil.getUserId();
-		updatePlanStatusUseCase.updateRemindStatus(id, userId);
+		switchPlanStatusUseCase.switchRemindable(id, userId);
 
 		return AjajaResponse.ok();
 	}
@@ -43,9 +43,9 @@ class UpdatePlanStatusController {
 	@Authorization
 	@PutMapping("/ajaja")
 	@ResponseStatus(OK)
-	public AjajaResponse<Void> updatePlanAjajaStatus(@PathVariable Long id) {
+	public AjajaResponse<Void> switchAjajaStatus(@PathVariable Long id) {
 		Long userId = SecurityUtil.getUserId();
-		updatePlanStatusUseCase.updateAjajaStatus(id, userId);
+		switchPlanStatusUseCase.switchAjajable(id, userId);
 
 		return AjajaResponse.ok();
 	}

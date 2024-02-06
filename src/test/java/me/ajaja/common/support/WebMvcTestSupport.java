@@ -37,7 +37,7 @@ import me.ajaja.module.feedback.application.UpdateFeedbackService;
 import me.ajaja.module.plan.application.port.in.CreatePlanUseCase;
 import me.ajaja.module.plan.application.port.in.DeletePlanUseCase;
 import me.ajaja.module.plan.application.port.in.LoadPlanDetailUseCase;
-import me.ajaja.module.plan.application.port.in.UpdatePlanStatusUseCase;
+import me.ajaja.module.plan.application.port.in.SwitchPlanStatusUseCase;
 import me.ajaja.module.plan.application.port.in.UpdatePlanUseCase;
 import me.ajaja.module.plan.application.port.in.ValidateContentUseCase;
 import me.ajaja.module.plan.application.port.out.FindAllPlansQuery;
@@ -146,7 +146,7 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 	@MockBean
 	protected UpdatePlanUseCase updatePlanService;
 	@MockBean
-	protected UpdatePlanStatusUseCase updatePlanStatusUseCase;
+	protected SwitchPlanStatusUseCase switchPlanStatusUseCase;
 	@MockBean
 	protected SwitchAjajaService switchAjajaService;
 	@MockBean
