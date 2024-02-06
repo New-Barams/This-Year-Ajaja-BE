@@ -25,7 +25,7 @@ import me.ajaja.module.plan.domain.PlanStatus;
 import me.ajaja.module.plan.dto.PlanRequest;
 import me.ajaja.module.plan.dto.PlanResponse;
 import me.ajaja.module.remind.application.port.out.FindRemindableTargetPort;
-import me.ajaja.module.remind.application.port.out.FindTargetRemindQuery;
+import me.ajaja.module.remind.application.port.out.FindTargetPort;
 import me.ajaja.module.user.adapter.out.persistence.UserJpaRepository;
 import me.ajaja.module.user.adapter.out.persistence.model.UserEntity;
 import me.ajaja.module.user.domain.User;
@@ -43,7 +43,7 @@ class PlanQueryRepositoryTest extends MonkeySupport {
 	@Autowired
 	private FindRemindableTargetPort findRemindableTargetPort;
 	@Autowired
-	private FindTargetRemindQuery findTargetRemindQuery;
+	private FindTargetPort findTargetPort;
 	@Autowired
 	private UserJpaRepository userRepository;
 	@Autowired
@@ -157,7 +157,7 @@ class PlanQueryRepositoryTest extends MonkeySupport {
 	void findByUserIdAndPlanId_Success_WithNoException() {
 		Plan savedPlan = savePlanPort.save(plan);
 
-		Plan plan = findTargetRemindQuery.loadByUserIdAndPlanId(savedPlan.getUserId(), savedPlan.getId());
+		Plan plan = findTargetPort.findByUserIdAndPlanId(savedPlan.getUserId(), savedPlan.getId());
 		assertThat(plan).isNotNull();
 	}
 
@@ -168,7 +168,7 @@ class PlanQueryRepositoryTest extends MonkeySupport {
 		Long userId = savedPlan.getUserId() + 1L;
 
 		assertThatException().isThrownBy(
-			() -> findTargetRemindQuery.findByUserIdAndPlanId(userId, savedPlan.getId())
+			() -> findTargetPort.findByUserIdAndPlanId(userId, savedPlan.getId())
 		);
 	}
 

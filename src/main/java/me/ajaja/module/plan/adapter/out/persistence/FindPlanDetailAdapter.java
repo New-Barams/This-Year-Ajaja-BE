@@ -1,6 +1,7 @@
 package me.ajaja.module.plan.adapter.out.persistence;
 
 import static com.querydsl.core.types.dsl.Expressions.*;
+import static me.ajaja.global.exception.ErrorCode.*;
 import static me.ajaja.module.plan.adapter.out.persistence.model.QPlanEntity.*;
 import static me.ajaja.module.user.adapter.out.persistence.model.QUserEntity.*;
 
@@ -14,19 +15,25 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
+import me.ajaja.global.exception.AjajaException;
 import me.ajaja.module.ajaja.domain.Ajaja;
 import me.ajaja.module.ajaja.infra.QAjajaEntity;
+import me.ajaja.module.plan.adapter.out.persistence.model.PlanEntity;
 import me.ajaja.module.plan.application.port.out.FindPlanDetailPort;
+import me.ajaja.module.plan.domain.Plan;
 import me.ajaja.module.plan.dto.PlanResponse;
 import me.ajaja.module.plan.dto.QPlanResponse_Detail;
 import me.ajaja.module.plan.dto.QPlanResponse_Writer;
+import me.ajaja.module.plan.mapper.PlanMapper;
+import me.ajaja.module.remind.application.port.out.FindTargetPort;
 import me.ajaja.module.tag.domain.QPlanTag;
 import me.ajaja.module.tag.domain.QTag;
 
 @Repository
 @RequiredArgsConstructor
-class FindPlanDetailAdapter implements FindPlanDetailPort {
+class FindPlanDetailAdapter implements FindPlanDetailPort, FindTargetPort {
 	private final JPAQueryFactory queryFactory;
+	private final PlanMapper planMapper;
 
 	@Override
 	public Optional<PlanResponse.Detail> findPlanDetailByIdAndOptionalUser(Long userId, Long id) {
@@ -67,5 +74,18 @@ class FindPlanDetailAdapter implements FindPlanDetailPort {
 			.where(QPlanTag.planTag.tagId.eq(QTag.tag.id)
 				.and(QPlanTag.planTag.planId.eq(planId)))
 			.fetch();
+	}
+
+	@Override
+	public Plan findByUserIdAndPlanId(Long userId, Long planId) {
+		PlanEntity entity = queryFactory.selectFrom(planEntity)
+			.where(planEntity.userId.eq(userId)
+				.and(planEntity.id.eq(planId)))
+			.fetchOne();
+
+		if (entity == null) {
+			throw AjajaException.withId(planId, NOT_FOUND_PLAN);
+		}
+		return planMapper.toDomain(entity);
 	}
 }
