@@ -2,7 +2,6 @@ package me.ajaja.module.plan.adapter.in.web;
 
 import static org.springframework.http.HttpStatus.*;
 
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -16,7 +15,6 @@ import me.ajaja.module.plan.application.port.in.ValidateContentUseCase;
 import me.ajaja.module.plan.dto.BanWordValidationResult;
 import me.ajaja.module.plan.dto.PlanRequest;
 
-@Validated
 @RestController
 @RequiredArgsConstructor
 class ValidateBanWordController {
