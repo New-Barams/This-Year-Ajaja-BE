@@ -796,7 +796,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		doNothing().when(switchPlanStatusUseCase).switchAjajable(anyLong(), anyLong());
 
 		// when
-		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}/ajaja"), 1)
+		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}/ajajable"), 1)
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN));
 
@@ -824,7 +824,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 			.when(switchPlanStatusUseCase).switchAjajable(anyLong(), anyLong());
 
 		// when
-		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}/ajaja"), 1)
+		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}/ajajable"), 1)
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN));
 
@@ -849,7 +849,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		doThrow(new AjajaException(NOT_AUTHOR)).when(switchPlanStatusUseCase).switchAjajable(anyLong(), anyLong());
 
 		// when
-		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}/ajaja"), 1)
+		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}/ajajable"), 1)
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN));
 
@@ -875,7 +875,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		doThrow(new AjajaException(errorCode)).when(switchPlanStatusUseCase).switchAjajable(anyLong(), anyLong());
 
 		// when
-		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}/ajaja"), 1)
+		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}/ajajable"), 1)
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN));
 
