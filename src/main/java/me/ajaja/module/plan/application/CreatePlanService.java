@@ -28,7 +28,7 @@ class CreatePlanService implements CreatePlanUseCase {
 
 	@Override
 	public Long create(Long userId, PlanRequest.Create request, int month) {
-		checkNumberOfUserPlans(userId);
+		validateCreateLimit(userId);
 
 		Plan plan = Plan.create(planMapper.toParam(userId, request, month));
 		Plan savedPlan = savePlanPort.save(plan);
@@ -38,7 +38,7 @@ class CreatePlanService implements CreatePlanUseCase {
 		return savedPlan.getId();
 	}
 
-	private void checkNumberOfUserPlans(Long userId) {
+	private void validateCreateLimit(Long userId) {
 		long countOfPlans = countPlanPort.countByUserId(userId);
 
 		if (isMoreThanMaxNumberOfPlans(countOfPlans)) {
