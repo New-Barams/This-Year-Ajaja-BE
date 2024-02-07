@@ -41,7 +41,7 @@ class SwitchPlanStatusController {
 	}
 
 	@Authorization
-	@PutMapping("/ajaja")
+	@PutMapping("/ajajable")
 	@ResponseStatus(OK)
 	public AjajaResponse<Void> switchAjajaStatus(@PathVariable Long id) {
 		Long userId = SecurityUtil.getUserId();
