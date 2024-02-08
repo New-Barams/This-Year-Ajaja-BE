@@ -15,16 +15,16 @@ import me.ajaja.global.exception.AjajaException;
 import me.ajaja.module.feedback.domain.Achieve;
 import me.ajaja.module.feedback.domain.FeedbackQueryRepository;
 import me.ajaja.module.feedback.domain.FeedbackRepository;
-import me.ajaja.module.plan.application.LoadPlanService;
 import me.ajaja.module.plan.domain.Plan;
 import me.ajaja.module.plan.domain.RemindDate;
+import me.ajaja.module.remind.application.port.out.FindTargetPort;
 
 class UpdateFeedbackServiceTest extends MockTestSupport {
 	@InjectMocks
 	private UpdateFeedbackService updateFeedbackService;
 
 	@Mock
-	private LoadPlanService loadPlanService;
+	private FindTargetPort findTargetPort;
 	@Mock
 	private FeedbackQueryRepository feedbackQueryRepository;
 	@Mock
@@ -43,7 +43,7 @@ class UpdateFeedbackServiceTest extends MockTestSupport {
 		@DisplayName("기간 내에 피드백을 시행할 경우 성공한다.")
 		void updateFeedback_Success_WithNoException() {
 			// given
-			given(loadPlanService.loadByUserIdAndPlanId(anyLong(), anyLong())).willReturn(mockPlan);
+			given(findTargetPort.findByUserIdAndPlanId(anyLong(), anyLong())).willReturn(mockPlan);
 			given(mockPlan.getFeedbackPeriod(any())).willReturn(TimeValue.now());
 			given(feedbackQueryRepository.existByPlanIdAndPeriod(any(), any())).willReturn(false);
 			doNothing().when(feedbackRepository).save(any());
@@ -57,7 +57,7 @@ class UpdateFeedbackServiceTest extends MockTestSupport {
 		@DisplayName("타인의 계획을 피드백 하려는 경우에는 예외를 던진다.")
 		void updateFeedback_Fail_ByNotFoundPlan() {
 			// given
-			doThrow(AjajaException.class).when(loadPlanService).loadByUserIdAndPlanId(anyLong(), anyLong());
+			doThrow(AjajaException.class).when(findTargetPort).findByUserIdAndPlanId(anyLong(), anyLong());
 
 			// when,then
 			assertThatException().isThrownBy(
@@ -69,7 +69,7 @@ class UpdateFeedbackServiceTest extends MockTestSupport {
 		@DisplayName("피드백 기간이 아닐 경우에는 예외를 던진다.")
 		void updateFeedback_Fail_ByExpiredFeedbackPeriod() {
 			// given
-			given(loadPlanService.loadByUserIdAndPlanId(anyLong(), anyLong())).willReturn(mockPlan);
+			given(findTargetPort.findByUserIdAndPlanId(anyLong(), anyLong())).willReturn(mockPlan);
 			doThrow(AjajaException.class).when(mockPlan).getFeedbackPeriod(any());
 
 			// when,then
@@ -82,7 +82,7 @@ class UpdateFeedbackServiceTest extends MockTestSupport {
 		@DisplayName("해당 기간에 이미 피드백을 한 경우에는 예외를 던진다.")
 		void updateFeedback_Fail_ByAlreadyFeedbackFound() {
 			// given
-			given(loadPlanService.loadByUserIdAndPlanId(anyLong(), anyLong())).willReturn(mockPlan);
+			given(findTargetPort.findByUserIdAndPlanId(anyLong(), anyLong())).willReturn(mockPlan);
 			given(mockPlan.getFeedbackPeriod(any())).willReturn(TimeValue.now());
 			given(feedbackQueryRepository.existByPlanIdAndPeriod(any(), any())).willReturn(true);
 

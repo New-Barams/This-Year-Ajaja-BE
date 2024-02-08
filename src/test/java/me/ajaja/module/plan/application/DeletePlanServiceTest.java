@@ -15,10 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 import net.jqwik.api.Arbitraries;
 
 import me.ajaja.global.exception.AjajaException;
+import me.ajaja.module.plan.application.port.out.SavePlanPort;
 import me.ajaja.module.plan.domain.Content;
 import me.ajaja.module.plan.domain.Message;
 import me.ajaja.module.plan.domain.Plan;
-import me.ajaja.module.plan.domain.PlanRepository;
 import me.ajaja.module.plan.domain.PlanStatus;
 import me.ajaja.module.plan.domain.RemindInfo;
 import me.ajaja.module.plan.dto.PlanParam;
@@ -29,14 +29,14 @@ class DeletePlanServiceTest {
 	@Autowired
 	private DeletePlanService deletePlanService;
 	@Autowired
-	private PlanRepository planRepository;
+	private SavePlanPort savePlanPort;
 
 	private final Long userId = 1L;
 	private Plan plan;
 
 	@BeforeEach
 	void setup() {
-		plan = planRepository.save(Plan.create(
+		plan = savePlanPort.save(Plan.create(
 			new PlanParam.Create(
 				1,
 				userId,

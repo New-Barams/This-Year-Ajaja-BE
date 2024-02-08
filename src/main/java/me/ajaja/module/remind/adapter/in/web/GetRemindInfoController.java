@@ -10,20 +10,20 @@ import lombok.RequiredArgsConstructor;
 import me.ajaja.global.common.AjajaResponse;
 import me.ajaja.global.security.annotation.Authorization;
 import me.ajaja.global.util.SecurityUtil;
-import me.ajaja.module.remind.application.port.out.FindPlanRemindQuery;
+import me.ajaja.module.remind.application.port.out.FindTargetRemindQuery;
 import me.ajaja.module.remind.dto.RemindResponse;
 
 @RestController
 @RequiredArgsConstructor
 public class GetRemindInfoController {
-	private final FindPlanRemindQuery findPlanRemindQuery;
+	private final FindTargetRemindQuery findTargetRemindQuery;
 
 	@Authorization
 	@GetMapping("/reminds/{planId}")
 	@ResponseStatus(HttpStatus.OK)
 	public AjajaResponse<RemindResponse.RemindInfo> getRemindResponse(@PathVariable Long planId) {
 		Long userId = SecurityUtil.getUserId();
-		RemindResponse.RemindInfo response = findPlanRemindQuery.findByUserIdAndPlanId(userId, planId);
+		RemindResponse.RemindInfo response = findTargetRemindQuery.findByUserIdAndPlanId(userId, planId);
 		return AjajaResponse.ok(response);
 	}
 }

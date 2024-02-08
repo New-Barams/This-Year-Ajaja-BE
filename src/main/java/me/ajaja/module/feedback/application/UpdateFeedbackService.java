@@ -10,19 +10,21 @@ import me.ajaja.global.exception.ErrorCode;
 import me.ajaja.module.feedback.domain.Feedback;
 import me.ajaja.module.feedback.domain.FeedbackQueryRepository;
 import me.ajaja.module.feedback.domain.FeedbackRepository;
-import me.ajaja.module.plan.application.LoadPlanService;
 import me.ajaja.module.plan.domain.Plan;
+import me.ajaja.module.remind.application.port.out.FindTargetPort;
+import me.ajaja.module.remind.application.port.out.FindTargetRemindQuery;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class UpdateFeedbackService {
-	private final LoadPlanService loadPlanService;
+	private final FindTargetPort findTargetPort;
+	private final FindTargetRemindQuery findTargetRemindQuery;
 	private final FeedbackQueryRepository feedbackQueryRepository;
 	private final FeedbackRepository feedbackRepository;
 
 	public void updateFeedback(Long userId, Long planId, int rate, String message) {
-		Plan plan = loadPlanService.loadByUserIdAndPlanId(userId, planId);
+		Plan plan = findTargetPort.findByUserIdAndPlanId(userId, planId);
 		TimeValue now = TimeValue.now();
 
 		TimeValue period = plan.getFeedbackPeriod(now);

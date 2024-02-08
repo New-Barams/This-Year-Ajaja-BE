@@ -13,19 +13,19 @@ import me.ajaja.global.common.AjajaResponse;
 import me.ajaja.global.security.annotation.Authorization;
 import me.ajaja.global.util.SecurityUtil;
 import me.ajaja.module.plan.dto.PlanResponse;
-import me.ajaja.module.remind.application.port.in.GetPlanInfoUseCase;
+import me.ajaja.module.remind.application.port.in.GetTargetInfoUseCase;
 
 @RestController
 @RequiredArgsConstructor
 public class GetPlanInfoController {
-	private final GetPlanInfoUseCase getPlanInfoUseCase;
+	private final GetTargetInfoUseCase getTargetInfoUseCase;
 
 	@Authorization
 	@GetMapping("/plans/main")
 	@ResponseStatus(OK)
 	public AjajaResponse<List<PlanResponse.MainInfo>> getPlanInfo() {
 		Long userId = SecurityUtil.getUserId();
-		List<PlanResponse.MainInfo> response = getPlanInfoUseCase.load(userId);
+		List<PlanResponse.MainInfo> response = getTargetInfoUseCase.load(userId);
 		return AjajaResponse.ok(response);
 	}
 }

@@ -12,6 +12,7 @@ import me.ajaja.global.common.TimeValue;
 import me.ajaja.module.ajaja.infra.AjajaEntity;
 import me.ajaja.module.feedback.application.model.FeedbackPeriod;
 import me.ajaja.module.feedback.application.model.PlanFeedbackInfo;
+import me.ajaja.module.plan.adapter.out.persistence.model.PlanEntity;
 import me.ajaja.module.plan.domain.Content;
 import me.ajaja.module.plan.domain.Message;
 import me.ajaja.module.plan.domain.Plan;
@@ -20,7 +21,6 @@ import me.ajaja.module.plan.domain.RemindInfo;
 import me.ajaja.module.plan.dto.PlanParam;
 import me.ajaja.module.plan.dto.PlanRequest;
 import me.ajaja.module.plan.dto.PlanResponse;
-import me.ajaja.module.plan.infra.PlanEntity;
 import me.ajaja.module.remind.application.model.RemindMessageInfo;
 
 @Mapper(componentModel = "spring")

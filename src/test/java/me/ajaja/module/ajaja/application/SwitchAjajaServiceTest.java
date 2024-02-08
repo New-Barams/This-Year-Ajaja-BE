@@ -13,11 +13,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import jakarta.transaction.Transactional;
 import me.ajaja.global.exception.AjajaException;
-import me.ajaja.module.plan.application.LoadPlanService;
+import me.ajaja.module.plan.application.port.in.LoadPlanDetailUseCase;
+import me.ajaja.module.plan.application.port.out.SavePlanPort;
 import me.ajaja.module.plan.domain.Content;
 import me.ajaja.module.plan.domain.Message;
 import me.ajaja.module.plan.domain.Plan;
-import me.ajaja.module.plan.domain.PlanRepository;
 import me.ajaja.module.plan.domain.PlanStatus;
 import me.ajaja.module.plan.domain.RemindInfo;
 import me.ajaja.module.plan.dto.PlanParam;
@@ -29,16 +29,16 @@ class SwitchAjajaServiceTest {
 	@Autowired
 	private SwitchAjajaService switchAjajaService;
 	@Autowired
-	private LoadPlanService loadPlanService;
+	private LoadPlanDetailUseCase loadPlanDetailUseCase;
 	@Autowired
-	private PlanRepository planRepository;
+	private SavePlanPort savePlanPort;
 
 	private final Long userId = 1L;
 	private Plan plan;
 
 	@BeforeEach
 	void setup() {
-		plan = planRepository.save(Plan.create(
+		plan = savePlanPort.save(Plan.create(
 			new PlanParam.Create(
 				1,
 				userId,
@@ -58,7 +58,7 @@ class SwitchAjajaServiceTest {
 
 		// when
 		switchAjajaService.switchOrAddIfNotExist(userId, plan.getId());
-		PlanResponse.Detail detail = loadPlanService.loadByIdAndOptionalUser(userId, plan.getId());
+		PlanResponse.Detail detail = loadPlanDetailUseCase.loadByIdAndOptionalUser(userId, plan.getId());
 
 		// then
 		assertThat(detail.getAjajas()).isEqualTo(1L);
@@ -71,10 +71,10 @@ class SwitchAjajaServiceTest {
 
 		// when
 		switchAjajaService.switchOrAddIfNotExist(userId, plan.getId());
-		PlanResponse.Detail detail = loadPlanService.loadByIdAndOptionalUser(userId, plan.getId());
+		PlanResponse.Detail detail = loadPlanDetailUseCase.loadByIdAndOptionalUser(userId, plan.getId());
 
 		switchAjajaService.switchOrAddIfNotExist(userId, plan.getId());
-		PlanResponse.Detail detail2 = loadPlanService.loadByIdAndOptionalUser(userId, plan.getId());
+		PlanResponse.Detail detail2 = loadPlanDetailUseCase.loadByIdAndOptionalUser(userId, plan.getId());
 
 		// then
 		assertThat(detail.getAjajas()).isEqualTo(1L);

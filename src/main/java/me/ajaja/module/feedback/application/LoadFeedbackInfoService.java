@@ -14,18 +14,23 @@ import me.ajaja.module.feedback.domain.FeedbackQueryRepository;
 import me.ajaja.module.feedback.dto.FeedbackResponse;
 import me.ajaja.module.feedback.infra.model.FeedbackInfo;
 import me.ajaja.module.feedback.mapper.FeedbackMapper;
-import me.ajaja.module.plan.application.LoadPlanService;
+import me.ajaja.module.plan.domain.Plan;
+import me.ajaja.module.plan.mapper.PlanMapper;
+import me.ajaja.module.remind.application.port.out.FindTargetPort;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class LoadFeedbackInfoService {
 	private final FeedbackQueryRepository feedbackQueryRepository;
-	private final LoadPlanService loadPlanService;
+	private final FindTargetPort findTargetPort;
 	private final FeedbackMapper feedbackMapper;
+	private final PlanMapper planMapper;
 
 	public FeedbackResponse.FeedbackInfo loadFeedbackInfoByPlanId(Long userId, Long planId) {
-		PlanFeedbackInfo planFeedbackInfo = loadPlanService.loadPlanFeedbackInfoByPlanId(userId, planId);
+		Plan plan = findTargetPort.findByUserIdAndPlanId(userId, planId);
+		PlanFeedbackInfo planFeedbackInfo = planMapper.toModel(plan);
+
 		List<FeedbackInfo> feedbackInfos = feedbackQueryRepository.findFeedbackInfosByPlanId(planId);
 
 		List<FeedbackResponse.RemindFeedback> feedbacks

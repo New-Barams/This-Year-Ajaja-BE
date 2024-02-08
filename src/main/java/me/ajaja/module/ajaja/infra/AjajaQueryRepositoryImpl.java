@@ -1,6 +1,6 @@
 package me.ajaja.module.ajaja.infra;
 
-import static me.ajaja.module.plan.infra.QPlanEntity.*;
+import static me.ajaja.module.plan.adapter.out.persistence.model.QPlanEntity.*;
 import static me.ajaja.module.user.adapter.out.persistence.model.QUserEntity.*;
 
 import java.time.Instant;

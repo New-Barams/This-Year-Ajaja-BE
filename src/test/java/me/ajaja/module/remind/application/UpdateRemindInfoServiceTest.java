@@ -18,17 +18,17 @@ import me.ajaja.module.plan.domain.Plan;
 import me.ajaja.module.plan.domain.RemindInfo;
 import me.ajaja.module.plan.dto.PlanRequest;
 import me.ajaja.module.plan.mapper.MessageMapper;
-import me.ajaja.module.remind.application.port.out.FindPlanPort;
-import me.ajaja.module.remind.application.port.out.SavePlanPort;
+import me.ajaja.module.remind.application.port.out.FindTargetPort;
+import me.ajaja.module.remind.application.port.out.SaveTargetPort;
 
 class UpdateRemindInfoServiceTest extends MockTestSupport {
 	@InjectMocks
 	private UpdateRemindInfoService updateRemindInfoService;
 
 	@Mock
-	private FindPlanPort findPlanPort;
+	private FindTargetPort findTargetPort;
 	@Mock
-	private SavePlanPort savePlanPort;
+	private SaveTargetPort saveTargetPort;
 	@Mock
 	private MessageMapper mapper;
 	@Mock
@@ -51,7 +51,7 @@ class UpdateRemindInfoServiceTest extends MockTestSupport {
 		// given
 		Long userId = 1L;
 		Long planId = 1L;
-		given(findPlanPort.findByUserIdAndPlanId(anyLong(), anyLong())).willReturn(mockPlan);
+		given(findTargetPort.findByUserIdAndPlanId(anyLong(), anyLong())).willReturn(mockPlan);
 		given(mapper.toDomain(dto.getMessages())).willReturn(messages);
 		given(mapper.toDomain(dto)).willReturn(info);
 		doNothing().when(mockPlan).updateRemind(any(), any());
@@ -69,7 +69,7 @@ class UpdateRemindInfoServiceTest extends MockTestSupport {
 		// given
 		Long userId = 2L;
 		Long planId = 2L;
-		doThrow(AjajaException.class).when(findPlanPort).findByUserIdAndPlanId(anyLong(), anyLong());
+		doThrow(AjajaException.class).when(findTargetPort).findByUserIdAndPlanId(anyLong(), anyLong());
 
 		// when,then
 		Assertions.assertThatException().isThrownBy(
@@ -83,7 +83,7 @@ class UpdateRemindInfoServiceTest extends MockTestSupport {
 		// given
 		Long userId = 1L;
 		Long planId = 1L;
-		given(findPlanPort.findByUserIdAndPlanId(anyLong(), anyLong())).willReturn(mockPlan);
+		given(findTargetPort.findByUserIdAndPlanId(anyLong(), anyLong())).willReturn(mockPlan);
 		doThrow(AjajaException.class).when(mockPlan).updateRemind(any(), any());
 
 		// when,then

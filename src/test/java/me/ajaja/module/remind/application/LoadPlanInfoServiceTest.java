@@ -14,14 +14,14 @@ import org.mockito.Mock;
 import me.ajaja.common.support.MockTestSupport;
 import me.ajaja.module.plan.dto.PlanResponse;
 import me.ajaja.module.plan.mapper.PlanMapper;
-import me.ajaja.module.remind.application.port.out.FindPlanInfoPort;
+import me.ajaja.module.remind.application.port.out.FindTargetInfoPort;
 
 class LoadPlanInfoServiceTest extends MockTestSupport {
 	@InjectMocks
-	private GetPlanInfoService loadPlanInfoService;
+	private GetTargetInfoService loadPlanInfoService;
 
 	@Mock
-	private FindPlanInfoPort findPlanInfoPort;
+	private FindTargetInfoPort findTargetInfoPort;
 	@Mock
 	private PlanMapper mapper;
 
@@ -39,7 +39,7 @@ class LoadPlanInfoServiceTest extends MockTestSupport {
 
 		int execute = 2023 - 2021 + 1;
 
-		given(findPlanInfoPort.findAllPlanInfosByUserId(any())).willReturn(List.of(planInfo1, planInfo2));
+		given(findTargetInfoPort.findAllPlanInfosByUserId(any())).willReturn(List.of(planInfo1, planInfo2));
 		given(mapper.toResponse(anyInt(), anyInt(), anyList())).willReturn(response);
 
 		//when
@@ -53,7 +53,7 @@ class LoadPlanInfoServiceTest extends MockTestSupport {
 	@DisplayName("만약 조회된 계획들이 없다면 기본값들을 반환한다.")
 	void getNoPlanInfo_Success_WithNoException() {
 		// given
-		given(findPlanInfoPort.findAllPlanInfosByUserId(any())).willReturn(Collections.emptyList());
+		given(findTargetInfoPort.findAllPlanInfosByUserId(any())).willReturn(Collections.emptyList());
 
 		//when
 		List<PlanResponse.MainInfo> planInfoResponses = loadPlanInfoService.load(1L);

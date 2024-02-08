@@ -8,20 +8,20 @@ import me.ajaja.module.plan.domain.Plan;
 import me.ajaja.module.plan.dto.PlanRequest;
 import me.ajaja.module.plan.mapper.MessageMapper;
 import me.ajaja.module.remind.application.port.in.UpdateRemindInfoUseCase;
-import me.ajaja.module.remind.application.port.out.FindPlanPort;
-import me.ajaja.module.remind.application.port.out.SavePlanPort;
+import me.ajaja.module.remind.application.port.out.FindTargetPort;
+import me.ajaja.module.remind.application.port.out.SaveTargetPort;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class UpdateRemindInfoService implements UpdateRemindInfoUseCase {
-	private final FindPlanPort findPlanPort;
-	private final SavePlanPort savePlanPort;
+	private final FindTargetPort findTargetPort;
+	private final SaveTargetPort saveTargetPort;
 	private final MessageMapper mapper;
 
 	public void update(Long userId, Long planId, PlanRequest.UpdateRemind request) {
-		Plan plan = findPlanPort.findByUserIdAndPlanId(userId, planId);
+		Plan plan = findTargetPort.findByUserIdAndPlanId(userId, planId);
 		plan.updateRemind(mapper.toDomain(request), mapper.toDomain(request.getMessages()));
-		savePlanPort.update(plan);
+		saveTargetPort.update(plan);
 	}
 }

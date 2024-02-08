@@ -33,7 +33,7 @@ class GetPlanInfoControllerTest extends WebMvcTestSupport {
 		);
 		List<PlanResponse.MainInfo> response = List.of(new PlanResponse.MainInfo(2023, 25, infos));
 
-		given(getPlanInfoUseCase.load(anyLong())).willReturn(response);
+		given(getTargetInfoUseCase.load(anyLong())).willReturn(response);
 
 		// when
 		var result = mockMvc.perform(get(PLAN_END_POINT + "/main")
@@ -84,7 +84,7 @@ class GetPlanInfoControllerTest extends WebMvcTestSupport {
 	void getPlanInfo_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
 		// given
 		AjajaException tokenException = new AjajaException(errorCode);
-		when(getPlanInfoUseCase.load(anyLong())).thenThrow(tokenException);
+		when(getTargetInfoUseCase.load(anyLong())).thenThrow(tokenException);
 
 		// when
 		var result = mockMvc.perform(get(PLAN_END_POINT + "/main")
@@ -110,7 +110,7 @@ class GetPlanInfoControllerTest extends WebMvcTestSupport {
 	void getPlanInfo_Fail_ByUserNotFound() throws Exception {
 		// given
 		AjajaException notFoundException = new AjajaException(USER_NOT_FOUND);
-		when(getPlanInfoUseCase.load(anyLong())).thenThrow(notFoundException);
+		when(getTargetInfoUseCase.load(anyLong())).thenThrow(notFoundException);
 
 		// when
 		var result = mockMvc.perform(get(PLAN_END_POINT + "/main")

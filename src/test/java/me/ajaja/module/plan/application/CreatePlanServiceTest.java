@@ -16,15 +16,15 @@ import net.jqwik.api.Arbitraries;
 
 import me.ajaja.common.support.MockTestSupport;
 import me.ajaja.global.common.TimeValue;
+import me.ajaja.module.plan.application.port.out.CountPlanPort;
+import me.ajaja.module.plan.application.port.out.SavePlanPort;
 import me.ajaja.module.plan.domain.Content;
 import me.ajaja.module.plan.domain.Message;
 import me.ajaja.module.plan.domain.Plan;
-import me.ajaja.module.plan.domain.PlanRepository;
 import me.ajaja.module.plan.domain.PlanStatus;
 import me.ajaja.module.plan.domain.RemindInfo;
 import me.ajaja.module.plan.dto.PlanParam;
 import me.ajaja.module.plan.dto.PlanRequest;
-import me.ajaja.module.plan.infra.PlanQueryRepository;
 import me.ajaja.module.plan.mapper.PlanMapper;
 import me.ajaja.module.tag.application.CreatePlanTagService;
 
@@ -60,9 +60,9 @@ class CreatePlanServiceTest extends MockTestSupport {
 	@InjectMocks
 	private CreatePlanService createPlanService;
 	@Mock
-	private PlanQueryRepository planQueryRepository;
+	private SavePlanPort savePlanPort;
 	@Mock
-	private PlanRepository planRepository;
+	private CountPlanPort countPlanPort;
 	@Mock
 	private PlanMapper planMapper;
 	@Mock
@@ -73,8 +73,8 @@ class CreatePlanServiceTest extends MockTestSupport {
 	void createPlan_Success() {
 		// given
 		given(planMapper.toParam(anyLong(), (PlanRequest.Create)any(), anyInt())).willReturn(param);
-		given(planRepository.save(any())).willReturn(savedPlan);
-		given(planQueryRepository.countByUserId(anyLong())).willReturn(1L);
+		given(savePlanPort.save(any())).willReturn(savedPlan);
+		given(countPlanPort.countByUserId(anyLong())).willReturn(1L);
 		given(createPlanTagService.create(anyLong(), anyList())).willReturn(Collections.emptyList());
 
 		// when
