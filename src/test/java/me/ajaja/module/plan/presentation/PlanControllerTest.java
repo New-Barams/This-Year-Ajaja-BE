@@ -985,7 +985,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		given(validateContentUseCase.check(request)).willReturn(response);
 
 		// when
-		var result = mockMvc.perform(post(PLAN_END_POINT.concat("/validate"))
+		var result = mockMvc.perform(post(PLAN_END_POINT.concat("/validate-content"))
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.content(objectMapper.writeValueAsString(request)));

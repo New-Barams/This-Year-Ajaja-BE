@@ -21,7 +21,7 @@ class ValidateBanWordController {
 	private final ValidateContentUseCase validateContentUseCase;
 
 	@Authorization
-	@PostMapping("/plans/validate")
+	@PostMapping("/plans/validate-content")
 	@ResponseStatus(OK)
 	public AjajaResponse<BanWordValidationResult> validateBanWord(
 		@Valid @RequestBody PlanRequest.CheckBanWord request
