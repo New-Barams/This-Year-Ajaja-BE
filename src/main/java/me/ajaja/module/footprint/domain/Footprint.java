@@ -23,7 +23,7 @@ public abstract class Footprint {
 
 	private Title title;
 	private Type type;
-	private Visibility visibility;
+	private FootprintStatus footprintStatus;
 
 	private Set<Tag> tags;
 	private List<Ajaja> ajajas;
@@ -33,7 +33,7 @@ public abstract class Footprint {
 		this.writer = footprintParam.getWriter();
 		this.title = footprintParam.getTitle();
 		this.type = footprintParam.getType();
-		this.visibility = footprintParam.getVisibility();
+		this.footprintStatus = footprintParam.getFootprintStatus();
 		this.tags = (tags == null) ? new HashSet<>() : footprintParam.getTags();
 		this.ajajas = (ajajas == null) ? new ArrayList<>() : footprintParam.getAjajas();
 	}

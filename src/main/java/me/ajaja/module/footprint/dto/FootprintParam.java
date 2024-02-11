@@ -6,6 +6,7 @@ import java.util.Set;
 import lombok.Data;
 import me.ajaja.module.footprint.domain.Ajaja;
 import me.ajaja.module.footprint.domain.Footprint;
+import me.ajaja.module.footprint.domain.FootprintStatus;
 import me.ajaja.module.footprint.domain.Tag;
 import me.ajaja.module.footprint.domain.TargetPlan;
 import me.ajaja.module.footprint.domain.Title;
@@ -19,7 +20,7 @@ public final class FootprintParam {
 
 		private Title title;
 		private Footprint.Type type;
-		private Footprint.Visibility visibility;
+		private FootprintStatus footprintStatus;
 
 		private Set<Tag> tags;
 		private List<Ajaja> ajajas;
