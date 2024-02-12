@@ -4,6 +4,7 @@ import java.beans.ConstructorProperties;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import me.ajaja.global.common.SelfValidating;
 
@@ -13,6 +14,7 @@ public class Tag extends SelfValidating<Tag> {
 	private final Long tagId;
 
 	@NotBlank
+	@Size(max = 10)
 	private final String tagName;
 
 	@ConstructorProperties({"tag", "tagName"})

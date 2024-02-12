@@ -7,14 +7,14 @@ import me.ajaja.module.footprint.dto.FootprintParam;
 
 @Getter
 public class KptFootprint extends Footprint {
-	private Blob KEEP;
-	private Blob PROBLEM;
-	private Blob TRY;
+	private Blob keepContent;
+	private Blob problem;
+	private Blob tryContent;
 
-	public KptFootprint(FootprintParam.Create footprintParam, Blob KEEP, Blob PROBLEM, Blob TRY) {
+	public KptFootprint(FootprintParam.Create footprintParam, Blob keepContent, Blob problem, Blob tryContent) {
 		super(footprintParam);
-		this.KEEP = KEEP;
-		this.PROBLEM = PROBLEM;
-		this.TRY = TRY;
+		this.keepContent = keepContent;
+		this.problem = problem;
+		this.tryContent = tryContent;
 	}
 }

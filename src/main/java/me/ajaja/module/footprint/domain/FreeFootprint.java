@@ -7,10 +7,10 @@ import me.ajaja.module.footprint.dto.FootprintParam;
 
 @Getter
 public class FreeFootprint extends Footprint {
-	private Blob CONTENT;
+	private Blob content;
 
-	public FreeFootprint(FootprintParam.Create footprintParam, Blob CONTENT) {
+	public FreeFootprint(FootprintParam.Create footprintParam, Blob content) {
 		super(footprintParam);
-		this.CONTENT = CONTENT;
+		this.content = content;
 	}
 }

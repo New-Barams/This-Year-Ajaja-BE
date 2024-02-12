@@ -14,10 +14,6 @@ public abstract class Footprint {
 		FREE, KPT
 	}
 
-	public enum Visibility {
-		PUBLIC, PRIVATE
-	}
-
 	private final TargetPlan targetPlan;
 	private final Writer writer;
 
