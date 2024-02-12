@@ -4,19 +4,19 @@ import lombok.Getter;
 
 @Getter
 public class FootprintStatus {
-	private boolean isPublic;
+	private boolean visible;
 	private boolean deleted;
 
-	public FootprintStatus(boolean isPublic) {
-		this.isPublic = isPublic;
+	public FootprintStatus(boolean visible) {
+		this.visible = visible;
 		this.deleted = false;
 	}
 
-	void switchPublic() {
-		this.isPublic = !isPublic;
+	void switchVisibility() {
+		this.visible = !visible;
 	}
 
-	void toDeleted() {
+	void delete() {
 		this.deleted = true;
 	}
 }

@@ -11,16 +11,16 @@ import me.ajaja.global.common.SelfValidating;
 @Getter
 public class Tag extends SelfValidating<Tag> {
 	@NotNull
-	private final Long tagId;
+	private final Long id;
 
 	@NotBlank
 	@Size(max = 10)
-	private final String tagName;
+	private final String name;
 
-	@ConstructorProperties({"tag", "tagName"})
-	public Tag(Long tagId, String tagName) {
-		this.tagId = tagId;
-		this.tagName = tagName;
+	@ConstructorProperties({"id", "name"})
+	public Tag(Long id, String name) {
+		this.id = id;
+		this.name = name;
 		this.validateSelf();
 	}
 }

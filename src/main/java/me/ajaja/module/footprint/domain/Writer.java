@@ -11,15 +11,15 @@ import me.ajaja.global.common.SelfValidating;
 @Getter
 public class Writer extends SelfValidating<Writer> {
 	@NotNull
-	private final Long userId;
+	private final Long id;
 
 	@NotBlank
 	@Size(max = 20)
 	private final String nickname;
 
-	@ConstructorProperties({"userId", "nickname"})
-	public Writer(Long userId, String nickname) {
-		this.userId = userId;
+	@ConstructorProperties({"id", "nickname"})
+	public Writer(Long id, String nickname) {
+		this.id = id;
 		this.nickname = nickname;
 		this.validateSelf();
 	}

@@ -9,14 +9,14 @@ import me.ajaja.module.footprint.domain.Ajaja;
 import me.ajaja.module.footprint.domain.Footprint;
 import me.ajaja.module.footprint.domain.FootprintStatus;
 import me.ajaja.module.footprint.domain.Tag;
-import me.ajaja.module.footprint.domain.TargetPlan;
+import me.ajaja.module.footprint.domain.Target;
 import me.ajaja.module.footprint.domain.Title;
 import me.ajaja.module.footprint.domain.Writer;
 
 public final class FootprintParam {
 	@Data
 	public static class Create {
-		private final TargetPlan targetPlan;
+		private final Target targetPlan;
 		private final Writer writer;
 
 		private final Title title;
@@ -27,7 +27,7 @@ public final class FootprintParam {
 		private final List<Ajaja> ajajas;
 
 		@ConstructorProperties({"targetPlan", "writer", "title", "type", "footprintStatus", "tags", "ajajas"})
-		public Create(TargetPlan targetPlan, Writer writer, Title title, Footprint.Type type,
+		public Create(Target targetPlan, Writer writer, Title title, Footprint.Type type,
 			FootprintStatus footprintStatus, Set<Tag> tags, List<Ajaja> ajajas
 		) {
 			this.targetPlan = targetPlan;

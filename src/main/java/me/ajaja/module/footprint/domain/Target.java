@@ -9,17 +9,17 @@ import lombok.Getter;
 import me.ajaja.global.common.SelfValidating;
 
 @Getter
-public class TargetPlan extends SelfValidating<TargetPlan> {
+public class Target extends SelfValidating<Target> {
 	@NotNull
-	private final Long targetPlanId;
+	private final Long id;
 
 	@NotBlank
 	@Size(max = 20)
 	private final String title;
 
-	@ConstructorProperties({"targetPlanId", "title"})
-	public TargetPlan(Long targetPlanId, String title) {
-		this.targetPlanId = targetPlanId;
+	@ConstructorProperties({"id", "title"})
+	public Target(Long id, String title) {
+		this.id = id;
 		this.title = title;
 		this.validateSelf();
 	}

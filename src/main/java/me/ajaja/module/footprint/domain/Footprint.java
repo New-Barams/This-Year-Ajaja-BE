@@ -14,7 +14,7 @@ public abstract class Footprint {
 		FREE, KPT
 	}
 
-	private final TargetPlan targetPlan;
+	private final Target targetPlan;
 	private final Writer writer;
 
 	private Title title;
