@@ -1,14 +1,20 @@
 package me.ajaja.module.footprint.domain;
 
+import java.util.List;
+import java.util.Set;
+
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
-import me.ajaja.module.footprint.dto.FootprintParam;
 
 @Getter
 public class FreeFootprint extends Footprint {
+	@NotBlank
 	private String content;
 
-	public FreeFootprint(FootprintParam.Create footprintParam, String content) {
-		super(footprintParam);
+	FreeFootprint(Target target, Writer writer, Title title, boolean visible, boolean deleted,
+		Set<Tag> tags, List<Ajaja> ajajas, String content) {
+		super(target, writer, title, visible, deleted, tags, ajajas);
 		this.content = content;
+		this.validateSelf();
 	}
 }

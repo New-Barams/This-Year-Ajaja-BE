@@ -5,32 +5,20 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import me.ajaja.module.footprint.dto.FootprintParam;
+import me.ajaja.global.common.SelfValidating;
 
 @Getter
-public abstract class Footprint {
-	public enum Type {
-		FREE, KPT
-	}
-
-	private final Target targetPlan;
+@AllArgsConstructor
+public abstract class Footprint extends SelfValidating<Footprint> {
+	private final Target target;
 	private final Writer writer;
 
 	private Title title;
-	private Type type;
-	private FootprintStatus footprintStatus;
+	private boolean visible;
+	private boolean deleted;
 
-	private Set<Tag> tags;
-	private List<Ajaja> ajajas;
-
-	public Footprint(FootprintParam.Create footprintParam) {
-		this.targetPlan = footprintParam.getTargetPlan();
-		this.writer = footprintParam.getWriter();
-		this.title = footprintParam.getTitle();
-		this.type = footprintParam.getType();
-		this.footprintStatus = footprintParam.getFootprintStatus();
-		this.tags = (tags == null) ? new HashSet<>() : footprintParam.getTags();
-		this.ajajas = (ajajas == null) ? new ArrayList<>() : footprintParam.getAjajas();
-	}
+	private Set<Tag> tags = new HashSet<>();
+	private List<Ajaja> ajajas = new ArrayList<>();
 }
