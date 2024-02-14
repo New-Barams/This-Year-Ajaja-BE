@@ -18,7 +18,7 @@ public class FootprintFactory {
 		);
 	}
 
-	public static KptFootprint createkptFootprint(
+	public static KptFootprint createKptFootprint(
 		FootprintParam.Create create, String keepContent, String problemContent, String tryContent
 	) {
 		return new KptFootprint(
