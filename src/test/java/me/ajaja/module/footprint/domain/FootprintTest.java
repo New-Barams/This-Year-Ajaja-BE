@@ -45,7 +45,7 @@ class FootprintTest extends MonkeySupport {
 			String tryContent = "tryContent";
 
 			assertThatNoException().isThrownBy(() -> {
-				FootprintFactory.createkptFootprint(param, keepContent, problemContent, tryContent);
+				FootprintFactory.createKptFootprint(param, keepContent, problemContent, tryContent);
 			});
 		}
 	}
