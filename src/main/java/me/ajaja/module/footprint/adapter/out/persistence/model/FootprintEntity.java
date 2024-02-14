@@ -25,7 +25,7 @@ public class FootprintEntity extends BaseEntity<FootprintEntity> {
 	@Column(name = "footprint_id")
 	private Long id;
 
-	@Column(name = "footprint_type", nullable = false)
+	@Column(name = "footprint_type", nullable = false, length = 10)
 	private String type;
 
 	@Column(nullable = false)

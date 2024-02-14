@@ -14,7 +14,7 @@ public interface FreeFootprintMapper extends FootprintMapper {
 	@Mapping(source = "content", target = "content")
 	FootprintEntity toEntity(FreeFootprint footprint);
 
-	@FootprintMapper.toDomain
+	@FootprintMapper.ToDomain
 	@Mapping(source = "content", target = "content")
 	FreeFootprint toDomain(FootprintEntity footprintEntity);
 }

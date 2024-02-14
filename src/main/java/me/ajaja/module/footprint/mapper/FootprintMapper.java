@@ -57,7 +57,7 @@ public interface FootprintMapper {
 	@Mapping(source = "deleted", target = "deleted")
 	@Mapping(source = "footprintEntity", target = "tags", qualifiedByName = "toTags")
 	@Mapping(source = "footprintEntity", target = "ajajas", qualifiedByName = "toAjajas")
-	@interface toDomain {
+	@interface ToDomain {
 	}
 
 	@Named("toTarget")
