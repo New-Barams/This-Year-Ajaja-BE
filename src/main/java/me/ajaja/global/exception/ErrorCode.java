@@ -1,6 +1,10 @@
 package me.ajaja.global.exception;
 
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.TOO_MANY_REQUESTS;
 
 import org.springframework.http.HttpStatus;
 
@@ -36,6 +40,7 @@ public enum ErrorCode {
 	NEVER_LOGIN(NOT_FOUND, "로그인한 이력을 찾을 수 없습니다. 다시 로그인 해주세요."),
 	NOT_FOUND_PLAN(NOT_FOUND, "계획 정보가 존재하지 않습니다."),
 	NOT_FOUND_FEEDBACK(NOT_FOUND, "피드백 정보가 존재하지 않습니다."),
+	NOT_FOUND_FOOTPRINT(NOT_FOUND, "발자취 정보가 존재하지 않습니다."),
 
 	// 409
 	ALREADY_FEEDBACK(CONFLICT, "이미 평가된 피드백 정보가 있습니다."),
