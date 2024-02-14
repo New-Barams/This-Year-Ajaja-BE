@@ -15,4 +15,10 @@ public interface KptFootprintMapper extends FootprintMapper {
 	@Mapping(source = "problemContent", target = "problemContent")
 	@Mapping(source = "tryContent", target = "tryContent")
 	FootprintEntity toEntity(KptFootprint footprint);
+
+	@FootprintMapper.toDomain
+	@Mapping(source = "keepContent", target = "keepContent")
+	@Mapping(source = "problemContent", target = "problemContent")
+	@Mapping(source = "tryContent", target = "tryContent")
+	KptFootprint toDomain(FootprintEntity footprintEntity);
 }
