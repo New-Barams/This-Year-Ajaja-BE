@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
 import me.ajaja.common.support.JpaTestSupport;
+import me.ajaja.module.footprint.domain.Footprint;
 import me.ajaja.module.footprint.domain.FootprintFactory;
 import me.ajaja.module.footprint.domain.FreeFootprint;
 import me.ajaja.module.footprint.domain.KptFootprint;
@@ -21,10 +22,11 @@ import com.navercorp.fixturemonkey.jakarta.validation.plugin.JakartaValidationPl
 
 @ContextConfiguration(classes = {
 	CreateFootprintAdaptor.class,
+	GetFootprintAdaptor.class,
 	FreeFootprintMapperImpl.class,
 	KptFootprintMapperImpl.class
 })
-class CreateFootprintAdaptorTest extends JpaTestSupport {
+class GetFootprintAdaptorTest extends JpaTestSupport {
 	private final FixtureMonkey fixtureMonkey = FixtureMonkey.builder()
 		.objectIntrospector(ConstructorPropertiesArbitraryIntrospector.INSTANCE)
 		.plugin(new JakartaValidationPlugin())
@@ -34,36 +36,42 @@ class CreateFootprintAdaptorTest extends JpaTestSupport {
 	@Autowired
 	private CreateFootprintAdaptor createFootprintAdaptor;
 
+	@Autowired
+	private GetFootprintAdaptor getFootprintAdaptor;
+
 	@Test
-	@DisplayName("자유 형식 발자취 생성 매핑 기능 구현 테스트")
-	void create_FreeFootprint_Success() {
+	@DisplayName("자유 형식 발자취 조회 매핑 기능 구현 테스트")
+	void get_FreeFootprint_Success() {
 		// given
 		FootprintParam.Create param = fixtureMonkey.giveMeOne(FootprintParam.Create.class);
 		String content = "content";
 		FreeFootprint freeFootprint = FootprintFactory.createFreeFootprint(param, content);
 
+		Long createdId = createFootprintAdaptor.create(freeFootprint);
+
 		// when
-		Long footprintEntityId = createFootprintAdaptor.create(freeFootprint);
+		Footprint footprint = getFootprintAdaptor.getFreeFootprint(createdId);
 
 		// then
-		assertThat(footprintEntityId).isNotNull();
+		assertThat(footprint.getId()).isEqualTo(createdId);
 	}
 
 	@Test
-	@DisplayName("자유 형식 발자취 생성 매핑 기능 구현 테스트")
-	void create_KptFootprint_Success() {
+	@DisplayName("Kpt 형식 발자취 조회 매핑 기능 구현 테스트")
+	void get_KptFootprint_Success() {
 		// given
 		FootprintParam.Create param = fixtureMonkey.giveMeOne(FootprintParam.Create.class);
 		String keepContent = "keepContent";
 		String problemContent = "problemContent";
 		String tryContent = "tryContent";
-
 		KptFootprint kptFootprint = FootprintFactory.createKptFootprint(param, keepContent, problemContent, tryContent);
 
+		Long createdId = createFootprintAdaptor.create(kptFootprint);
+
 		// when
-		Long footprintEntityId = createFootprintAdaptor.create(kptFootprint);
+		Footprint footprint = getFootprintAdaptor.getKptFootprint(createdId);
 
 		// then
-		assertThat(footprintEntityId).isNotNull();
+		assertThat(footprint.getId()).isEqualTo(createdId);
 	}
 }
