@@ -7,6 +7,7 @@ import me.ajaja.module.footprint.dto.FootprintParam;
 public class FootprintFactory {
 	public static FreeFootprint createFreeFootprint(FootprintParam.Create create, String content) {
 		return new FreeFootprint(
+			null,
 			create.getTarget(),
 			create.getWriter(),
 			create.getTitle(),
@@ -22,6 +23,7 @@ public class FootprintFactory {
 		FootprintParam.Create create, String keepContent, String problemContent, String tryContent
 	) {
 		return new KptFootprint(
+			null,
 			create.getTarget(),
 			create.getWriter(),
 			create.getTitle(),

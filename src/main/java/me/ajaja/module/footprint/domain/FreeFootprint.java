@@ -11,9 +11,9 @@ public class FreeFootprint extends Footprint {
 	@NotBlank
 	private String content;
 
-	FreeFootprint(Target target, Writer writer, Title title, boolean visible, boolean deleted,
+	public FreeFootprint(Long id, Target target, Writer writer, Title title, boolean visible, boolean deleted,
 		Set<Tag> tags, List<Ajaja> ajajas, String content) {
-		super(target, writer, title, visible, deleted, tags, ajajas);
+		super(id, target, writer, title, visible, deleted, tags, ajajas);
 		this.content = content;
 		this.validateSelf();
 	}

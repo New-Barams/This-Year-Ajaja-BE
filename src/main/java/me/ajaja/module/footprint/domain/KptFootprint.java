@@ -15,9 +15,10 @@ public class KptFootprint extends Footprint {
 	@NotBlank
 	private String tryContent;
 
-	KptFootprint(Target target, Writer writer, Title title, boolean visible, boolean deleted, Set<Tag> tags,
+	public KptFootprint(Long id, Target target, Writer writer, Title title, boolean visible, boolean deleted,
+		Set<Tag> tags,
 		List<Ajaja> ajajas, String keepContent, String problemContent, String tryContent) {
-		super(target, writer, title, visible, deleted, tags, ajajas);
+		super(id, target, writer, title, visible, deleted, tags, ajajas);
 		this.keepContent = keepContent;
 		this.problemContent = problemContent;
 		this.tryContent = tryContent;
