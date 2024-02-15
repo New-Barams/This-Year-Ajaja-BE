@@ -17,22 +17,17 @@ import me.ajaja.module.user.application.port.out.DisconnectOauthPort;
 @Component
 @RequiredArgsConstructor
 class KakaoDisconnectOauthAdapter implements DisconnectOauthPort {
-	private static final String KAKAO_AK_PREFIX = "KakaoAK ";
-
 	private final KakaoUnlinkFeignClient kakaoUnlinkFeignClient;
 	private final KakaoProperties kakaoProperties;
 
 	@Async
 	@Override
 	public void disconnect(Long oauthId) {
-		KakaoResponse.Withdraw result = kakaoUnlinkFeignClient.unlink(kakaoHeader(), new KakaoRequest.Unlink(oauthId));
+		KakaoRequest.Unlink request = new KakaoRequest.Unlink(oauthId);
+		KakaoResponse.Withdraw result = kakaoUnlinkFeignClient.unlink(kakaoProperties.asHeader(), request);
 
 		if (Objects.equals(result.getId(), oauthId)) {
-			log.info("Kakao Service Disconnected : {}", oauthId);
+			log.info("[Kakao Oauth Disconnected] disconnected oauth ID : {}", oauthId);
 		}
-	}
-
-	private String kakaoHeader() {
-		return KAKAO_AK_PREFIX + kakaoProperties.getAdminKey();
 	}
 }

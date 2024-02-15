@@ -10,6 +10,8 @@ import me.ajaja.infra.feign.kakao.model.KakaoRequest;
 @RequiredArgsConstructor
 @ConfigurationProperties(prefix = "secret.kakao")
 public class KakaoProperties {
+	private static final String KAKAO_AK_PREFIX = "KakaoAK ";
+
 	private final String adminKey;
 	private final String clientId;
 	private final String clientSecret;
@@ -17,5 +19,9 @@ public class KakaoProperties {
 
 	public KakaoRequest.Authorize authorizeRequest(String authorizationCode, String redirectUri) {
 		return new KakaoRequest.Authorize(clientId, redirectUri, authorizationCode, clientSecret);
+	}
+
+	public String asHeader() {
+		return KAKAO_AK_PREFIX + adminKey;
 	}
 }
