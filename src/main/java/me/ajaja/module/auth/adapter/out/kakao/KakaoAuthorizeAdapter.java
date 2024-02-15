@@ -21,17 +21,10 @@ class KakaoAuthorizeAdapter implements AuthorizePort {
 
 	@Override
 	public Profile authorize(String authorizationCode, String redirectUri) {
-		KakaoRequest.Token request = generateRequest(authorizationCode, redirectUri);
+		KakaoRequest.Authorize request = kakaoProperties.authorizeRequest(authorizationCode, redirectUri);
 		AccessToken accessToken = kakaoAuthorizeFeignClient.authorize(request);
-		return kakaoProfileFeignClient.getKakaoProfile(BearerUtil.toBearer(accessToken.getContent()));
-	}
 
-	private KakaoRequest.Token generateRequest(String authorizationCode, String redirectUri) {
-		return new KakaoRequest.Token(
-			kakaoProperties.getClientId(),
-			redirectUri,
-			authorizationCode,
-			kakaoProperties.getClientSecret()
-		);
+		String bearerAccessToken = BearerUtil.toBearer(accessToken.getContent());
+		return kakaoProfileFeignClient.getKakaoProfile(bearerAccessToken);
 	}
 }
