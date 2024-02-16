@@ -5,14 +5,24 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Where;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.ajaja.global.common.BaseEntity;
+import me.ajaja.module.ajaja.infra.AjajaEntity;
 
 @Getter
 @Entity
@@ -25,20 +35,14 @@ public class FootprintEntity extends BaseEntity<FootprintEntity> {
 	@Column(name = "footprint_id")
 	private Long id;
 
-	@Column(name = "footprint_type", nullable = false, length = 10)
-	private String type;
-
 	@Column(nullable = false)
 	private Long targetId;
-
-	@Column(nullable = false, length = 50)
-	private String targetTitle;
 
 	@Column(nullable = false)
 	private Long writerId;
 
-	@Column(nullable = false, length = 20)
-	private String nickname;
+	@Column(name = "footprint_type", nullable = false, length = 10)
+	private String type;
 
 	@Column(nullable = false, length = 50)
 	private String title;
@@ -47,16 +51,15 @@ public class FootprintEntity extends BaseEntity<FootprintEntity> {
 	private boolean visible;
 
 	@Column(nullable = false)
-	@ColumnDefault(value = "false")
 	private boolean deleted;
 
-	@ElementCollection
-	@CollectionTable(name = "footprint_tags", joinColumns = @JoinColumn(name = "footprint_id"))
-	private Set<Tag> tags = new HashSet<>();
+	@OneToMany(mappedBy = "footprint", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<FootprintTagEntity> footprintTags = new HashSet<>();
 
-	@ElementCollection
-	@CollectionTable(name = "footprint_ajajas", joinColumns = @JoinColumn(name = "footprint_id"))
-	private List<Ajaja> ajajas = new ArrayList<>();
+	@Where(clause = "target_type = \"FOOTPRINT\"")
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "target_id")
+	private List<AjajaEntity> ajajas = new ArrayList<>();
 
 	@Column(columnDefinition = "TEXT")
 	private String content;
