@@ -1,6 +1,6 @@
 package me.ajaja.module.footprint.adapter.out.persistence;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,8 +13,7 @@ import me.ajaja.module.footprint.domain.FootprintFactory;
 import me.ajaja.module.footprint.domain.FreeFootprint;
 import me.ajaja.module.footprint.domain.KptFootprint;
 import me.ajaja.module.footprint.dto.FootprintParam;
-import me.ajaja.module.footprint.mapper.FreeFootprintMapperImpl;
-import me.ajaja.module.footprint.mapper.KptFootprintMapperImpl;
+import me.ajaja.module.footprint.mapper.FootprintMapperImpl;
 
 import com.navercorp.fixturemonkey.FixtureMonkey;
 import com.navercorp.fixturemonkey.api.introspector.ConstructorPropertiesArbitraryIntrospector;
@@ -23,8 +22,7 @@ import com.navercorp.fixturemonkey.jakarta.validation.plugin.JakartaValidationPl
 @ContextConfiguration(classes = {
 	CreateFootprintAdaptor.class,
 	GetFootprintAdaptor.class,
-	FreeFootprintMapperImpl.class,
-	KptFootprintMapperImpl.class
+	FootprintMapperImpl.class
 })
 class GetFootprintAdaptorTest extends JpaTestSupport {
 	private final FixtureMonkey fixtureMonkey = FixtureMonkey.builder()
@@ -50,7 +48,7 @@ class GetFootprintAdaptorTest extends JpaTestSupport {
 		Long createdId = createFootprintAdaptor.create(freeFootprint);
 
 		// when
-		Footprint footprint = getFootprintAdaptor.getFreeFootprint(createdId);
+		Footprint footprint = getFootprintAdaptor.getFootprint(createdId);
 
 		// then
 		assertThat(footprint.getId()).isEqualTo(createdId);
@@ -69,7 +67,7 @@ class GetFootprintAdaptorTest extends JpaTestSupport {
 		Long createdId = createFootprintAdaptor.create(kptFootprint);
 
 		// when
-		Footprint footprint = getFootprintAdaptor.getKptFootprint(createdId);
+		Footprint footprint = getFootprintAdaptor.getFootprint(createdId);
 
 		// then
 		assertThat(footprint.getId()).isEqualTo(createdId);

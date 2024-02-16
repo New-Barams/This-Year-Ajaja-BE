@@ -1,38 +1,49 @@
 package me.ajaja.module.footprint.adapter.out.persistence;
 
-import static me.ajaja.global.exception.ErrorCode.NOT_FOUND_FOOTPRINT;
+import static me.ajaja.global.exception.ErrorCode.*;
+import static me.ajaja.module.plan.adapter.out.persistence.model.QPlanEntity.*;
+import static me.ajaja.module.user.adapter.out.persistence.model.QUserEntity.*;
 
 import org.springframework.stereotype.Repository;
+
+import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
 import me.ajaja.global.exception.AjajaException;
 import me.ajaja.module.footprint.adapter.out.persistence.model.FootprintEntity;
+import me.ajaja.module.footprint.adapter.out.persistence.model.TargetEntity;
+import me.ajaja.module.footprint.adapter.out.persistence.model.WriterEntity;
 import me.ajaja.module.footprint.application.port.out.GetFootprintPort;
-import me.ajaja.module.footprint.domain.FreeFootprint;
-import me.ajaja.module.footprint.domain.KptFootprint;
-import me.ajaja.module.footprint.mapper.FreeFootprintMapper;
-import me.ajaja.module.footprint.mapper.KptFootprintMapper;
+import me.ajaja.module.footprint.domain.Footprint;
+import me.ajaja.module.footprint.mapper.FootprintMapper;
 
 @Repository
 @RequiredArgsConstructor
 public class GetFootprintAdaptor implements GetFootprintPort {
 	private final FootprintJpaRepository footprintJpaRepository;
-	private final FreeFootprintMapper freeFootprintMapper;
-	private final KptFootprintMapper kptFootprintMapper;
+	private final JPAQueryFactory queryFactory;
+	private final FootprintMapper footprintMapper;
 
 	@Override
-	public FreeFootprint getFreeFootprint(Long id) {
+	public Footprint getFootprint(Long id) {
 		FootprintEntity footprintEntity = footprintJpaRepository.findById(id)
 			.orElseThrow(() -> AjajaException.withId(id, NOT_FOUND_FOOTPRINT));
 
-		return freeFootprintMapper.toDomain(footprintEntity);
-	}
+		TargetEntity targetEntity = queryFactory.select(
+				Projections.fields(TargetEntity.class, planEntity.id, planEntity.title))
+			.from(planEntity)
+			.where(planEntity.id.eq(footprintEntity.getTargetId()))
+			.fetchOne();
 
-	@Override
-	public KptFootprint getKptFootprint(Long id) {
-		FootprintEntity footprintEntity = footprintJpaRepository.findById(id)
-			.orElseThrow(() -> AjajaException.withId(id, NOT_FOUND_FOOTPRINT));
+		WriterEntity writerEntity = queryFactory.select(
+				Projections.fields(WriterEntity.class, userEntity.id, userEntity.nickname))
+			.from(userEntity)
+			.where(userEntity.id.eq(footprintEntity.getWriterId()))
+			.fetchOne();
 
-		return kptFootprintMapper.toDomain(footprintEntity);
+		Footprint footprint = footprintMapper.toDomain(footprintEntity, targetEntity, writerEntity);
+
+		return footprint;
 	}
 }
