@@ -19,13 +19,13 @@ class RawParserTest {
 	private RawParser rawParser;
 
 	@MockBean
-	private TokenCache cache;
+	private TokenStorage storage;
 
 	@Test
 	@DisplayName("파싱 시도 시에 토큰이 유효하다면 true를 리턴해야 한다.")
 	void tryParse_Success_WithValidToken() {
 		// given
-		willDoNothing().given(cache).save(anyString(), anyString(), anyByte());
+		willDoNothing().given(storage).save(anyString(), anyString(), anyByte());
 		AuthResponse.Token token = jwtGenerator.login(1L);
 
 		// when

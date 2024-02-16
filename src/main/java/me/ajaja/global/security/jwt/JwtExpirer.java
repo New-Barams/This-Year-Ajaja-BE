@@ -10,10 +10,10 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class JwtExpirer {
 	private final JwtSecretProvider secretProvider;
-	private final TokenCache tokenCache;
+	private final TokenStorage tokenStorage;
 
 	public void expire(Long userId) {
-		if (!tokenCache.remove(secretProvider.cacheKey(userId))) {
+		if (!tokenStorage.remove(secretProvider.cacheKey(userId))) {
 			log.warn("[JWT] Refresh Token DELETED failed. ID : " + userId);
 		}
 	}

@@ -18,7 +18,7 @@ public class JwtGenerator {
 	}
 
 	private final JwtSecretProvider secretProvider;
-	private final TokenCache tokenCache;
+	private final TokenStorage tokenStorage;
 	private final RawParser rawParser;
 
 	public AuthResponse.Token login(Long userId) {
@@ -59,7 +59,7 @@ public class JwtGenerator {
 			.signWith(secretProvider.getSecretKey())
 			.compact();
 
-		tokenCache.save(secretProvider.cacheKey(userId), refreshToken, secretProvider.refreshTokenExpireIn());
+		tokenStorage.save(secretProvider.cacheKey(userId), refreshToken, secretProvider.refreshTokenExpireIn());
 		return refreshToken;
 	}
 

@@ -9,12 +9,12 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import me.ajaja.global.exception.AjajaException;
-import me.ajaja.global.security.jwt.TokenCache;
+import me.ajaja.global.security.jwt.TokenStorage;
 import me.ajaja.module.user.application.model.Verification;
 
 @Component
 @RequiredArgsConstructor
-public class CacheUtil implements TokenCache {
+public class CacheUtil implements TokenStorage {
 	private static final long VERIFICATION_EMAIL_EXPIRE_IN = 10 * 60 * 1000L; // 10분
 	private static final String DEFAULT_KEY = "AJAJA ";
 

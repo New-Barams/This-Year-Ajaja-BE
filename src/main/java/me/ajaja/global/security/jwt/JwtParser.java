@@ -13,7 +13,7 @@ import me.ajaja.global.security.common.CustomUserDetailsService;
 public class JwtParser {
 	private final CustomUserDetailsService userDetailService;
 	private final JwtSecretProvider secretProvider;
-	private final TokenCache tokenCache;
+	private final TokenStorage tokenStorage;
 	private final RawParser rawParser;
 
 	public Authentication parseAuthentication(String jwt) {
@@ -38,7 +38,7 @@ public class JwtParser {
 
 	private Long parseIdIfHistoryExists(String refreshToken) {
 		Long userId = parseId(refreshToken);
-		tokenCache.validateHistory(secretProvider.cacheKey(userId), refreshToken);
+		tokenStorage.validateHistory(secretProvider.cacheKey(userId), refreshToken);
 		return userId;
 	}
 }
