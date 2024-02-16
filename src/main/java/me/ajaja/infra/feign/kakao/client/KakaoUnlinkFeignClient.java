@@ -13,7 +13,7 @@ import me.ajaja.infra.feign.kakao.model.KakaoResponse;
 
 @FeignClient(name = "KakaoDisconnectFeignClient", url = "https://kapi.kakao.com")
 public interface KakaoUnlinkFeignClient {
-	
+
 	@PostMapping(value = "/v1/user/unlink", consumes = APPLICATION_FORM_URLENCODED_VALUE)
 	KakaoResponse.Withdraw unlink(
 		@RequestHeader(AUTHORIZATION) String adminKey,
