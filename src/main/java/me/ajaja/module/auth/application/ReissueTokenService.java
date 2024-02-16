@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import me.ajaja.global.security.jwt.JwtGenerator;
-import me.ajaja.global.security.jwt.JwtValidator;
+import me.ajaja.global.security.jwt.JwtParser;
 import me.ajaja.module.auth.application.port.in.ReissueTokenUseCase;
 import me.ajaja.module.auth.dto.AuthResponse;
 
@@ -12,11 +12,11 @@ import me.ajaja.module.auth.dto.AuthResponse;
 @RequiredArgsConstructor
 class ReissueTokenService implements ReissueTokenUseCase {
 	private final JwtGenerator jwtGenerator;
-	private final JwtValidator jwtValidator;
+	private final JwtParser jwtParser;
 
 	@Override
 	public AuthResponse.Token reissue(String accessToken, String refreshToken) {
-		Long userId = jwtValidator.validateReissuableAndExtractId(accessToken, refreshToken);
+		Long userId = jwtParser.parseIdIfReissueable(accessToken, refreshToken);
 		return jwtGenerator.reissue(userId, refreshToken);
 	}
 }

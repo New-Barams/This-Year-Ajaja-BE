@@ -9,11 +9,12 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import me.ajaja.global.exception.AjajaException;
+import me.ajaja.global.security.jwt.TokenCache;
 import me.ajaja.module.user.application.model.Verification;
 
 @Component
 @RequiredArgsConstructor
-public class CacheUtil {
+public class CacheUtil implements TokenCache {
 	private static final long VERIFICATION_EMAIL_EXPIRE_IN = 10 * 60 * 1000L; // 10분
 	private static final String DEFAULT_KEY = "AJAJA ";
 
@@ -39,15 +40,29 @@ public class CacheUtil {
 		return redisTemplate.opsForValue().get(DEFAULT_KEY + userId);
 	}
 
-	public void saveRefreshToken(String key, String refreshToken, long expireIn) {
+	@Override
+	public void save(String key, String refreshToken, long expireIn) {
 		redisTemplate.opsForValue().set(key, refreshToken, Duration.ofMillis(expireIn));
 	}
 
-	public Object getRefreshToken(String key) {
-		return redisTemplate.opsForValue().get(key);
+	@Override
+	public void validateHistory(String key, String refreshToken) {
+		if (redisTemplate.opsForValue().get(key) instanceof String token) {
+			compare(token, refreshToken);
+			return;
+		}
+
+		throw new AjajaException(NEVER_LOGIN);
 	}
 
-	public boolean deleteRefreshToken(String key) {
+	private void compare(String saved, String target) {
+		if (!saved.equals(target)) {
+			throw new AjajaException(TOKEN_NOT_MATCH);
+		}
+	}
+
+	@Override
+	public boolean remove(String key) {
 		return Boolean.TRUE.equals(redisTemplate.delete(key));
 	}
 }

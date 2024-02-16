@@ -4,30 +4,54 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.util.Date;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class TimeValueTest {
-	@Test
-	void isWithinThreeDays_Success() {
+	private static final long ONE_DAY = 60 * 60 * 24 * 1000L;
+	private static final long ONE_SECOND = 60 * 1000L;
+
+	@ParameterizedTest
+	@ValueSource(longs = {
+		ONE_DAY,
+		ONE_DAY * 2,
+		ONE_DAY * 3,
+	})
+	@DisplayName("지금으로부터 3일 이내라면 true를 리턴해야 한다.")
+	void isWithinThreeDays_Success(long days) {
 		// given
-		Date threeDaysBefore = new Date(new Date().getTime() - 60 * 60 * 24 * 3 * 1000L);
+		Date threeDaysBefore = new Date(new Date().getTime() - days);
+		Date threeDaysAfter = new Date(new Date().getTime() + days);
 
 		// when
-		boolean withinThreeDays = TimeValue.now().isWithinThreeDays(threeDaysBefore);
+		boolean withinThreeDaysBefore = TimeValue.now().isWithin3Days(threeDaysBefore);
+		boolean withinThreeDaysAfter = TimeValue.now().isWithin3Days(threeDaysAfter);
 
 		// then
-		assertThat(withinThreeDays).isTrue();
+		assertThat(withinThreeDaysBefore).isTrue();
+		assertThat(withinThreeDaysAfter).isTrue();
 	}
 
-	@Test
-	void isWithinThreeDays_Fail() {
+	@ParameterizedTest
+	@ValueSource(longs = {
+		ONE_DAY * 4 + ONE_SECOND, // to avoid equal case
+		ONE_DAY * 5,
+		ONE_DAY * 6,
+		ONE_DAY * 7,
+	})
+	@DisplayName("지금으로부터 3일 이후라면 false를 리턴해야 한다.")
+	void isWithinThreeDays_Fail(long days) {
 		// given
-		Date fourDaysBefore = new Date(new Date().getTime() - 60 * 60 * 24 * 4 * 1000L);
+		Date fourDaysBefore = new Date(new Date().getTime() - days);
+		Date fourDaysAfter = new Date(new Date().getTime() + days);
 
 		// when
-		boolean withinThreeDays = TimeValue.now().isWithinThreeDays(fourDaysBefore);
+		boolean withinThreeDaysBefore = TimeValue.now().isWithin3Days(fourDaysBefore);
+		boolean withinThreeDaysAfter = TimeValue.now().isWithin3Days(fourDaysAfter);
 
 		// then
-		assertThat(withinThreeDays).isFalse();
+		assertThat(withinThreeDaysBefore).isFalse();
+		assertThat(withinThreeDaysAfter).isFalse();
 	}
 }
