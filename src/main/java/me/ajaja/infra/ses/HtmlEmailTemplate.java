@@ -13,7 +13,7 @@ class HtmlEmailTemplate {
 		           <table border="1" cellpadding="0" cellspacing="0" width="600" style="border-style: solid; padding: 20px; border-top-color: #f76c5e; border-width: 2px; border-top-width: 12px">
 		             <tr>
 		               <td style="border: none">
-		                 <img src="https://i.imgur.com/vmHDigp.png" alt="올해도 아좌좌 LOGO" width="95" height="75" />
+		                 <img src="https://i.imgur.com/vmHDigp.png" alt="올해도 아좌좌 LOGO" width="140" height="80" />
 		               </td>
 		             </tr>
 		             %s
