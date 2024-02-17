@@ -1,5 +1,6 @@
 package me.ajaja.module.user.application;
 
+import static me.ajaja.common.extenstion.AssertExtension.*;
 import static me.ajaja.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
@@ -12,8 +13,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import me.ajaja.common.annotation.RedisBasedTest;
 import me.ajaja.common.support.MockTestSupport;
-import me.ajaja.global.cache.CacheUtil;
-import me.ajaja.global.exception.AjajaException;
 import me.ajaja.module.user.application.port.out.ApplyChangePort;
 import me.ajaja.module.user.domain.Email;
 import me.ajaja.module.user.domain.PhoneNumber;
@@ -26,7 +25,7 @@ class VerifyCertificationServiceTest extends MockTestSupport {
 	@Autowired
 	private VerifyCertificationService verifyCertificationService;
 	@Autowired
-	private CacheUtil cacheUtil;
+	private VerificationStorage storage;
 
 	@MockBean
 	private RetrieveUserService retrieveUserService;
@@ -49,7 +48,7 @@ class VerifyCertificationServiceTest extends MockTestSupport {
 	void verify_Success_WithUpdatedVerificationStatus() {
 		// given
 		String certification = RandomCertificationGenerator.generate();
-		cacheUtil.saveEmailVerification(user.getId(), DEFAULT_EMAIL, certification);
+		storage.save(user.getId(), DEFAULT_EMAIL, certification);
 
 		given(retrieveUserService.loadExistById(anyLong())).willReturn(user);
 		willDoNothing().given(applyChangePort).apply(any());
@@ -70,9 +69,9 @@ class VerifyCertificationServiceTest extends MockTestSupport {
 		// given
 
 		// when, then
-		assertThatExceptionOfType(AjajaException.class)
-			.isThrownBy(() -> verifyCertificationService.verify(user.getId(), "certification"))
-			.withMessage(CERTIFICATION_NOT_FOUND.getMessage());
+		assertThatAjajaException(EMPTY_CACHE).isThrownBy(() ->
+			verifyCertificationService.verify(user.getId(), "certification")
+		);
 	}
 
 	@Test
@@ -80,11 +79,11 @@ class VerifyCertificationServiceTest extends MockTestSupport {
 	void verify_Fail_ByWrongCertification() {
 		// given
 		String certification = RandomCertificationGenerator.generate();
-		cacheUtil.saveEmailVerification(user.getId(), DEFAULT_EMAIL, certification);
+		storage.save(user.getId(), DEFAULT_EMAIL, certification);
 
 		// when, then
-		assertThatExceptionOfType(AjajaException.class)
-			.isThrownBy(() -> verifyCertificationService.verify(user.getId(), "certification"))
-			.withMessage(CERTIFICATION_NOT_MATCH.getMessage());
+		assertThatAjajaException(CERTIFICATION_NOT_MATCH).isThrownBy(() ->
+			verifyCertificationService.verify(user.getId(), "certification")
+		);
 	}
 }

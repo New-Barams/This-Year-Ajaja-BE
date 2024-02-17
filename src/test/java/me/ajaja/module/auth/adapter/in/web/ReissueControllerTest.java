@@ -110,10 +110,10 @@ class ReissueControllerTest extends WebMvcTestSupport {
 	}
 
 	@ApiTest
-	@DisplayName("로그인한 이력이 존재하지 않으면 404에러를 반환한다.")
+	@DisplayName("로그인한 이력(캐시가 비어있다면)이 존재하지 않으면 404에러를 반환한다.")
 	void reissue_Fail_ByNeverLogin() throws Exception {
 		// given
-		RuntimeException neverLogin = new AjajaException(NEVER_LOGIN);
+		RuntimeException neverLogin = new AjajaException(EMPTY_CACHE);
 
 		willThrow(neverLogin).given(reissueTokenUseCase).reissue(anyString(), anyString());
 
@@ -126,8 +126,8 @@ class ReissueControllerTest extends WebMvcTestSupport {
 		result.andExpectAll(
 			status().isNotFound(),
 			jsonPath("$.httpStatus").value(NOT_FOUND.name()),
-			jsonPath("$.errorName").value(NEVER_LOGIN.name()),
-			jsonPath("$.errorMessage").value(NEVER_LOGIN.getMessage())
+			jsonPath("$.errorName").value(EMPTY_CACHE.name()),
+			jsonPath("$.errorMessage").value(EMPTY_CACHE.getMessage())
 		);
 
 		// docs

@@ -1,13 +1,11 @@
 package me.ajaja.global.security.jwt;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.BDDMockito.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import me.ajaja.module.auth.dto.AuthResponse;
 
@@ -18,14 +16,10 @@ class RawParserTest {
 	@Autowired
 	private RawParser rawParser;
 
-	@MockBean
-	private TokenStorage storage;
-
 	@Test
-	@DisplayName("파싱 시도 시에 토큰이 유효하다면 true를 리턴해야 한다.")
+	@DisplayName("토큰이 유효하다면 true를 리턴해야 한다.")
 	void tryParse_Success_WithValidToken() {
 		// given
-		willDoNothing().given(storage).save(anyString(), anyString(), anyByte());
 		AuthResponse.Token token = jwtGenerator.login(1L);
 
 		// when
@@ -36,7 +30,7 @@ class RawParserTest {
 	}
 
 	@Test
-	@DisplayName("파싱 시도 시에 토큰이 유효하지 않다면 false를 리턴해야 한다.")
+	@DisplayName("토큰이 유효하지 않다면 false를 리턴해야 한다.")
 	void tryParse_Fail_ByInvalidToken() {
 		// given
 		String invalidToken = """

@@ -148,7 +148,7 @@ class JwtParserTest extends MonkeySupport {
 		redisTemplate.delete(jwtSecretProvider.getSignature() + userId);
 
 		// when, then
-		assertThatAjajaException(NEVER_LOGIN).isThrownBy(() ->
+		assertThatAjajaException(EMPTY_CACHE).isThrownBy(() ->
 			jwtParser.parseIdIfReissueable(null, refreshToken)
 		);
 	}
