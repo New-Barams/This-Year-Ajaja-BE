@@ -29,7 +29,6 @@ public interface FootprintMapper {
 	@Mapping(target = "problemContent", expression = "java(toProblemContent(footprint))")
 	@Mapping(target = "tryContent", expression = "java(toTryContent(footprint))")
 		// @Mapping(source = "footprint", target = "tags", qualifiedByName = "toTags")
-		// @Mapping(source = "footprint", target = "ajajas", qualifiedByName = "toAjajas")
 	FootprintEntity toEntity(Footprint footprint);
 
 	default String toType(Footprint footprint) {
@@ -66,7 +65,6 @@ public interface FootprintMapper {
 				footprintEntity.isVisible(),
 				footprintEntity.isDeleted(),
 				null,
-				null,
 				footprintEntity.getContent()
 			);
 		} else {
@@ -77,7 +75,6 @@ public interface FootprintMapper {
 				new Title(footprintEntity.getTitle()),
 				footprintEntity.isVisible(),
 				footprintEntity.isDeleted(),
-				null,
 				null,
 				footprintEntity.getKeepContent(),
 				footprintEntity.getProblemContent(),

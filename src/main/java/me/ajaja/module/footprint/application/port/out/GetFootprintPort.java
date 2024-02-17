@@ -1,10 +1,8 @@
 package me.ajaja.module.footprint.application.port.out;
 
-import me.ajaja.module.footprint.domain.FreeFootprint;
-import me.ajaja.module.footprint.domain.KptFootprint;
+import me.ajaja.module.footprint.domain.Footprint;
 
 public interface GetFootprintPort {
-	FreeFootprint getFreeFootprint(Long id);
+	Footprint getFootprint(Long id);
 
-	KptFootprint getKptFootprint(Long id);
 }

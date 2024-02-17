@@ -1,7 +1,5 @@
 package me.ajaja.module.footprint.domain;
 
-import java.util.ArrayList;
-
 import me.ajaja.module.footprint.dto.FootprintParam;
 
 public class FootprintFactory {
@@ -14,7 +12,6 @@ public class FootprintFactory {
 			create.isVisible(),
 			false,
 			create.getTags(),
-			new ArrayList<>(),
 			content
 		);
 	}
@@ -30,7 +27,6 @@ public class FootprintFactory {
 			create.isVisible(),
 			false,
 			create.getTags(),
-			new ArrayList<>(),
 			keepContent,
 			problemContent,
 			tryContent

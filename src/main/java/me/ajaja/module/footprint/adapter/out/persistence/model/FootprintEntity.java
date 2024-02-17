@@ -43,11 +43,6 @@ public class FootprintEntity extends BaseEntity<FootprintEntity> {
 
 	// @OneToMany(mappedBy = "footprint", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	// private Set<FootprintTagEntity> footprintTags = new HashSet<>();
-	//
-	// @Where(clause = "target_type = \"FOOTPRINT\"")
-	// @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	// @JoinColumn(name = "target_id")
-	// private List<AjajaEntity> ajajas = new ArrayList<>();
 
 	@Column(columnDefinition = "TEXT")
 	private String content;
