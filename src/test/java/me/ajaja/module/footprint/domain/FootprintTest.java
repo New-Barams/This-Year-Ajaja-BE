@@ -1,7 +1,6 @@
 package me.ajaja.module.footprint.domain;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatNoException;
+import static org.assertj.core.api.AssertionsForClassTypes.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -32,7 +31,7 @@ class FootprintTest extends MonkeySupport {
 			String content = "content";
 
 			assertThatNoException().isThrownBy(() -> {
-				FootprintFactory.createFreeFootprint(param, content);
+				FootprintFactory.freeTemplate(param, content);
 			});
 		}
 
@@ -45,7 +44,7 @@ class FootprintTest extends MonkeySupport {
 			String tryContent = "tryContent";
 
 			assertThatNoException().isThrownBy(() -> {
-				FootprintFactory.createKptFootprint(param, keepContent, problemContent, tryContent);
+				FootprintFactory.kptTemplate(param, keepContent, problemContent, tryContent);
 			});
 		}
 	}
@@ -57,7 +56,7 @@ class FootprintTest extends MonkeySupport {
 		String content = null;
 
 		assertThatExceptionOfType(ConstraintViolationException.class).isThrownBy(
-			() -> FootprintFactory.createFreeFootprint(param, content)
+			() -> FootprintFactory.freeTemplate(param, content)
 		);
 	}
 }

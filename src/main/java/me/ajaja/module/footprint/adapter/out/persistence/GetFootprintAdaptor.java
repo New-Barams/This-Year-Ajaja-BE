@@ -5,6 +5,7 @@ import static me.ajaja.module.plan.adapter.out.persistence.model.QPlanEntity.*;
 import static me.ajaja.module.user.adapter.out.persistence.model.QUserEntity.*;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -19,6 +20,7 @@ import me.ajaja.module.footprint.domain.Footprint;
 import me.ajaja.module.footprint.mapper.FootprintMapper;
 
 @Repository
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class GetFootprintAdaptor implements GetFootprintPort {
 	private final FootprintJpaRepository footprintJpaRepository;

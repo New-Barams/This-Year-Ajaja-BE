@@ -2,8 +2,8 @@ package me.ajaja.module.footprint.domain;
 
 import me.ajaja.module.footprint.dto.FootprintParam;
 
-public class FootprintFactory {
-	public static FreeFootprint createFreeFootprint(FootprintParam.Create create, String content) {
+public final class FootprintFactory {
+	public static FreeFootprint freeTemplate(FootprintParam.Create create, String content) {
 		return new FreeFootprint(
 			null,
 			create.getTarget(),
@@ -16,7 +16,7 @@ public class FootprintFactory {
 		);
 	}
 
-	public static KptFootprint createKptFootprint(
+	public static KptFootprint kptTemplate(
 		FootprintParam.Create create, String keepContent, String problemContent, String tryContent
 	) {
 		return new KptFootprint(

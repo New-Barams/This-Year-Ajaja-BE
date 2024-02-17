@@ -38,7 +38,7 @@ class CreateFootprintAdaptorTest extends JpaTestSupport {
 		// given
 		FootprintParam.Create param = fixtureMonkey.giveMeOne(FootprintParam.Create.class);
 		String content = "content";
-		FreeFootprint freeFootprint = FootprintFactory.createFreeFootprint(param, content);
+		FreeFootprint freeFootprint = FootprintFactory.freeTemplate(param, content);
 
 		// when
 		Long footprintEntityId = createFootprintAdaptor.create(freeFootprint);
@@ -56,7 +56,7 @@ class CreateFootprintAdaptorTest extends JpaTestSupport {
 		String problemContent = "problemContent";
 		String tryContent = "tryContent";
 
-		KptFootprint kptFootprint = FootprintFactory.createKptFootprint(param, keepContent, problemContent, tryContent);
+		KptFootprint kptFootprint = FootprintFactory.kptTemplate(param, keepContent, problemContent, tryContent);
 
 		// when
 		Long footprintEntityId = createFootprintAdaptor.create(kptFootprint);
