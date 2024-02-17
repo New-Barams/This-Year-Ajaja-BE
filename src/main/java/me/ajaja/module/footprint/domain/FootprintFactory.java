@@ -11,7 +11,6 @@ public final class FootprintFactory {
 			create.getTitle(),
 			create.isVisible(),
 			false,
-			create.getTags(),
 			content
 		);
 	}
@@ -26,7 +25,6 @@ public final class FootprintFactory {
 			create.getTitle(),
 			create.isVisible(),
 			false,
-			create.getTags(),
 			keepContent,
 			problemContent,
 			tryContent

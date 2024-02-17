@@ -1,8 +1,5 @@
 package me.ajaja.module.footprint.domain;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import me.ajaja.global.common.SelfValidating;
@@ -17,6 +14,4 @@ public abstract class Footprint extends SelfValidating<Footprint> {
 	private Title title;
 	private boolean visible;
 	private boolean deleted;
-
-	private Set<Tag> tags = new HashSet<>();
 }

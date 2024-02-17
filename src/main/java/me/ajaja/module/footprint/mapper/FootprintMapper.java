@@ -58,23 +58,21 @@ public interface FootprintMapper {
 		if (footprintEntity.getType().equals("FREE")) {
 			return new FreeFootprint(
 				footprintEntity.getId(),
-				new Target(targetEntity.id(), targetEntity.title()),
-				new Writer(writerEntity.id(), writerEntity.nickname()),
+				new Target(targetEntity.getId(), targetEntity.getTitle()),
+				new Writer(writerEntity.getId(), writerEntity.getNickname()),
 				new Title(footprintEntity.getTitle()),
 				footprintEntity.isVisible(),
 				footprintEntity.isDeleted(),
-				null,
 				footprintEntity.getContent()
 			);
 		} else {
 			return new KptFootprint(
 				footprintEntity.getId(),
-				new Target(targetEntity.id(), targetEntity.title()),
-				new Writer(writerEntity.id(), writerEntity.nickname()),
+				new Target(targetEntity.getId(), targetEntity.getTitle()),
+				new Writer(writerEntity.getId(), writerEntity.getNickname()),
 				new Title(footprintEntity.getTitle()),
 				footprintEntity.isVisible(),
 				footprintEntity.isDeleted(),
-				null,
 				footprintEntity.getKeepContent(),
 				footprintEntity.getProblemContent(),
 				footprintEntity.getTryContent()

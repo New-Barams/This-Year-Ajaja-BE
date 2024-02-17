@@ -1,7 +1,5 @@
 package me.ajaja.module.footprint.domain;
 
-import java.util.Set;
-
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
@@ -11,8 +9,8 @@ public class FreeFootprint extends Footprint {
 	private String content;
 
 	public FreeFootprint(Long id, Target target, Writer writer, Title title, boolean visible, boolean deleted,
-		Set<Tag> tags, String content) {
-		super(id, target, writer, title, visible, deleted, tags);
+		String content) {
+		super(id, target, writer, title, visible, deleted);
 		this.content = content;
 		this.validateSelf();
 	}
