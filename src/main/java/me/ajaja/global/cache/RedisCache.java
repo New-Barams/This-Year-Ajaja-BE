@@ -35,9 +35,9 @@ class RedisCache implements TokenStorage, VerificationStorage {
 
 	@Override
 	public String getEmailIfVerified(Long userId, String certification) {
-		EmailVerification saved = getSaved(DEFAULT_KEY + userId, EmailVerification.class);
-		compare(saved.certification(), certification, CERTIFICATION_NOT_MATCH);
-		return saved.email();
+		EmailVerification verification = poll(DEFAULT_KEY + userId, EmailVerification.class);
+		compare(verification.certification(), certification, CERTIFICATION_NOT_MATCH);
+		return verification.email();
 	}
 
 	/**
@@ -50,8 +50,8 @@ class RedisCache implements TokenStorage, VerificationStorage {
 
 	@Override
 	public void validateHistory(String key, String refreshToken) {
-		String saved = getSaved(key, String.class);
-		compare(saved, refreshToken, TOKEN_NOT_MATCH);
+		String token = poll(key, String.class);
+		compare(token, refreshToken, TOKEN_NOT_MATCH);
 	}
 
 	@Override
@@ -59,7 +59,7 @@ class RedisCache implements TokenStorage, VerificationStorage {
 		return Boolean.TRUE.equals(redisTemplate.delete(key));
 	}
 
-	private <T> T getSaved(String key, Class<T> type) {
+	private <T> T poll(String key, Class<T> type) {
 		Object saved = redisTemplate.opsForValue().get(key);
 
 		if (type.isInstance(saved)) {
