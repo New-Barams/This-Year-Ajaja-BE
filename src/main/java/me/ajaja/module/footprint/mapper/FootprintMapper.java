@@ -28,7 +28,6 @@ public interface FootprintMapper {
 	@Mapping(target = "keepContent", expression = "java(toKeepContent(footprint))")
 	@Mapping(target = "problemContent", expression = "java(toProblemContent(footprint))")
 	@Mapping(target = "tryContent", expression = "java(toTryContent(footprint))")
-		// @Mapping(source = "footprint", target = "tags", qualifiedByName = "toTags")
 	FootprintEntity toEntity(Footprint footprint);
 
 	default String toType(Footprint footprint) {

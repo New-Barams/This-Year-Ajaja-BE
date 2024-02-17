@@ -41,9 +41,6 @@ public class FootprintEntity extends BaseEntity<FootprintEntity> {
 	@Column(nullable = false)
 	private boolean deleted;
 
-	// @OneToMany(mappedBy = "footprint", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	// private Set<FootprintTagEntity> footprintTags = new HashSet<>();
-
 	@Column(columnDefinition = "TEXT")
 	private String content;
 
