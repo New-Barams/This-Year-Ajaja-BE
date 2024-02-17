@@ -1,6 +1,7 @@
 package me.ajaja.common.extenstion;
 
-import org.assertj.core.api.ThrowableAssert;
+import static org.assertj.core.api.ThrowableAssert.*;
+
 import org.assertj.core.api.ThrowableAssertAlternative;
 import org.assertj.core.api.ThrowableTypeAssert;
 
@@ -22,7 +23,7 @@ public class AssertExtension {
 		}
 
 		@Override
-		public ThrowableAssertAlternative<AjajaException> isThrownBy(ThrowableAssert.ThrowingCallable throwingCallable) {
+		public ThrowableAssertAlternative<AjajaException> isThrownBy(ThrowingCallable throwingCallable) {
 			return super.isThrownBy(throwingCallable)
 				.withMessage(errorCode.getMessage());
 		}
