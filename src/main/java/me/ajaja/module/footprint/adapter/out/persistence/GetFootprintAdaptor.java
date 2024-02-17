@@ -33,13 +33,13 @@ public class GetFootprintAdaptor implements GetFootprintPort {
 			.orElseThrow(() -> AjajaException.withId(id, NOT_FOUND_FOOTPRINT));
 
 		TargetEntity targetEntity = queryFactory.select(
-				Projections.fields(TargetEntity.class, planEntity.id, planEntity.title))
+				Projections.constructor(TargetEntity.class, planEntity.id, planEntity.title))
 			.from(planEntity)
 			.where(planEntity.id.eq(footprintEntity.getTargetId()))
 			.fetchOne();
 
 		WriterEntity writerEntity = queryFactory.select(
-				Projections.fields(WriterEntity.class, userEntity.id, userEntity.nickname))
+				Projections.constructor(WriterEntity.class, userEntity.id, userEntity.nickname))
 			.from(userEntity)
 			.where(userEntity.id.eq(footprintEntity.getWriterId()))
 			.fetchOne();
