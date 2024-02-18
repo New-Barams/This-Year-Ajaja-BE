@@ -43,7 +43,7 @@ import me.ajaja.module.plan.application.port.in.ValidateContentUseCase;
 import me.ajaja.module.plan.application.port.out.FindAllPlansQuery;
 import me.ajaja.module.remind.application.port.in.GetRemindInfoUseCase;
 import me.ajaja.module.remind.application.port.in.GetTargetInfoUseCase;
-import me.ajaja.module.remind.application.port.in.SendTestRemindUseCase;
+import me.ajaja.module.remind.application.port.in.SendTrialRemindUseCase;
 import me.ajaja.module.remind.application.port.in.UpdateRemindInfoUseCase;
 import me.ajaja.module.remind.application.port.out.FindTargetRemindQuery;
 import me.ajaja.module.user.application.port.in.ChangeRemindTypeUseCase;
@@ -57,9 +57,10 @@ import me.ajaja.module.user.application.port.out.GetMyPageQuery;
 /**
  * Supports Cached Context On WebMvcTest with Monkey <br>
  * When Authentication is required USE @ApiTest, @ParameterizedApiTest
+ *
+ * @author hejow
  * @see ApiTest
  * @see ParameterizedApiTest
- * @author hejow
  */
 @WebMvcTest
 @ExtendWith(RestDocumentationExtension.class)
@@ -170,5 +171,5 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 	@MockBean
 	protected FindTargetRemindQuery findTargetRemindQuery;
 	@MockBean
-	protected SendTestRemindUseCase sendTestRemindUseCase;
+	protected SendTrialRemindUseCase sendTrialRemindUseCase;
 }

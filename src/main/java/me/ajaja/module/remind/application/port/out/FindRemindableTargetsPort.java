@@ -5,6 +5,6 @@ import java.util.List;
 import me.ajaja.global.common.TimeValue;
 import me.ajaja.module.remind.domain.Remind;
 
-public interface FindRemindableTargetPort {
-	List<Remind> findAllRemindablePlan(String remindTime, String remindType, TimeValue time);
+public interface FindRemindableTargetsPort {
+	List<Remind> findAllRemindablePlansByType(String remindTime, String remindType, TimeValue time);
 }

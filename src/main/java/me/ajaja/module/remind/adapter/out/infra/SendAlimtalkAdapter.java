@@ -17,7 +17,7 @@ import me.ajaja.infra.feign.ncp.client.NaverSendAlimtalkFeignClient;
 import me.ajaja.infra.feign.ncp.model.NaverRequest;
 import me.ajaja.infra.feign.ncp.model.NaverResponse;
 import me.ajaja.module.remind.application.CreateRemindService;
-import me.ajaja.module.remind.application.port.out.FindRemindableTargetPort;
+import me.ajaja.module.remind.application.port.out.FindRemindableTargetsPort;
 import me.ajaja.module.remind.application.port.out.SendRemindPort;
 import me.ajaja.module.remind.domain.Remind;
 import me.ajaja.module.remind.util.RemindExceptionHandler;
@@ -32,20 +32,20 @@ public class SendAlimtalkAdapter extends SendRemindPort {
 	private final NaverCloudProperties naverCloudProperties;
 
 	public SendAlimtalkAdapter(
-		FindRemindableTargetPort findRemindableTargetPort,
+		FindRemindableTargetsPort findRemindableTargetsPort,
 		RemindExceptionHandler exceptionHandler,
 		CreateRemindService createRemindService,
 		NaverSendAlimtalkFeignClient naverSendAlimtalkFeignClient,
 		NaverCloudProperties naverCloudProperties
 	) {
-		super(findRemindableTargetPort, exceptionHandler, createRemindService);
+		super(findRemindableTargetsPort, exceptionHandler, createRemindService);
 		this.naverSendAlimtalkFeignClient = naverSendAlimtalkFeignClient;
 		this.naverCloudProperties = naverCloudProperties;
 	}
 
 	@Override
 	public void send(String remindTime, TimeValue now) {
-		List<Remind> reminds = findRemindableTargetPort.findAllRemindablePlan(remindTime, END_POINT, now);
+		List<Remind> reminds = findRemindableTargetsPort.findAllRemindablePlansByType(remindTime, END_POINT, now);
 		reminds.stream().filter(remind -> !Objects.equals(remind.getPhoneNumber(), "01000000000")).forEach(remind -> {
 			String url = FEEDBACK_URL.formatted(remind.getTitle(), now.getMonth(), now.getDate(), remind.getPlanId());
 			sendAlimtalk(remind, url).handle((message, exception) -> {

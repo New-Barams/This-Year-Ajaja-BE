@@ -16,7 +16,7 @@ import me.ajaja.global.common.TimeValue;
 import me.ajaja.infra.feign.ncp.client.NaverCloudProperties;
 import me.ajaja.infra.feign.ncp.client.NaverSendAlimtalkFeignClient;
 import me.ajaja.infra.feign.ncp.model.NaverResponse;
-import me.ajaja.module.remind.application.port.out.FindRemindableTargetPort;
+import me.ajaja.module.remind.application.port.out.FindRemindableTargetsPort;
 import me.ajaja.module.remind.domain.Receiver;
 import me.ajaja.module.remind.domain.Remind;
 import me.ajaja.module.remind.domain.Target;
@@ -33,7 +33,7 @@ class SendAlimtalkAdapterTest extends MockTestSupport {
 	@Mock
 	private RemindExceptionHandler exceptionHandler;
 	@Mock
-	private FindRemindableTargetPort findRemindableTargetPort;
+	private FindRemindableTargetsPort findRemindableTargetsPort;
 	private Remind remind;
 
 	@BeforeEach
@@ -50,7 +50,7 @@ class SendAlimtalkAdapterTest extends MockTestSupport {
 		// given
 		NaverResponse.AlimTalk response = sut.giveMeBuilder(NaverResponse.AlimTalk.class)
 			.set("statusCode", "200").sample();
-		given(findRemindableTargetPort.findAllRemindablePlan(anyString(), anyString(), any()))
+		given(findRemindableTargetsPort.findAllRemindablePlansByType(anyString(), anyString(), any()))
 			.willReturn(List.of(remind));
 
 		// when , then

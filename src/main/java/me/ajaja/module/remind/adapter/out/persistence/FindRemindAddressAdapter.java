@@ -16,7 +16,7 @@ public class FindRemindAddressAdapter implements FindRemindAddressPort {
 	private final RemindMapper remindMapper;
 
 	@Override
-	public Remind findAddressByUserId(Long userId) {
+	public Remind findRemindByUserId(Long userId) {
 		RemindAddress address = findUserAddressPort.findUserAddressByUserId(userId);
 		return remindMapper.toMockDomain(address);
 	}

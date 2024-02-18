@@ -14,19 +14,19 @@ import lombok.RequiredArgsConstructor;
 import me.ajaja.global.common.TimeValue;
 import me.ajaja.module.plan.domain.RemindDate;
 import me.ajaja.module.plan.mapper.PlanMapper;
-import me.ajaja.module.remind.application.port.out.FindRemindableTargetPort;
+import me.ajaja.module.remind.application.port.out.FindRemindableTargetsPort;
 import me.ajaja.module.remind.domain.Remind;
 import me.ajaja.module.remind.mapper.RemindMapper;
 
 @Repository
 @RequiredArgsConstructor
-public class FindRemindableTargetAdapter implements FindRemindableTargetPort {
+public class FindRemindableTargetsAdapter implements FindRemindableTargetsPort {
 	private final JPAQueryFactory queryFactory;
 	private final PlanMapper planMapper;
 	private final RemindMapper mapper;
 
 	@Override
-	public List<Remind> findAllRemindablePlan(String remindTime, String remindType, TimeValue time) {
+	public List<Remind> findAllRemindablePlansByType(String remindTime, String remindType, TimeValue time) {
 		return queryFactory.select(planEntity, userEntity.remindEmail, userEntity.phoneNumber,
 				userEntity.remindType)
 			.from(planEntity)

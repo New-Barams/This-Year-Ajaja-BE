@@ -15,7 +15,7 @@ public abstract class SendRemindPort {
 		""";
 	protected static final int RETRY_MAX_COUNT = 5;
 
-	protected final FindRemindableTargetPort findRemindableTargetPort;
+	protected final FindRemindableTargetsPort findRemindableTargetsPort;
 	protected final RemindExceptionHandler exceptionHandler;
 	protected final CreateRemindService createRemindService;
 

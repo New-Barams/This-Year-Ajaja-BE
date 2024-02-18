@@ -19,16 +19,16 @@ public interface RemindMapper {
 	@Mapping(source = "entity.content", target = "message")
 	@Mapping(source = "entity.remindMonth", target = "remindMonth")
 	@Mapping(source = "entity.remindDay", target = "remindDay")
-	@Mapping(source = "entity", target = "receiver", qualifiedByName = "toNullReceiver")
-	@Mapping(source = "entity", target = "target", qualifiedByName = "toNullTarget")
+	@Mapping(source = "entity", target = "receiver", qualifiedByName = "toEmptyReceiver")
+	@Mapping(source = "entity", target = "target", qualifiedByName = "toEmptyTarget")
 	Remind toDomain(RemindEntity entity);
 
-	@Named("toNullReceiver")
+	@Named("toEmptyReceiver")
 	static Receiver toUserInfo(RemindEntity entity) {
 		return new Receiver(entity.getUserId(), null, null, null);
 	}
 
-	@Named("toNullTarget")
+	@Named("toEmptyTarget")
 	static Target toPlanInfo(RemindEntity entity) {
 		return new Target(entity.getPlanId(), null);
 	}
@@ -71,8 +71,8 @@ public interface RemindMapper {
 		return new Target(0L, "테스트 계획입니다!");
 	}
 
-	@Mapping(source = "receiver.id", target = "planId")
-	@Mapping(source = "target.id", target = "userId")
+	@Mapping(source = "receiver.id", target = "userId")
+	@Mapping(source = "target.id", target = "planId")
 	@Mapping(source = "remindDate.month", target = "remindMonth")
 	@Mapping(source = "remindDate.day", target = "remindDay")
 	@Mapping(source = "message", target = "content")

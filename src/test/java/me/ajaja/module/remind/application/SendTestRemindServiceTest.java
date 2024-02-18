@@ -23,7 +23,7 @@ import me.ajaja.module.remind.domain.Target;
 @RedisBasedTest
 class SendTestRemindServiceTest extends MockTestSupport {
 	@Autowired
-	private SendTestRemindService sendTestRemindService;
+	private SendTrialRemindService sendTestRemindService;
 	@Autowired
 	private RedisTemplate<String, Object> redisTemplate;
 
@@ -48,7 +48,7 @@ class SendTestRemindServiceTest extends MockTestSupport {
 	@DisplayName("유저에게 테스트 리마인드를 전송한다.")
 	void send_Success_WithNoException() {
 		// given
-		given(findRemindAddressPort.findAddressByUserId(anyLong())).willReturn(remind);
+		given(findRemindAddressPort.findRemindByUserId(anyLong())).willReturn(remind);
 		given(factory.get(anyString())).willReturn(sendAlimtalkAdapter);
 
 		// when
@@ -64,7 +64,7 @@ class SendTestRemindServiceTest extends MockTestSupport {
 		// given
 		redisTemplate.opsForValue().set(remind.getPhoneNumber(), 3);
 
-		given(findRemindAddressPort.findAddressByUserId(anyLong())).willReturn(remind);
+		given(findRemindAddressPort.findRemindByUserId(anyLong())).willReturn(remind);
 		given(factory.get(anyString())).willReturn(sendAlimtalkAdapter);
 
 		// when, then
