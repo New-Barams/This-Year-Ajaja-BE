@@ -21,7 +21,7 @@ import me.ajaja.module.remind.domain.Remind;
 import me.ajaja.module.remind.domain.Target;
 
 @RedisBasedTest
-class SendTestRemindServiceTest extends MockTestSupport {
+class SendTrialRemindServiceTest extends MockTestSupport {
 	@Autowired
 	private SendTrialRemindService sendTestRemindService;
 	@Autowired
@@ -38,10 +38,12 @@ class SendTestRemindServiceTest extends MockTestSupport {
 
 	@BeforeEach
 	void setUp() {
-		Receiver receiver = sut.giveMeOne(Receiver.class);
+		Receiver receiver = new Receiver(1L, "KAKAO", "email@ajaja.com", "01011112222");
 		Target target = sut.giveMeOne(Target.class);
 		String message = "화이팅";
 		remind = new Remind(receiver, target, message, Remind.Type.AJAJA, 3, 1);
+
+		redisTemplate.delete("01011112222");
 	}
 
 	@Test
