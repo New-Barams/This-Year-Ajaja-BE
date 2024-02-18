@@ -20,7 +20,7 @@ public class RemindStrategyFactory {
 	}
 
 	public SendRemindPort get(String remindType) {
-		if (remindType.equals("KAKAO") || remindType.equals("BOTH")) {
+		if ("KAKAO".equals(remindType) || "BOTH".equals(remindType)) {
 			return alimtalkStrategy;
 		}
 		return emailStrategy;
