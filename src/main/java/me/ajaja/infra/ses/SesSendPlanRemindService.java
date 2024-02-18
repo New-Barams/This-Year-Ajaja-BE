@@ -76,7 +76,8 @@ public class SesSendPlanRemindService implements SendRemindPort {
 				SendEmailResult response = amazonSimpleEmailService.sendEmail(mailForm.toSesForm());
 
 				if (isExceptionOccur(response.getSdkHttpMetadata().getHttpStatusCode(), tries)) {
-					exceptionHandler.handleRemindException(response.getSdkHttpMetadata().getHttpStatusCode(), tries);
+					log.warn("Send SES Remind Error Code : {} , retries : {}",
+						response.getSdkHttpMetadata().getHttpStatusCode(), tries);
 					tries++;
 					continue;
 				}

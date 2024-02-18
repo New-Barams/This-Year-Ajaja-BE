@@ -8,5 +8,5 @@ import me.ajaja.module.remind.application.model.RemindableAjaja;
 
 @Repository
 public interface AjajaQueryRepository {
-	List<RemindableAjaja> findRemindableAjaja();
+	List<RemindableAjaja> findRemindableAjajasByEndPoint(String remindType);
 }

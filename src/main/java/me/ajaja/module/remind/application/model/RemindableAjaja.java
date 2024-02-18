@@ -5,6 +5,7 @@ public record RemindableAjaja(
 	Long planId,
 	Long userId,
 	Long count,
-	String email
+	String email,
+	String phoneNumber
 ) {
 }

@@ -81,7 +81,7 @@ public class SendAlimtalkAdapter implements SendRemindPort {
 					request);
 
 				if (isExceptionOccur(response.getStatusCode(), tries)) {
-					exceptionHandler.handleRemindException(Integer.parseInt(response.getStatusCode()), tries);
+					log.warn("Send Alimtalk Remind Error Code : {} , retries : {}", response.getStatusCode(), tries);
 					tries++;
 					continue;
 				}

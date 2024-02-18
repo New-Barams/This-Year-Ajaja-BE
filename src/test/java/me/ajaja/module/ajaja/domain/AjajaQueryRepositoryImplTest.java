@@ -23,7 +23,7 @@ class AjajaQueryRepositoryImplTest extends MockTestSupport {
 	@DisplayName("해당 유저가 받은 아자자 개수들을 가져온다.")
 	void findAjajaByUpdatedAt_Success_WithNpException() {
 		// when
-		List<RemindableAjaja> remindableAjajas = ajajaQueryRepository.findRemindableAjaja();
+		List<RemindableAjaja> remindableAjajas = ajajaQueryRepository.findRemindableAjajasByEndPoint("KAKAO");
 
 		// then
 		assertThat(remindableAjajas).isEmpty();
