@@ -1,23 +1,19 @@
 package me.ajaja.global.security.jwt;
 
-import static me.ajaja.global.exception.ErrorCode.*;
-
-import java.util.Date;
-
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
-import me.ajaja.global.exception.AjajaException;
 import me.ajaja.global.security.common.CustomUserDetailsService;
 
 @Component
 @RequiredArgsConstructor
 public class JwtParser {
 	private final CustomUserDetailsService userDetailService;
-	private final JwtSecretProvider jwtSecretProvider;
+	private final JwtSecretProvider secretProvider;
+	private final TokenStorage tokenStorage;
 	private final RawParser rawParser;
 
 	public Authentication parseAuthentication(String jwt) {
@@ -27,20 +23,22 @@ public class JwtParser {
 	}
 
 	public Long parseId(String jwt) {
-		return getSpecificClaim(jwt, jwtSecretProvider.getSignature(), Long.class);
+		return rawParser.parseClaimWithType(jwt, secretProvider.getSignature(), Long.class);
 	}
 
-	boolean isParsable(String jwt) {
-		return rawParser.isParsable(jwt);
+	/**
+	 * If either of tokens are valid parse ID. <br>
+	 * Valid access Token means that refresh token is also valid, so don't need to validate refresh token.
+	 * However, if only refresh token is valid should validate whether user logged in before.
+	 * @author hejow
+	 */
+	public Long parseIdIfReissueable(String accessToken, String refreshToken) {
+		return rawParser.tryParse(accessToken) ? parseId(accessToken) : parseIdIfHistoryExists(refreshToken);
 	}
 
-	Date parseExpireIn(String refreshToken) {
-		return getSpecificClaim(refreshToken, jwtSecretProvider.getDateKey(), Date.class);
-	}
-
-	private <T> T getSpecificClaim(String token, String key, Class<T> type) {
-		return rawParser.parseClaim(token)
-			.map(claims -> claims.get(key, type))
-			.orElseThrow(() -> new AjajaException(INVALID_TOKEN));
+	private Long parseIdIfHistoryExists(String refreshToken) {
+		Long userId = parseId(refreshToken);
+		tokenStorage.validateHistory(secretProvider.cacheKey(userId), refreshToken);
+		return userId;
 	}
 }

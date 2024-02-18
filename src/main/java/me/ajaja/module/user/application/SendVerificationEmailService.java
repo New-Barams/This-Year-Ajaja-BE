@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import me.ajaja.global.cache.CacheUtil;
 import me.ajaja.module.user.application.port.in.SendVerificationEmailUseCase;
 import me.ajaja.module.user.application.port.out.SendCertificationPort;
 import me.ajaja.module.user.domain.User;
@@ -15,14 +14,14 @@ import me.ajaja.module.user.domain.User;
 class SendVerificationEmailService implements SendVerificationEmailUseCase {
 	private final SendCertificationPort sendCertificationPort;
 	private final RetrieveUserService retrieveUserService;
-	private final CacheUtil cacheUtil;
+	private final VerificationStorage storage;
 
 	@Override
 	public void sendVerification(Long userId, String email) {
 		validateEmail(userId, email);
 		String certification = RandomCertificationGenerator.generate();
 		sendCertificationPort.send(email, certification);
-		cacheUtil.saveEmailVerification(userId, email, certification);
+		storage.save(userId, email, certification);
 	}
 
 	private void validateEmail(Long id, String email) {

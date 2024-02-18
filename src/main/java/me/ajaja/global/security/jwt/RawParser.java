@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
@@ -18,7 +17,7 @@ import me.ajaja.global.exception.AjajaException;
 
 @Component
 class RawParser {
-	private final JwtParser parser;
+	private final io.jsonwebtoken.JwtParser parser;
 
 	RawParser(JwtSecretProvider jwtSecretProvider) {
 		this.parser = Jwts.parser()
@@ -26,7 +25,7 @@ class RawParser {
 			.build();
 	}
 
-	boolean isParsable(String jwt) {
+	boolean tryParse(String jwt) {
 		try {
 			parser.parseSignedClaims(jwt);
 			return true;
@@ -35,7 +34,13 @@ class RawParser {
 		}
 	}
 
-	Optional<Claims> parseClaim(String jwt) {
+	<T> T parseClaimWithType(String token, String key, Class<T> type) {
+		return parseClaim(token)
+			.map(claims -> claims.get(key, type))
+			.orElseThrow(() -> new AjajaException(INVALID_TOKEN));
+	}
+
+	private Optional<Claims> parseClaim(String jwt) {
 		try {
 			return Optional.ofNullable(parser.parseSignedClaims(jwt).getPayload());
 		} catch (JwtException | IllegalArgumentException e) {

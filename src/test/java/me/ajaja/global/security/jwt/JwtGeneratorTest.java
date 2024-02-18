@@ -11,7 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import me.ajaja.common.annotation.RedisBasedTest;
@@ -20,6 +20,8 @@ import me.ajaja.module.auth.dto.AuthResponse;
 
 @RedisBasedTest
 class JwtGeneratorTest extends MockTestSupport {
+	private static final long ONE_DAY = 60 * 60 * 24 * 1000L;
+
 	@Autowired
 	private JwtGenerator jwtGenerator;
 	@Autowired
@@ -27,8 +29,8 @@ class JwtGeneratorTest extends MockTestSupport {
 	@Autowired
 	private RedisTemplate<String, Object> redisTemplate;
 
-	@SpyBean
-	private JwtParser jwtParser;
+	@MockBean
+	private RawParser rawParser;
 
 	private Long userId;
 
@@ -61,43 +63,49 @@ class JwtGeneratorTest extends MockTestSupport {
 		assertThat(response.getAccessTokenExpireIn()).isGreaterThan(new Date().getTime());
 	}
 
-	// @Test
-	// @DisplayName("재발급 시 Refresh Token의 만료일이 3일 이상 남았다면 Access Token만 재발급되어야 한다.")
-	// void reissue_Success_WithOnlyAccessTokenGenerated() throws InterruptedException {
-	// 	// given
-	// 	AuthResponse.Token logined = jwtGenerator.login(userId);
-	// 	TimeUnit.SECONDS.sleep(1); // to avoid test fail
-	//
-	// 	// when
-	// 	AuthResponse.Token reissued = jwtGenerator.reissue(userId, logined.getRefreshToken());
-	//
-	// 	// then
-	// 	assertThat(reissued.getAccessToken()).isNotEqualTo(logined.getAccessToken());
-	// 	assertThat(reissued.getRefreshToken()).isEqualTo(logined.getRefreshToken());
-	//
-	// 	Object savedToken = redisTemplate.opsForValue().get(jwtSecretProvider.getSignature() + userId);
-	// 	assertThat(savedToken).isNotNull();
-	// 	assertThat(savedToken).isInstanceOf(String.class);
-	// 	assertThat(reissued.getRefreshToken()).isEqualTo((String)savedToken);
-	// }
-
 	@Test
-	@DisplayName("재발급 시 Refresh Token의 만료일이 3일 이하라면 모두 새롭게 발급되어야 한다.")
-	void reissue_Success_WithNewRefreshToken() throws InterruptedException {
+	@DisplayName("Refresh Token의 만료일이 3일 이상 남았다면 Access Token만 재발급되어야 한다.")
+	void reissue_Success_WithOnlyAccessTokenGenerated() throws InterruptedException {
 		// given
-		AuthResponse.Token logined = jwtGenerator.login(userId);
+		AuthResponse.Token tokens = jwtGenerator.login(userId);
 
 		Date now = new Date();
-		Date twoDaysBefore = new Date(now.getTime() - 60 * 60 * 24 * 2 * 1000L);
-		given(jwtParser.parseExpireIn(logined.getRefreshToken())).willReturn(twoDaysBefore);
+		Date expiredAt = new Date(now.getTime() - ONE_DAY * 4); // expiration 4 days left
+
+		given(rawParser.parseClaimWithType(anyString(), anyString(), any())).willReturn(expiredAt);
 		TimeUnit.SECONDS.sleep(1); // to avoid test fail
 
 		// when
-		AuthResponse.Token reissued = jwtGenerator.reissue(userId, logined.getRefreshToken());
+		AuthResponse.Token reissued = jwtGenerator.reissue(userId, tokens.getRefreshToken());
 
 		// then
-		assertThat(reissued.getAccessToken()).isNotEqualTo(logined.getAccessToken());
-		assertThat(reissued.getRefreshToken()).isNotEqualTo(logined.getRefreshToken());
+		assertThat(reissued.getAccessToken()).isNotEqualTo(tokens.getAccessToken());
+		assertThat(reissued.getRefreshToken()).isEqualTo(tokens.getRefreshToken());
+
+		Object savedToken = redisTemplate.opsForValue().get(jwtSecretProvider.getSignature() + userId);
+		assertThat(savedToken).isNotNull();
+		assertThat(savedToken).isInstanceOf(String.class);
+		assertThat(reissued.getRefreshToken()).isEqualTo((String)savedToken);
+	}
+
+	@Test
+	@DisplayName("Refresh Token의 만료일이 3일 이하라면 모두 재발급되어야 한다")
+	void reissue_Success_WithNewRefreshToken() throws InterruptedException {
+		// given
+		AuthResponse.Token tokens = jwtGenerator.login(userId);
+
+		Date now = new Date();
+		Date expiredAt = new Date(now.getTime() - ONE_DAY * 2); // expiration 2 days left
+
+		given(rawParser.parseClaimWithType(anyString(), anyString(), any())).willReturn(expiredAt);
+		TimeUnit.SECONDS.sleep(1); // to avoid test fail
+
+		// when
+		AuthResponse.Token reissued = jwtGenerator.reissue(userId, tokens.getRefreshToken());
+
+		// then
+		assertThat(reissued.getAccessToken()).isNotEqualTo(tokens.getAccessToken());
+		assertThat(reissued.getRefreshToken()).isNotEqualTo(tokens.getRefreshToken());
 
 		Object savedToken = redisTemplate.opsForValue().get(jwtSecretProvider.getSignature() + userId);
 		assertThat(savedToken).isNotNull();

@@ -12,6 +12,9 @@ import lombok.Getter;
 @Getter
 @Component
 class JwtSecretProvider {
+	private static final long REFRESH_TOKEN_VALID_TIME = 7 * 24 * 60 * 60 * 1000L; // 7일
+	private static final long ACCESS_TOKEN_VALID_TIME = 30 * 60 * 1000L; // 30분
+
 	private static final String DATE_CLAIM_POSTFIX = " DATE";
 
 	private final SecretKey secretKey;
@@ -30,7 +33,15 @@ class JwtSecretProvider {
 		return signature + userId;
 	}
 
-	public String getDateKey() {
+	public String dateKey() {
 		return signature + DATE_CLAIM_POSTFIX;
+	}
+
+	public long refreshTokenExpireIn() {
+		return REFRESH_TOKEN_VALID_TIME;
+	}
+
+	public long accessTokenExpireIn() {
+		return ACCESS_TOKEN_VALID_TIME;
 	}
 }

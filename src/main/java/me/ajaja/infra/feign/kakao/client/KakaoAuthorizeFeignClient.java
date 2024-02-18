@@ -12,5 +12,5 @@ import me.ajaja.infra.feign.kakao.model.KakaoResponse;
 @FeignClient(name = "KakaoAuthorizeFeignClient", url = "https://kauth.kakao.com")
 public interface KakaoAuthorizeFeignClient {
 	@PostMapping(value = "/oauth/token", consumes = APPLICATION_FORM_URLENCODED_VALUE)
-	KakaoResponse.Token authorize(@RequestBody KakaoRequest.Token request);
+	KakaoResponse.Token authorize(@RequestBody KakaoRequest.Authorize request);
 }
