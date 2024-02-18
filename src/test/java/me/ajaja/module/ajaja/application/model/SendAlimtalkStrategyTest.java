@@ -14,6 +14,7 @@ import org.mockito.Mock;
 
 import me.ajaja.common.support.MockTestSupport;
 import me.ajaja.global.common.TimeValue;
+import me.ajaja.infra.feign.ncp.client.NaverCloudProperties;
 import me.ajaja.infra.feign.ncp.client.NaverSendAlimtalkFeignClient;
 import me.ajaja.infra.feign.ncp.model.NaverResponse;
 import me.ajaja.module.ajaja.domain.AjajaQueryRepository;
@@ -29,6 +30,8 @@ class SendAlimtalkStrategyTest extends MockTestSupport {
 	private AjajaQueryRepository ajajaQueryRepository;
 	@Mock
 	private NaverSendAlimtalkFeignClient feignClient;
+	@Mock
+	private NaverCloudProperties properties;
 	@Mock
 	private RemindExceptionHandler exceptionHandler;
 	@Mock

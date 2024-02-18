@@ -41,7 +41,9 @@ public final class NaverRequest {
 			return of(AJAJA.getTemplateCode(), to, content, PLAN_BASE_URL + planId, PLAN_BUTTON_NAME);
 		}
 
-		private static Alimtalk of(String templateCode, String to, String content, String buttonUrl, String buttonName) {
+		private static Alimtalk of(
+			String templateCode, String to, String content, String buttonUrl, String buttonName
+		) {
 			Message message = new Message(to, content, buttonUrl, buttonName);
 			return new Alimtalk(templateCode, List.of(message));
 		}

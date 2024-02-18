@@ -37,7 +37,7 @@ public class SendTestRemindService implements SendTestRemindUseCase {
 
 	private void sendRemind(Remind address) {
 		Integer sendCount = getSendCount(address.getPhoneNumber());
-		factory.get(address.getRemindType()).sendTest(address, MAIN_PAGE_URL);
+		factory.get(address.getRemindType()).sendTrial(address, MAIN_PAGE_URL);
 		increaseCount(address.getPhoneNumber(), sendCount);
 	}
 
