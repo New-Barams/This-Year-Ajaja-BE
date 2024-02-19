@@ -48,7 +48,7 @@ public class SesSendPlanRemindService extends SendRemindPort {
 					exceptionHandler.handleRemindException(END_POINT, remind.getEmail(), exception.getMessage());
 					return null;
 				}
-				createRemindService.create(remind, now);
+				createRemindService.create(remind, now, END_POINT);
 				return null;
 			});
 		});

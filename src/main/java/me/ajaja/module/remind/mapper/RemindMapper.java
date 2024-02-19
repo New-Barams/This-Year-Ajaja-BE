@@ -25,7 +25,7 @@ public interface RemindMapper {
 
 	@Named("toEmptyReceiver")
 	static Receiver toUserInfo(RemindEntity entity) {
-		return new Receiver(entity.getUserId(), null, null, null);
+		return new Receiver(entity.getUserId(), entity.getEndPoint(), null, null);
 	}
 
 	@Named("toEmptyTarget")
@@ -72,6 +72,7 @@ public interface RemindMapper {
 	}
 
 	@Mapping(source = "receiver.id", target = "userId")
+	@Mapping(source = "receiver.type", target = "endPoint")
 	@Mapping(source = "target.id", target = "planId")
 	@Mapping(source = "remindDate.month", target = "remindMonth")
 	@Mapping(source = "remindDate.day", target = "remindDay")

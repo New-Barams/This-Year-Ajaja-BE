@@ -18,8 +18,8 @@ public class SaveAjajaRemindAdapter implements SaveAjajaRemindPort {
 	private final RemindMapper mapper;
 
 	@Override
-	public Remind save(Long userId, Long planId, String message, TimeValue now) {
-		Remind remind = Remind.ajaja(userId, planId, message, now.getMonth(), now.getDate());
+	public Remind save(Long userId, String endPoint, Long planId, String message, TimeValue now) {
+		Remind remind = Remind.ajaja(userId, endPoint, planId, message, now.getMonth(), now.getDate());
 		RemindEntity entity = remindJpaRepository.save(mapper.toEntity(remind));
 		return mapper.toDomain(entity);
 	}

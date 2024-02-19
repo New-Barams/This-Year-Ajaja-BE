@@ -75,6 +75,6 @@ class SendAlimtalkStrategyTest extends MockTestSupport {
 		sendAlimtalkStrategy.send(TimeValue.now());
 		sleep(100);
 		then(exceptionHandler).should(times(1)).handleRemindException(anyString(), anyString(), anyString());
-		then(saveAjajaRemindPort).should(never()).save(anyLong(), anyLong(), anyString(), any());
+		then(saveAjajaRemindPort).should(never()).save(anyLong(), anyString(), anyLong(), anyString(), any());
 	}
 }

@@ -38,7 +38,7 @@ class SendAlimtalkAdapterTest extends MockTestSupport {
 
 	@BeforeEach
 	void setUp() {
-		Receiver receiver = new Receiver(1L, null, "yamsang2002@naver.com", null);
+		Receiver receiver = new Receiver(1L, "KAKAO", "yamsang2002@naver.com", null);
 		Target target = new Target(1L, "화이팅");
 		String message = "화이팅";
 		remind = new Remind(receiver, target, message, Remind.Type.AJAJA, 3, 1);

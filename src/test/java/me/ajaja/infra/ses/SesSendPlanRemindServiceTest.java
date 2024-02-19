@@ -26,7 +26,7 @@ class SesSendPlanRemindServiceTest extends MockTestSupport {
 	@DisplayName("아마존 ses를 통해 리마인드 될 정보들을 전송한다.")
 	void send_Success_WithNoException() {
 		// given
-		Receiver receiver = new Receiver(1L, null, "yamsang2002@naver.com", null);
+		Receiver receiver = new Receiver(1L, "KAKAO", "yamsang2002@naver.com", null);
 		Target target = new Target(1L, "화이팅");
 		String message = "화이팅";
 		Remind remind = new Remind(receiver, target, message, Remind.Type.AJAJA, 3, 1);

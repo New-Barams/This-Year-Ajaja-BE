@@ -30,15 +30,18 @@ public class Remind extends SelfValidating<Remind> {
 		this.validateSelf();
 	}
 
-	public static Remind plan(Long userId, Long planId, String message, int remindMonth, int remindDate) {
+	public static Remind plan(Long userId, String remindType, Long planId, String message, int remindMonth,
+		int remindDate) {
 		return new Remind(
-			new Receiver(userId, null, null, null),
+			new Receiver(userId, remindType, null, null),
 			new Target(planId, null), message, Type.PLAN, remindMonth, remindDate);
 	}
 
-	public static Remind ajaja(Long userId, Long planId, String message, int remindMonth, int remindDate) {
-		return new Remind(new Receiver(userId, null, null, null), new Target(planId, null), message, Type.AJAJA,
-			remindMonth, remindDate);
+	public static Remind ajaja(Long userId, String remindType, Long planId, String message, int remindMonth,
+		int remindDate) {
+		return new Remind(
+			new Receiver(userId, remindType, null, null),
+			new Target(planId, null), message, Type.AJAJA, remindMonth, remindDate);
 	}
 
 	public Long getUserId() {
@@ -46,7 +49,7 @@ public class Remind extends SelfValidating<Remind> {
 	}
 
 	public String getRemindType() {
-		return this.receiver.getRemindType();
+		return this.receiver.getType().toString();
 	}
 
 	public String getEmail() {

@@ -46,7 +46,7 @@ class RemindTest extends MonkeySupport {
 		void makePlanRemind() {
 			// when,then
 			assertThatNoException().isThrownBy(
-				() -> Remind.plan(1L, 1L, "화이팅", 3, 15));
+				() -> Remind.plan(1L, "KAKAO", 1L, "화이팅", 3, 15));
 
 		}
 
@@ -54,7 +54,7 @@ class RemindTest extends MonkeySupport {
 		void makeAjajaRemind() {
 			// when,then
 			assertThatNoException().isThrownBy(
-				() -> Remind.ajaja(1L, 1L, "화이팅", 3, 15));
+				() -> Remind.ajaja(1L, "KAKAO", 1L, "화이팅", 3, 15));
 		}
 	}
 }

@@ -53,7 +53,7 @@ public class SendAlimtalkAdapter extends SendRemindPort {
 					exceptionHandler.handleRemindException(END_POINT, remind.getPhoneNumber(), exception.getMessage());
 					return null;
 				}
-				createRemindService.create(remind, now);
+				createRemindService.create(remind, now, END_POINT);
 				return null;
 			});
 		});

@@ -4,5 +4,5 @@ import me.ajaja.global.common.TimeValue;
 import me.ajaja.module.remind.domain.Remind;
 
 public interface SaveAjajaRemindPort {
-	Remind save(Long userId, Long planId, String message, TimeValue now);
+	Remind save(Long userId, String endPoint, Long planId, String message, TimeValue now);
 }

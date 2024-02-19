@@ -6,15 +6,20 @@ import me.ajaja.global.common.SelfValidating;
 
 @Getter
 public class Receiver extends SelfValidating<Receiver> {
+	public enum RemindType {
+		KAKAO,
+		EMAIL
+	}
+
 	@NotNull
 	private final Long id;
 	private final String email;
 	private final String phoneNumber;
-	private final String remindType;
+	private final RemindType type;
 
-	public Receiver(Long id, String remindType, String email, String phoneNumber) {
+	public Receiver(Long id, String type, String email, String phoneNumber) {
 		this.id = id;
-		this.remindType = remindType;
+		this.type = RemindType.valueOf(type);
 		this.email = email;
 		this.phoneNumber = phoneNumber;
 		validateSelf();

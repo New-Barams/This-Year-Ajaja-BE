@@ -52,7 +52,7 @@ public class SendAlimtalkStrategy extends SendAjajaStrategy {
 						exceptionHandler.handleRemindException(END_POINT, ajaja.phoneNumber(), exception.getMessage());
 						return null;
 					}
-					saveAjajaRemindPort.save(ajaja.userId(), ajaja.planId(), message, now);
+					saveAjajaRemindPort.save(ajaja.userId(), END_POINT, ajaja.planId(), message, now);
 					return null;
 				});
 			});
