@@ -75,7 +75,7 @@ public class LoadFeedbackInfoService {
 		TimeValue feedbackDate = TimeValue.parse(planInfo.createdYear(), feedbackInfo.feedbackMonth(),
 			feedbackInfo.feedbackDate(), planInfo.remindTime());
 
-		return feedbackDate.isBetween(TimeValue.parse(planInfo.createdYear(),
+		return feedbackDate.isBetweenOrEqual(TimeValue.parse(planInfo.createdYear(),
 			feedbackPeriod.remindMonth(), feedbackPeriod.remindDate(), planInfo.remindTime()));
 	}
 }

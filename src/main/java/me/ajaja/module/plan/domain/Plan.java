@@ -152,7 +152,7 @@ public class Plan {
 
 	public TimeValue getFeedbackPeriod(TimeValue current) {
 		return this.messages.stream()
-			.filter(message -> current.isBetween(
+			.filter(message -> current.isBetweenOrEqual(
 				TimeValue.parse(
 					this.createdAt.getYear(),
 					message.getRemindDate().getRemindMonth(),
