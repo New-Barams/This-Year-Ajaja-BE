@@ -28,6 +28,7 @@ public enum ErrorCode {
 	EXPIRED_FEEDBACK(BAD_REQUEST, "피드백 기간이 아닙니다."),
 	NON_NUMERIC_INPUT(BAD_REQUEST, "휴대폰 번호로 숫자 이외의 값을 입력할 수 없습니다."),
 	REMIND_TASK_FAILED(BAD_REQUEST, "리마인드 전송에 실패하였습니다."),
+	INVALID_FOOTPRINT_TYPE(BAD_REQUEST, "지원하지 않는 발자취 유형입니다."),
 
 	// 404
 	NOT_SUPPORT_END_POINT(NOT_FOUND, "지원하지 않는 API 입니다."),
