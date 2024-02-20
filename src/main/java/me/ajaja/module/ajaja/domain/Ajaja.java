@@ -41,7 +41,7 @@ public class Ajaja {
 		return new Ajaja(targetId, userId, Type.PLAN);
 	}
 
-	public static Ajaja retrospect(Long targetId, Long userId) {
+	public static Ajaja footprint(Long targetId, Long userId) {
 		return new Ajaja(targetId, userId, Type.FOOTPRINT);
 	}
 
