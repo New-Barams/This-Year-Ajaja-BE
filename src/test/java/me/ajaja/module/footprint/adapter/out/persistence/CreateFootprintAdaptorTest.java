@@ -8,48 +8,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
 import me.ajaja.common.support.JpaTestSupport;
+import me.ajaja.module.footprint.domain.Footprint;
 import me.ajaja.module.footprint.domain.FootprintFactory;
-import me.ajaja.module.footprint.domain.FreeFootprint;
-import me.ajaja.module.footprint.domain.KptFootprint;
 import me.ajaja.module.footprint.dto.FootprintParam;
 import me.ajaja.module.footprint.mapper.FootprintMapperImpl;
 
-@ContextConfiguration(classes = {
-	CreateFootprintAdaptor.class,
-	FootprintMapperImpl.class
-})
+@ContextConfiguration(classes = {CreateFootprintAdaptor.class, FootprintMapperImpl.class, FootprintFactory.class})
 class CreateFootprintAdaptorTest extends JpaTestSupport {
 	@Autowired
 	private CreateFootprintAdaptor createFootprintAdaptor;
+
+	@Autowired
+	private FootprintFactory footprintFactory;
 
 	@Test
 	@DisplayName("자유 형식 발자취 생성 매핑 기능 구현 테스트")
 	void create_FreeFootprint_Success() {
 		// given
-		FootprintParam.Create param = sut.giveMeOne(FootprintParam.Create.class);
-		String content = "content";
-		FreeFootprint freeFootprint = FootprintFactory.freeTemplate(param, content);
+		FootprintParam.Create param = sut.giveMeBuilder(FootprintParam.Create.class)
+			.set("type", Footprint.Type.FREE)
+			.set("content", "content")
+			.sample();
+
+		Footprint freeFootprint = footprintFactory.create(param);
 
 		// when
 		Long footprintEntityId = createFootprintAdaptor.create(freeFootprint);
-
-		// then
-		assertThat(footprintEntityId).isNotNull();
-	}
-
-	@Test
-	@DisplayName("자유 형식 발자취 생성 매핑 기능 구현 테스트")
-	void create_KptFootprint_Success() {
-		// given
-		FootprintParam.Create param = sut.giveMeOne(FootprintParam.Create.class);
-		String keepContent = "keepContent";
-		String problemContent = "problemContent";
-		String tryContent = "tryContent";
-
-		KptFootprint kptFootprint = FootprintFactory.kptTemplate(param, keepContent, problemContent, tryContent);
-
-		// when
-		Long footprintEntityId = createFootprintAdaptor.create(kptFootprint);
 
 		// then
 		assertThat(footprintEntityId).isNotNull();
