@@ -49,7 +49,7 @@ public class Remind extends SelfValidating<Remind> {
 	}
 
 	public String getRemindType() {
-		return this.receiver.getType().toString();
+		return this.receiver.getType().name();
 	}
 
 	public String getEmail() {
