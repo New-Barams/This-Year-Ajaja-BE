@@ -16,10 +16,15 @@ class FootprintTest extends MonkeySupport {
 	@DisplayName("조건에 맞는 입력 값에 따라 유형별 발자취 도메인 생성에 성공 한다.")
 	void create_FreeFootprint_Success_WithNoException() {
 		FootprintParam.Create param = sut.giveMeOne(FootprintParam.Create.class);
+		Footprint footprint = footprintFactory.create(param);
 
-		assertThatNoException().isThrownBy(() -> {
-			footprintFactory.create(param);
-		});
+		assertThat(footprint.getId()).isNull();
+		assertThat(footprint.getTarget()).isNotNull();
+		assertThat(footprint.getWriter()).isNotNull();
+		assertThat(footprint.getType()).isNotNull().isIn(Footprint.Type.FREE, Footprint.Type.KPT);
+		assertThat(footprint.getTitle()).isNotNull();
+		assertThat(footprint.isVisible()).isNotNull();
+		assertThat(footprint.isDeleted()).isFalse();
 	}
 
 	@Test
@@ -32,6 +37,8 @@ class FootprintTest extends MonkeySupport {
 			.set("tryContent", "")
 			.sample();
 
-		assertThatExceptionOfType(ConstraintViolationException.class).isThrownBy(() -> footprintFactory.create(param));
+		assertThatExceptionOfType(ConstraintViolationException.class).isThrownBy(
+			() -> footprintFactory.create(param)
+		);
 	}
 }

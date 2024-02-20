@@ -2,7 +2,6 @@ package me.ajaja.module.footprint.domain;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
-import me.ajaja.module.footprint.dto.FootprintParam;
 
 @Getter
 public class FreeFootprint extends Footprint {
@@ -16,13 +15,9 @@ public class FreeFootprint extends Footprint {
 		this.validateSelf();
 	}
 
-	public FreeFootprint(Target target, Writer writer, Type type, Title title, boolean visible) {
+	public FreeFootprint(Target target, Writer writer, Type type, Title title, boolean visible, String content) {
 		super(target, writer, type, title, visible);
-	}
-
-	@Override
-	public void setItems(FootprintParam.Create param) {
-		this.content = param.getContent();
+		this.content = content;
 		this.validateSelf();
 	}
 }

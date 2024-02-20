@@ -2,7 +2,6 @@ package me.ajaja.module.footprint.domain;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
-import me.ajaja.module.footprint.dto.FootprintParam;
 
 @Getter
 public class KptFootprint extends Footprint {
@@ -22,15 +21,12 @@ public class KptFootprint extends Footprint {
 		this.validateSelf();
 	}
 
-	public KptFootprint(Target target, Writer writer, Type type, Title title, boolean visible) {
+	public KptFootprint(Target target, Writer writer, Type type, Title title, boolean visible, String keepContent,
+		String problemContent, String tryContent) {
 		super(target, writer, type, title, visible);
-	}
-
-	@Override
-	public void setItems(FootprintParam.Create param) {
-		this.keepContent = param.getKeepContent();
-		this.problemContent = param.getProblemContent();
-		this.tryContent = param.getTryContent();
+		this.keepContent = keepContent;
+		this.problemContent = problemContent;
+		this.tryContent = tryContent;
 		this.validateSelf();
 	}
 }
