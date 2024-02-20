@@ -47,7 +47,7 @@ public class SendAlimtalkAdapter extends SendRemindPort {
 	public void send(String remindTime, TimeValue now) {
 		List<Remind> reminds = findRemindableTargetsPort.findAllRemindablePlansByType(remindTime, END_POINT, now);
 		reminds.stream().filter(remind -> !Objects.equals(remind.getPhoneNumber(), "01000000000")).forEach(remind -> {
-			String url = FEEDBACK_URL.formatted(remind.getTitle(), now.getMonth(), now.getDate(), remind.getPlanId());
+			String url = this.toFeedbackUrl(remind.getTitle(), now.getMonth(), now.getDate(), remind.getPlanId());
 			sendAlimtalk(remind, url).handle((message, exception) -> {
 				if (exception != null) {
 					exceptionHandler.handleRemindException(END_POINT, remind.getPhoneNumber(), exception.getMessage());

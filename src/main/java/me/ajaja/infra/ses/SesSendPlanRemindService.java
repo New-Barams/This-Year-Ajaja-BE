@@ -42,7 +42,7 @@ public class SesSendPlanRemindService extends SendRemindPort {
 	public void send(String remindTime, TimeValue now) {
 		List<Remind> reminds = findRemindableTargetsPort.findAllRemindablePlansByType(remindTime, END_POINT, now);
 		reminds.forEach(remind -> {
-			String url = FEEDBACK_URL.formatted(remind.getTitle(), now.getMonth(), now.getDate(), remind.getPlanId());
+			String url = this.toFeedbackUrl(remind.getTitle(), now.getMonth(), now.getDate(), remind.getPlanId());
 			send(remind, url).handle((message, exception) -> {
 				if (exception != null) {
 					exceptionHandler.handleRemindException(END_POINT, remind.getEmail(), exception.getMessage());
