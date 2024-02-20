@@ -41,7 +41,6 @@ import me.ajaja.module.plan.application.port.in.SwitchPlanStatusUseCase;
 import me.ajaja.module.plan.application.port.in.UpdatePlanUseCase;
 import me.ajaja.module.plan.application.port.in.ValidateContentUseCase;
 import me.ajaja.module.plan.application.port.out.FindAllPlansQuery;
-import me.ajaja.module.remind.application.port.in.GetRemindInfoUseCase;
 import me.ajaja.module.remind.application.port.in.GetTargetInfoUseCase;
 import me.ajaja.module.remind.application.port.in.SendTrialRemindUseCase;
 import me.ajaja.module.remind.application.port.in.UpdateRemindInfoUseCase;
@@ -164,8 +163,6 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 	// Remind
 	@MockBean
 	protected GetTargetInfoUseCase getTargetInfoUseCase;
-	@MockBean
-	protected GetRemindInfoUseCase getRemindInfoUseCase;
 	@MockBean
 	protected UpdateRemindInfoUseCase updateRemindInfoUseCase;
 	@MockBean
