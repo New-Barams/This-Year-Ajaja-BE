@@ -61,7 +61,7 @@ public class TimeValue {
 		return zonedDateTime.isAfter(time.zonedDateTime);
 	}
 
-	public boolean isBetweenOrEqual(TimeValue time) {
+	public boolean isWithin1Month(TimeValue time) {
 		return !this.zonedDateTime.isBefore(time.zonedDateTime)
 			&& !this.zonedDateTime.isAfter(time.oneMonthLater());
 	}
