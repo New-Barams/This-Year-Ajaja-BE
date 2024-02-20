@@ -6,14 +6,13 @@ import org.mapstruct.ObjectFactory;
 import org.mapstruct.ReportingPolicy;
 
 import me.ajaja.module.footprint.adapter.out.persistence.model.FootprintEntity;
-import me.ajaja.module.footprint.adapter.out.persistence.model.TargetEntity;
-import me.ajaja.module.footprint.adapter.out.persistence.model.WriterEntity;
 import me.ajaja.module.footprint.domain.Footprint;
 import me.ajaja.module.footprint.domain.FreeFootprint;
 import me.ajaja.module.footprint.domain.KptFootprint;
 import me.ajaja.module.footprint.domain.Target;
 import me.ajaja.module.footprint.domain.Title;
 import me.ajaja.module.footprint.domain.Writer;
+import me.ajaja.module.footprint.dto.Entity;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface FootprintMapper {
@@ -50,16 +49,17 @@ public interface FootprintMapper {
 		return (footprint instanceof KptFootprint) ? ((KptFootprint)footprint).getTryContent() : null;
 	}
 
-	Footprint toDomain(FootprintEntity footprintEntity, TargetEntity targetEntity, WriterEntity writerEntity);
+	Footprint toDomain(FootprintEntity footprintEntity, Entity.Target target, Entity.Writer writer);
 
 	@ObjectFactory
-	default Footprint createFootprint(FootprintEntity footprintEntity, TargetEntity targetEntity,
-		WriterEntity writerEntity) {
-		if (footprintEntity.getType().equals("FREE")) {
+	default Footprint createFootprint(FootprintEntity footprintEntity, Entity.Target target,
+		Entity.Writer writer) {
+		String type = footprintEntity.getType();
+		if (type.equals("FREE")) {
 			return new FreeFootprint(
 				footprintEntity.getId(),
-				new Target(targetEntity.id(), targetEntity.title()),
-				new Writer(writerEntity.id(), writerEntity.nickname()),
+				new Target(target.getId(), target.getTitle()),
+				new Writer(writer.getId(), writer.getNickname()),
 				Footprint.Type.FREE,
 				new Title(footprintEntity.getTitle()),
 				footprintEntity.isVisible(),
@@ -69,8 +69,8 @@ public interface FootprintMapper {
 		} else {
 			return new KptFootprint(
 				footprintEntity.getId(),
-				new Target(targetEntity.id(), targetEntity.title()),
-				new Writer(writerEntity.id(), writerEntity.nickname()),
+				new Target(target.getId(), target.getTitle()),
+				new Writer(writer.getId(), writer.getNickname()),
 				Footprint.Type.KPT,
 				new Title(footprintEntity.getTitle()),
 				footprintEntity.isVisible(),
