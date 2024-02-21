@@ -3,6 +3,7 @@ package me.ajaja.global.exception;
 import static me.ajaja.global.exception.ErrorCode.*;
 import static org.springframework.http.HttpStatus.*;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -13,11 +14,15 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import jakarta.validation.ConstraintViolationException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestControllerAdvice
+@RequiredArgsConstructor
 public class GlobalExceptionHandler {
+	private final ApplicationEventPublisher eventPublisher;
+
 	@ExceptionHandler(AjajaException.class)
 	public ResponseEntity<ErrorResponse> handleAjajaException(AjajaException exception) {
 		final ErrorCode errorCode = exception.getErrorCode();
@@ -51,6 +56,7 @@ public class GlobalExceptionHandler {
 	@ResponseStatus(INTERNAL_SERVER_ERROR)
 	public ErrorResponse handleUnexpectedException(RuntimeException exception) {
 		log.warn("UnexpectedException Occurs : {}", exception.getMessage());
+		eventPublisher.publishEvent(new UnexpectedExceptionEvent(exception.getMessage()));
 		return ErrorResponse.from(AJAJA_SERVER_ERROR);
 	}
 }
