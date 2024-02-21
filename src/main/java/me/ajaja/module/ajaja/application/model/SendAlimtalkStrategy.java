@@ -56,7 +56,8 @@ public class SendAlimtalkStrategy extends SendAjajaStrategy {
 			.forEach(ajaja -> {
 				send(ajaja).handle((message, exception) -> {
 					if (exception != null) {
-						exceptionHandler.handleRemindException(END_POINT, ajaja.getPhoneNumber(), exception.getMessage());
+						exceptionHandler.handleRemindException(END_POINT, ajaja.getPhoneNumber(),
+							exception.getMessage());
 						return null;
 					}
 					saveAjajaRemindPort.save(ajaja.getUserId(), END_POINT, ajaja.getTargetId(), message, now);

@@ -17,7 +17,9 @@ import me.ajaja.global.common.TimeValue;
 import me.ajaja.infra.feign.ncp.client.NaverCloudProperties;
 import me.ajaja.infra.feign.ncp.client.NaverSendAlimtalkFeignClient;
 import me.ajaja.infra.feign.ncp.model.NaverResponse;
+import me.ajaja.module.ajaja.domain.Ajaja;
 import me.ajaja.module.ajaja.domain.AjajaQueryRepository;
+import me.ajaja.module.ajaja.mapper.AjajaMapper;
 import me.ajaja.module.remind.application.model.RemindableAjaja;
 import me.ajaja.module.remind.application.port.out.SaveAjajaRemindPort;
 import me.ajaja.module.remind.util.RemindExceptionHandler;
@@ -36,6 +38,10 @@ class SendAlimtalkStrategyTest extends MockTestSupport {
 	private RemindExceptionHandler exceptionHandler;
 	@Mock
 	private SaveAjajaRemindPort saveAjajaRemindPort;
+	@Mock
+	private AjajaMapper mapper;
+
+	private Ajaja domain = sut.giveMeOne(Ajaja.class);
 
 	@Test
 	@DisplayName("응원 가능한 아좌좌 수만큼 리마인드를 전송한다.")
@@ -49,6 +55,7 @@ class SendAlimtalkStrategyTest extends MockTestSupport {
 
 		given(ajajaQueryRepository.findRemindableAjajasByEndPoint("KAKAO")).willReturn(ajajas);
 		given(feignClient.send(any(), any())).willReturn(response);
+		given(mapper.toDomain(any(RemindableAjaja.class))).willReturn(domain);
 
 		// when , then
 		sendAlimtalkStrategy.send(TimeValue.now());
@@ -69,6 +76,7 @@ class SendAlimtalkStrategyTest extends MockTestSupport {
 
 		given(ajajaQueryRepository.findRemindableAjajasByEndPoint("KAKAO")).willReturn(List.of(ajaja));
 		given(feignClient.send(any(), any())).willReturn(response);
+		given(mapper.toDomain(any(RemindableAjaja.class))).willReturn(domain);
 		doNothing().when(exceptionHandler).handleRemindException(anyString(), anyString(), anyString());
 
 		// when , then

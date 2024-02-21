@@ -14,7 +14,9 @@ import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
 
 import me.ajaja.common.support.MockTestSupport;
 import me.ajaja.global.common.TimeValue;
+import me.ajaja.module.ajaja.domain.Ajaja;
 import me.ajaja.module.ajaja.domain.AjajaQueryRepository;
+import me.ajaja.module.ajaja.mapper.AjajaMapper;
 import me.ajaja.module.remind.application.model.RemindableAjaja;
 import me.ajaja.module.remind.application.port.out.SaveAjajaRemindPort;
 import me.ajaja.module.remind.util.RemindExceptionHandler;
@@ -31,6 +33,10 @@ class SesSendAjajaRemindServiceTest extends MockTestSupport {
 	private AmazonSimpleEmailService amazonSimpleEmailService;
 	@Mock
 	private SaveAjajaRemindPort saveAjajaRemindPort;
+	@Mock
+	private AjajaMapper mapper;
+
+	private Ajaja domain = sut.giveMeOne(Ajaja.class);
 
 	@Test
 	@DisplayName("응원 가능한 아좌좌 수만큼 리마인드를 전송한다.")
@@ -39,6 +45,7 @@ class SesSendAjajaRemindServiceTest extends MockTestSupport {
 		List<RemindableAjaja> ajajas = sut.giveMe(RemindableAjaja.class, 10);
 
 		given(ajajaQueryRepository.findRemindableAjajasByEndPoint("EMAIL")).willReturn(ajajas);
+		given(mapper.toDomain(any(RemindableAjaja.class))).willReturn(domain);
 
 		// when , then
 		sendSesStrategy.send(TimeValue.now());
@@ -55,6 +62,7 @@ class SesSendAjajaRemindServiceTest extends MockTestSupport {
 			.sample();
 
 		given(ajajaQueryRepository.findRemindableAjajasByEndPoint("EMAIL")).willReturn(List.of(ajaja));
+		given(mapper.toDomain(any(RemindableAjaja.class))).willReturn(domain);
 		doNothing().when(exceptionHandler).handleRemindException(anyString(), anyString(), anyString());
 
 		// when , then

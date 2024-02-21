@@ -45,7 +45,7 @@ public class SesSendAjajaRemindService extends SendAjajaStrategy {
 		List<Ajaja> ajajas = ajajaQueryRepository.findRemindableAjajasByEndPoint(END_POINT).stream()
 			.map(mapper::toDomain)
 			.toList();
-		;
+
 		ajajas.forEach(ajaja -> {
 			send(ajaja).handle((message, exception) -> {
 				if (exception != null) {
