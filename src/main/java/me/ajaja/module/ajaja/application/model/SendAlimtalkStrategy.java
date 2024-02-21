@@ -16,8 +16,9 @@ import me.ajaja.infra.feign.ncp.client.NaverCloudProperties;
 import me.ajaja.infra.feign.ncp.client.NaverSendAlimtalkFeignClient;
 import me.ajaja.infra.feign.ncp.model.NaverRequest;
 import me.ajaja.infra.feign.ncp.model.NaverResponse;
+import me.ajaja.module.ajaja.domain.Ajaja;
 import me.ajaja.module.ajaja.domain.AjajaQueryRepository;
-import me.ajaja.module.remind.application.model.RemindableAjaja;
+import me.ajaja.module.ajaja.mapper.AjajaMapper;
 import me.ajaja.module.remind.application.port.out.SaveAjajaRemindPort;
 import me.ajaja.module.remind.util.RemindExceptionHandler;
 
@@ -29,42 +30,49 @@ public class SendAlimtalkStrategy extends SendAjajaStrategy {
 
 	private final NaverSendAlimtalkFeignClient naverSendAlimtalkFeignClient;
 	private final NaverCloudProperties naverCloudProperties;
+	private final AjajaMapper mapper;
 
 	public SendAlimtalkStrategy(
 		AjajaQueryRepository ajajaQueryRepository,
 		RemindExceptionHandler exceptionHandler,
 		SaveAjajaRemindPort saveAjajaRemindPort,
 		NaverSendAlimtalkFeignClient naverSendAlimtalkFeignClient,
-		NaverCloudProperties naverCloudProperties
+		NaverCloudProperties naverCloudProperties,
+		AjajaMapper mapper
 	) {
 		super(ajajaQueryRepository, exceptionHandler, saveAjajaRemindPort);
 		this.naverSendAlimtalkFeignClient = naverSendAlimtalkFeignClient;
 		this.naverCloudProperties = naverCloudProperties;
+		this.mapper = mapper;
 	}
 
 	@Override
 	public void send(TimeValue now) {
-		List<RemindableAjaja> remindableAjajas = ajajaQueryRepository.findRemindableAjajasByEndPoint(END_POINT);
-		remindableAjajas.stream().filter(ajaja -> !Objects.equals(ajaja.phoneNumber(), "01000000000"))
+		List<Ajaja> ajajas = ajajaQueryRepository.findRemindableAjajasByEndPoint(END_POINT).stream()
+			.map(mapper::toDomain)
+			.toList();
+
+		ajajas.stream().filter(ajaja -> !Objects.equals(ajaja.getPhoneNumber(), "01000000000"))
 			.forEach(ajaja -> {
 				send(ajaja).handle((message, exception) -> {
 					if (exception != null) {
-						exceptionHandler.handleRemindException(END_POINT, ajaja.phoneNumber(), exception.getMessage());
+						exceptionHandler.handleRemindException(END_POINT, ajaja.getPhoneNumber(), exception.getMessage());
 						return null;
 					}
-					saveAjajaRemindPort.save(ajaja.userId(), END_POINT, ajaja.planId(), message, now);
+					saveAjajaRemindPort.save(ajaja.getUserId(), END_POINT, ajaja.getTargetId(), message, now);
 					return null;
 				});
 			});
 	}
 
 	@Async
-	public CompletableFuture<String> send(RemindableAjaja ajaja) {
-		NaverRequest.Alimtalk request = ajaja(ajaja.phoneNumber(), ajaja.count(), ajaja.title(), ajaja.planId());
+	public CompletableFuture<String> send(Ajaja ajaja) {
+		NaverRequest.Alimtalk request
+			= ajaja(ajaja.getPhoneNumber(), ajaja.getCount(), ajaja.getTitle(), ajaja.getTargetId());
 
 		return CompletableFuture.supplyAsync(alimtalkSupplier(request))
 			.thenApply(tries -> {
-				log.info("[NCP] Remind Sent To : {} After {} tries", ajaja.phoneNumber(), tries);
+				log.info("[NCP] Remind Sent To : {} After {} tries", ajaja.getPhoneNumber(), tries);
 				return request.getMessages().get(0).getContent();
 			});
 	}

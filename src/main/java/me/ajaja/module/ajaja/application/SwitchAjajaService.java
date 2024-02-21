@@ -36,7 +36,7 @@ public class SwitchAjajaService {
 	}
 
 	private void addToPlan(Plan plan, Long userId) {
-		Ajaja ajaja = Ajaja.plan(plan.getId(), userId);
+		Ajaja ajaja = Ajaja.plan(plan.getPlanTitle(), plan.getId(), userId);
 		ajajaRepository.save(ajaja);
 	}
 
