@@ -34,6 +34,7 @@ public class FindRemindableTargetsAdapter implements FindRemindableTargetsPort {
 			.from(planEntity)
 			.join(userEntity).on(userEntity.id.eq(planEntity.userId))
 			.where(planEntity.canRemind
+				.and(userEntity.deleted.isFalse())
 				.and(planEntity.remindTime.eq(remindTime).and(isRemindable(time)))
 				.and(userEntity.remindType.eq(remindType).or(userEntity.remindType.eq("BOTH")))
 			)
