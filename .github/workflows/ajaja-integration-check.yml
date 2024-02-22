@@ -36,10 +36,10 @@ jobs:
           gradle-version: ${{ env.GRADLE_VERSION }}
 
       - name: Check Code Convention
-        run: gradle check
+        run: ./gradlew -x test check
 
       - name: Check Tests w/ Test Coverage
-        run: gradle testWithJacoco
+        run: ./gradlew testWithJacoco
 
       - name: Add Coverage on Pull Request
         id: jacoco
@@ -51,21 +51,3 @@ jobs:
           min-coverage-changed-files: 60
           title: Test Coverage Report
 
-  build:
-    needs: check
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Branch
-        uses: actions/checkout@v4
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: ${{ env.JAVA_VERSION }}
-          distribution: ${{ env.JAVA_DISTRIBUTION }}
-
-      - name: Clean Build w/o TEST, CHECK
-        uses: gradle/gradle-build-action@v2.9.0
-        with:
-          arguments: clean build -x test -x check

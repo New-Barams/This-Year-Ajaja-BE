@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: kentaro-m/auto-assign-action@v1.2.5
+      - uses: hkusu/review-assign-action@v1
         with:
-          configuration-path: '.github/ajaja-reviewers.yml'
+          assignees: ${{ github.actor }}
+          ready-comment: 'Ready for review :ok:'
