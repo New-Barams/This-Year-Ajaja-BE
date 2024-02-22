@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Locale;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Order;
@@ -26,6 +27,7 @@ import me.ajaja.module.tag.domain.QPlanTag;
 import me.ajaja.module.tag.domain.QTag;
 
 @Repository
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 class FindAllPlansAdapter implements FindAllPlansQuery {
 	private static final String LATEST = "latest";
