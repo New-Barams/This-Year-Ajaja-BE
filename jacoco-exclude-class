@@ -10,6 +10,7 @@ exclude me/ajaja/global/security/common/*
 exclude me/ajaja/global/security/filter/AuthorizationExceptionFilter
 exclude me/ajaja/global/security/jwt/JwtSecretProvider
 exclude me/ajaja/global/util/*
+exclude me/ajaja/infra/discord/*
 exclude me/ajaja/infra/feign/common/*
 exclude me/ajaja/infra/feign/kakao/client/*
 exclude me/ajaja/infra/feign/kakao/model/*
