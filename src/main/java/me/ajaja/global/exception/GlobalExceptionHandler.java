@@ -56,7 +56,7 @@ public class GlobalExceptionHandler {
 	@ResponseStatus(INTERNAL_SERVER_ERROR)
 	public ErrorResponse handleUnexpectedException(RuntimeException exception) {
 		log.warn("UnexpectedException Occurs : {}", exception.getMessage());
-		eventPublisher.publishEvent(new UnexpectedExceptionEvent(exception.getMessage()));
+		eventPublisher.publishEvent(new UnexpectedExceptionEvent(exception));
 		return ErrorResponse.from(AJAJA_SERVER_ERROR);
 	}
 }
