@@ -18,5 +18,6 @@ public class Receiver extends SelfValidating<Receiver> {
 		this.userId = userId;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
+		validateSelf();
 	}
 }
