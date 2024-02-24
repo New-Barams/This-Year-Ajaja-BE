@@ -9,10 +9,13 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
+import me.ajaja.global.security.filter.AuthorizationExceptionFilter;
+import me.ajaja.global.security.filter.AuthorizeRequestFilter;
 
 @Configuration
 @RequiredArgsConstructor
@@ -29,6 +32,12 @@ public class SecurityConfig {
 			.cors(withDefaults())
 			.headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+		http
+			.addFilterBefore(new AuthorizeRequestFilter(), UsernamePasswordAuthenticationFilter.class)
+			.addFilterBefore(new AuthorizationExceptionFilter(objectMapper), AuthorizeRequestFilter.class);
+
+		http.authorizeHttpRequests(request -> request.anyRequest().permitAll());
 
 		return http.build();
 	}
