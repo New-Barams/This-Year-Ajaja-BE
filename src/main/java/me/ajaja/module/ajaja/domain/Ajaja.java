@@ -16,7 +16,7 @@ public class Ajaja {
 
 	public enum Type {
 		PLAN,
-		RETROSPECT, // 회고
+		FOOTPRINT, // 회고
 		DEFAULT
 	}
 
@@ -41,8 +41,8 @@ public class Ajaja {
 		return new Ajaja(targetId, userId, Type.PLAN);
 	}
 
-	public static Ajaja retrospect(Long targetId, Long userId) {
-		return new Ajaja(targetId, userId, Type.RETROSPECT);
+	public static Ajaja footprint(Long targetId, Long userId) {
+		return new Ajaja(targetId, userId, Type.FOOTPRINT);
 	}
 
 	public static Ajaja defaultValue() {
