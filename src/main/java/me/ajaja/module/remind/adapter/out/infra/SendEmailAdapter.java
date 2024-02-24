@@ -75,7 +75,8 @@ public class SendEmailAdapter extends SendRemindPort {
 			int tries = 1;
 			while (tries <= RETRY_MAX_COUNT) {
 				int statusCode =
-					sesSendPlanRemindService.send(remind.getEmail(), remind.getTitle(), remind.getMessage(), feedbackUrl);
+					sesSendPlanRemindService
+						.send(remind.getEmail(), remind.getTitle(), remind.getMessage(), feedbackUrl);
 
 				if (isErrorOccurred(statusCode)) {
 					validateTryCount(tries);
