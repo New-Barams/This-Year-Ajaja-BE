@@ -1,5 +1,6 @@
 package me.ajaja.global.security.jwt;
 
+import static me.ajaja.common.extenstion.AssertExtension.*;
 import static me.ajaja.global.exception.ErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
@@ -7,7 +8,6 @@ import static org.mockito.BDDMockito.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -42,9 +42,11 @@ class JwtParserTest extends MonkeySupport {
 	@BeforeEach
 	void setup() {
 		userId = sut.giveMeOne(Long.class);
-		AuthResponse.Token response = jwtGenerator.login(userId);
-		accessToken = response.getAccessToken();
-		refreshToken = response.getRefreshToken();
+
+		AuthResponse.Token tokens = jwtGenerator.login(userId);
+
+		accessToken = tokens.getAccessToken();
+		refreshToken = tokens.getRefreshToken();
 	}
 
 	@AfterEach
@@ -92,19 +94,6 @@ class JwtParserTest extends MonkeySupport {
 		});
 	}
 
-	// @Test
-	// @DisplayName("Refresh Token에서 만료일을 파싱하면 예외가 발생하지 않아야 한다.")
-	// void parseExpireIn_Success_WithinOneWeek() {
-	// 	// given
-	// 	String expected = LocalDateTime.now().plusWeeks(1).toString();
-	//
-	// 	// when, then
-	// 	assertThatNoException().isThrownBy(() -> {
-	// 		Date expireIn = jwtParser.parseExpireIn(refreshToken);
-	// 		assertThat(expireIn).isCloseTo(expected, 1000);
-	// 	});
-	// }
-
 	@Test
 	@DisplayName("서명이 다른 토큰을 파싱 시도하면 예외가 발생한다.")
 	void parseId_Fail_ByWrongSignature() {
@@ -126,40 +115,59 @@ class JwtParserTest extends MonkeySupport {
 		String emptyToken = "";
 
 		// when, then
-		assertThatException()
-			.isThrownBy(() -> jwtParser.parseId(emptyToken))
-			.withMessage(EMPTY_TOKEN.getMessage());
+		assertThatAjajaException(EMPTY_TOKEN).isThrownBy(() ->
+			jwtParser.parseId(emptyToken)
+		);
 	}
 
-	@Nested
-	class CanParseTest {
-		@Test
-		@DisplayName("유효한 토큰을 파싱을 시도하면 true를 리턴해야 한다.")
-		void isParsable_Success_ByValidToken() {
-			// given
+	@Test
+	@DisplayName("Access Token만 유효해도 검증에 성공해야 한다.")
+	void parseIdIfReissueable_Success_ByOnlyAccessTokenIsValid() {
+		// given
 
-			// when
-			boolean shouldBeTrue = jwtParser.isParsable(accessToken);
+		// when, then
+		assertThatNoException().isThrownBy(() ->
+			jwtParser.parseIdIfReissueable(accessToken, null)
+		);
+	}
 
-			// then
-			assertThat(shouldBeTrue).isTrue();
-		}
+	@Test
+	@DisplayName("Refresh Token만 유효해도 검증에 성공해야 한다.")
+	void parseIdIfReissueable_Success_ByOnlyRefreshTokenIsValid() {
 
-		@Test
-		@DisplayName("유효하지 않은 토큰으로 파싱을 시도하면 false를 리턴해야 한다.")
-		void isParsable_Fail_ByInvalidToken() {
-			// given
-			String invalidToken = """
-				eyJhbGciOiJIUzI1NiJ9.
-				eyJuYW1lIjoiSGVqb3cifQ.
-				SI7XBRHE_95nkxQ69SiiCQcqDkZ-FW1RdxNL1DmAAAg
-				""";
+		// when, then
+		assertThatNoException().isThrownBy(() ->
+			jwtParser.parseIdIfReissueable(null, refreshToken)
+		);
+	}
 
-			// when
-			boolean shouldBeFalse = jwtParser.isParsable(invalidToken);
+	@Test
+	@DisplayName("Refresh Token만으로 검증할 때 로그인 이력이 존재하지 않으면 검증에 실패해야 한다.")
+	void parseIdIfReissueable_Fail_ByNoneLoginHistory() {
+		// given
+		redisTemplate.delete(jwtSecretProvider.getSignature() + userId);
 
-			// then
-			assertThat(shouldBeFalse).isFalse();
-		}
+		// when, then
+		assertThatAjajaException(EMPTY_CACHE).isThrownBy(() ->
+			jwtParser.parseIdIfReissueable(null, refreshToken)
+		);
+	}
+
+	@Test
+	@DisplayName("검증을 요청한 Refresh Token과 관리 중인 Token이 다르다면 검증에 실패해야 한다..")
+	void validateReissuable_Fail_ByDifferentRefreshToken() {
+		// given
+		String anotherToken = """
+				eyJhbGciOiJIUzUxMiJ9.
+				eyJleHAiOjk5OTk5OTk5OTl9.
+				MY8pP9aep_3Dwza-unK3EmnPYJ88mYQe0IWjO_iMlbhKMcAzNpCmD11A9K--o_Pw6dc6slxnlb7zHNAVOUNsOw
+			""";
+
+		redisTemplate.opsForValue().set(jwtSecretProvider.getSignature() + userId, anotherToken);
+
+		// when, then
+		assertThatAjajaException(TOKEN_NOT_MATCH).isThrownBy(() ->
+			jwtParser.parseIdIfReissueable(null, refreshToken)
+		);
 	}
 }

@@ -45,6 +45,9 @@ secret:
     access-key: thisisfortest
     secret-key: thisisfortest
 
+  discord:
+    web-hook: thisisfortest
+
 ses:
   credentials:
     access-key: thisisfortest

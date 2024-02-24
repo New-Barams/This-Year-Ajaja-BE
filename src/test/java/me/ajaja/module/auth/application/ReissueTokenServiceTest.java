@@ -9,7 +9,7 @@ import org.mockito.Mock;
 
 import me.ajaja.common.support.MockTestSupport;
 import me.ajaja.global.security.jwt.JwtGenerator;
-import me.ajaja.global.security.jwt.JwtValidator;
+import me.ajaja.global.security.jwt.JwtParser;
 import me.ajaja.module.auth.dto.AuthResponse;
 
 class ReissueTokenServiceTest extends MockTestSupport {
@@ -19,7 +19,7 @@ class ReissueTokenServiceTest extends MockTestSupport {
 	@Mock
 	private JwtGenerator jwtGenerator;
 	@Mock
-	private JwtValidator jwtValidator;
+	private JwtParser jwtParser;
 
 	@Test
 	void reissue_Success_WithExpectedCall() {
@@ -32,7 +32,7 @@ class ReissueTokenServiceTest extends MockTestSupport {
 
 		// then
 		then(jwtGenerator).should(times(1)).reissue(any(), anyString());
-		then(jwtValidator).should(times(1)).validateReissuableAndExtractId(any(), anyString());
+		then(jwtParser).should(times(1)).parseIdIfReissueable(anyString(), anyString());
 		assertThat(response).usingRecursiveComparison().isEqualTo(tokens);
 	}
 }

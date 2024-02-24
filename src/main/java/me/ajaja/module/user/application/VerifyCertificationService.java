@@ -8,9 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import me.ajaja.global.cache.CacheUtil;
 import me.ajaja.global.exception.AjajaException;
-import me.ajaja.module.user.application.model.Verification;
 import me.ajaja.module.user.application.port.in.VerifyCertificationUseCase;
 import me.ajaja.module.user.application.port.out.ApplyChangePort;
 import me.ajaja.module.user.domain.User;
@@ -21,14 +19,13 @@ import me.ajaja.module.user.domain.User;
 class VerifyCertificationService implements VerifyCertificationUseCase {
 	private final RetrieveUserService retrieveUserService;
 	private final ApplyChangePort applyChangePort;
-	private final CacheUtil cacheUtil;
+	private final VerificationStorage storage;
 
 	@Override
 	public void verify(Long userId, String certification) {
 		User user = retrieveUserService.loadExistById(userId);
-		Verification verification = cacheUtil.getEmailVerification(userId);
-		verifyCertification(verification.getCertification(), certification);
-		user.verified(verification.getTarget());
+		String email = storage.getEmailIfVerified(userId, certification);
+		user.verified(email);
 		applyChangePort.apply(user);
 	}
 

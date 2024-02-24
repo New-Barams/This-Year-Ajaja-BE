@@ -13,6 +13,7 @@ import me.ajaja.infra.feign.common.FeignResponseEncoder;
 @Configuration
 @EnableFeignClients("me.ajaja.infra.feign")
 public class OpenFeignConfig {
+	public static final String DEFINED_ON_RUNTIME = "ajaja.me";
 
 	@Bean
 	ErrorDecoder errorDecoder() {

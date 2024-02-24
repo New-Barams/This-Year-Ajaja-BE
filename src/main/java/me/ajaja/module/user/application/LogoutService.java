@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import me.ajaja.global.exception.AjajaException;
-import me.ajaja.global.security.jwt.JwtRemover;
+import me.ajaja.global.security.jwt.JwtExpirer;
 import me.ajaja.module.user.application.port.in.LogoutUseCase;
 import me.ajaja.module.user.application.port.out.CheckExistUserPort;
 
@@ -14,12 +14,12 @@ import me.ajaja.module.user.application.port.out.CheckExistUserPort;
 @RequiredArgsConstructor
 class LogoutService implements LogoutUseCase {
 	private final CheckExistUserPort checkExistUserPort;
-	private final JwtRemover jwtRemover;
+	private final JwtExpirer jwtExpirer;
 
 	@Override
 	public void logout(Long id) {
-		validateExist(id);
-		jwtRemover.remove(id);
+		validateExist(id); // todo: delete
+		jwtExpirer.expire(id);
 	}
 
 	private void validateExist(Long id) {

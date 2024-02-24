@@ -11,14 +11,12 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
 
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import lombok.RequiredArgsConstructor;
 import me.ajaja.global.common.TimeValue;
 
-@Component
 @RequiredArgsConstructor
 class NaverFeignHeaderConfiguration {
 	private static final String EPOCH_TIME_HEADER = "x-ncp-apigw-timestamp";

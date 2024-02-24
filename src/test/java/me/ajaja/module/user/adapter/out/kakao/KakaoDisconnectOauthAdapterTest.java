@@ -23,15 +23,13 @@ class KakaoDisconnectOauthAdapterTest extends MockTestSupport {
 	@Test
 	void disconnect_Success() {
 		// given
-		Long oauthId = sut.giveMeOne(Long.class);
-		String adminKey = sut.giveMeOne(String.class);
 		KakaoResponse.Withdraw response = sut.giveMeOne(KakaoResponse.Withdraw.class);
 
-		given(kakaoProperties.getAdminKey()).willReturn(adminKey);
+		given(kakaoProperties.asHeader()).willReturn(sut.giveMeOne(String.class));
 		given(kakaoUnlinkFeignClient.unlink(anyString(), any())).willReturn(response);
 
 		// when
-		kakaoDisconnectOauthAdapter.disconnect(oauthId);
+		kakaoDisconnectOauthAdapter.disconnect(sut.giveMeOne(Long.class));
 
 		// then
 		then(kakaoUnlinkFeignClient).should(times(1)).unlink(anyString(), any());

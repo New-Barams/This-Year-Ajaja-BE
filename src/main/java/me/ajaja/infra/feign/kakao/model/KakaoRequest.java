@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 
 public final class KakaoRequest {
 	@AllArgsConstructor(access = AccessLevel.PRIVATE)
-	public static class Token {
+	public static class Authorize {
 		private static final String KAKAO_GRANT_TYPE = "authorization_code";
 
 		private String grant_type;
@@ -14,7 +14,7 @@ public final class KakaoRequest {
 		private String code;
 		private String client_secret;
 
-		public Token(String clientId, String redirectUri, String code, String clientSecret) {
+		public Authorize(String clientId, String redirectUri, String code, String clientSecret) {
 			this(KAKAO_GRANT_TYPE, clientId, redirectUri, code, clientSecret);
 		}
 	}

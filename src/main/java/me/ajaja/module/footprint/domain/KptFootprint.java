@@ -1,8 +1,5 @@
 package me.ajaja.module.footprint.domain;
 
-import java.util.List;
-import java.util.Set;
-
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
@@ -15,9 +12,18 @@ public class KptFootprint extends Footprint {
 	@NotBlank
 	private String tryContent;
 
-	KptFootprint(Target target, Writer writer, Title title, boolean visible, boolean deleted, Set<Tag> tags,
-		List<Ajaja> ajajas, String keepContent, String problemContent, String tryContent) {
-		super(target, writer, title, visible, deleted, tags, ajajas);
+	public KptFootprint(Long id, Target target, Writer writer, Type type, Title title, boolean visible, boolean deleted,
+		String keepContent, String problemContent, String tryContent) {
+		super(id, target, writer, type, title, visible, deleted);
+		this.keepContent = keepContent;
+		this.problemContent = problemContent;
+		this.tryContent = tryContent;
+		this.validateSelf();
+	}
+
+	public KptFootprint(Target target, Writer writer, Type type, Title title, boolean visible, String keepContent,
+		String problemContent, String tryContent) {
+		super(target, writer, type, title, visible);
 		this.keepContent = keepContent;
 		this.problemContent = problemContent;
 		this.tryContent = tryContent;

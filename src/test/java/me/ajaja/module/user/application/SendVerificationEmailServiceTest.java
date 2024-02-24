@@ -1,6 +1,6 @@
 package me.ajaja.module.user.application;
 
-import static org.assertj.core.api.Assertions.*;
+import static me.ajaja.common.extenstion.AssertExtension.*;
 import static org.mockito.BDDMockito.*;
 
 import org.junit.jupiter.api.DisplayName;
@@ -10,8 +10,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import me.ajaja.common.annotation.RedisBasedTest;
 import me.ajaja.common.support.MonkeySupport;
-import me.ajaja.global.cache.CacheUtil;
-import me.ajaja.module.user.application.model.Verification;
+import me.ajaja.global.exception.ErrorCode;
 import me.ajaja.module.user.application.port.out.SendCertificationPort;
 import me.ajaja.module.user.domain.Email;
 import me.ajaja.module.user.domain.PhoneNumber;
@@ -22,7 +21,7 @@ class SendVerificationEmailServiceTest extends MonkeySupport {
 	@Autowired
 	private SendVerificationEmailService sendVerificationEmailService;
 	@Autowired
-	private CacheUtil cacheUtil;
+	private VerificationStorage storage;
 
 	@MockBean
 	private SendCertificationPort sendCertificationPort;
@@ -30,7 +29,7 @@ class SendVerificationEmailServiceTest extends MonkeySupport {
 	private RetrieveUserService retrieveUserService;
 
 	@Test
-	@DisplayName("이메일 인증 메일을 전송하면 인증 전용 객체가 cache에 잘 저장되어야 한다.")
+	@DisplayName("이메일 인증 메일을 전송하면 인증 전용 객체가 저장소에 저장되어야 한다.")
 	void sendVerification_Success_SavedOnRedis() {
 		// given
 		Long userId = sut.giveMeOne(Long.class);
@@ -50,9 +49,9 @@ class SendVerificationEmailServiceTest extends MonkeySupport {
 		then(retrieveUserService).should(times(1)).loadExistById(any());
 		then(sendCertificationPort).should(times(1)).send(any(), any());
 
-		Verification verification = cacheUtil.getEmailVerification(userId);
-		assertThat(verification).isNotNull();
-		assertThat(verification.getTarget()).isEqualTo(email);
-		assertThat(verification.getCertification()).isNotNull();
+		// intended exception because no way to know certification
+		assertThatAjajaException(ErrorCode.CERTIFICATION_NOT_MATCH).isThrownBy(() ->
+			storage.getEmailIfVerified(userId, "certification")
+		);
 	}
 }

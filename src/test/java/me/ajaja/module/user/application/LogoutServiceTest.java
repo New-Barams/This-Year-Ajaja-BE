@@ -10,7 +10,7 @@ import org.mockito.Mock;
 
 import me.ajaja.common.support.MockTestSupport;
 import me.ajaja.global.exception.AjajaException;
-import me.ajaja.global.security.jwt.JwtRemover;
+import me.ajaja.global.security.jwt.JwtExpirer;
 import me.ajaja.module.user.application.port.out.CheckExistUserPort;
 
 class LogoutServiceTest extends MockTestSupport {
@@ -20,7 +20,7 @@ class LogoutServiceTest extends MockTestSupport {
 	@Mock
 	private CheckExistUserPort checkExistUserPort;
 	@Mock
-	private JwtRemover jwtRemover;
+	private JwtExpirer jwtExpirer;
 
 	@Test
 	@DisplayName("사용자가 로그아웃하면 토큰이 삭제되어야 한다.")
@@ -34,7 +34,7 @@ class LogoutServiceTest extends MockTestSupport {
 
 		// then
 		then(checkExistUserPort).should(times(1)).isExist(any());
-		then(jwtRemover).should(times(1)).remove(any());
+		then(jwtExpirer).should(times(1)).expire(any());
 	}
 
 	@Test
@@ -47,6 +47,6 @@ class LogoutServiceTest extends MockTestSupport {
 		// when, then
 		assertThatExceptionOfType(AjajaException.class)
 			.isThrownBy(() -> logoutService.logout(userId));
-		then(jwtRemover).shouldHaveNoInteractions();
+		then(jwtExpirer).shouldHaveNoInteractions();
 	}
 }

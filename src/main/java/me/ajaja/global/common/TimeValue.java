@@ -10,10 +10,11 @@ import java.util.Date;
 import lombok.Getter;
 
 @Getter
-public class TimeValue {
+public final class TimeValue {
 	private static final String DEFAULT_TIME_ZONE = "Asia/Seoul";
-	private static final int THREE_DAYS = 3;
+
 	private static final int LAST_MONTH = 12;
+	private static final int THREE_DAYS = 3;
 
 	private final Instant instant;
 	private final ZonedDateTime zonedDateTime;
@@ -52,7 +53,7 @@ public class TimeValue {
 			? parseDateTime(12, 31, 23, 59) : zonedDateTime.plusMonths(1);
 	}
 
-	public boolean isWithinThreeDays(Date expireIn) {
+	public boolean isWithin3Days(Date expireIn) {
 		Duration between = Duration.between(instant, expireIn.toInstant());
 		return Math.abs(between.toDays()) <= THREE_DAYS;
 	}

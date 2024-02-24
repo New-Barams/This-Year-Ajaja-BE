@@ -11,16 +11,13 @@ import me.ajaja.common.annotation.RedisBasedTest;
 import me.ajaja.common.support.MonkeySupport;
 
 @RedisBasedTest
-class JwtRemoverTest extends MonkeySupport {
+class JwtExpirerTest extends MonkeySupport {
 	@Autowired
-	private JwtRemover jwtRemover;
-
+	private JwtExpirer jwtExpirer;
 	@Autowired
 	private JwtGenerator jwtGenerator;
-
 	@Autowired
 	private RedisTemplate<String, Object> redisTemplate;
-
 	@Autowired
 	private JwtSecretProvider jwtSecretProvider;
 
@@ -32,10 +29,9 @@ class JwtRemoverTest extends MonkeySupport {
 		jwtGenerator.login(userId);
 
 		// when
-		jwtRemover.remove(userId);
+		jwtExpirer.expire(userId);
 
 		// then
 		assertThat(redisTemplate.opsForValue().get(jwtSecretProvider.getSignature() + userId)).isNull();
 	}
-
 }
