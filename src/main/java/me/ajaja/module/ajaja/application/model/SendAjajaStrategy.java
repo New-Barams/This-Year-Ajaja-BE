@@ -22,8 +22,7 @@ public abstract class SendAjajaStrategy {
 
 	protected void validateTryCount(int tries) {
 		if (tries == RETRY_MAX_COUNT) {
-			log.warn("Exceed maximum count of try");
-			throw new AjajaException(ErrorCode.EXTERNAL_API_FAIL);
+			throw new AjajaException(ErrorCode.ATTEMPTS_EXCEED_MAXIMUM_COUNT);
 		}
 	}
 }
