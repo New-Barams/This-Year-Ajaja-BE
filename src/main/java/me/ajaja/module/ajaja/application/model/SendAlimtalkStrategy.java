@@ -96,7 +96,7 @@ public class SendAlimtalkStrategy extends SendAjajaStrategy {
 		};
 	}
 
-	private boolean isErrorOccurred(String errorCode) {
-		return HANDLING_ERROR_CODES.contains(errorCode);
+	private boolean isErrorOccurred(String statusCode) {
+		return HANDLING_ERROR_CODES.contains(statusCode);
 	}
 }
