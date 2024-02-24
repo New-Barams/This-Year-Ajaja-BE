@@ -43,7 +43,7 @@ public class Ajaja {
 	}
 
 	public static Ajaja footprint(String title, Long targetId, Long userId) {
-		return new Ajaja(targetId, userId, Type.FOOTPRINT);
+		return new Ajaja(title, targetId, userId, null, null, Type.FOOTPRINT);
 	}
 
 	public static Ajaja defaultValue() {
