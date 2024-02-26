@@ -6,19 +6,19 @@ import me.ajaja.module.footprint.dto.FootprintParam;
 
 @Component
 public final class FootprintFactory {
-	public Footprint create(FootprintParam.Create param) {
+	public Footprint create(Target target, Writer writer, FootprintParam.Create param) {
 		return switch (param.getType()) {
 			case FREE -> new FreeFootprint(
-				param.getTarget(),
-				param.getWriter(),
+				target,
+				writer,
 				param.getType(),
 				param.getTitle(),
 				param.isVisible(),
 				param.getContent()
 			);
 			case KPT -> new KptFootprint(
-				param.getTarget(),
-				param.getWriter(),
+				target,
+				writer,
 				param.getType(),
 				param.getTitle(),
 				param.isVisible(),

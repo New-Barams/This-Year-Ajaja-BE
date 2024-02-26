@@ -67,14 +67,12 @@ class GetFootprintAdaptorTest extends JpaTestSupport {
 		Target target = new Target(1L, "Example Plan");
 		Writer writer = new Writer(1L, "Example Nickname");
 		FootprintParam.Create param = sut.giveMeBuilder(FootprintParam.Create.class)
-			.set("writer", writer)
-			.set("target", target)
 			.set("type", Footprint.Type.FREE)
 			.set("content", "content")
 			.sample();
 
 		String content = "content";
-		Footprint freeFootprint = footprintFactory.create(param);
+		Footprint freeFootprint = footprintFactory.create(target, writer, param);
 
 		Long createdId = createFootprintAdaptor.create(freeFootprint);
 
