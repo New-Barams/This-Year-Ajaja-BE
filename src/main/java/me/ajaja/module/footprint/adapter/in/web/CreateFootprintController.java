@@ -2,6 +2,8 @@ package me.ajaja.module.footprint.adapter.in.web;
 
 import static org.springframework.http.HttpStatus.*;
 
+import java.util.List;
+
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,8 +32,9 @@ public class CreateFootprintController {
 	) {
 		Long userId = SecurityUtil.getUserId();
 		FootprintParam.Create param = request.getParam();
+		List<String> tags = request.getTags();
 
-		createFootprintUseCase.create(userId, targetId, param);
+		createFootprintUseCase.create(userId, targetId, param, tags);
 		return AjajaResponse.ok();
 	}
 }

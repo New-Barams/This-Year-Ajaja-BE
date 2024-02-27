@@ -4,6 +4,7 @@ import static me.ajaja.global.exception.ErrorCode.*;
 import static org.assertj.core.api.AssertionsForClassTypes.*;
 import static org.mockito.Mockito.*;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -58,6 +59,8 @@ class CreateFootprintServiceTest extends MockTestSupport {
 
 	private Footprint footprint;
 
+	private List<String> tags;
+
 	@BeforeEach
 	void setUpFixture() {
 		user = sut.giveMeBuilder(User.class)
@@ -75,6 +78,8 @@ class CreateFootprintServiceTest extends MockTestSupport {
 			.set("type", Footprint.Type.FREE)
 			.set("content", "contents")
 			.sample();
+
+		tags = List.of("tag1", "tag2", "tag3");
 	}
 
 	@Test
@@ -89,7 +94,7 @@ class CreateFootprintServiceTest extends MockTestSupport {
 		when(createFootprintPort.create(footprint)).thenReturn(expectedFootprintId);
 
 		// when
-		long actualId = createFootprintService.create(user.getId(), target.getId(), param);
+		long actualId = createFootprintService.create(user.getId(), target.getId(), param, tags);
 
 		// then
 		assertThat(actualId).isEqualTo(expectedFootprintId);
@@ -106,7 +111,7 @@ class CreateFootprintServiceTest extends MockTestSupport {
 		when(retrieveUserPort.loadById(user.getId())).thenReturn(Optional.of(user));
 		when(findPlanPort.findById(plan.getId())).thenReturn(Optional.empty());
 
-		assertThatThrownBy(() -> createFootprintService.create(user.getId(), target.getId(), param))
+		assertThatThrownBy(() -> createFootprintService.create(user.getId(), target.getId(), param, tags))
 			.isInstanceOf(AjajaException.class)
 			.hasMessage((NOT_FOUND_PLAN.getMessage()));
 	}

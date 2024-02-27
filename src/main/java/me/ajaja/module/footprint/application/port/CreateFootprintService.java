@@ -2,6 +2,8 @@ package me.ajaja.module.footprint.application.port;
 
 import static me.ajaja.global.exception.ErrorCode.*;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +31,7 @@ public class CreateFootprintService implements CreateFootprintUseCase {
 	private final FindPlanPort findPlanPort;
 
 	@Override
-	public Long create(Long userId, Long targetId, FootprintParam.Create param) {
+	public Long create(Long userId, Long targetId, FootprintParam.Create param, List<String> tags) {
 		User user = retrieveUserPort.loadById(userId).orElseThrow(() -> new AjajaException(USER_NOT_FOUND));
 		Writer writer = new Writer(user.getId(), user.getNickname().getNickname());
 

@@ -33,8 +33,8 @@ class CreateFootprintControllerTest extends WebMvcTestSupport {
 		Long userId = 1L;
 		Long createFootprintId = 1L;
 
-		when(createFootprintUseCase.create(anyLong(), anyLong(), any(FootprintParam.Create.class))).thenReturn(
-			createFootprintId);
+		when(createFootprintUseCase.create(anyLong(), anyLong(), any(FootprintParam.Create.class),
+			anyList())).thenReturn(createFootprintId);
 
 		// when
 		var result = mockMvc.perform(RestDocumentationRequestBuilders.post("/targets/{id}/footprints", userId)
@@ -67,7 +67,7 @@ class CreateFootprintControllerTest extends WebMvcTestSupport {
 			.sample();
 
 		doThrow(ConstraintViolationException.class).when(createFootprintUseCase)
-			.create(anyLong(), anyLong(), any(FootprintParam.Create.class));
+			.create(anyLong(), anyLong(), any(FootprintParam.Create.class), anyList());
 
 		// when
 		var result = mockMvc.perform(RestDocumentationRequestBuilders.post("/targets/{id}/footprints", userId)
