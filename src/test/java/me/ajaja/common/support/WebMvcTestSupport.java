@@ -34,6 +34,7 @@ import me.ajaja.module.auth.application.port.in.ReissueTokenUseCase;
 import me.ajaja.module.feedback.application.LoadFeedbackInfoService;
 import me.ajaja.module.feedback.application.LoadTotalAchieveService;
 import me.ajaja.module.feedback.application.UpdateFeedbackService;
+import me.ajaja.module.footprint.application.port.in.CreateFootprintUseCase;
 import me.ajaja.module.plan.application.port.in.CreatePlanUseCase;
 import me.ajaja.module.plan.application.port.in.DeletePlanUseCase;
 import me.ajaja.module.plan.application.port.in.LoadPlanDetailUseCase;
@@ -171,4 +172,8 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 	protected FindTargetRemindQuery findTargetRemindQuery;
 	@MockBean
 	protected SendTestRemindUseCase sendTestRemindUseCase;
+
+	// footprint
+	@MockBean
+	protected CreateFootprintUseCase createFootprintUseCase;
 }
