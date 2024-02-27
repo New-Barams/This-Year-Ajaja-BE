@@ -4,5 +4,4 @@ import me.ajaja.module.footprint.domain.Footprint;
 
 public interface GetFootprintPort {
 	Footprint getFootprint(Long id);
-
 }

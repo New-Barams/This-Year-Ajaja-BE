@@ -2,25 +2,25 @@ package me.ajaja.module.footprint.domain;
 
 import org.springframework.stereotype.Component;
 
-import me.ajaja.module.footprint.dto.FootprintParam;
+import me.ajaja.module.footprint.dto.FootprintRequest;
 
 @Component
 public final class FootprintFactory {
-	public Footprint create(Target target, Writer writer, FootprintParam.Create param) {
+	public Footprint create(Long userId, FootprintRequest.Create param) {
 		return switch (param.getType()) {
 			case FREE -> new FreeFootprint(
-				target,
-				writer,
+				new Target(param.getTargetId()),
+				new Writer(userId),
 				param.getType(),
-				param.getTitle(),
+				new Title(param.getTitle()),
 				param.isVisible(),
 				param.getContent()
 			);
 			case KPT -> new KptFootprint(
-				target,
-				writer,
+				new Target(param.getTargetId()),
+				new Writer(userId),
 				param.getType(),
-				param.getTitle(),
+				new Title(param.getTitle()),
 				param.isVisible(),
 				param.getKeepContent(),
 				param.getProblemContent(),
