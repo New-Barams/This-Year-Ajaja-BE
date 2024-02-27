@@ -35,8 +35,9 @@ public class AjajaApplication {
 
 	@EventListener(ApplicationReadyEvent.class)
 	private void started() {
-		if (Arrays.asList(environment.getActiveProfiles()).contains("prod"))
+		if (Arrays.asList(environment.getActiveProfiles()).contains("prod")) {
 			eventPublisher.publishEvent(new DiscordEvent("Production server started"));
+		}
 	}
 
 	public static void main(String[] args) {
