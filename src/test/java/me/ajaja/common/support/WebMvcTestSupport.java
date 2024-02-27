@@ -71,6 +71,7 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 	protected static final String PLAN_END_POINT = "/plans";
 	protected static final String FEEDBACK_END_POINT = "/feedbacks";
 	protected static final String REMIND_END_POINT = "/reminds";
+	protected static final String FOOTPRINT_END_POINT = "/footprints";
 	protected static final String BEARER_TOKEN = "Bearer eyJhbGxMiJ9.eyJzWpvdyJ9.avFKonhbIIhEg8H1dycQkhQ";
 
 	@Autowired

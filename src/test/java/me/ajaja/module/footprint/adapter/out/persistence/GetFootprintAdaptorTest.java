@@ -12,16 +12,14 @@ import org.springframework.test.context.ContextConfiguration;
 import me.ajaja.common.support.JpaTestSupport;
 import me.ajaja.module.footprint.domain.Footprint;
 import me.ajaja.module.footprint.domain.FootprintFactory;
-import me.ajaja.module.footprint.domain.Target;
-import me.ajaja.module.footprint.domain.Writer;
-import me.ajaja.module.footprint.dto.FootprintParam;
+import me.ajaja.module.footprint.dto.FootprintRequest;
 import me.ajaja.module.footprint.mapper.FootprintMapperImpl;
 
 @ContextConfiguration(classes = {
 	CreateFootprintAdaptor.class,
 	GetFootprintAdaptor.class,
 	FootprintMapperImpl.class,
-	FootprintFactory.class,
+	FootprintFactory.class
 })
 class GetFootprintAdaptorTest extends JpaTestSupport {
 	private final String userCreateQuery = """
@@ -38,7 +36,7 @@ class GetFootprintAdaptorTest extends JpaTestSupport {
 		(can_ajaja, can_remind, deleted, icon_number, is_public, remind_date, remind_term, remind_total_period,
 		created_at, plan_id, updated_at, user_id, title, description, remind_time)
 		VALUES
-		(true, true, false, 1, true, 1, 7, 30, CURRENT_TIMESTAMP(6) AT TIME ZONE 'UTC', DEFAULT,
+		(true, true, false, 1, true, 1, 7, 30, CURRENT_TIMESTAMP(6) AT TIME ZONE 'UTC', 1,
 		CURRENT_TIMESTAMP(6) AT TIME ZONE 'UTC', 1, 'Example Plan', 'This is an example description.', '12:00 PM');
 		""";
 
@@ -64,15 +62,17 @@ class GetFootprintAdaptorTest extends JpaTestSupport {
 	@DisplayName("발자취 조회 매핑 기능 구현 테스트")
 	void get_Footprint_Success() {
 		// given
-		Target target = new Target(1L, "Example Plan");
-		Writer writer = new Writer(1L, "Example Nickname");
-		FootprintParam.Create param = sut.giveMeBuilder(FootprintParam.Create.class)
+		Long userId = 1L;
+		Long targetId = 1L;
+
+		FootprintRequest.Create param = sut.giveMeBuilder(FootprintRequest.Create.class)
+			.set("targetId", targetId)
+			.set("title", "title")
 			.set("type", Footprint.Type.FREE)
 			.set("content", "content")
 			.sample();
 
-		String content = "content";
-		Footprint freeFootprint = footprintFactory.create(target, writer, param);
+		Footprint freeFootprint = footprintFactory.create(userId, param);
 
 		Long createdId = createFootprintAdaptor.create(freeFootprint);
 
@@ -81,10 +81,8 @@ class GetFootprintAdaptorTest extends JpaTestSupport {
 
 		// then
 		assertThat(footprint.getId()).isEqualTo(createdId);
-		assertThat(footprint.getTarget().getId()).isEqualTo(target.getId());
-		assertThat(footprint.getTarget().getTitle()).isEqualTo(target.getTitle());
-		assertThat(footprint.getWriter().getId()).isEqualTo(writer.getId());
-		assertThat(footprint.getWriter().getNickname()).isEqualTo(writer.getNickname());
+		assertThat(footprint.getTarget().getId()).isEqualTo(targetId);
+		assertThat(footprint.getWriter().getId()).isEqualTo(userId);
 		assertThat(footprint.getType()).isEqualTo(Footprint.Type.FREE);
 	}
 }
