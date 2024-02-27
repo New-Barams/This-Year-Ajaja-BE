@@ -17,7 +17,8 @@ public class AuthorizeRequestFilter extends OncePerRequestFilter {
 	private static final List<String> ALLOW_LIST = List.of(
 		"/index.html", "/swagger-spec", "/swagger-ui", "/api-docs", "favicon", // swagger
 		"/login", "/reissue", // auth api
-		"/users", "/plans", "/reminds", "/feedbacks" // domain apis
+		"/users", "/plans", "/reminds", "/feedbacks", // domain apis
+		"/actuator"
 	);
 
 	@Override
