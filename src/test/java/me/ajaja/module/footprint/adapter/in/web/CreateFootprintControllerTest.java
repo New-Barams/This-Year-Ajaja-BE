@@ -1,7 +1,9 @@
 package me.ajaja.module.footprint.adapter.in.web;
 
+import static me.ajaja.global.exception.ErrorCode.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
+import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -73,7 +75,12 @@ class CreateFootprintControllerTest extends WebMvcTestSupport {
 			.contentType(APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(request)));
 
-		result.andExpect(status().is4xxClientError());
+		result.andExpectAll(
+			status().isBadRequest(),
+			jsonPath("$.httpStatus").value(BAD_REQUEST.name()),
+			jsonPath("$.errorName").value(BEAN_VALIDATION_FAIL_EXCEPTION.name()),
+			jsonPath("$.errorMessage").value(BEAN_VALIDATION_FAIL_EXCEPTION.getMessage())
+		);
 
 		// docs
 		result.andDo(RestDocument.builder()
