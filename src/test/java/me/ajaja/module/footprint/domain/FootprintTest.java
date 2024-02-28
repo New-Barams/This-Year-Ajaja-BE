@@ -24,7 +24,7 @@ class FootprintTest extends MonkeySupport {
 			.set("problemContent", "problemContent")
 			.set("tryContent", "tryContent")
 			.sample();
-		Footprint footprint = footprintFactory.create(userId, param);
+		Footprint footprint = footprintFactory.init(userId, param);
 
 		assertAll(
 			() -> assertThat(footprint.getId()).isNull(),
@@ -50,6 +50,6 @@ class FootprintTest extends MonkeySupport {
 			.sample();
 
 		assertThatExceptionOfType(ConstraintViolationException.class).isThrownBy(
-			() -> footprintFactory.create(userId, param));
+			() -> footprintFactory.init(userId, param));
 	}
 }

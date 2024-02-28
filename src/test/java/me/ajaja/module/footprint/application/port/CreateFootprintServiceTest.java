@@ -48,7 +48,7 @@ class CreateFootprintServiceTest extends MockTestSupport {
 		Long userId = 1L;
 		Long expectedFootprintId = 1L;
 
-		when(footprintFactory.create(anyLong(), eq(param))).thenReturn(footprint);
+		when(footprintFactory.init(anyLong(), eq(param))).thenReturn(footprint);
 		when(createFootprintPort.create(footprint)).thenReturn(expectedFootprintId);
 
 		// when
@@ -56,7 +56,7 @@ class CreateFootprintServiceTest extends MockTestSupport {
 
 		// then
 		assertAll("verify stubbing method",
-			() -> verify(footprintFactory, times(1)).create(anyLong(), eq(param)),
+			() -> verify(footprintFactory, times(1)).init(anyLong(), eq(param)),
 			() -> verify(createFootprintPort, times(1)).create(footprint)
 		);
 	}

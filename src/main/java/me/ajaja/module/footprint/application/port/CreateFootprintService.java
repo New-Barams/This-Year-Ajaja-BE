@@ -19,7 +19,7 @@ public class CreateFootprintService implements CreateFootprintUseCase {
 
 	@Override
 	public void create(Long userId, FootprintRequest.Create param) {
-		Footprint footprint = footprintFactory.create(userId, param);
+		Footprint footprint = footprintFactory.init(userId, param);
 		createFootprintPort.create(footprint);
 	}
 }

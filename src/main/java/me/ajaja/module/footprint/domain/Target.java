@@ -19,7 +19,7 @@ public class Target extends SelfValidating<Target> {
 		this.validateSelf();
 	}
 
-	public Target(Long id) {
-		this(id, null);
+	public static Target init(Long id) {
+		return new Target(id, null);
 	}
 }

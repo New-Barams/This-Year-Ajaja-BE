@@ -19,7 +19,7 @@ public class Writer extends SelfValidating<Writer> {
 		this.validateSelf();
 	}
 
-	public Writer(Long id) {
-		this(id, null);
+	public static Writer init(Long id) {
+		return new Writer(id, null);
 	}
 }

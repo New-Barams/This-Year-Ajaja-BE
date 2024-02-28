@@ -73,7 +73,7 @@ class GetFootprintAdaptorTest extends JpaTestSupport {
 			.set("content", "content")
 			.sample();
 
-		Footprint freeFootprint = footprintFactory.create(userId, param);
+		Footprint freeFootprint = footprintFactory.init(userId, param);
 
 		Long createdId = createFootprintAdaptor.create(freeFootprint);
 
