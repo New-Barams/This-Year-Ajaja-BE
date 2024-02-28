@@ -25,8 +25,8 @@ import me.ajaja.module.remind.util.RemindExceptionHandler;
 @Slf4j
 @Component
 public class SendAlimtalkStrategy extends SendAjajaStrategy {
-	private static final List<String> HANDLING_ERROR_CODES = List.of("400", "401", "403", "404", "500");
-	private static final String END_POINT = "KAKAO";
+	private static final List<Integer> errorCodes = List.of(400, 401, 403, 404, 500);
+	private static final String endPoint = "KAKAO";
 
 	private final NaverSendAlimtalkFeignClient naverSendAlimtalkFeignClient;
 	private final NaverCloudProperties naverCloudProperties;
@@ -48,21 +48,12 @@ public class SendAlimtalkStrategy extends SendAjajaStrategy {
 
 	@Override
 	public void send(TimeValue now) {
-		List<Ajaja> ajajas = ajajaQueryRepository.findRemindableAjajasByEndPoint(END_POINT).stream()
+		ajajaQueryRepository.findRemindableAjajasByEndPoint(endPoint).stream()
 			.map(mapper::toDomain)
-			.toList();
-
-		ajajas.stream().filter(ajaja -> !Objects.equals(ajaja.getPhoneNumber(), "01000000000"))
+			.toList()
+			.stream().filter(ajaja -> !Objects.equals(ajaja.getPhoneNumber(), "01000000000"))
 			.forEach(ajaja -> {
-				send(ajaja).handle((message, exception) -> {
-					if (exception != null) {
-						exceptionHandler.handleRemindException(END_POINT, ajaja.getPhoneNumber(),
-							exception.getMessage());
-						return null;
-					}
-					saveAjajaRemindPort.save(ajaja.getUserId(), END_POINT, ajaja.getTargetId(), message, now);
-					return null;
-				});
+				processResult(send(ajaja), ajaja, endPoint, now);
 			});
 	}
 
@@ -80,23 +71,19 @@ public class SendAlimtalkStrategy extends SendAjajaStrategy {
 
 	private Supplier<Integer> alimtalkSupplier(NaverRequest.Alimtalk request) {
 		return () -> {
-			int tries = 1;
-			while (tries <= RETRY_MAX_COUNT) {
+			int attempts = 1;
+			while (attempts <= ATTEMPTS_MAX_COUNT) {
 				NaverResponse.AlimTalk response = naverSendAlimtalkFeignClient.send(naverCloudProperties.getServiceId(),
 					request);
-				if (isErrorOccurred(response.getStatusCode())) {
-					validateTryCount(tries);
-					log.warn("Send Alimtalk Remind Error Code : {} , retries : {}", response.getStatusCode(), tries);
-					tries++;
+
+				int statusCode = Integer.parseInt(response.getStatusCode());
+				if (isErrorOccurred(statusCode, errorCodes)) {
+					attempts = checkAttemptsOrThrow(statusCode, attempts);
 					continue;
 				}
 				break;
 			}
-			return tries;
+			return attempts;
 		};
-	}
-
-	private boolean isErrorOccurred(String statusCode) {
-		return HANDLING_ERROR_CODES.contains(statusCode);
 	}
 }

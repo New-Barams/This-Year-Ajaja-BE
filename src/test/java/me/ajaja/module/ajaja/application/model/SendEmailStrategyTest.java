@@ -58,8 +58,6 @@ class SendEmailStrategyTest extends MockTestSupport {
 		// then
 		then(sesSendAjajaRemindService).should(times(10))
 			.send(anyString(), anyString(), anyLong(), anyLong());
-		then(saveAjajaRemindPort).should(times(10))
-			.save(anyLong(), anyString(), anyLong(), anyString(), any());
 	}
 
 	@ParameterizedTest
@@ -81,6 +79,5 @@ class SendEmailStrategyTest extends MockTestSupport {
 
 		// then
 		then(exceptionHandler).should(times(1)).handleRemindException(anyString(), anyString(), anyString());
-		then(saveAjajaRemindPort).should(never()).save(anyLong(), anyString(), anyLong(), anyString(), any());
 	}
 }

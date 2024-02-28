@@ -21,8 +21,8 @@ import me.ajaja.module.remind.util.RemindExceptionHandler;
 @Slf4j
 @Component
 public class SendEmailAdapter extends SendRemindPort {
-	private static final List<Integer> HANDLING_ERROR_CODES = List.of(400, 408, 500, 503);
-	private static final String END_POINT = "EMAIL";
+	private static final List<Integer> errorCodes = List.of(400, 408, 500, 503);
+	private final String endPoint = "EMAIL";
 
 	private final SesSendPlanRemindService sesSendPlanRemindService;
 
@@ -38,17 +38,9 @@ public class SendEmailAdapter extends SendRemindPort {
 
 	@Override
 	public void send(String remindTime, TimeValue now) {
-		List<Remind> reminds = findRemindableTargetsPort.findAllRemindablePlansByType(remindTime, END_POINT, now);
-		reminds.forEach(remind -> {
+		findRemindableTargetsPort.findAllRemindablePlansByType(remindTime, endPoint, now).forEach(remind -> {
 			String url = this.toFeedbackUrl(remind.getTitle(), now.getMonth(), now.getDate(), remind.getPlanId());
-			send(remind, url).handle((message, exception) -> {
-				if (exception != null) {
-					exceptionHandler.handleRemindException(END_POINT, remind.getEmail(), exception.getMessage());
-					return null;
-				}
-				createRemindService.create(remind, now, END_POINT);
-				return null;
-			});
+			processResult(send(remind, url), remind, endPoint, now);
 		});
 	}
 
@@ -72,26 +64,19 @@ public class SendEmailAdapter extends SendRemindPort {
 
 	private Supplier<Integer> emailSupplier(Remind remind, String feedbackUrl) {
 		return () -> {
-			int tries = 1;
-			while (tries <= RETRY_MAX_COUNT) {
+			int attempts = 1;
+			while (attempts <= ATTEMPTS_MAX_COUNT) {
 				int statusCode =
 					sesSendPlanRemindService
 						.send(remind.getEmail(), remind.getTitle(), remind.getMessage(), feedbackUrl);
 
-				if (isErrorOccurred(statusCode)) {
-					validateTryCount(tries);
-					log.warn("Send SES Remind Error Code : {} , retries : {}",
-						statusCode, tries);
-					tries++;
+				if (isErrorOccurred(statusCode, errorCodes)) {
+					attempts = checkAttemptsOrThrow(statusCode, attempts);
 					continue;
 				}
 				break;
 			}
-			return tries;
+			return attempts;
 		};
-	}
-
-	private boolean isErrorOccurred(int statusCode) {
-		return HANDLING_ERROR_CODES.contains(statusCode);
 	}
 }

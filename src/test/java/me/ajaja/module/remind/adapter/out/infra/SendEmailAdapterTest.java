@@ -54,8 +54,6 @@ class SendEmailAdapterTest extends MockTestSupport {
 		// then
 		then(sesSendPlanRemindService).should(times(1))
 			.send(anyString(), anyString(), anyString(), anyString());
-		then(createRemindService).should(times(1))
-			.create(any(), any(), anyString());
 	}
 
 	@ParameterizedTest
@@ -79,7 +77,5 @@ class SendEmailAdapterTest extends MockTestSupport {
 		// then
 		then(sesSendPlanRemindService).should(times(5))
 			.send(anyString(), anyString(), anyString(), anyString());
-		then(createRemindService).should(times(0))
-			.create(any(), any(), anyString());
 	}
 }

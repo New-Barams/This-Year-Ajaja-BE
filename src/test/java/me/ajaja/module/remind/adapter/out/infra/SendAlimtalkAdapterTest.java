@@ -1,13 +1,15 @@
 package me.ajaja.module.remind.adapter.out.infra;
 
+import static java.lang.Thread.*;
 import static org.mockito.BDDMockito.*;
 
 import java.util.List;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
@@ -45,17 +47,39 @@ class SendAlimtalkAdapterTest extends MockTestSupport {
 	}
 
 	@Test
-	@DisplayName("유저에게 알림톡 메세지를 전송한다.")
-	void send_Success_WithNoException() {
+	@DisplayName("응원 가능한 아좌좌 수만큼 리마인드를 전송한다.")
+	void send_Success_WithNoException() throws InterruptedException {
 		// given
 		NaverResponse.AlimTalk response = sut.giveMeBuilder(NaverResponse.AlimTalk.class)
-			.set("statusCode", "200").sample();
+			.set("statusCode", "202")
+			.sample();
+
 		given(findRemindableTargetsPort.findAllRemindablePlansByType(anyString(), anyString(), any()))
 			.willReturn(List.of(remind));
+		given(feignClient.send(any(), any())).willReturn(response);
 
 		// when , then
-		Assertions.assertThatNoException().isThrownBy(() ->
-			sendAlimtalkAdapter.send("MORNING", TimeValue.now()
-			));
+		sendAlimtalkAdapter.send("MORNING", TimeValue.now());
+		sleep(100); // 비동기 메소드 처리 시간 확보
+		then(feignClient).should(times(1)).send(any(), any());
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {"400", "401", "403", "404", "500"})
+	@DisplayName("핸들링 가능한 예외가 발생한다면 재시도를 5회 진행한다.")
+	void send_Fail_ByExternalApiFailed(String errorCode) throws InterruptedException {
+		// given
+		NaverResponse.AlimTalk response = sut.giveMeBuilder(NaverResponse.AlimTalk.class)
+			.set("statusCode", errorCode)
+			.sample();
+
+		given(findRemindableTargetsPort.findAllRemindablePlansByType(anyString(), anyString(), any()))
+			.willReturn(List.of(remind));
+		given(feignClient.send(any(), any())).willReturn(response);
+
+		// when , then
+		sendAlimtalkAdapter.send("MORNING", TimeValue.now());
+		sleep(100);
+		then(feignClient).should(times(5)).send(any(), any());
 	}
 }
