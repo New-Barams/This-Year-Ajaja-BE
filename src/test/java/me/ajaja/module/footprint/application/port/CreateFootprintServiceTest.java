@@ -1,6 +1,6 @@
 package me.ajaja.module.footprint.application.port;
 
-import static org.assertj.core.api.AssertionsForClassTypes.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -52,11 +52,12 @@ class CreateFootprintServiceTest extends MockTestSupport {
 		when(createFootprintPort.create(footprint)).thenReturn(expectedFootprintId);
 
 		// when
-		Long actualId = createFootprintService.create(userId, param);
+		createFootprintService.create(userId, param);
 
 		// then
-		assertThat(actualId).isEqualTo(expectedFootprintId);
-		verify(footprintFactory, times(1)).create(anyLong(), eq(param));
-		verify(createFootprintPort, times(1)).create(footprint);
+		assertAll("verify stubbing method",
+			() -> verify(footprintFactory, times(1)).create(anyLong(), eq(param)),
+			() -> verify(createFootprintPort, times(1)).create(footprint)
+		);
 	}
 }

@@ -18,10 +18,8 @@ public class CreateFootprintService implements CreateFootprintUseCase {
 	private final CreateFootprintPort createFootprintPort;
 
 	@Override
-	public Long create(Long userId, FootprintRequest.Create param) {
+	public void create(Long userId, FootprintRequest.Create param) {
 		Footprint footprint = footprintFactory.create(userId, param);
-		Long footprintId = createFootprintPort.create(footprint);
-
-		return footprintId;
+		createFootprintPort.create(footprint);
 	}
 }

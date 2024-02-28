@@ -28,6 +28,7 @@ class CreateFootprintAdaptorTest extends JpaTestSupport {
 		Long userId = 1L;
 
 		FootprintRequest.Create param = sut.giveMeBuilder(FootprintRequest.Create.class)
+			.set("title", "title")
 			.set("type", Footprint.Type.FREE)
 			.set("content", "content")
 			.sample();

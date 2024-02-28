@@ -1,6 +1,7 @@
 package me.ajaja.module.footprint.adapter.out.persistence;
 
 import static org.assertj.core.api.AssertionsForClassTypes.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -80,9 +81,11 @@ class GetFootprintAdaptorTest extends JpaTestSupport {
 		Footprint footprint = getFootprintAdaptor.getFootprint(createdId);
 
 		// then
-		assertThat(footprint.getId()).isEqualTo(createdId);
-		assertThat(footprint.getTarget().getId()).isEqualTo(targetId);
-		assertThat(footprint.getWriter().getId()).isEqualTo(userId);
-		assertThat(footprint.getType()).isEqualTo(Footprint.Type.FREE);
+		assertAll(
+			() -> assertThat(footprint.getId()).isEqualTo(createdId),
+			() -> assertThat(footprint.getTarget().getId()).isEqualTo(targetId),
+			() -> assertThat(footprint.getWriter().getId()).isEqualTo(userId),
+			() -> assertThat(footprint.getType()).isEqualTo(Footprint.Type.FREE)
+		);
 	}
 }

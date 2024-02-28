@@ -1,6 +1,7 @@
 package me.ajaja.module.footprint.domain;
 
 import static org.assertj.core.api.AssertionsForClassTypes.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,13 +26,15 @@ class FootprintTest extends MonkeySupport {
 			.sample();
 		Footprint footprint = footprintFactory.create(userId, param);
 
-		assertThat(footprint.getId()).isNull();
-		assertThat(footprint.getTarget()).isNotNull();
-		assertThat(footprint.getWriter()).isNotNull();
-		assertThat(footprint.getType()).isNotNull().isIn(Footprint.Type.FREE, Footprint.Type.KPT);
-		assertThat(footprint.getTitle()).isNotNull();
-		assertThat(footprint.isVisible()).isNotNull();
-		assertThat(footprint.isDeleted()).isFalse();
+		assertAll(
+			() -> assertThat(footprint.getId()).isNull(),
+			() -> assertThat(footprint.getTarget()).isNotNull(),
+			() -> assertThat(footprint.getWriter()).isNotNull(),
+			() -> assertThat(footprint.getType()).isNotNull().isIn(Footprint.Type.FREE, Footprint.Type.KPT),
+			() -> assertThat(footprint.getTitle()).isNotNull(),
+			() -> assertThat(footprint.isVisible()).isNotNull(),
+			() -> assertThat(footprint.isDeleted()).isFalse()
+		);
 	}
 
 	@Test

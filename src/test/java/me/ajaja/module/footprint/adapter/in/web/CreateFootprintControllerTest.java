@@ -31,9 +31,7 @@ class CreateFootprintControllerTest extends WebMvcTestSupport {
 			.set("tags", List.of("tag1", "tag2"))
 			.sample();
 
-		Long createFootprintId = 1L;
-
-		when(createFootprintUseCase.create(anyLong(), any())).thenReturn(createFootprintId);
+		doNothing().when(createFootprintUseCase).create(anyLong(), any());
 
 		// when
 		var result = mockMvc.perform(post(FOOTPRINT_END_POINT)
@@ -60,7 +58,6 @@ class CreateFootprintControllerTest extends WebMvcTestSupport {
 	@DisplayName("발자취 유형에 해당 하는 항목 값이 빈 문자일 때 대해 발자취 생성에 실패한다.")
 	void createFootprint_Fail_By_InvalidContents() throws Exception {
 		// given
-		Long userId = 1L;
 		FootprintRequest.Create request = sut.giveMeBuilder(FootprintRequest.Create.class)
 			.set("param.content", "")
 			.set("tags", List.of("tag1", "tag2"))
