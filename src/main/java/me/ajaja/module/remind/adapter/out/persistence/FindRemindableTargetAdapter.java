@@ -6,6 +6,7 @@ import static me.ajaja.module.user.adapter.out.persistence.model.QUserEntity.*;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -19,6 +20,7 @@ import me.ajaja.module.remind.domain.Remind;
 import me.ajaja.module.remind.mapper.RemindMapper;
 
 @Repository
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class FindRemindableTargetAdapter implements FindRemindableTargetPort {
 	private final JPAQueryFactory queryFactory;
