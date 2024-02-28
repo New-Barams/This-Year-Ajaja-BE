@@ -1,6 +1,5 @@
 package me.ajaja.module.footprint.application.port;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -12,18 +11,12 @@ import org.mockito.Mock;
 import me.ajaja.common.support.MockTestSupport;
 import me.ajaja.module.footprint.application.port.out.CreateFootprintPort;
 import me.ajaja.module.footprint.domain.Footprint;
-import me.ajaja.module.footprint.domain.FootprintFactory;
+import me.ajaja.module.footprint.domain.Title;
 import me.ajaja.module.footprint.dto.FootprintRequest;
 
 class CreateFootprintServiceTest extends MockTestSupport {
-	private static final String PHONE_NUMBER = "01012345678";
-	private static final String DEFAULT_EMAIL = "Ajaja@me.com";
-
 	@InjectMocks
 	private CreateFootprintService createFootprintService;
-
-	@Mock
-	private FootprintFactory footprintFactory;
 
 	@Mock
 	private CreateFootprintPort createFootprintPort;
@@ -36,6 +29,7 @@ class CreateFootprintServiceTest extends MockTestSupport {
 		param = sut.giveMeOne(FootprintRequest.Create.class);
 
 		footprint = sut.giveMeBuilder(Footprint.class)
+			.set("title", Title.init("title"))
 			.set("type", Footprint.Type.FREE)
 			.set("content", "contents")
 			.sample();
@@ -48,16 +42,12 @@ class CreateFootprintServiceTest extends MockTestSupport {
 		Long userId = 1L;
 		Long expectedFootprintId = 1L;
 
-		when(footprintFactory.init(anyLong(), eq(param))).thenReturn(footprint);
-		when(createFootprintPort.create(footprint)).thenReturn(expectedFootprintId);
+		when(createFootprintPort.create(any())).thenReturn(expectedFootprintId);
 
 		// when
 		createFootprintService.create(userId, param);
 
 		// then
-		assertAll("verify stubbing method",
-			() -> verify(footprintFactory, times(1)).init(anyLong(), eq(param)),
-			() -> verify(createFootprintPort, times(1)).create(footprint)
-		);
+		verify(createFootprintPort, times(1)).create(any());
 	}
 }

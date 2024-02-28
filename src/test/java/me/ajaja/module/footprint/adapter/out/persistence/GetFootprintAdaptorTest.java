@@ -12,15 +12,13 @@ import org.springframework.test.context.ContextConfiguration;
 
 import me.ajaja.common.support.JpaTestSupport;
 import me.ajaja.module.footprint.domain.Footprint;
-import me.ajaja.module.footprint.domain.FootprintFactory;
 import me.ajaja.module.footprint.dto.FootprintRequest;
 import me.ajaja.module.footprint.mapper.FootprintMapperImpl;
 
 @ContextConfiguration(classes = {
 	CreateFootprintAdaptor.class,
 	GetFootprintAdaptor.class,
-	FootprintMapperImpl.class,
-	FootprintFactory.class
+	FootprintMapperImpl.class
 })
 class GetFootprintAdaptorTest extends JpaTestSupport {
 	private final String userCreateQuery = """
@@ -50,9 +48,6 @@ class GetFootprintAdaptorTest extends JpaTestSupport {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
-	@Autowired
-	private FootprintFactory footprintFactory;
-
 	@BeforeEach
 	void createTempDate() {
 		jdbcTemplate.update(userCreateQuery);
@@ -73,7 +68,7 @@ class GetFootprintAdaptorTest extends JpaTestSupport {
 			.set("content", "content")
 			.sample();
 
-		Footprint freeFootprint = footprintFactory.init(userId, param);
+		Footprint freeFootprint = Footprint.init(userId, param);
 
 		Long createdId = createFootprintAdaptor.create(freeFootprint);
 

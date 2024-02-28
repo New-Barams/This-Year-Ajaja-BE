@@ -11,8 +11,6 @@ import me.ajaja.common.support.MonkeySupport;
 import me.ajaja.module.footprint.dto.FootprintRequest;
 
 class FootprintTest extends MonkeySupport {
-	private final FootprintFactory footprintFactory = new FootprintFactory();
-
 	@Test
 	@DisplayName("조건에 맞는 입력 값에 따라 유형별 발자취 도메인 생성에 성공 한다.")
 	void create_FreeFootprint_Success_WithNoException() {
@@ -24,7 +22,7 @@ class FootprintTest extends MonkeySupport {
 			.set("problemContent", "problemContent")
 			.set("tryContent", "tryContent")
 			.sample();
-		Footprint footprint = footprintFactory.init(userId, param);
+		Footprint footprint = Footprint.init(userId, param);
 
 		assertAll(
 			() -> assertThat(footprint.getId()).isNull(),
@@ -50,6 +48,6 @@ class FootprintTest extends MonkeySupport {
 			.sample();
 
 		assertThatExceptionOfType(ConstraintViolationException.class).isThrownBy(
-			() -> footprintFactory.init(userId, param));
+			() -> Footprint.init(userId, param));
 	}
 }
