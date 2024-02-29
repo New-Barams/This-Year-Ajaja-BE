@@ -21,13 +21,9 @@ public class Ajaja {
 	}
 
 	private Long id;
-
 	private Target target;
-
 	private Receiver receiver;
-
 	private boolean canceled;
-
 	private Type type;
 	private Long count;
 
@@ -78,6 +74,10 @@ public class Ajaja {
 
 	public boolean isEqualsDefault() {
 		return this.equals(Ajaja.defaultValue());
+	}
+
+	public boolean isValidNumber() {
+		return !Objects.equals(this.getPhoneNumber(), "01000000000");
 	}
 
 	public String getType() {
