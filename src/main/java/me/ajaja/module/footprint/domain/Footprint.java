@@ -3,6 +3,7 @@ package me.ajaja.module.footprint.domain;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import me.ajaja.global.common.SelfValidating;
+import me.ajaja.module.footprint.dto.FootprintRequest;
 
 @Getter
 @AllArgsConstructor
@@ -22,5 +23,28 @@ public abstract class Footprint extends SelfValidating<Footprint> {
 
 	public Footprint(Target target, Writer writer, Type type, Title title, boolean visible) {
 		this(null, target, writer, type, title, visible, false);
+	}
+
+	public static Footprint init(Long userId, FootprintRequest.Create param) {
+		return switch (param.getType()) {
+			case FREE -> new FreeFootprint(
+				Target.init(param.getTargetId()),
+				Writer.init(userId),
+				param.getType(),
+				Title.init(param.getTitle()),
+				param.isVisible(),
+				param.getContent()
+			);
+			case KPT -> new KptFootprint(
+				Target.init(param.getTargetId()),
+				Writer.init(userId),
+				param.getType(),
+				Title.init(param.getTitle()),
+				param.isVisible(),
+				param.getKeepContent(),
+				param.getProblemContent(),
+				param.getTryContent()
+			);
+		};
 	}
 }

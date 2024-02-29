@@ -18,4 +18,8 @@ public class Title extends SelfValidating<Title> {
 		this.title = title;
 		this.validateSelf();
 	}
+
+	public static Title init(String title) {
+		return new Title(title);
+	}
 }

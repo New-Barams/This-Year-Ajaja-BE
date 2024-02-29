@@ -1,0 +1,10 @@
+management:
+  endpoints:
+    enabled-by-default: false
+    jmx:
+      exposure:
+        exclude: "*"
+
+  endpoint:
+    health:
+      enabled: true

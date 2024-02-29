@@ -8,6 +8,7 @@ public enum ApiTag {
 	FEEDBACK("피드백 API"),
 	PLAN("계획 API"),
 	REMIND("리마인드 API"),
+	FOOTPRINT("발자취 API"),
 	USER("사용자 API");
 
 	final String content;
