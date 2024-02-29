@@ -11,14 +11,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.ajaja.global.exception.AjajaException;
 import me.ajaja.module.remind.application.model.RemindStrategyFactory;
-import me.ajaja.module.remind.application.port.in.SendTestRemindUseCase;
+import me.ajaja.module.remind.application.port.in.SendTrialRemindUseCase;
 import me.ajaja.module.remind.application.port.out.FindRemindAddressPort;
 import me.ajaja.module.remind.domain.Remind;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class SendTestRemindService implements SendTestRemindUseCase {
+public class SendTrialRemindService implements SendTrialRemindUseCase {
 	private static final String MAIN_PAGE_URL = "https://www.ajaja.me/home";
 	private static final int MAX_SEND_COUNT = 3;
 	private static final int INIT_COUNT_VALUE = 1;
@@ -30,14 +30,14 @@ public class SendTestRemindService implements SendTestRemindUseCase {
 
 	@Override
 	public String send(Long userId) {
-		Remind address = findRemindAddressPort.findAddressByUserId(userId);
+		Remind address = findRemindAddressPort.findRemindByUserId(userId);
 		sendRemind(address);
 		return address.getRemindType();
 	}
 
 	private void sendRemind(Remind address) {
 		Integer sendCount = getSendCount(address.getPhoneNumber());
-		factory.get(address.getRemindType()).sendTest(address, MAIN_PAGE_URL);
+		factory.get(address.getRemindType()).sendTrial(address, MAIN_PAGE_URL);
 		increaseCount(address.getPhoneNumber(), sendCount);
 	}
 

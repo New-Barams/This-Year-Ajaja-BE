@@ -35,6 +35,9 @@ public class RemindEntity extends BaseEntity<RemindEntity> {
 	@Column(nullable = false, name = "remind_type", length = 20)
 	private String type;
 
+	@Column(nullable = false, name = "end_point", length = 10)
+	private String endPoint;
+
 	@Column(nullable = false)
 	private boolean deleted;
 

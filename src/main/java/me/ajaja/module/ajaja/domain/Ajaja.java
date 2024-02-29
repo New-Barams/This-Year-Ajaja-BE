@@ -22,31 +22,32 @@ public class Ajaja {
 
 	private Long id;
 
-	private Long targetId;
+	private Target target;
 
-	private Long userId;
+	private Receiver receiver;
 
 	private boolean canceled;
 
 	private Type type;
+	private Long count;
 
-	private Ajaja(Long targetId, Long userId, Type type) {
-		this.targetId = targetId;
-		this.userId = userId;
+	private Ajaja(String title, Long targetId, Long userId, String email, String phoneNumber, Type type) {
+		this.target = new Target(targetId, title);
+		this.receiver = new Receiver(userId, email, phoneNumber);
 		this.canceled = false;
 		this.type = type;
 	}
 
-	public static Ajaja plan(Long targetId, Long userId) {
-		return new Ajaja(targetId, userId, Type.PLAN);
+	public static Ajaja plan(String title, Long targetId, Long userId) {
+		return new Ajaja(title, targetId, userId, null, null, Type.PLAN);
 	}
 
-	public static Ajaja footprint(Long targetId, Long userId) {
-		return new Ajaja(targetId, userId, Type.FOOTPRINT);
+	public static Ajaja footprint(String title, Long targetId, Long userId) {
+		return new Ajaja(title, targetId, userId, null, null, Type.FOOTPRINT);
 	}
 
 	public static Ajaja defaultValue() {
-		return new Ajaja(DEFAULT_TARGET_ID, DEFAULT_USER_ID, Type.DEFAULT);
+		return new Ajaja(null, DEFAULT_TARGET_ID, DEFAULT_USER_ID, null, null, Type.DEFAULT);
 	}
 
 	@Override
@@ -61,13 +62,14 @@ public class Ajaja {
 
 		Ajaja ajaja = (Ajaja)obj;
 
-		return Objects.equals(targetId, ajaja.targetId) && Objects.equals(userId, ajaja.userId)
+		return Objects.equals(target.getTargetId(), ajaja.target.getTargetId())
+			&& Objects.equals(receiver.getUserId(), ajaja.receiver.getUserId())
 			&& type == ajaja.type;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(targetId, userId, type);
+		return Objects.hash(target.getTargetId(), receiver.getUserId(), type);
 	}
 
 	public void switchStatus() {
@@ -80,5 +82,25 @@ public class Ajaja {
 
 	public String getType() {
 		return this.type.name();
+	}
+
+	public Long getUserId() {
+		return receiver.getUserId();
+	}
+
+	public String getPhoneNumber() {
+		return receiver.getPhoneNumber();
+	}
+
+	public String getEmail() {
+		return receiver.getEmail();
+	}
+
+	public String getTitle() {
+		return target.getTitle();
+	}
+
+	public Long getTargetId() {
+		return target.getTargetId();
 	}
 }

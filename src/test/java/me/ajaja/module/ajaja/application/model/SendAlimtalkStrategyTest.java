@@ -1,11 +1,10 @@
-package me.ajaja.module.remind.adapter.out.infra;
+package me.ajaja.module.ajaja.application.model;
 
 import static java.lang.Thread.*;
 import static org.mockito.BDDMockito.*;
 
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -18,16 +17,19 @@ import me.ajaja.global.common.TimeValue;
 import me.ajaja.infra.feign.ncp.client.NaverCloudProperties;
 import me.ajaja.infra.feign.ncp.client.NaverSendAlimtalkFeignClient;
 import me.ajaja.infra.feign.ncp.model.NaverResponse;
-import me.ajaja.module.remind.application.port.out.FindRemindableTargetsPort;
-import me.ajaja.module.remind.domain.Receiver;
-import me.ajaja.module.remind.domain.Remind;
-import me.ajaja.module.remind.domain.Target;
+import me.ajaja.module.ajaja.domain.Ajaja;
+import me.ajaja.module.ajaja.domain.AjajaQueryRepository;
+import me.ajaja.module.ajaja.mapper.AjajaMapper;
+import me.ajaja.module.remind.application.model.RemindableAjaja;
+import me.ajaja.module.remind.application.port.out.SaveAjajaRemindPort;
 import me.ajaja.module.remind.util.RemindExceptionHandler;
 
-class SendAlimtalkAdapterTest extends MockTestSupport {
+class SendAlimtalkStrategyTest extends MockTestSupport {
 	@InjectMocks
-	private SendAlimtalkAdapter sendAlimtalkAdapter;
+	private SendAlimtalkStrategy sendAlimtalkStrategy;
 
+	@Mock
+	private AjajaQueryRepository ajajaQueryRepository;
 	@Mock
 	private NaverSendAlimtalkFeignClient feignClient;
 	@Mock
@@ -35,51 +37,51 @@ class SendAlimtalkAdapterTest extends MockTestSupport {
 	@Mock
 	private RemindExceptionHandler exceptionHandler;
 	@Mock
-	private FindRemindableTargetsPort findRemindableTargetsPort;
-	private Remind remind;
+	private SaveAjajaRemindPort saveAjajaRemindPort;
+	@Mock
+	private AjajaMapper mapper;
 
-	@BeforeEach
-	void setUp() {
-		Receiver receiver = new Receiver(1L, "KAKAO", "yamsang2002@naver.com", null);
-		Target target = new Target(1L, "화이팅");
-		String message = "화이팅";
-		remind = new Remind(receiver, target, message, Remind.Type.AJAJA, 3, 1);
-	}
+	private Ajaja domain = sut.giveMeOne(Ajaja.class);
 
 	@Test
 	@DisplayName("응원 가능한 아좌좌 수만큼 리마인드를 전송한다.")
 	void send_Success_WithNoException() throws InterruptedException {
 		// given
+		List<RemindableAjaja> ajajas = sut.giveMe(RemindableAjaja.class, 10);
+
 		NaverResponse.AlimTalk response = sut.giveMeBuilder(NaverResponse.AlimTalk.class)
 			.set("statusCode", "202")
 			.sample();
 
-		given(findRemindableTargetsPort.findAllRemindablePlansByType(anyString(), anyString(), any()))
-			.willReturn(List.of(remind));
+		given(ajajaQueryRepository.findRemindableAjajasByEndPoint("KAKAO")).willReturn(ajajas);
 		given(feignClient.send(any(), any())).willReturn(response);
+		given(mapper.toDomain(any(RemindableAjaja.class))).willReturn(domain);
 
 		// when , then
-		sendAlimtalkAdapter.send("MORNING", TimeValue.now());
+		sendAlimtalkStrategy.send(TimeValue.now());
 		sleep(100); // 비동기 메소드 처리 시간 확보
-		then(feignClient).should(times(1)).send(any(), any());
+		then(feignClient).should(times(10)).send(any(), any());
 	}
 
 	@ParameterizedTest
 	@ValueSource(strings = {"400", "401", "403", "404", "500"})
-	@DisplayName("핸들링 가능한 예외가 발생한다면 재시도를 5회 진행한다.")
+	@DisplayName("핸들링 가능한 예외가 발생한다면 리마인드 예외 핸들러에서 처리한다.")
 	void send_Fail_ByExternalApiFailed(String errorCode) throws InterruptedException {
 		// given
+		RemindableAjaja ajaja = sut.giveMeOne(RemindableAjaja.class);
+
 		NaverResponse.AlimTalk response = sut.giveMeBuilder(NaverResponse.AlimTalk.class)
 			.set("statusCode", errorCode)
 			.sample();
 
-		given(findRemindableTargetsPort.findAllRemindablePlansByType(anyString(), anyString(), any()))
-			.willReturn(List.of(remind));
+		given(ajajaQueryRepository.findRemindableAjajasByEndPoint("KAKAO")).willReturn(List.of(ajaja));
 		given(feignClient.send(any(), any())).willReturn(response);
+		given(mapper.toDomain(any(RemindableAjaja.class))).willReturn(domain);
+		doNothing().when(exceptionHandler).handleRemindException(anyString(), anyString(), anyString());
 
 		// when , then
-		sendAlimtalkAdapter.send("MORNING", TimeValue.now());
+		sendAlimtalkStrategy.send(TimeValue.now());
 		sleep(100);
-		then(feignClient).should(times(5)).send(any(), any());
+		then(exceptionHandler).should(times(1)).handleRemindException(anyString(), anyString(), anyString());
 	}
 }

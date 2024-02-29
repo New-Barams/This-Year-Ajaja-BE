@@ -17,6 +17,8 @@ public final class NaverRequest {
 	@AllArgsConstructor(access = AccessLevel.PRIVATE)
 	@JsonIgnoreProperties(ignoreUnknown = true)
 	public static class Alimtalk {
+		private static final String FEEDBACK_BUTTON_NAME = "피드백 하러가기";
+		private static final String PLAN_BUTTON_NAME = "계획 확인하기";
 		private static final String PLAN_BASE_URL = "https://www.ajaja.me/plans/";
 		private static final String CHANNEL = "@올해도아좌좌";
 
@@ -31,16 +33,18 @@ public final class NaverRequest {
 		public static Alimtalk remind(String to, String planName, String message, String feedbackUrl) {
 			ZonedDateTime deadLine = TimeValue.now().oneMonthLater();
 			String content = REMIND.content(planName, message, deadLine.getMonthValue(), deadLine.getDayOfMonth());
-			return of(REMIND.getTemplateCode(), to, content, feedbackUrl);
+			return of(REMIND.getTemplateCode(), to, content, feedbackUrl, FEEDBACK_BUTTON_NAME);
 		}
 
 		public static Alimtalk ajaja(String to, Long ajajaCount, String planName, Long planId) {
 			String content = AJAJA.content(ajajaCount, planName);
-			return of(AJAJA.getTemplateCode(), to, content, PLAN_BASE_URL + planId);
+			return of(AJAJA.getTemplateCode(), to, content, PLAN_BASE_URL + planId, PLAN_BUTTON_NAME);
 		}
 
-		private static Alimtalk of(String templateCode, String to, String content, String buttonUrl) {
-			Message message = new Message(to, content, buttonUrl);
+		private static Alimtalk of(
+			String templateCode, String to, String content, String buttonUrl, String buttonName
+		) {
+			Message message = new Message(to, content, buttonUrl, buttonName);
 			return new Alimtalk(templateCode, List.of(message));
 		}
 
@@ -61,26 +65,25 @@ public final class NaverRequest {
 		private final String content;
 		private final List<Button> buttons;
 
-		public Message(String to, String content, String link) {
+		public Message(String to, String content, String link, String buttonName) {
 			this.to = to;
 			this.content = content;
-			this.buttons = List.of(new Button(link));
+			this.buttons = List.of(new Button(link, buttonName));
 		}
 
 		@Getter
 		@JsonIgnoreProperties(ignoreUnknown = true)
 		private static class Button {
 			private static final String WEB_LINK_BUTTON_TYPE = "WL";
-			private static final String BUTTON_NAME = "피드백 하러가기";
 
 			private final String type;
 			private final String name;
 			private final String linkMobile;
 			private final String linkPc;
 
-			private Button(String link) {
+			private Button(String link, String buttonName) {
 				this.type = WEB_LINK_BUTTON_TYPE;
-				this.name = BUTTON_NAME;
+				this.name = buttonName;
 				this.linkMobile = link;
 				this.linkPc = link;
 			}

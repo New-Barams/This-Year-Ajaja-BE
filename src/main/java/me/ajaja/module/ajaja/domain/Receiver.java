@@ -1,4 +1,4 @@
-package me.ajaja.module.remind.domain;
+package me.ajaja.module.ajaja.domain;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -6,20 +6,13 @@ import me.ajaja.global.common.SelfValidating;
 
 @Getter
 public class Receiver extends SelfValidating<Receiver> {
-	public enum RemindType {
-		KAKAO,
-		EMAIL
-	}
-
 	@NotNull
-	private final Long id;
+	private final Long userId;
 	private final String email;
 	private final String phoneNumber;
-	private final RemindType type;
 
-	public Receiver(Long id, String type, String email, String phoneNumber) {
-		this.id = id;
-		this.type = RemindType.valueOf(type);
+	public Receiver(Long userId, String email, String phoneNumber) {
+		this.userId = userId;
 		this.email = email;
 		this.phoneNumber = phoneNumber;
 		validateSelf();

@@ -19,12 +19,12 @@ import me.ajaja.common.util.RestDocument;
 import me.ajaja.global.exception.AjajaException;
 import me.ajaja.global.exception.ErrorCode;
 
-class SendTestRemindControllerTest extends WebMvcTestSupport {
+class SendTrialRemindControllerTest extends WebMvcTestSupport {
 
 	@ApiTest
 	void sendTestRemind_Success_WithNoException() throws Exception {
 		// given
-		given(sendTestRemindUseCase.send(anyLong())).willReturn("EMAIL");
+		given(sendTrialRemindUseCase.send(anyLong())).willReturn("EMAIL");
 
 		// when
 		var result = mockMvc.perform(post(REMIND_END_POINT + "/test")
@@ -57,7 +57,7 @@ class SendTestRemindControllerTest extends WebMvcTestSupport {
 	void sendTestRemind_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
 		// given
 		AjajaException tokenException = new AjajaException(errorCode);
-		when(sendTestRemindUseCase.send(anyLong())).thenThrow(tokenException);
+		when(sendTrialRemindUseCase.send(anyLong())).thenThrow(tokenException);
 
 		// when
 		var result = mockMvc.perform(post(REMIND_END_POINT + "/test")
@@ -82,7 +82,7 @@ class SendTestRemindControllerTest extends WebMvcTestSupport {
 	void sendTestRemind_Fail_ByRequestOverMax() throws Exception {
 		// given
 		AjajaException requestException = new AjajaException(REQUEST_OVER_MAX);
-		when(sendTestRemindUseCase.send(1L)).thenThrow(requestException);
+		when(sendTrialRemindUseCase.send(1L)).thenThrow(requestException);
 
 		// when
 		var result = mockMvc.perform(post(REMIND_END_POINT + "/test")
@@ -107,7 +107,7 @@ class SendTestRemindControllerTest extends WebMvcTestSupport {
 	void sendTestRemind_Fail_ByTaskFailed() throws Exception {
 		// given
 		AjajaException taskFailedException = new AjajaException(REMIND_TASK_FAILED);
-		when(sendTestRemindUseCase.send(1L)).thenThrow(taskFailedException);
+		when(sendTrialRemindUseCase.send(1L)).thenThrow(taskFailedException);
 
 		// when
 		var result = mockMvc.perform(post(REMIND_END_POINT + "/test")

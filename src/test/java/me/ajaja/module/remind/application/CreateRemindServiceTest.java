@@ -25,13 +25,13 @@ class CreateRemindServiceTest extends MockTestSupport {
 	@DisplayName("보낸 리마인드 정보를 담은 리마인드 객체를 저장한다.")
 	void save_Success_WithNoException() {
 		// given
-		Receiver receiver = new Receiver(1L, null, "yamsang2002@naver.com", null);
+		Receiver receiver = new Receiver(1L, "KAKAO", "yamsang2002@naver.com", null);
 		Target target = new Target(1L, "화이팅");
 		String message = "화이팅";
 		Remind remind = new Remind(receiver, target, message, Remind.Type.AJAJA, 3, 1);
 
 		// when
-		createRemindService.create(remind, TimeValue.now());
+		createRemindService.create(remind, TimeValue.now(), "EMAIL");
 
 		// then
 		then(saveRemindAdapter).should(times(1)).save(any());

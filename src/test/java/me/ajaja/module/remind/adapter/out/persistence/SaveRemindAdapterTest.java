@@ -31,7 +31,7 @@ class SaveRemindAdapterTest extends JpaTestSupport {
 	void save_Success_WithNoException() {
 		// given
 		Remind remind = new Remind(
-			new Receiver(1L, null, null, null),
+			new Receiver(1L, "KAKAO", null, null),
 			new Target(1L, null), "화이팅", Remind.Type.PLAN,
 			2,
 			17);

@@ -14,9 +14,10 @@ import me.ajaja.module.remind.domain.Remind;
 public class CreateRemindService {
 	private final SaveRemindPort saveRemindPort;
 
-	public void create(Remind send, TimeValue time) {
+	public void create(Remind send, TimeValue time, String endPoint) {
 		Remind remind
-			= Remind.plan(send.getUserId(), send.getPlanId(), send.getMessage(), time.getMonth(), time.getDate());
+			= Remind.plan(send.getUserId(), endPoint, send.getPlanId(), send.getMessage(), time.getMonth(),
+			time.getDate());
 		saveRemindPort.save(remind);
 	}
 }

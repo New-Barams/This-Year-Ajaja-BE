@@ -24,7 +24,7 @@ import me.ajaja.module.plan.domain.Plan;
 import me.ajaja.module.plan.domain.PlanStatus;
 import me.ajaja.module.plan.dto.PlanRequest;
 import me.ajaja.module.plan.dto.PlanResponse;
-import me.ajaja.module.remind.application.port.out.FindRemindableTargetPort;
+import me.ajaja.module.remind.application.port.out.FindRemindableTargetsPort;
 import me.ajaja.module.remind.application.port.out.FindTargetPort;
 import me.ajaja.module.user.adapter.out.persistence.UserJpaRepository;
 import me.ajaja.module.user.adapter.out.persistence.model.UserEntity;
@@ -41,7 +41,7 @@ class PlanQueryRepositoryTest extends MonkeySupport {
 	@Autowired
 	private FindPlanDetailPort findPlanDetailPort;
 	@Autowired
-	private FindRemindableTargetPort findRemindableTargetPort;
+	private FindRemindableTargetsPort findRemindableTargetsPort;
 	@Autowired
 	private FindTargetPort findTargetPort;
 	@Autowired
@@ -222,7 +222,7 @@ class PlanQueryRepositoryTest extends MonkeySupport {
 	void findAllRemindablePlan_Success_WithNoException() {
 		// when,then
 		Assertions.assertThatNoException().isThrownBy(
-			() -> findRemindableTargetPort.findAllRemindablePlan("MORNING", "EMAIL", TimeValue.now())
+			() -> findRemindableTargetsPort.findAllRemindablePlansByType("MORNING", "EMAIL", TimeValue.now())
 		);
 	}
 

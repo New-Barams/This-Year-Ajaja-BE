@@ -10,19 +10,19 @@ import lombok.RequiredArgsConstructor;
 import me.ajaja.global.common.AjajaResponse;
 import me.ajaja.global.security.annotation.Authorization;
 import me.ajaja.global.util.SecurityUtil;
-import me.ajaja.module.remind.application.port.in.SendTestRemindUseCase;
+import me.ajaja.module.remind.application.port.in.SendTrialRemindUseCase;
 
 @RestController
 @RequiredArgsConstructor
-public class SendTestRemindController {
-	private final SendTestRemindUseCase sendTestRemindUseCase;
+public class SendTrialRemindController {
+	private final SendTrialRemindUseCase sendTrialRemindUseCase;
 
 	@Authorization
 	@PostMapping("/reminds/test")
 	@ResponseStatus(OK)
-	public AjajaResponse<String> sendTestRemind() {
+	public AjajaResponse<String> sendTrialRemind() {
 		Long userId = SecurityUtil.getUserId();
-		String remindType = sendTestRemindUseCase.send(userId);
+		String remindType = sendTrialRemindUseCase.send(userId);
 		return AjajaResponse.ok(remindType);
 	}
 }
