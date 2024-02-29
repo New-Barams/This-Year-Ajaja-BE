@@ -34,6 +34,7 @@ import me.ajaja.module.auth.application.port.in.ReissueTokenUseCase;
 import me.ajaja.module.feedback.application.LoadFeedbackInfoService;
 import me.ajaja.module.feedback.application.LoadTotalAchieveService;
 import me.ajaja.module.feedback.application.UpdateFeedbackService;
+import me.ajaja.module.footprint.application.port.in.CreateFootprintUseCase;
 import me.ajaja.module.plan.application.port.in.CreatePlanUseCase;
 import me.ajaja.module.plan.application.port.in.DeletePlanUseCase;
 import me.ajaja.module.plan.application.port.in.LoadPlanDetailUseCase;
@@ -70,6 +71,7 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 	protected static final String PLAN_END_POINT = "/plans";
 	protected static final String FEEDBACK_END_POINT = "/feedbacks";
 	protected static final String REMIND_END_POINT = "/reminds";
+	protected static final String FOOTPRINT_END_POINT = "/footprints";
 	protected static final String BEARER_TOKEN = "Bearer eyJhbGxMiJ9.eyJzWpvdyJ9.avFKonhbIIhEg8H1dycQkhQ";
 
 	@Autowired
@@ -171,4 +173,8 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 	protected FindTargetRemindQuery findTargetRemindQuery;
 	@MockBean
 	protected SendTestRemindUseCase sendTestRemindUseCase;
+
+	// footprint
+	@MockBean
+	protected CreateFootprintUseCase createFootprintUseCase;
 }

@@ -9,28 +9,27 @@ import org.springframework.test.context.ContextConfiguration;
 
 import me.ajaja.common.support.JpaTestSupport;
 import me.ajaja.module.footprint.domain.Footprint;
-import me.ajaja.module.footprint.domain.FootprintFactory;
-import me.ajaja.module.footprint.dto.FootprintParam;
+import me.ajaja.module.footprint.dto.FootprintRequest;
 import me.ajaja.module.footprint.mapper.FootprintMapperImpl;
 
-@ContextConfiguration(classes = {CreateFootprintAdaptor.class, FootprintMapperImpl.class, FootprintFactory.class})
+@ContextConfiguration(classes = {CreateFootprintAdaptor.class, FootprintMapperImpl.class})
 class CreateFootprintAdaptorTest extends JpaTestSupport {
 	@Autowired
 	private CreateFootprintAdaptor createFootprintAdaptor;
-
-	@Autowired
-	private FootprintFactory footprintFactory;
 
 	@Test
 	@DisplayName("자유 형식 발자취 생성 매핑 기능 구현 테스트")
 	void create_FreeFootprint_Success() {
 		// given
-		FootprintParam.Create param = sut.giveMeBuilder(FootprintParam.Create.class)
+		Long userId = 1L;
+
+		FootprintRequest.Create param = sut.giveMeBuilder(FootprintRequest.Create.class)
+			.set("title", "title")
 			.set("type", Footprint.Type.FREE)
 			.set("content", "content")
 			.sample();
 
-		Footprint freeFootprint = footprintFactory.create(param);
+		Footprint freeFootprint = Footprint.init(userId, param);
 
 		// when
 		Long footprintEntityId = createFootprintAdaptor.create(freeFootprint);
