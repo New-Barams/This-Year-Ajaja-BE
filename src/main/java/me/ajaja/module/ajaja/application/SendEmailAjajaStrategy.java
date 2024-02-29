@@ -37,14 +37,14 @@ class SendEmailAjajaStrategy extends SendAjajaStrategy implements EmailSendable 
 	@Async
 	@Override
 	public void send() {
-		loadRemindableAjajas(getEndPoint()).forEach(this::proceed);
+		loadRemindableAjajas(endPoint()).forEach(this::proceed);
 	}
 
 	@Override
 	protected void proceed(Ajaja ajaja) {
 		CompletableFuture
 			.supplyAsync(emailSupplier(ajaja))
-			.thenAccept(tries -> onSuccess(ajaja, createMessage(ajaja.getTitle(), ajaja.getCount()), getEndPoint(), tries))
+			.thenAccept(tries -> onSuccess(ajaja, createMessage(ajaja.getTitle(), ajaja.getCount()), endPoint(), tries))
 			.exceptionally(super::handleFail);
 	}
 
@@ -59,8 +59,8 @@ class SendEmailAjajaStrategy extends SendAjajaStrategy implements EmailSendable 
 		return () -> {
 			int attempts = 1;
 			while (attempts <= MAX_TRY) {
-				int statusCode =
-					sesSendAjajaRemindService.send(ajaja.getEmail(), ajaja.getTitle(), ajaja.getCount(), ajaja.getTargetId());
+				int statusCode = sesSendAjajaRemindService
+					.send(ajaja.getEmail(), ajaja.getTitle(), ajaja.getCount(), ajaja.getTargetId());
 
 				if (isError(statusCode)) {
 					checkAttempts(attempts);

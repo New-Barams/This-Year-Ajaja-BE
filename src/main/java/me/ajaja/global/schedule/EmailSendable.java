@@ -6,12 +6,12 @@ import java.util.function.Supplier;
 public interface EmailSendable extends Sendable {
 
 	@Override
-	default List<Integer> getErrors() {
+	default List<Integer> errors() {
 		return List.of(400, 408, 500, 503);
 	}
 
 	@Override
-	default String getEndPoint() {
+	default String endPoint() {
 		return "EMAIL";
 	}
 

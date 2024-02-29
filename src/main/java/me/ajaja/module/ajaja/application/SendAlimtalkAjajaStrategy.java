@@ -39,18 +39,19 @@ class SendAlimtalkAjajaStrategy extends SendAjajaStrategy implements AlimtalkSen
 	@Async
 	@Override
 	public void send() {
-		loadRemindableAjajas(getEndPoint()).stream()
+		loadRemindableAjajas(endPoint()).stream()
 			.filter(Ajaja::isValidNumber)
 			.forEach(this::proceed);
 	}
 
 	@Override
 	protected void proceed(Ajaja ajaja) {
-		Alimtalk request = Alimtalk.ajaja(ajaja.getPhoneNumber(), ajaja.getCount(), ajaja.getTitle(), ajaja.getTargetId());
+		Alimtalk request =
+			Alimtalk.ajaja(ajaja.getPhoneNumber(), ajaja.getCount(), ajaja.getTitle(), ajaja.getTargetId());
 
 		CompletableFuture
 			.supplyAsync(alimtalkSupplier(request))
-			.thenAccept(tries -> super.onSuccess(ajaja, request.getMessages().get(0).getContent(), getEndPoint(), tries))
+			.thenAccept(tries -> super.onSuccess(ajaja, request.getMessages().get(0).getContent(), endPoint(), tries))
 			.exceptionally(super::handleFail);
 	}
 

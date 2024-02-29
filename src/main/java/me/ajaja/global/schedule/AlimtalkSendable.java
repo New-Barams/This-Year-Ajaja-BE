@@ -6,12 +6,12 @@ import java.util.function.Supplier;
 public interface AlimtalkSendable extends Sendable {
 
 	@Override
-	default List<Integer> getErrors() {
+	default List<Integer> errors() {
 		return List.of(400, 401, 403, 404, 500);
 	}
 
 	@Override
-	default String getEndPoint() {
+	default String endPoint() {
 		return "KAKAO";
 	}
 

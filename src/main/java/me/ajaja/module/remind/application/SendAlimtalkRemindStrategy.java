@@ -36,12 +36,10 @@ class SendAlimtalkRemindStrategy extends SendRemindStrategy implements AlimtalkS
 	@Async
 	@Override
 	public void send(String remindTime, TimeValue now) {
-		loadRemindables(remindTime, getEndPoint(), now).stream()
+		loadRemindables(remindTime, endPoint(), now).stream()
 			.filter(Remind::isValidNumber)
-			.forEach(remind ->
-				proceed(remind, now,
-					() -> toFeedbackUrl(remind.getTitle(), now.getMonth(), now.getDate(), remind.getPlanId()))
-			);
+			.forEach(remind -> proceed(remind, now, () ->
+				toFeedbackUrl(remind.getTitle(), now.getMonth(), now.getDate(), remind.getPlanId())));
 	}
 
 	@Async
@@ -56,7 +54,7 @@ class SendAlimtalkRemindStrategy extends SendRemindStrategy implements AlimtalkS
 
 		CompletableFuture
 			.supplyAsync(alimtalkSupplier(request))
-			.thenAccept(tries -> super.onSuccess(remind, getEndPoint(), now, tries))
+			.thenAccept(tries -> super.onSuccess(remind, endPoint(), now, tries))
 			.exceptionally(super::handleFail);
 	}
 

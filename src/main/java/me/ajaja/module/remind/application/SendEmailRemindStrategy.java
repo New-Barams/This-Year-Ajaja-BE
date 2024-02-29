@@ -33,10 +33,9 @@ class SendEmailRemindStrategy extends SendRemindStrategy implements EmailSendabl
 	@Async
 	@Override
 	public void send(String remindTime, TimeValue now) {
-		loadRemindables(remindTime, getEndPoint(), now)
-			.forEach(remind ->
-				proceed(remind, now, () -> toFeedbackUrl(remind.getTitle(), now.getMonth(), now.getDate(), remind.getPlanId()))
-			);
+		loadRemindables(remindTime, endPoint(), now)
+			.forEach(remind -> proceed(remind, now, () ->
+				toFeedbackUrl(remind.getTitle(), now.getMonth(), now.getDate(), remind.getPlanId())));
 	}
 
 	@Async
@@ -49,7 +48,7 @@ class SendEmailRemindStrategy extends SendRemindStrategy implements EmailSendabl
 	protected void proceed(Remind remind, TimeValue now, Supplier<String> url) {
 		CompletableFuture
 			.supplyAsync(emailSupplier(remind, url.get()))
-			.thenAccept(tries -> super.onSuccess(remind, getEndPoint(), now, tries))
+			.thenAccept(tries -> super.onSuccess(remind, endPoint(), now, tries))
 			.exceptionally(super::handleFail);
 	}
 

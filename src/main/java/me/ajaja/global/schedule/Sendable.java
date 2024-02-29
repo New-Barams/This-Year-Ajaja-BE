@@ -9,14 +9,14 @@ import me.ajaja.global.exception.ErrorCode;
 public interface Sendable {
 	int MAX_TRY = 5;
 
-	List<Integer> getErrors();
+	List<Integer> errors();
 
-	String getEndPoint();
+	String endPoint();
 
 	Supplier<Integer> supply(); // todo: refactor
 
 	default boolean isError(int status) {
-		return getErrors().contains(status);
+		return errors().contains(status);
 	}
 
 	default void checkAttempts(int attempts) {
