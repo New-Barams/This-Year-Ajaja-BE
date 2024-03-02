@@ -23,8 +23,8 @@ import me.ajaja.module.plan.domain.Plan;
 import me.ajaja.module.plan.dto.PlanRequest;
 import me.ajaja.module.plan.dto.PlanResponse;
 import me.ajaja.module.plan.mapper.PlanMapper;
-import me.ajaja.module.tag.domain.QPlanTag;
-import me.ajaja.module.tag.domain.QTag;
+import me.ajaja.module.tag.adapter.out.persistence.model.QPlanTag;
+import me.ajaja.module.tag.adapter.out.persistence.model.QTag;
 
 @Repository
 @Transactional(readOnly = true)
