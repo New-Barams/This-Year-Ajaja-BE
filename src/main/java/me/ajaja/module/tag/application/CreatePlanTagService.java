@@ -4,21 +4,28 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import me.ajaja.module.tag.domain.PlanTag;
-import me.ajaja.module.tag.domain.Tag;
-import me.ajaja.module.tag.domain.repository.PlanTagRepository;
-import me.ajaja.module.tag.domain.repository.TagRepository;
+import me.ajaja.module.tag.adapter.out.persistence.model.PlanTag;
+import me.ajaja.module.tag.adapter.out.persistence.model.Tag;
+import me.ajaja.module.tag.adapter.out.persistence.PlanTagRepository;
+import me.ajaja.module.tag.adapter.out.persistence.TagRepository;
+import me.ajaja.module.tag.application.port.out.CreateTagPort;
 
 @Service
+@Qualifier("plan")
 @Transactional
 @RequiredArgsConstructor
-public class CreatePlanTagService {
+public class CreatePlanTagService implements CreateTagPort {
 	private final TagRepository tagRepository;
 	private final PlanTagRepository planTagRepository;
+
+	@Override
+	public void createTags(Long targetId, List<String> tagNames) {
+	}
 
 	public List<String> create(Long planId, List<String> tagNames) {
 		if (tagNames == null) {
