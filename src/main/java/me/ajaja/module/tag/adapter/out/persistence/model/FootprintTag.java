@@ -15,12 +15,13 @@ import lombok.NoArgsConstructor;
 public class FootprintTag {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "footprint_tag_id")
 	private Long id;
 
-	@Column(nullable = false)
+	@Column(name = "footprint_id", nullable = false)
 	private Long footprintId;
 
-	@Column(nullable = false)
+	@Column(name = "tag_id", nullable = false)
 	private Long tagId;
 
 	public FootprintTag(Long footprintId, Long tagId) {
