@@ -28,6 +28,6 @@ public class CreateFootprintService implements CreateFootprintUseCase {
 	public void create(Long userId, FootprintRequest.Create param) {
 		Footprint footprint = Footprint.init(userId, param);
 		Long createdFootprintId = createFootprintPort.create(footprint);
-		createTagPort.createTags(createdFootprintId, param.getTags());
+		createTagPort.create(createdFootprintId, param.getTags());
 	}
 }

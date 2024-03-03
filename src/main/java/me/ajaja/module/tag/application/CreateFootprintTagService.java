@@ -1,7 +1,5 @@
 package me.ajaja.module.tag.application;
 
-import static me.ajaja.global.exception.ErrorCode.*;
-
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -11,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import me.ajaja.global.exception.AjajaException;
 import me.ajaja.module.tag.adapter.out.persistence.FootprintTagRepository;
 import me.ajaja.module.tag.adapter.out.persistence.TagRepository;
 import me.ajaja.module.tag.adapter.out.persistence.model.FootprintTag;
@@ -26,29 +23,27 @@ public class CreateFootprintTagService implements CreateTagPort {
 	private final TagRepository tagRepository;
 	private final FootprintTagRepository footprintTagRepository;
 
-	public void createTags(Long footprintId, List<String> tagNames) {
+	public List<String> create(Long footprintId, List<String> tagNames) {
 		if (tagNames == null) {
-			throw new AjajaException(INVALID_REQUEST);
+			return null;
 		}
-
 		Set<String> tagNameSet = new LinkedHashSet<>(tagNames);
-		tagNameSet.forEach(tagName -> createTag(footprintId, tagName));
+
+		return tagNameSet.stream()
+			.map(tagName -> saveFootprintTag(footprintId, tagName))
+			.toList();
 	}
 
-	private void createTag(Long footprintId, String tagName) {
-		tagRepository.findByName(tagName)
-			.ifPresentOrElse(tag -> handleExistingTag(tag, footprintId), () -> handleNewTag(tagName, footprintId));
-	}
-
-	private void handleExistingTag(Tag existingTag, Long footprintId) {
-		FootprintTag footprintTag = new FootprintTag(footprintId, existingTag.getId());
+	private String saveFootprintTag(Long footprintId, String tagName) {
+		Tag tag = getOrCreateTagIfNotExists(tagName);
+		FootprintTag footprintTag = new FootprintTag(footprintId, tag.getId());
 		footprintTagRepository.save(footprintTag);
+
+		return tag.getName();
 	}
 
-	private void handleNewTag(String tagName, Long footprintId) {
-		Tag tag = new Tag(tagName);
-		Tag createdTag = tagRepository.save(tag);
-		FootprintTag footprintTag = new FootprintTag(footprintId, createdTag.getId());
-		footprintTagRepository.save(footprintTag);
+	private Tag getOrCreateTagIfNotExists(String name) {
+		return tagRepository.findByName(name)
+			.orElseGet(() -> tagRepository.save(new Tag(name)));
 	}
 }

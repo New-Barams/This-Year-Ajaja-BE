@@ -24,9 +24,6 @@ public class CreatePlanTagService implements CreateTagPort {
 	private final PlanTagRepository planTagRepository;
 
 	@Override
-	public void createTags(Long targetId, List<String> tagNames) {
-	}
-
 	public List<String> create(Long planId, List<String> tagNames) {
 		if (tagNames == null) {
 			return null;
