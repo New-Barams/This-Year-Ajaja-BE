@@ -29,6 +29,5 @@ public class CreateFootprintService implements CreateFootprintUseCase {
 		Footprint footprint = Footprint.init(userId, param);
 		Long createdFootprintId = createFootprintPort.create(footprint);
 		createTagPort.createTags(createdFootprintId, param.getTags());
-
 	}
 }

@@ -2,7 +2,7 @@ package me.ajaja.module.tag.application;
 
 import static me.ajaja.global.exception.ErrorCode.*;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -31,8 +31,8 @@ public class CreateFootprintTagService implements CreateTagPort {
 			throw new AjajaException(INVALID_REQUEST);
 		}
 
-		Set<String> nonDuplicatedTagNames = new HashSet<>(tagNames);
-		nonDuplicatedTagNames.forEach(tagName -> createTag(footprintId, tagName));
+		Set<String> tagNameSet = new LinkedHashSet<>(tagNames);
+		tagNameSet.forEach(tagName -> createTag(footprintId, tagName));
 	}
 
 	private void createTag(Long footprintId, String tagName) {

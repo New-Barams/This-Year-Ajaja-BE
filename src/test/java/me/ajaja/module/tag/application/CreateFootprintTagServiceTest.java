@@ -24,7 +24,7 @@ class CreateFootprintTagServiceTest extends MockTestSupport {
 	private TagRepository tagRepository;
 
 	@Mock
-	FootprintTagRepository footprintTagRepository;
+	private FootprintTagRepository footprintTagRepository;
 
 	@Test
 	@DisplayName("생성 되었던 태그가 없을 때 태그 데이터를 생성하고 발자취-태그 중간 테이블 데이터를 생성한다.")
@@ -48,14 +48,16 @@ class CreateFootprintTagServiceTest extends MockTestSupport {
 	@Test
 	@DisplayName("생성 되었던 태그가 있을 때 발자취-태그 중간 테이블 데이터만 생성한다.")
 	void create_Only_FootprintTag_When_Tag_Exist() {
-		Tag tag = sut.giveMeOne(Tag.class);
+		Tag tag = sut.giveMeBuilder(Tag.class)
+			.set("name", "existTag")
+			.sample();
 		FootprintTag footprintTag = sut.giveMeOne(FootprintTag.class);
 
-		when(tagRepository.findByName(anyString())).thenReturn(Optional.of(new Tag("tag")));
+		when(tagRepository.findByName(anyString())).thenReturn(Optional.of(tag));
 		when(footprintTagRepository.save(any())).thenReturn(footprintTag);
 
 		Long footprintId = 1L;
-		List<String> tagNames = List.of("tag");
+		List<String> tagNames = List.of("existTag");
 		createFootprintTagService.createTags(footprintId, tagNames);
 
 		verify(tagRepository, times(1)).findByName(anyString());
