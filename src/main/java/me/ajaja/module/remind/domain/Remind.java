@@ -1,5 +1,7 @@
 package me.ajaja.module.remind.domain;
 
+import java.util.Objects;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -18,7 +20,7 @@ public class Remind extends SelfValidating<Remind> {
 
 	@NotBlank
 	@Size(max = 255)
-	private final String message;
+	private final String message; // todo: final..?
 	private final RemindDate remindDate;
 
 	public Remind(Receiver receiver, Target target, String message, Type type, int remindMonth, int remindDay) {
@@ -42,6 +44,10 @@ public class Remind extends SelfValidating<Remind> {
 		return new Remind(
 			new Receiver(userId, remindType, null, null),
 			new Target(planId, null), message, Type.AJAJA, remindMonth, remindDate);
+	}
+
+	public boolean isValidNumber() {
+		return !Objects.equals(this.getPhoneNumber(), "01000000000");
 	}
 
 	public Long getUserId() {

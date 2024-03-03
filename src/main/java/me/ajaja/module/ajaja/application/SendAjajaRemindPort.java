@@ -1,8 +1,8 @@
-package me.ajaja.module.remind.application.port.out;
+package me.ajaja.module.ajaja.application;
 
 import me.ajaja.infra.feign.ncp.model.NaverRequest;
 import me.ajaja.infra.feign.ncp.model.NaverResponse;
 
-public interface SendRemindPort {
+public interface SendAjajaRemindPort {
 	NaverResponse.AlimTalk send(NaverRequest.Alimtalk request);
 }
