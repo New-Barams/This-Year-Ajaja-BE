@@ -1,5 +1,6 @@
 package me.ajaja.module.footprint.application.port;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.List;
@@ -53,13 +54,15 @@ class CreateFootprintServiceTest extends MockTestSupport {
 		Long expectedFootprintId = 1L;
 
 		when(createFootprintPort.create(any())).thenReturn(expectedFootprintId);
-		doNothing().when(createTagPort).createTags(anyLong(), anyList());
+		when(createTagPort.create(anyLong(), anyList())).thenReturn(List.of("tag1", "tag2"));
 
 		// when
 		createFootprintService.create(userId, param);
 
 		// then
-		verify(createFootprintPort, times(1)).create(any());
-		verify(createTagPort, times(1)).createTags(anyLong(), anyList());
+		assertAll(
+			() -> verify(createFootprintPort, times(1)).create(any()),
+			() -> verify(createTagPort, times(1)).create(anyLong(), anyList())
+		);
 	}
 }

@@ -1,5 +1,6 @@
 package me.ajaja.module.tag.application;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.List;
@@ -29,38 +30,42 @@ class CreateFootprintTagServiceTest extends MockTestSupport {
 	@Test
 	@DisplayName("생성 되었던 태그가 없을 때 태그 데이터를 생성하고 발자취-태그 중간 테이블 데이터를 생성한다.")
 	void createTag_And_FootprintTag_When_Tag_NotExist() {
-		Tag tag = sut.giveMeOne(Tag.class);
-		FootprintTag footprintTag = sut.giveMeOne(FootprintTag.class);
+		Long footprintId = 1L;
+		Long tagId = 1L;
+		String existTagName = "tag";
+		Tag tag = new Tag(existTagName);
+		FootprintTag footprintTag = new FootprintTag(footprintId, tagId);
 
-		when(tagRepository.findByName(anyString())).thenReturn(Optional.empty());
-		when(tagRepository.save(any())).thenReturn(tag);
+		when(tagRepository.findByName(existTagName)).thenReturn(Optional.of(tag));
 		when(footprintTagRepository.save(any())).thenReturn(footprintTag);
 
-		Long footprintId = 1L;
-		List<String> tagNames = List.of("tag1");
-		createFootprintTagService.createTags(footprintId, tagNames);
+		createFootprintTagService.create(footprintId, List.of(existTagName));
 
-		verify(tagRepository, times(1)).findByName(anyString());
-		verify(tagRepository, times(1)).save(any());
-		verify(footprintTagRepository, times(1)).save(any());
+		assertAll(
+			() -> verify(tagRepository, times(1)).findByName(existTagName),
+			() -> verify(footprintTagRepository, times(1)).save(any())
+		);
 	}
 
 	@Test
 	@DisplayName("생성 되었던 태그가 있을 때 발자취-태그 중간 테이블 데이터만 생성한다.")
 	void create_Only_FootprintTag_When_Tag_Exist() {
-		Tag tag = sut.giveMeBuilder(Tag.class)
-			.set("name", "existTag")
-			.sample();
-		FootprintTag footprintTag = sut.giveMeOne(FootprintTag.class);
+		Long footprintId = 1L;
+		Long tagId = 1L;
+		String existTagName = "tag";
+		Tag tag = new Tag(existTagName);
+		FootprintTag footprintTag = new FootprintTag(footprintId, tagId);
 
-		when(tagRepository.findByName(anyString())).thenReturn(Optional.of(tag));
+		when(tagRepository.findByName(existTagName)).thenReturn(Optional.empty());
+		when(tagRepository.save(any())).thenReturn(tag);
 		when(footprintTagRepository.save(any())).thenReturn(footprintTag);
 
-		Long footprintId = 1L;
-		List<String> tagNames = List.of("existTag");
-		createFootprintTagService.createTags(footprintId, tagNames);
+		createFootprintTagService.create(footprintId, List.of(existTagName));
 
-		verify(tagRepository, times(1)).findByName(anyString());
-		verify(footprintTagRepository, times(1)).save(any());
+		assertAll(
+			() -> verify(tagRepository, times(1)).findByName(existTagName),
+			() -> verify(tagRepository, times(1)).save(any()),
+			() -> verify(footprintTagRepository, times(1)).save(any())
+		);
 	}
 }
