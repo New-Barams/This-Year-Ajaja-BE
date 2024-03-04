@@ -13,17 +13,15 @@ import me.ajaja.module.tag.adapter.out.persistence.PlanTagRepository;
 import me.ajaja.module.tag.adapter.out.persistence.TagRepository;
 import me.ajaja.module.tag.domain.PlanTag;
 import me.ajaja.module.tag.domain.Tag;
-import me.ajaja.module.tag.application.port.out.CreateTagPort;
 
 @Service
 @Qualifier("plan")
 @Transactional
 @RequiredArgsConstructor
-public class CreatePlanTagService implements CreateTagPort {
+public class CreatePlanTagService {
 	private final TagRepository tagRepository;
 	private final PlanTagRepository planTagRepository;
 
-	@Override
 	public List<String> create(Long planId, List<String> tagNames) {
 		if (tagNames == null) {
 			return null;

@@ -26,8 +26,8 @@ import me.ajaja.module.plan.dto.QPlanResponse_Detail;
 import me.ajaja.module.plan.dto.QPlanResponse_Writer;
 import me.ajaja.module.plan.mapper.PlanMapper;
 import me.ajaja.module.remind.application.port.out.FindTargetPort;
-import me.ajaja.module.tag.adapter.out.persistence.model.QPlanTag;
-import me.ajaja.module.tag.adapter.out.persistence.model.QTag;
+import me.ajaja.module.tag.domain.QPlanTag;
+import me.ajaja.module.tag.domain.QTag;
 
 @Repository
 @RequiredArgsConstructor
