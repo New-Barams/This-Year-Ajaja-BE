@@ -1,4 +1,4 @@
-package me.ajaja.module.footprint.application.port;
+package me.ajaja.module.footprint.application;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;

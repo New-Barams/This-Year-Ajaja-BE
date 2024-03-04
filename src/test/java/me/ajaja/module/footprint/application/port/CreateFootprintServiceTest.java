@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import me.ajaja.common.support.MockTestSupport;
+import me.ajaja.module.footprint.application.CreateFootprintService;
 import me.ajaja.module.footprint.application.port.out.CreateFootprintPort;
 import me.ajaja.module.footprint.domain.Footprint;
 import me.ajaja.module.footprint.dto.FootprintRequest;

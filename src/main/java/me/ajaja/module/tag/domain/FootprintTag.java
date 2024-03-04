@@ -1,4 +1,4 @@
-package me.ajaja.module.tag.adapter.out.persistence.model;
+package me.ajaja.module.tag.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,12 +9,13 @@ import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.ajaja.global.common.BaseEntity;
 
 @Getter
 @Entity
 @Table(name = "footprint_tags")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class FootprintTag {
+public class FootprintTag extends BaseEntity<PlanTag> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "footprint_tag_id")
@@ -29,5 +30,6 @@ public class FootprintTag {
 	public FootprintTag(Long footprintId, Long tagId) {
 		this.footprintId = footprintId;
 		this.tagId = tagId;
+		this.validateSelf();
 	}
 }
