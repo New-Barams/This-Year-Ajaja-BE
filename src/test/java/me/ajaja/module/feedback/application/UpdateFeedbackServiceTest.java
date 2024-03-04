@@ -10,7 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import me.ajaja.common.support.MockTestSupport;
-import me.ajaja.global.common.TimeValue;
+import me.ajaja.global.common.BaseTime;
 import me.ajaja.global.exception.AjajaException;
 import me.ajaja.module.feedback.domain.Achieve;
 import me.ajaja.module.feedback.domain.FeedbackQueryRepository;
@@ -44,7 +44,7 @@ class UpdateFeedbackServiceTest extends MockTestSupport {
 		void updateFeedback_Success_WithNoException() {
 			// given
 			given(findTargetPort.findByUserIdAndPlanId(anyLong(), anyLong())).willReturn(mockPlan);
-			given(mockPlan.getFeedbackPeriod(any())).willReturn(TimeValue.now());
+			given(mockPlan.getFeedbackPeriod(any())).willReturn(BaseTime.now());
 			given(feedbackQueryRepository.existByPlanIdAndPeriod(any(), any())).willReturn(false);
 			doNothing().when(feedbackRepository).save(any());
 
@@ -83,7 +83,7 @@ class UpdateFeedbackServiceTest extends MockTestSupport {
 		void updateFeedback_Fail_ByAlreadyFeedbackFound() {
 			// given
 			given(findTargetPort.findByUserIdAndPlanId(anyLong(), anyLong())).willReturn(mockPlan);
-			given(mockPlan.getFeedbackPeriod(any())).willReturn(TimeValue.now());
+			given(mockPlan.getFeedbackPeriod(any())).willReturn(BaseTime.now());
 			given(feedbackQueryRepository.existByPlanIdAndPeriod(any(), any())).willReturn(true);
 
 			// when,then

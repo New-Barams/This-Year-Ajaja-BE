@@ -8,7 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import me.ajaja.common.support.MockTestSupport;
-import me.ajaja.global.common.TimeValue;
+import me.ajaja.global.common.BaseTime;
 import me.ajaja.module.remind.adapter.out.persistence.SaveRemindAdapter;
 import me.ajaja.module.remind.domain.Receiver;
 import me.ajaja.module.remind.domain.Remind;
@@ -31,7 +31,7 @@ class CreateRemindServiceTest extends MockTestSupport {
 		Remind remind = new Remind(receiver, target, message, Remind.Type.AJAJA, 3, 1);
 
 		// when
-		createRemindService.create(remind, TimeValue.now(), "EMAIL");
+		createRemindService.create(remind, BaseTime.now(), "EMAIL");
 
 		// then
 		then(saveRemindAdapter).should(times(1)).save(any());

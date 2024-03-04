@@ -24,4 +24,8 @@ public class Receiver extends SelfValidating<Receiver> {
 		this.phoneNumber = phoneNumber;
 		validateSelf();
 	}
+
+	public static Receiver init(Long id, String type) {
+		return new Receiver(id, type, null, null);
+	}
 }

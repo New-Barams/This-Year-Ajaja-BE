@@ -1,10 +1,13 @@
 package me.ajaja.module.remind.domain;
 
+import static me.ajaja.module.remind.domain.Remind.Type.*;
+
 import java.util.Objects;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
+import me.ajaja.global.common.BaseTime;
 import me.ajaja.global.common.SelfValidating;
 
 @Getter
@@ -20,7 +23,8 @@ public class Remind extends SelfValidating<Remind> {
 
 	@NotBlank
 	@Size(max = 255)
-	private final String message; // todo: final..?
+	private final String message;
+
 	private final RemindDate remindDate;
 
 	public Remind(Receiver receiver, Target target, String message, Type type, int remindMonth, int remindDay) {
@@ -32,18 +36,18 @@ public class Remind extends SelfValidating<Remind> {
 		this.validateSelf();
 	}
 
-	public static Remind plan(Long userId, String remindType, Long planId, String message, int remindMonth,
-		int remindDate) {
-		return new Remind(
-			new Receiver(userId, remindType, null, null),
-			new Target(planId, null), message, Type.PLAN, remindMonth, remindDate);
+	public static Remind plan(Long userId, String sendType, Long planId, String message, BaseTime time) {
+		return of(userId, sendType, planId, message, PLAN, time);
 	}
 
-	public static Remind ajaja(Long userId, String remindType, Long planId, String message, int remindMonth,
-		int remindDate) {
-		return new Remind(
-			new Receiver(userId, remindType, null, null),
-			new Target(planId, null), message, Type.AJAJA, remindMonth, remindDate);
+	public static Remind ajaja(Long userId, String sendType, Long planId, String message, BaseTime time) {
+		return of(userId, sendType, planId, message, AJAJA, time);
+	}
+
+	private static Remind of(Long userId, String sendType, Long planId, String message, Type type, BaseTime time) {
+		Receiver receiver = Receiver.init(userId, sendType);
+		Target target = Target.init(planId);
+		return new Remind(receiver, target, message, type, time.getMonth(), time.getDate());
 	}
 
 	public boolean isValidNumber() {

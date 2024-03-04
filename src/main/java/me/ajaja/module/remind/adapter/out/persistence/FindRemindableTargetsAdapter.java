@@ -12,7 +12,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
-import me.ajaja.global.common.TimeValue;
+import me.ajaja.global.common.BaseTime;
 import me.ajaja.module.plan.domain.RemindDate;
 import me.ajaja.module.plan.mapper.PlanMapper;
 import me.ajaja.module.remind.application.port.out.FindRemindableTargetsPort;
@@ -28,7 +28,7 @@ public class FindRemindableTargetsAdapter implements FindRemindableTargetsPort {
 	private final RemindMapper mapper;
 
 	@Override
-	public List<Remind> findAllRemindablePlansByType(String remindTime, String remindType, TimeValue time) {
+	public List<Remind> findAllRemindablePlansByType(String remindTime, String remindType, BaseTime time) {
 		return queryFactory.select(planEntity, userEntity.remindEmail, userEntity.phoneNumber,
 				userEntity.remindType)
 			.from(planEntity)
@@ -48,9 +48,10 @@ public class FindRemindableTargetsAdapter implements FindRemindableTargetsPort {
 			.toList();
 	}
 
-	private BooleanExpression isRemindable(TimeValue time) {
+	private BooleanExpression isRemindable(BaseTime time) {
 		RemindDate today = new RemindDate(time.getMonth(), time.getDate());
-		return planEntity.createdAt.year().eq(time.getYear())
+		return planEntity.createdAt.year()
+			.eq(time.getYear())
 			.andAnyOf(planEntity.messages.any().remindDate.eq(today));
 	}
 }

@@ -7,7 +7,7 @@ import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import me.ajaja.global.common.TimeValue;
+import me.ajaja.global.common.BaseTime;
 import me.ajaja.global.exception.AjajaException;
 import me.ajaja.module.ajaja.infra.AjajaEntity;
 import me.ajaja.module.plan.dto.PlanParam;
@@ -31,7 +31,7 @@ public class Plan {
 	private List<Message> messages;
 
 	private List<AjajaEntity> ajajas;
-	private TimeValue createdAt;
+	private BaseTime createdAt;
 
 	Plan(Long userId, Content content, RemindInfo info, PlanStatus status,
 		int iconNumber, List<Message> messages) {
@@ -93,7 +93,7 @@ public class Plan {
 	}
 
 	public void updateRemind(RemindInfo info, List<Message> messages) {
-		if (TimeValue.now().getMonth() != MODIFIABLE_MONTH) {
+		if (BaseTime.now().getMonth() != MODIFIABLE_MONTH) {
 			throw new AjajaException(UNMODIFIABLE_DURATION);
 		}
 
@@ -125,14 +125,6 @@ public class Plan {
 		return this.info.getRemindTotalPeriod();
 	}
 
-	public boolean getIsRemindable() {
-		return this.status.isCanRemind();
-	}
-
-	public int getTotalRemindNumber() {
-		return this.info.getTotalRemindNumber();
-	}
-
 	public String getPlanTitle() {
 		return this.content.getTitle();
 	}
@@ -150,17 +142,17 @@ public class Plan {
 		this.status = status.disable();
 	}
 
-	public TimeValue getFeedbackPeriod(TimeValue current) {
+	public BaseTime getFeedbackPeriod(BaseTime current) {
 		return this.messages.stream()
-			.filter(message -> current.isWithin1Month(
-				TimeValue.parse(
+			.filter(message -> current.isWithinAMonth(
+				BaseTime.parse(
 					this.createdAt.getYear(),
 					message.getRemindDate().getRemindMonth(),
 					message.getRemindDate().getRemindDay(),
 					this.getRemindTime()))
 			)
 			.findAny()
-			.map(message -> TimeValue.parse(this.createdAt.getYear(),
+			.map(message -> BaseTime.parse(this.createdAt.getYear(),
 				message.getRemindDate().getRemindMonth(),
 				message.getRemindDate().getRemindDay(),
 				this.getRemindTime()))

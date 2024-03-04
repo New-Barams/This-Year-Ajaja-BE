@@ -8,7 +8,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-import me.ajaja.global.common.TimeValue;
+import me.ajaja.global.common.BaseTime;
 import me.ajaja.module.ajaja.infra.AjajaEntity;
 import me.ajaja.module.feedback.application.model.FeedbackPeriod;
 import me.ajaja.module.feedback.application.model.PlanFeedbackInfo;
@@ -43,8 +43,8 @@ public interface PlanMapper {
 	@Mapping(target = "createdAt", expression = "java(parseTimeValue(planEntity.getCreatedAt()))")
 	Plan toDomain(PlanEntity planEntity);
 
-	default TimeValue parseTimeValue(Instant createdAt) {
-		return createdAt == null ? null : new TimeValue(createdAt); // 계획 저장 후 조회 시 작성일 null로 인한 코드
+	default BaseTime parseTimeValue(Instant createdAt) {
+		return createdAt == null ? null : new BaseTime(createdAt); // 계획 저장 후 조회 시 작성일 null로 인한 코드
 	}
 
 	@Named("toContent")
@@ -60,8 +60,11 @@ public interface PlanMapper {
 
 	@Named("toPlanStatus")
 	static PlanStatus toPlanStatus(PlanEntity planEntity) {
-		return new PlanStatus(planEntity.isPublic(), planEntity.isCanRemind(), planEntity.isCanAjaja(),
-			planEntity.isDeleted());
+		return new PlanStatus(planEntity.isPublic(),
+			planEntity.isCanRemind(),
+			planEntity.isCanAjaja(),
+			planEntity.isDeleted()
+		);
 	}
 
 	@Mapping(source = "request", target = "content", qualifiedByName = "toContent")
@@ -77,8 +80,12 @@ public interface PlanMapper {
 
 	@Named("toRemindInfo")
 	static RemindInfo toRemindInfo(PlanRequest.Create request) {
-		return new RemindInfo(request.getRemindTotalPeriod(), request.getRemindTerm(),
-			request.getRemindDate(), request.getRemindTime());
+		return new RemindInfo(
+			request.getRemindTotalPeriod(),
+			request.getRemindTerm(),
+			request.getRemindDate(),
+			request.getRemindTime()
+		);
 	}
 
 	@Named("toPlanStatus")
@@ -110,8 +117,7 @@ public interface PlanMapper {
 
 	@Mapping(source = "planYear", target = "year")
 	@Mapping(target = "getPlanList", expression = "java(createPlanList(planInfos,planYear))")
-	PlanResponse.MainInfo toResponse(int planYear, int totalAchieveRate,
-		List<PlanResponse.PlanInfo> planInfos);
+	PlanResponse.MainInfo toResponse(int planYear, int totalAchieveRate, List<PlanResponse.PlanInfo> planInfos);
 
 	default List<PlanResponse.PlanInfo> createPlanList(List<PlanResponse.PlanInfo> planInfos, int planYear) {
 		return planInfos.stream()

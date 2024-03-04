@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import me.ajaja.common.support.MonkeySupport;
+import me.ajaja.global.common.BaseTime;
 
 class RemindTest extends MonkeySupport {
 
@@ -40,21 +41,22 @@ class RemindTest extends MonkeySupport {
 
 	@Nested
 	@DisplayName("종류에 따른 리마인드를 생성한다.")
-	class MakeRemindTest {
+	class CreateRemindTest {
 
 		@Test
-		void makePlanRemind() {
+		void createPlan_Success() {
 			// when,then
 			assertThatNoException().isThrownBy(
-				() -> Remind.plan(1L, "KAKAO", 1L, "화이팅", 3, 15));
-
+				() -> Remind.plan(1L, "KAKAO", 1L, "화이팅", BaseTime.now())
+			);
 		}
 
 		@Test
-		void makeAjajaRemind() {
+		void createAjaja_Success() {
 			// when,then
 			assertThatNoException().isThrownBy(
-				() -> Remind.ajaja(1L, "KAKAO", 1L, "화이팅", 3, 15));
+				() -> Remind.ajaja(1L, "KAKAO", 1L, "화이팅", BaseTime.now())
+			);
 		}
 	}
 }

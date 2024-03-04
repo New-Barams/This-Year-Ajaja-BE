@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import me.ajaja.global.common.TimeValue;
+import me.ajaja.global.common.BaseTime;
 import me.ajaja.module.feedback.domain.Achieve;
 import me.ajaja.module.feedback.domain.Feedback;
 import me.ajaja.module.feedback.domain.FeedbackRepository;
@@ -30,7 +30,7 @@ class FeedbackQueryRepositoryImplTest {
 
 	@BeforeEach
 	void setUp() {
-		feedback = new Feedback(1L, 1L, 1L, Achieve.GOOD, "아좌좌", TimeValue.now(), TimeValue.now());
+		feedback = new Feedback(1L, 1L, 1L, Achieve.GOOD, "아좌좌", BaseTime.now(), BaseTime.now());
 		feedbackRepository.save(feedback);
 	}
 
@@ -66,7 +66,7 @@ class FeedbackQueryRepositoryImplTest {
 		Long planId = 2L;
 
 		// when
-		boolean isFeedbacked = feedbackQueryRepository.existByPlanIdAndPeriod(planId, TimeValue.now());
+		boolean isFeedbacked = feedbackQueryRepository.existByPlanIdAndPeriod(planId, BaseTime.now());
 
 		// then
 		Assertions.assertThat(isFeedbacked).isFalse();

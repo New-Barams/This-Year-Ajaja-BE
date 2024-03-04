@@ -2,14 +2,14 @@ package me.ajaja.module.feedback.domain;
 
 import java.util.List;
 
-import me.ajaja.global.common.TimeValue;
+import me.ajaja.global.common.BaseTime;
 import me.ajaja.module.feedback.infra.model.AchieveInfo;
 import me.ajaja.module.feedback.infra.model.FeedbackInfo;
 
 public interface FeedbackQueryRepository {
 	List<Feedback> findAllFeedbackByPlanId(Long planId);
 
-	boolean existByPlanIdAndPeriod(Long feedbackId, TimeValue period);
+	boolean existByPlanIdAndPeriod(Long feedbackId, BaseTime period);
 
 	List<FeedbackInfo> findFeedbackInfosByPlanId(Long planId);
 

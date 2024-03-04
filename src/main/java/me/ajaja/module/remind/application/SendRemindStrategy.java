@@ -7,7 +7,7 @@ import org.springframework.context.ApplicationEventPublisher;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import me.ajaja.global.common.TimeValue;
+import me.ajaja.global.common.BaseTime;
 import me.ajaja.global.exception.UnexpectedExceptionEvent;
 import me.ajaja.module.remind.application.port.out.FindRemindableTargetsPort;
 import me.ajaja.module.remind.domain.Remind;
@@ -23,15 +23,15 @@ abstract class SendRemindStrategy {
 	private final ApplicationEventPublisher eventPublisher;
 	private final CreateRemindService createRemindService;
 
-	public abstract void send(String remindTime, TimeValue now);
+	public abstract void send(String remindTime, BaseTime now);
 
 	public abstract void sendTrial(Remind remind);
 
-	protected abstract void proceed(Remind remind, TimeValue now, Supplier<String> url);
+	protected abstract void proceed(Remind remind, BaseTime now, Supplier<String> url);
 
-	protected abstract List<Remind> loadRemindables(String scheduledTime, String endPoint, TimeValue now);
+	protected abstract List<Remind> loadRemindables(String scheduledTime, String endPoint, BaseTime now);
 
-	protected void onSuccess(Remind remind, String endPoint, TimeValue now, long tries) {
+	protected void onSuccess(Remind remind, String endPoint, BaseTime now, long tries) {
 		log.info("[NCP] Remind Sent To : {} After {} tries", remind.getPhoneNumber(), tries);
 		createRemindService.create(remind, now, endPoint);
 	}

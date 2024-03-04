@@ -6,7 +6,7 @@ import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import me.ajaja.global.common.TimeValue;
+import me.ajaja.global.common.BaseTime;
 import me.ajaja.module.feedback.application.model.PlanFeedbackInfo;
 import me.ajaja.module.feedback.domain.Feedback;
 import me.ajaja.module.feedback.dto.FeedbackResponse;
@@ -16,8 +16,8 @@ import me.ajaja.module.feedback.infra.model.FeedbackInfo;
 @Mapper(componentModel = "spring")
 public interface FeedbackMapper {
 	@Mapping(source = "entity.id", target = "id")
-	@Mapping(target = "createdAt", expression = "java(new TimeValue(entity.getCreatedAt()))")
-	@Mapping(target = "updatedAt", expression = "java(new TimeValue(entity.getUpdatedAt()))")
+	@Mapping(target = "createdAt", expression = "java(new BaseTime(entity.getCreatedAt()))")
+	@Mapping(target = "updatedAt", expression = "java(new BaseTime(entity.getUpdatedAt()))")
 	@Mapping(target = "achieve", expression = "java(Achieve.of(entity.getAchieve()))")
 	Feedback toDomain(FeedbackEntity entity);
 
@@ -44,7 +44,7 @@ public interface FeedbackMapper {
 	@Mapping(target = "remindDate", expression = "java(sendDate.getDate())")
 	@Mapping(target = "endMonth", expression = "java(endDate.getMonthValue())")
 	@Mapping(target = "endDate", expression = "java(endDate.getDayOfMonth())")
-	FeedbackResponse.RemindFeedback toResponse(TimeValue sendDate, FeedbackInfo feedbackInfo, ZonedDateTime endDate);
+	FeedbackResponse.RemindFeedback toResponse(BaseTime sendDate, FeedbackInfo feedbackInfo, ZonedDateTime endDate);
 
 	@Mapping(target = "message", expression = "java(\"\")")
 	@Mapping(target = "reminded", expression = "java(isReminded(sendDate))")
@@ -53,10 +53,10 @@ public interface FeedbackMapper {
 	@Mapping(target = "endMonth", expression = "java(endDate.getMonthValue())")
 	@Mapping(target = "endDate", expression = "java(endDate.getDayOfMonth())")
 	@Mapping(target = "achieve", ignore = true)
-	FeedbackResponse.RemindFeedback toEmptyResponse(TimeValue sendDate, Integer remindTime, ZonedDateTime endDate);
+	FeedbackResponse.RemindFeedback toEmptyResponse(BaseTime sendDate, Integer remindTime, ZonedDateTime endDate);
 
-	default boolean isReminded(TimeValue sendDate) {
-		TimeValue now = TimeValue.now();
+	default boolean isReminded(BaseTime sendDate) {
+		BaseTime now = BaseTime.now();
 		return now.isAfter(sendDate);
 	}
 }
