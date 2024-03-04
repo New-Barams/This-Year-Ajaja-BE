@@ -13,7 +13,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.ajaja.global.common.BaseEntity;
+import me.ajaja.global.common.TimeEntity;
 
 @Getter
 @Entity
@@ -21,7 +21,7 @@ import me.ajaja.global.common.BaseEntity;
 @Where(clause = "deleted = false")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class UserEntity extends BaseEntity<UserEntity> {
+public class UserEntity extends TimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id")
