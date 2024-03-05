@@ -6,14 +6,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import me.ajaja.module.tag.application.port.in.CreateTagUseCase;
-import me.ajaja.module.tag.application.port.out.CreateTagPort;
+import me.ajaja.module.tag.application.port.in.CreateTagsUseCase;
+import me.ajaja.module.tag.application.port.out.CreateTagsPort;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class CreateTagService implements CreateTagUseCase {
-	private final CreateTagPort createTagPort;
+public class CreateTagsService implements CreateTagsUseCase {
+	private final CreateTagsPort createTagPort;
 
 	@Override
 	public void create(Type type, Long id, List<String> tags) {

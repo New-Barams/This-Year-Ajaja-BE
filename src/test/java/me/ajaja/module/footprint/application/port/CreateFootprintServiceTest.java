@@ -14,7 +14,7 @@ import org.mockito.Mock;
 import me.ajaja.common.support.MockTestSupport;
 import me.ajaja.module.footprint.application.CreateFootprintService;
 import me.ajaja.module.footprint.application.port.out.CreateFootprintPort;
-import me.ajaja.module.footprint.application.port.out.CreateTagPort;
+import me.ajaja.module.footprint.application.port.out.CreateTagsPort;
 import me.ajaja.module.footprint.domain.Footprint;
 import me.ajaja.module.footprint.dto.FootprintRequest;
 
@@ -26,7 +26,7 @@ class CreateFootprintServiceTest extends MockTestSupport {
 	private CreateFootprintPort createFootprintPort;
 
 	@Mock
-	private CreateTagPort createTagPort;
+	private CreateTagsPort createTagPort;
 
 	private FootprintRequest.Create param;
 

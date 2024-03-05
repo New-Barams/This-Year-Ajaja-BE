@@ -2,7 +2,7 @@ package me.ajaja.module.footprint.application.port.out;
 
 import java.util.List;
 
-public interface CreateTagPort {
+public interface CreateTagsPort {
 	/**
 	 * request create tag and tag-footprint to tag domain CreateTagUseCase
 	 * @param footprintId target that have tags

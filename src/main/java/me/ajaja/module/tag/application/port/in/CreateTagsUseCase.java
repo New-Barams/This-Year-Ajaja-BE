@@ -2,7 +2,7 @@ package me.ajaja.module.tag.application.port.in;
 
 import java.util.List;
 
-public interface CreateTagUseCase {
+public interface CreateTagsUseCase {
 	enum Type { PLAN, FOOTPRINT }
 
 	/**

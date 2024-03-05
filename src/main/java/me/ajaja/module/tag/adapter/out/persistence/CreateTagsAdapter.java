@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import me.ajaja.global.exception.AjajaException;
-import me.ajaja.module.tag.application.port.in.CreateTagUseCase;
-import me.ajaja.module.tag.application.port.out.CreateTagPort;
+import me.ajaja.module.tag.application.port.in.CreateTagsUseCase;
+import me.ajaja.module.tag.application.port.out.CreateTagsPort;
 import me.ajaja.module.tag.domain.FootprintTag;
 import me.ajaja.module.tag.domain.PlanTag;
 import me.ajaja.module.tag.domain.Tag;
@@ -18,13 +18,13 @@ import me.ajaja.module.tag.domain.Tag;
 @Repository
 @Transactional
 @RequiredArgsConstructor
-public class CreateTagAdapter implements CreateTagPort {
+public class CreateTagsAdapter implements CreateTagsPort {
 	private final TagRepository tagRepository;
 	private final FootprintTagRepository footprintTagRepository;
 	private final PlanTagRepository planTagRepository;
 
 	@Override
-	public void create(CreateTagUseCase.Type type, Long targetId, List<String> tagNames) {
+	public void create(CreateTagsUseCase.Type type, Long targetId, List<String> tagNames) {
 		List<Tag> tags = tagNames.stream()
 			.distinct()
 			.map(this::getOrCreateIfNotExists)
@@ -38,23 +38,18 @@ public class CreateTagAdapter implements CreateTagPort {
 	}
 
 	private Tag getOrCreateIfNotExists(String name) {
-		return tagRepository.findByName(name)
-			.orElseGet(() -> tagRepository.save(new Tag(name)));
+		return tagRepository.findByName(name).orElseGet(() -> tagRepository.save(new Tag(name)));
 	}
 
 	private void saveFootprintTag(Long footprintId, List<Tag> tags) {
-		List<FootprintTag> footprintTags = tags.stream()
-			.map(tag -> new FootprintTag(footprintId, tag.getId()))
-			.toList();
-
-		footprintTagRepository.saveAll(footprintTags);
+		for (Tag tag : tags) {
+			footprintTagRepository.save(new FootprintTag(footprintId, tag.getId()));
+		}
 	}
 
 	private void savePlanTag(Long planId, List<Tag> tags) {
-		List<PlanTag> planTags = tags.stream()
-			.map(tag -> new PlanTag(planId, tag.getId()))
-			.toList();
-
-		planTagRepository.saveAll(planTags);
+		for (Tag tag : tags) {
+			planTagRepository.save(new PlanTag(planId, tag.getId()));
+		}
 	}
 }

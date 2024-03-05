@@ -12,13 +12,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import me.ajaja.common.support.MockTestSupport;
-import me.ajaja.module.tag.application.port.in.CreateTagUseCase;
+import me.ajaja.module.tag.application.port.in.CreateTagsUseCase;
 import me.ajaja.module.tag.domain.FootprintTag;
 import me.ajaja.module.tag.domain.Tag;
 
 class CreateTagAdapterTest extends MockTestSupport {
 	@InjectMocks
-	private CreateTagAdapter createTagAdapter;
+	private CreateTagsAdapter createTagAdapter;
 	@Mock
 	private TagRepository tagRepository;
 	@Mock
@@ -28,22 +28,22 @@ class CreateTagAdapterTest extends MockTestSupport {
 	@DisplayName("발자취 태그 저장시 기존 태그가 있으면 불러 오고 없으면 태그를 저장 하고 불러와 발자취 태그를 저장 한다")
 	void createFootprintTag_Success() {
 		Tag tag = sut.giveMeOne(Tag.class);
-		List<FootprintTag> footprintTags = sut.giveMeBuilder(FootprintTag.class).sampleList(3);
+		FootprintTag footprintTag = sut.giveMeOne(FootprintTag.class);
 
 		when(tagRepository.findByName("tag1")).thenReturn(Optional.of(tag));
 		when(tagRepository.findByName("tag2")).thenReturn(Optional.empty());
 		when(tagRepository.findByName("tag3")).thenReturn(Optional.empty());
 		when(tagRepository.save(any())).thenReturn(tag);
-		when(footprintTagRepository.saveAll(any())).thenReturn(footprintTags);
+		when(footprintTagRepository.save(any())).thenReturn(footprintTag);
 
-		createTagAdapter.create(CreateTagUseCase.Type.FOOTPRINT, 1L, List.of("tag1", "tag2", "tag3"));
+		createTagAdapter.create(CreateTagsUseCase.Type.FOOTPRINT, 1L, List.of("tag1", "tag2", "tag3"));
 
 		assertAll(
 			() -> verify(tagRepository, times(1)).findByName("tag1"),
 			() -> verify(tagRepository, times(1)).findByName("tag2"),
 			() -> verify(tagRepository, times(1)).findByName("tag3"),
 			() -> verify(tagRepository, times(2)).save(any()),
-			() -> verify(footprintTagRepository, times(1)).saveAll(any())
+			() -> verify(footprintTagRepository, times(3)).save(any())
 		);
 	}
 }
