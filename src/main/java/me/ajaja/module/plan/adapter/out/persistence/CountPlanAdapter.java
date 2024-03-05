@@ -8,7 +8,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
-import me.ajaja.global.common.TimeValue;
+import me.ajaja.global.common.BaseTime;
 import me.ajaja.module.plan.application.port.out.CountPlanPort;
 
 @Repository
@@ -26,6 +26,6 @@ class CountPlanAdapter implements CountPlanPort {
 	}
 
 	private BooleanExpression isCurrentYear() {
-		return planEntity.createdAt.year().eq(TimeValue.now().getYear());
+		return planEntity.createdAt.year().eq(BaseTime.now().getYear());
 	}
 }

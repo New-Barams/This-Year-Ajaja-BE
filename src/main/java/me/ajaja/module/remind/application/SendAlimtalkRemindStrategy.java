@@ -11,7 +11,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
-import me.ajaja.global.common.TimeValue;
+import me.ajaja.global.common.BaseTime;
 import me.ajaja.global.schedule.AlimtalkSendable;
 import me.ajaja.infra.feign.ncp.model.NaverResponse;
 import me.ajaja.module.remind.application.port.out.FindRemindableTargetsPort;
@@ -35,7 +35,7 @@ class SendAlimtalkRemindStrategy extends SendRemindStrategy implements AlimtalkS
 
 	@Async
 	@Override
-	public void send(String remindTime, TimeValue now) {
+	public void send(String remindTime, BaseTime now) {
 		loadRemindables(remindTime, endPoint(), now).stream()
 			.filter(Remind::isValidNumber)
 			.forEach(remind -> proceed(remind, now, () ->
@@ -45,11 +45,11 @@ class SendAlimtalkRemindStrategy extends SendRemindStrategy implements AlimtalkS
 	@Async
 	@Override
 	public void sendTrial(Remind remind) {
-		proceed(remind, TimeValue.now(), () -> MAIN_PAGE_URL);
+		proceed(remind, BaseTime.now(), () -> MAIN_PAGE_URL);
 	}
 
 	@Override
-	protected void proceed(Remind remind, TimeValue now, Supplier<String> url) {
+	protected void proceed(Remind remind, BaseTime now, Supplier<String> url) {
 		Alimtalk request = Alimtalk.remind(remind.getPhoneNumber(), remind.getTitle(), remind.getMessage(), url.get());
 
 		CompletableFuture
@@ -59,7 +59,7 @@ class SendAlimtalkRemindStrategy extends SendRemindStrategy implements AlimtalkS
 	}
 
 	@Override
-	protected List<Remind> loadRemindables(String scheduledTime, String endPoint, TimeValue now) {
+	protected List<Remind> loadRemindables(String scheduledTime, String endPoint, BaseTime now) {
 		return findRemindableTargetsPort.findAllRemindablePlansByType(scheduledTime, endPoint, now);
 	}
 

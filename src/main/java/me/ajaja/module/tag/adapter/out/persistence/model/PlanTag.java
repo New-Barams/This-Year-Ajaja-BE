@@ -9,12 +9,12 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.ajaja.global.common.BaseEntity;
+import me.ajaja.global.common.TimeEntity;
 
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PlanTag extends BaseEntity<PlanTag> {
+public class PlanTag extends TimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "plan_tag_id")
@@ -29,6 +29,5 @@ public class PlanTag extends BaseEntity<PlanTag> {
 	public PlanTag(Long planId, Long tagId) {
 		this.planId = planId;
 		this.tagId = tagId;
-		this.validateSelf();
 	}
 }

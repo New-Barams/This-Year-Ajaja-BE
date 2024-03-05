@@ -10,7 +10,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
-import me.ajaja.global.common.DiscordEvent;
+import me.ajaja.global.event.DiscordEvent;
 import me.ajaja.infra.feign.discord.client.DiscordNotificationFeignClient;
 
 @Component

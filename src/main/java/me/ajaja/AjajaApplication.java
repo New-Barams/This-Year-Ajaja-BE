@@ -14,7 +14,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import lombok.RequiredArgsConstructor;
-import me.ajaja.global.common.DiscordEvent;
+import me.ajaja.global.event.DiscordEvent;
 import me.ajaja.infra.discord.DiscordProperties;
 import me.ajaja.infra.feign.kakao.client.KakaoProperties;
 import me.ajaja.infra.feign.ncp.client.NaverCloudProperties;

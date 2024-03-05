@@ -1,27 +1,27 @@
 package me.ajaja.module.feedback.domain;
 
-import static me.ajaja.global.exception.ErrorCode.*;
-
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import me.ajaja.global.common.BaseTime;
 import me.ajaja.global.common.SelfValidating;
-import me.ajaja.global.common.TimeValue;
-import me.ajaja.global.exception.AjajaException;
 
 @Getter
 public class Feedback extends SelfValidating<Feedback> {
 	private Long id;
+
 	@NotNull
 	private final Long userId;
+
 	@NotNull
 	private final Long planId;
+
 	private Info info;
 
-	private final TimeValue createdAt;
-	private final TimeValue updatedAt;
+	private final BaseTime createdAt;
+	private final BaseTime updatedAt;
 
-	public Feedback(Long id, Long userId, Long planId, Achieve achieve, String message, TimeValue createdAt,
-		TimeValue updatedAt) {
+	public Feedback(Long id, Long userId, Long planId, Achieve achieve, String message, BaseTime createdAt,
+		BaseTime updatedAt) {
 		this.id = id;
 		this.userId = userId;
 		this.planId = planId;
@@ -37,13 +37,5 @@ public class Feedback extends SelfValidating<Feedback> {
 
 	public boolean isFeedback() {
 		return this.getUpdatedAt().isAfter(this.getCreatedAt());
-	}
-
-	public void updateFeedback(int rate, String message) {
-		if (createdAt.isExpired()) {
-			throw new AjajaException(EXPIRED_FEEDBACK);
-		}
-
-		this.info = new Info(Achieve.of(rate), message);
 	}
 }

@@ -1,4 +1,4 @@
-package me.ajaja.global.common;
+package me.ajaja.global.event;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

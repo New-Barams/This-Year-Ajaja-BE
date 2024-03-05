@@ -5,7 +5,7 @@ import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import me.ajaja.global.common.TimeValue;
+import me.ajaja.global.common.BaseTime;
 import me.ajaja.module.plan.domain.Message;
 import me.ajaja.module.plan.domain.Plan;
 import me.ajaja.module.plan.domain.RemindDate;
@@ -27,8 +27,8 @@ public interface RemindInfoMapper {
 	RemindResponse.Message toMessage(Message message);
 
 	default boolean isReminded(RemindDate date) {
-		TimeValue now = TimeValue.now();
-		TimeValue sendDate = TimeValue.parse(2024, date.getRemindMonth(), date.getRemindDay(), 9); // todo:수정
+		BaseTime now = BaseTime.now();
+		BaseTime sendDate = BaseTime.parse(2024, date.getRemindMonth(), date.getRemindDay(), 9); // todo:수정
 		return now.isAfter(sendDate);
 	}
 }

@@ -14,7 +14,7 @@ import lombok.Getter;
 @Getter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class BaseEntity<T> extends SelfValidating<T> {
+public abstract class TimeEntity {
 	@CreatedDate
 	@Column(updatable = false)
 	private Instant createdAt;

@@ -4,7 +4,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import me.ajaja.global.common.TimeValue;
+import me.ajaja.global.common.BaseTime;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +32,7 @@ class SchedulingRemindService {
 
 	private void sendRemindsOnScheduledTime(String remindTime) {
 		sendRemindStrategyFactory.getStrategies()
-			.forEach(strategy -> strategy.send(remindTime, TimeValue.now()));
+			.forEach(strategy -> strategy.send(remindTime, BaseTime.now()));
 	}
 }
 

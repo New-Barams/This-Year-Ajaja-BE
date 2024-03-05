@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
-import me.ajaja.global.common.TimeValue;
+import me.ajaja.global.common.BaseTime;
 import me.ajaja.global.schedule.EmailSendable;
 import me.ajaja.infra.ses.SesSendPlanRemindService;
 import me.ajaja.module.remind.application.port.out.FindRemindableTargetsPort;
@@ -32,7 +32,7 @@ class SendEmailRemindStrategy extends SendRemindStrategy implements EmailSendabl
 
 	@Async
 	@Override
-	public void send(String remindTime, TimeValue now) {
+	public void send(String remindTime, BaseTime now) {
 		loadRemindables(remindTime, endPoint(), now)
 			.forEach(remind -> proceed(remind, now, () ->
 				toFeedbackUrl(remind.getTitle(), now.getMonth(), now.getDate(), remind.getPlanId())));
@@ -41,11 +41,11 @@ class SendEmailRemindStrategy extends SendRemindStrategy implements EmailSendabl
 	@Async
 	@Override
 	public void sendTrial(Remind remind) {
-		proceed(remind, TimeValue.now(), () -> MAIN_PAGE_URL);
+		proceed(remind, BaseTime.now(), () -> MAIN_PAGE_URL);
 	}
 
 	@Override
-	protected void proceed(Remind remind, TimeValue now, Supplier<String> url) {
+	protected void proceed(Remind remind, BaseTime now, Supplier<String> url) {
 		CompletableFuture
 			.supplyAsync(emailSupplier(remind, url.get()))
 			.thenAccept(tries -> super.onSuccess(remind, endPoint(), now, tries))
@@ -53,7 +53,7 @@ class SendEmailRemindStrategy extends SendRemindStrategy implements EmailSendabl
 	}
 
 	@Override
-	protected List<Remind> loadRemindables(String scheduledTime, String endPoint, TimeValue now) {
+	protected List<Remind> loadRemindables(String scheduledTime, String endPoint, BaseTime now) {
 		return findRemindableTargetsPort.findAllRemindablePlansByType(scheduledTime, endPoint, now);
 	}
 
