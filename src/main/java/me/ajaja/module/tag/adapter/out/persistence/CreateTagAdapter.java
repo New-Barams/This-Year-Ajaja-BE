@@ -1,13 +1,14 @@
 package me.ajaja.module.tag.adapter.out.persistence;
 
-import java.util.LinkedHashSet;
+import static me.ajaja.global.exception.ErrorCode.*;
+
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import me.ajaja.global.exception.AjajaException;
 import me.ajaja.module.tag.application.port.in.CreateTagUseCase;
 import me.ajaja.module.tag.application.port.out.CreateTagPort;
 import me.ajaja.module.tag.domain.FootprintTag;
@@ -24,29 +25,36 @@ public class CreateTagAdapter implements CreateTagPort {
 
 	@Override
 	public void create(CreateTagUseCase.Type type, Long targetId, List<String> tagNames) {
-		Set<String> tagNameSet = new LinkedHashSet<>(tagNames);
-		List<Tag> savedTags = tagNameSet.stream().map(this::getOrCreateTagIfNotExists).toList();
+		List<Tag> tags = tagNames.stream()
+			.distinct()
+			.map(this::getOrCreateIfNotExists)
+			.toList();
 
 		switch (type) {
-			case FOOTPRINT -> saveFootprintTag(targetId, savedTags);
-			case PLAN -> savePlanTag(targetId, savedTags);
+			case FOOTPRINT -> saveFootprintTag(targetId, tags);
+			case PLAN -> savePlanTag(targetId, tags);
+			default -> throw new AjajaException(INVALID_TAG_TYPE);
 		}
 	}
 
-	private Tag getOrCreateTagIfNotExists(String name) {
+	private Tag getOrCreateIfNotExists(String name) {
 		return tagRepository.findByName(name)
 			.orElseGet(() -> tagRepository.save(new Tag(name)));
 	}
 
-	private void saveFootprintTag(Long footprintId, List<Tag> savedTags) {
-		savedTags.stream().map(tag -> new FootprintTag(footprintId, tag.getId())).forEach(
-			footprintTag -> footprintTagRepository.save(footprintTag)
-		);
+	private void saveFootprintTag(Long footprintId, List<Tag> tags) {
+		List<FootprintTag> footprintTags = tags.stream()
+			.map(tag -> new FootprintTag(footprintId, tag.getId()))
+			.toList();
+
+		footprintTagRepository.saveAll(footprintTags);
 	}
 
-	private void savePlanTag(Long planId, List<Tag> savedTags) {
-		savedTags.stream().map(tag -> new PlanTag(planId, tag.getId())).forEach(
-			planTag -> planTagRepository.save(planTag)
-		);
+	private void savePlanTag(Long planId, List<Tag> tags) {
+		List<PlanTag> planTags = tags.stream()
+			.map(tag -> new PlanTag(planId, tag.getId()))
+			.toList();
+
+		planTagRepository.saveAll(planTags);
 	}
 }

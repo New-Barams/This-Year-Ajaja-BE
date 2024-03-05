@@ -4,7 +4,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +14,6 @@ import me.ajaja.module.tag.domain.PlanTag;
 import me.ajaja.module.tag.domain.Tag;
 
 @Service
-@Qualifier("plan")
 @Transactional
 @RequiredArgsConstructor
 public class CreatePlanTagService {

@@ -28,13 +28,13 @@ class CreateTagAdapterTest extends MockTestSupport {
 	@DisplayName("발자취 태그 저장시 기존 태그가 있으면 불러 오고 없으면 태그를 저장 하고 불러와 발자취 태그를 저장 한다")
 	void createFootprintTag_Success() {
 		Tag tag = sut.giveMeOne(Tag.class);
-		FootprintTag footprintTag = sut.giveMeOne(FootprintTag.class);
+		List<FootprintTag> footprintTags = sut.giveMeBuilder(FootprintTag.class).sampleList(3);
 
 		when(tagRepository.findByName("tag1")).thenReturn(Optional.of(tag));
 		when(tagRepository.findByName("tag2")).thenReturn(Optional.empty());
 		when(tagRepository.findByName("tag3")).thenReturn(Optional.empty());
 		when(tagRepository.save(any())).thenReturn(tag);
-		when(footprintTagRepository.save(any())).thenReturn(footprintTag);
+		when(footprintTagRepository.saveAll(any())).thenReturn(footprintTags);
 
 		createTagAdapter.create(CreateTagUseCase.Type.FOOTPRINT, 1L, List.of("tag1", "tag2", "tag3"));
 
@@ -43,7 +43,7 @@ class CreateTagAdapterTest extends MockTestSupport {
 			() -> verify(tagRepository, times(1)).findByName("tag2"),
 			() -> verify(tagRepository, times(1)).findByName("tag3"),
 			() -> verify(tagRepository, times(2)).save(any()),
-			() -> verify(footprintTagRepository, times(3)).save(any())
+			() -> verify(footprintTagRepository, times(1)).saveAll(any())
 		);
 	}
 }
