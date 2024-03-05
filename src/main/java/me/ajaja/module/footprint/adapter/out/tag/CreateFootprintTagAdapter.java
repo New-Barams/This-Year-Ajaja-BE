@@ -1,5 +1,7 @@
 package me.ajaja.module.footprint.adapter.out.tag;
 
+import static me.ajaja.module.tag.application.port.in.CreateTagUseCase.Type.*;
+
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -17,6 +19,6 @@ public class CreateFootprintTagAdapter implements CreateTagPort {
 
 	@Override
 	public void create(Long footprintId, List<String> tags) {
-		createTagUseCase.create(CreateTagUseCase.Type.FOOTPRINT, footprintId, tags);
+		createTagUseCase.create(FOOTPRINT, footprintId, tags);
 	}
 }
