@@ -1,5 +1,6 @@
 package me.ajaja.module.plan.adapter.out.persistence;
 
+
 import static me.ajaja.module.plan.adapter.out.persistence.model.QPlanEntity.*;
 
 import org.springframework.stereotype.Repository;

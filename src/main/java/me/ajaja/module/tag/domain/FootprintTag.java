@@ -9,13 +9,13 @@ import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.ajaja.global.common.BaseEntity;
+import me.ajaja.global.common.TimeEntity;
 
 @Getter
 @Entity
 @Table(name = "footprint_tags")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class FootprintTag extends BaseEntity<PlanTag> {
+public class FootprintTag extends TimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "footprint_tag_id")
@@ -30,6 +30,5 @@ public class FootprintTag extends BaseEntity<PlanTag> {
 	public FootprintTag(Long footprintId, Long tagId) {
 		this.footprintId = footprintId;
 		this.tagId = tagId;
-		this.validateSelf();
 	}
 }
