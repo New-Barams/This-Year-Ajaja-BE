@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
-import me.ajaja.global.common.TimeValue;
+import me.ajaja.global.common.BaseTime;
 import me.ajaja.module.auth.dto.AuthResponse;
 
 @Component
@@ -14,7 +14,7 @@ import me.ajaja.module.auth.dto.AuthResponse;
 public class JwtGenerator {
 	@FunctionalInterface
 	private interface RefreshTokenGenerator {
-		String generate(Long userId, TimeValue time);
+		String generate(Long userId, BaseTime time);
 	}
 
 	private final JwtSecretProvider secretProvider;
@@ -30,7 +30,7 @@ public class JwtGenerator {
 	}
 
 	private AuthResponse.Token generate(Long userId, RefreshTokenGenerator refreshTokenGenerator) {
-		final TimeValue now = TimeValue.now();
+		final BaseTime now = BaseTime.now();
 
 		return new AuthResponse.Token(
 			generateAccess(userId, now),
@@ -39,7 +39,7 @@ public class JwtGenerator {
 		);
 	}
 
-	private String generateAccess(Long userId, TimeValue time) {
+	private String generateAccess(Long userId, BaseTime time) {
 		Date accessTokenExpireIn = time.expireIn(secretProvider.accessTokenExpireIn());
 
 		return Jwts.builder()
@@ -49,7 +49,7 @@ public class JwtGenerator {
 			.compact();
 	}
 
-	private String generateRefresh(Long userId, TimeValue time) {
+	private String generateRefresh(Long userId, BaseTime time) {
 		Date refreshTokenExpireIn = time.expireIn(secretProvider.refreshTokenExpireIn());
 
 		String refreshToken = Jwts.builder()
@@ -63,7 +63,7 @@ public class JwtGenerator {
 		return refreshToken;
 	}
 
-	private boolean is3DaysLeft(String oldRefreshToken, TimeValue time) {
+	private boolean is3DaysLeft(String oldRefreshToken, BaseTime time) {
 		Date expireIn = rawParser.parseClaimWithType(oldRefreshToken, secretProvider.dateKey(), Date.class);
 		return time.isWithin3Days(expireIn);
 	}

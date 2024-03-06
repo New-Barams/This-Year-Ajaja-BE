@@ -11,13 +11,13 @@ import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.ajaja.global.common.BaseEntity;
+import me.ajaja.global.common.TimeEntity;
 
 @Getter
 @Entity
 @Table(name = "tags")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Tag extends BaseEntity<Tag> {
+public class Tag extends TimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "tag_id")
@@ -30,6 +30,5 @@ public class Tag extends BaseEntity<Tag> {
 
 	public Tag(String name) {
 		this.name = name;
-		this.validateSelf();
 	}
 }

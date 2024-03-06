@@ -12,7 +12,7 @@ import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
-import me.ajaja.global.common.TimeValue;
+import me.ajaja.global.common.BaseTime;
 import me.ajaja.module.feedback.domain.Feedback;
 import me.ajaja.module.feedback.domain.FeedbackQueryRepository;
 import me.ajaja.module.feedback.infra.model.AchieveInfo;
@@ -36,7 +36,7 @@ class FeedbackQueryRepositoryImpl implements FeedbackQueryRepository {
 	}
 
 	@Override
-	public boolean existByPlanIdAndPeriod(Long planId, TimeValue period) {
+	public boolean existByPlanIdAndPeriod(Long planId, BaseTime period) {
 		return queryFactory.selectFrom(feedbackEntity)
 			.where(feedbackEntity.planId.eq(planId)
 				.and(feedbackEntity.createdAt.between(period.getInstant(), period.oneMonthLater().toInstant()))

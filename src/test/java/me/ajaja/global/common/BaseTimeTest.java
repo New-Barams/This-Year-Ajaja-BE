@@ -8,7 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-class TimeValueTest {
+class BaseTimeTest {
 	private static final long ONE_DAY = 60 * 60 * 24 * 1000L;
 	private static final long ONE_SECOND = 60 * 1000L;
 
@@ -25,8 +25,8 @@ class TimeValueTest {
 		Date threeDaysAfter = new Date(new Date().getTime() + days);
 
 		// when
-		boolean withinThreeDaysBefore = TimeValue.now().isWithin3Days(threeDaysBefore);
-		boolean withinThreeDaysAfter = TimeValue.now().isWithin3Days(threeDaysAfter);
+		boolean withinThreeDaysBefore = BaseTime.now().isWithin3Days(threeDaysBefore);
+		boolean withinThreeDaysAfter = BaseTime.now().isWithin3Days(threeDaysAfter);
 
 		// then
 		assertThat(withinThreeDaysBefore).isTrue();
@@ -47,8 +47,8 @@ class TimeValueTest {
 		Date fourDaysAfter = new Date(new Date().getTime() + days);
 
 		// when
-		boolean withinThreeDaysBefore = TimeValue.now().isWithin3Days(fourDaysBefore);
-		boolean withinThreeDaysAfter = TimeValue.now().isWithin3Days(fourDaysAfter);
+		boolean withinThreeDaysBefore = BaseTime.now().isWithin3Days(fourDaysBefore);
+		boolean withinThreeDaysAfter = BaseTime.now().isWithin3Days(fourDaysAfter);
 
 		// then
 		assertThat(withinThreeDaysBefore).isFalse();

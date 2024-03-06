@@ -10,14 +10,14 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.ajaja.global.common.BaseEntity;
+import me.ajaja.global.common.TimeEntity;
 
 @Getter
 @Entity
 @Table(name = "footprints")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class FootprintEntity extends BaseEntity<FootprintEntity> {
+public class FootprintEntity extends TimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "footprint_id")

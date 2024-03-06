@@ -12,7 +12,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
 
-import me.ajaja.global.common.DiscordEvent;
+import me.ajaja.global.event.DiscordEvent;
 
 @SpringBootTest
 @RecordApplicationEvents

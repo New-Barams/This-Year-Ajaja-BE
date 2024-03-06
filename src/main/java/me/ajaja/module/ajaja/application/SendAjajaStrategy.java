@@ -6,7 +6,7 @@ import org.springframework.context.ApplicationEventPublisher;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import me.ajaja.global.common.TimeValue;
+import me.ajaja.global.common.BaseTime;
 import me.ajaja.global.exception.UnexpectedExceptionEvent;
 import me.ajaja.module.ajaja.domain.Ajaja;
 import me.ajaja.module.ajaja.domain.AjajaQueryRepository;
@@ -29,7 +29,7 @@ abstract class SendAjajaStrategy {
 
 	protected void onSuccess(Ajaja ajaja, String message, String endPoint, long tries) {
 		log.info("[NCP] Ajaja Sent To : {} After {} tries", ajaja.getPhoneNumber(), tries);
-		saveAjajaRemindPort.save(ajaja.getUserId(), endPoint, ajaja.getTargetId(), message, TimeValue.now());
+		saveAjajaRemindPort.save(ajaja.getUserId(), endPoint, ajaja.getTargetId(), message, BaseTime.now());
 	}
 
 	protected Void handleFail(Throwable throwable) {

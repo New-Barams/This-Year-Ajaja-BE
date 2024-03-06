@@ -23,7 +23,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.ajaja.global.common.BaseEntity;
+import me.ajaja.global.common.TimeEntity;
 import me.ajaja.module.ajaja.infra.AjajaEntity;
 import me.ajaja.module.plan.domain.Message;
 
@@ -33,7 +33,7 @@ import me.ajaja.module.plan.domain.Message;
 @Where(clause = "deleted = false")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class PlanEntity extends BaseEntity<PlanEntity> {
+public class PlanEntity extends TimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "plan_id")

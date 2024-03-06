@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import me.ajaja.global.common.TimeValue;
+import me.ajaja.global.common.BaseTime;
 
 public final class NaverRequest {
 	@Getter
@@ -31,7 +31,7 @@ public final class NaverRequest {
 		}
 
 		public static Alimtalk remind(String to, String planName, String message, String feedbackUrl) {
-			ZonedDateTime deadLine = TimeValue.now().oneMonthLater();
+			ZonedDateTime deadLine = BaseTime.now().oneMonthLater();
 			String content = REMIND.content(planName, message, deadLine.getMonthValue(), deadLine.getDayOfMonth());
 			return of(REMIND.getTemplateCode(), to, content, feedbackUrl, FEEDBACK_BUTTON_NAME);
 		}
@@ -41,11 +41,9 @@ public final class NaverRequest {
 			return of(AJAJA.getTemplateCode(), to, content, PLAN_BASE_URL + planId, PLAN_BUTTON_NAME);
 		}
 
-		private static Alimtalk of(
-			String templateCode, String to, String content, String buttonUrl, String buttonName
-		) {
+		private static Alimtalk of(String template, String to, String content, String buttonUrl, String buttonName) {
 			Message message = new Message(to, content, buttonUrl, buttonName);
-			return new Alimtalk(templateCode, List.of(message));
+			return new Alimtalk(template, List.of(message));
 		}
 
 		// multi-request

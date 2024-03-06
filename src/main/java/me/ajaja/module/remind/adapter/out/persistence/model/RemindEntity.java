@@ -12,7 +12,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.ajaja.global.common.BaseEntity;
+import me.ajaja.global.common.TimeEntity;
 
 @Entity
 @Getter
@@ -20,7 +20,7 @@ import me.ajaja.global.common.BaseEntity;
 @Where(clause = "deleted = false")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class RemindEntity extends BaseEntity<RemindEntity> {
+public class RemindEntity extends TimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable = false, name = "remind_id")

@@ -16,7 +16,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
-import me.ajaja.global.common.TimeValue;
+import me.ajaja.global.common.BaseTime;
 import me.ajaja.module.plan.adapter.out.persistence.model.PlanEntity;
 import me.ajaja.module.plan.application.port.out.FindAllPlansQuery;
 import me.ajaja.module.plan.domain.Plan;
@@ -56,7 +56,7 @@ class FindAllPlansAdapter implements FindAllPlansQuery {
 	}
 
 	private BooleanExpression isEqualsYear(boolean isNewYear) {
-		int currentYear = TimeValue.now().getYear();
+		int currentYear = BaseTime.now().getYear();
 		return isNewYear ? planEntity.createdAt.year().eq(currentYear) : planEntity.createdAt.year().ne(currentYear);
 	}
 
@@ -118,6 +118,6 @@ class FindAllPlansAdapter implements FindAllPlansQuery {
 	}
 
 	private BooleanExpression isCurrentYear() {
-		return planEntity.createdAt.year().eq(TimeValue.now().getYear());
+		return planEntity.createdAt.year().eq(BaseTime.now().getYear());
 	}
 }

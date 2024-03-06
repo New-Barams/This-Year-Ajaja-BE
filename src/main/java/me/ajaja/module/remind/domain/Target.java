@@ -15,4 +15,8 @@ public class Target extends SelfValidating<Target> {
 		this.title = title;
 		validateSelf();
 	}
+
+	public static Target init(Long id) {
+		return new Target(id, null);
+	}
 }
