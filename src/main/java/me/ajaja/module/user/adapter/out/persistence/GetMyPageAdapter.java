@@ -1,6 +1,5 @@
 package me.ajaja.module.user.adapter.out.persistence;
 
-
 import static me.ajaja.module.user.adapter.out.persistence.model.QUserEntity.*;
 
 import org.springframework.stereotype.Repository;

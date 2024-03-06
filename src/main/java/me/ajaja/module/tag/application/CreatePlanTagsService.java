@@ -16,7 +16,7 @@ import me.ajaja.module.tag.domain.repository.TagRepository;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class CreatePlanTagService {
+public class CreatePlanTagsService {
 	private final TagRepository tagRepository;
 	private final PlanTagRepository planTagRepository;
 

@@ -26,7 +26,7 @@ import me.ajaja.module.plan.domain.RemindInfo;
 import me.ajaja.module.plan.dto.PlanParam;
 import me.ajaja.module.plan.dto.PlanRequest;
 import me.ajaja.module.plan.mapper.PlanMapper;
-import me.ajaja.module.tag.application.CreatePlanTagService;
+import me.ajaja.module.tag.application.CreatePlanTagsService;
 
 class CreatePlanServiceTest extends MockTestSupport {
 	PlanRequest.Create request = sut.giveMeBuilder(PlanRequest.Create.class)
@@ -66,7 +66,7 @@ class CreatePlanServiceTest extends MockTestSupport {
 	@Mock
 	private PlanMapper planMapper;
 	@Mock
-	private CreatePlanTagService createPlanTagService;
+	private CreatePlanTagsService createPlanTagService;
 
 	@Test
 	@DisplayName("요청이 들어오면 계획이 생성되고, 생성된 계획의 Id를 반환한다.")

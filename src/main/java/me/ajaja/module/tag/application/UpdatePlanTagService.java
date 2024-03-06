@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 @RequiredArgsConstructor
 public class UpdatePlanTagService {
-	private final CreatePlanTagService createPlanTagService;
+	private final CreatePlanTagsService createPlanTagService;
 	private final DeletePlanTagService deletePlanTagService;
 
 	public List<String> update(Long planId, List<String> tags) {
