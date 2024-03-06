@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import me.ajaja.module.tag.domain.PlanTagRepository;
+import me.ajaja.module.tag.domain.repository.PlanTagRepository;
 
 @Service
 @Transactional

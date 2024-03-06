@@ -4,9 +4,9 @@ import java.util.List;
 
 public interface CreateTagsPort {
 	/**
-	 * request create tag and tag-footprint to tag domain CreateTagUseCase
-	 * @param footprintId target that have tags
-	 * @param tags the tags
+	 * 발자취 태그 생성 외부 요청 포트
+	 * @param footprintId 발자취 식별자
+	 * @param tags 태그 이름
 	 */
 	void create(Long footprintId, List<String> tags);
 }

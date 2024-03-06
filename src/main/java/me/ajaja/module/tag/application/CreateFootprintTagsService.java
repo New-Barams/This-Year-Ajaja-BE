@@ -7,14 +7,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import me.ajaja.module.tag.domain.FootprintTag;
-import me.ajaja.module.tag.domain.FootprintTagRepository;
 import me.ajaja.module.tag.domain.Tag;
-import me.ajaja.module.tag.domain.TagRepository;
+import me.ajaja.module.tag.domain.repository.FootprintTagRepository;
+import me.ajaja.module.tag.domain.repository.TagRepository;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class CreateFootprintTagService {
+public class CreateFootprintTagsService {
 	private final TagRepository tagRepository;
 	private final FootprintTagRepository footprintTagRepository;
 

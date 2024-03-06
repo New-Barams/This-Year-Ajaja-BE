@@ -15,12 +15,12 @@ import me.ajaja.module.footprint.dto.FootprintRequest;
 @RequiredArgsConstructor
 public class CreateFootprintService implements CreateFootprintUseCase {
 	private final CreateFootprintPort createFootprintPort;
-	private final CreateTagsPort createTagPort;
+	private final CreateTagsPort createTagsPort;
 
 	@Override
 	public void create(Long userId, FootprintRequest.Create param) {
 		Footprint footprint = Footprint.init(userId, param);
 		Long footprintId = createFootprintPort.create(footprint);
-		createTagPort.create(footprintId, param.getTags());
+		createTagsPort.create(footprintId, param.getTags());
 	}
 }

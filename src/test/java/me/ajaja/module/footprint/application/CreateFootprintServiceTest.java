@@ -1,4 +1,4 @@
-package me.ajaja.module.footprint.application.port;
+package me.ajaja.module.footprint.application;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;

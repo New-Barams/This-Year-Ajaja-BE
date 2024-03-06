@@ -7,16 +7,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import me.ajaja.module.footprint.application.port.out.CreateTagsPort;
-import me.ajaja.module.tag.application.CreateFootprintTagService;
+import me.ajaja.module.tag.application.CreateFootprintTagsService;
 
 @Component
 @Transactional
 @RequiredArgsConstructor
 public class CreateFootprintTagsAdapter implements CreateTagsPort {
-	private final CreateFootprintTagService createTagService;
+	private final CreateFootprintTagsService createTagsService;
 
 	@Override
 	public void create(Long footprintId, List<String> tags) {
-		createTagService.create(footprintId, tags);
+		createTagsService.create(footprintId, tags);
 	}
 }
