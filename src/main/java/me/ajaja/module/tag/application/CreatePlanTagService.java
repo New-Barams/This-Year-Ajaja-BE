@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import me.ajaja.module.tag.adapter.out.persistence.PlanTagRepository;
-import me.ajaja.module.tag.adapter.out.persistence.TagRepository;
+import me.ajaja.module.tag.domain.PlanTagRepository;
 import me.ajaja.module.tag.domain.PlanTag;
 import me.ajaja.module.tag.domain.Tag;
+import me.ajaja.module.tag.domain.TagRepository;
 
 @Service
 @Transactional
