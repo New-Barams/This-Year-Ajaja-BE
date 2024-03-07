@@ -14,7 +14,7 @@ import com.amazonaws.services.simpleemail.model.SendEmailRequest;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
-import me.ajaja.global.common.TimeValue;
+import me.ajaja.global.common.BaseTime;
 
 @Builder
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -34,7 +34,7 @@ class MailForm {
 	}
 
 	public static MailForm remind(String to, String title, String message, String feedbackUrl) {
-		ZonedDateTime deadLine = TimeValue.now().oneMonthLater();
+		ZonedDateTime deadLine = BaseTime.now().oneMonthLater();
 		return MailForm.builder()
 			.to(to)
 			.subject(REMIND.subject(title))

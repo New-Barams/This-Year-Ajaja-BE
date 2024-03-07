@@ -22,18 +22,19 @@ import me.ajaja.module.remind.application.model.RemindableAjaja;
 public class AjajaQueryRepositoryImpl implements AjajaQueryRepository {
 	private final JPAQueryFactory queryFactory;
 
-	public List<RemindableAjaja> findRemindableAjaja() {
+	public List<RemindableAjaja> findRemindableAjajasByEndPoint(String remindType) {
 		return queryFactory.select(Projections.constructor(RemindableAjaja.class,
 				planEntity.title,
 				planEntity.id,
 				userEntity.id,
-				userEntity.remindEmail.count(),
-				userEntity.remindEmail
+				userEntity.signUpEmail.count(),
+				userEntity.remindEmail,
+				userEntity.phoneNumber
 			)).from(QAjajaEntity.ajajaEntity)
 			.join(planEntity).on(QAjajaEntity.ajajaEntity.targetId.eq(planEntity.id))
 			.join(userEntity).on(planEntity.userId.eq(userEntity.id))
 			.where(planEntity.canAjaja.eq(true)
-				.and(userEntity.remindType.eq("EMAIL")
+				.and(userEntity.remindType.eq(remindType)
 					.or(userEntity.remindType.eq("BOTH")))
 				.and(QAjajaEntity.ajajaEntity.updatedAt.between(Instant.now().minus(7, ChronoUnit.DAYS), Instant.now()))
 				.and(QAjajaEntity.ajajaEntity.type.eq(Ajaja.Type.PLAN.name()))

@@ -15,7 +15,7 @@ import org.mockito.Mock;
 import net.jqwik.api.Arbitraries;
 
 import me.ajaja.common.support.MockTestSupport;
-import me.ajaja.global.common.TimeValue;
+import me.ajaja.global.common.BaseTime;
 import me.ajaja.module.plan.application.port.out.CountPlanPort;
 import me.ajaja.module.plan.application.port.out.SavePlanPort;
 import me.ajaja.module.plan.domain.Content;
@@ -54,7 +54,7 @@ class CreatePlanServiceTest extends MockTestSupport {
 		new PlanStatus(true, true),
 		List.of(new Message("message1", 6, 1), new Message("message2", 12, 1)),
 		Collections.emptyList(),
-		new TimeValue(Instant.now())
+		new BaseTime(Instant.now())
 	);
 
 	@InjectMocks

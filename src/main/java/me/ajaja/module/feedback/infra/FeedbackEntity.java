@@ -12,8 +12,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.ajaja.global.common.BaseEntity;
-import me.ajaja.module.feedback.domain.Feedback;
+import me.ajaja.global.common.TimeEntity;
 
 @Entity
 @Getter
@@ -21,7 +20,7 @@ import me.ajaja.module.feedback.domain.Feedback;
 @Where(clause = "deleted = false")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class FeedbackEntity extends BaseEntity<Feedback> {
+public class FeedbackEntity extends TimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable = false, name = "feedback_id")

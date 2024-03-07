@@ -5,6 +5,7 @@ spring:
       - jasypt
       - ses
       - secret
+      - monitor
 
   jpa:
     hibernate:

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import me.ajaja.global.common.TimeValue;
+import me.ajaja.global.common.BaseTime;
 import me.ajaja.module.feedback.application.model.FeedbackPeriod;
 import me.ajaja.module.feedback.application.model.PlanFeedbackInfo;
 import me.ajaja.module.feedback.domain.FeedbackQueryRepository;
@@ -33,38 +33,45 @@ public class LoadFeedbackInfoService {
 
 		List<FeedbackInfo> feedbackInfos = feedbackQueryRepository.findFeedbackInfosByPlanId(planId);
 
-		List<FeedbackResponse.RemindFeedback> feedbacks
-			= createRemindFeedbacks(feedbackInfos.iterator(), planFeedbackInfo);
+		List<FeedbackResponse.RemindFeedback> feedbacks =
+			createRemindFeedbacks(planFeedbackInfo, feedbackInfos.iterator());
 
 		return feedbackMapper.toResponse(planFeedbackInfo, feedbacks);
 	}
 
 	private List<FeedbackResponse.RemindFeedback> createRemindFeedbacks(
-		Iterator<FeedbackInfo> feedbackInfos,
-		PlanFeedbackInfo planInfo
+		PlanFeedbackInfo planFeedbackInfo,
+		Iterator<FeedbackInfo> feedbackInfoIterator
 	) {
-		FeedbackInfo feedbackInfo = feedbackInfos.hasNext() ? feedbackInfos.next() : null;
+		FeedbackInfo feedbackInfo = feedbackInfoIterator.hasNext() ? feedbackInfoIterator.next() : null;
 
-		return planInfo.periods().stream()
-			.map(period -> createRemindFeedbackResponse(feedbackInfo, planInfo, period, feedbackInfos)).toList();
+		return planFeedbackInfo.periods().stream()
+			.map(period -> createRemindFeedbackResponse(feedbackInfo, planFeedbackInfo, period, feedbackInfoIterator))
+			.toList();
 	}
 
 	private FeedbackResponse.RemindFeedback createRemindFeedbackResponse(
 		FeedbackInfo feedbackInfo,
-		PlanFeedbackInfo planInfo,
+		PlanFeedbackInfo planFeedbackInfo,
 		FeedbackPeriod period,
-		Iterator<FeedbackInfo> feedbackInfos
+		Iterator<FeedbackInfo> feedbackInfoIterator
 	) {
-		TimeValue sendDateValue = TimeValue.parse(planInfo.createdYear(), period.remindMonth(), period.remindDate(),
-			planInfo.remindTime());
+		BaseTime sendDate = BaseTime.parse(
+			planFeedbackInfo.createdYear(),
+			period.remindMonth(),
+			period.remindDate(),
+			planFeedbackInfo.remindTime()
+		);
 
-		boolean feedbacked = isFeedbacked(feedbackInfo, planInfo, period);
-		if (feedbacked && feedbackInfos.hasNext()) {
-			feedbackInfos.next();
+		boolean isFeedbacked = isFeedbacked(feedbackInfo, planFeedbackInfo, period);
+
+		if (isFeedbacked && feedbackInfoIterator.hasNext()) {
+			feedbackInfoIterator.next();
 		}
 
-		return feedbacked ? feedbackMapper.toResponse(sendDateValue, feedbackInfo, sendDateValue.oneMonthLater()) :
-			feedbackMapper.toEmptyResponse(sendDateValue, planInfo.remindTime(), sendDateValue.oneMonthLater());
+		return isFeedbacked
+			? feedbackMapper.toResponse(sendDate, feedbackInfo, sendDate.oneMonthLater())
+			: feedbackMapper.toEmptyResponse(sendDate, planFeedbackInfo.remindTime(), sendDate.oneMonthLater());
 	}
 
 	private boolean isFeedbacked(FeedbackInfo feedbackInfo, PlanFeedbackInfo planInfo, FeedbackPeriod feedbackPeriod) {
@@ -72,10 +79,18 @@ public class LoadFeedbackInfoService {
 			return false;
 		}
 
-		TimeValue feedbackDate = TimeValue.parse(planInfo.createdYear(), feedbackInfo.feedbackMonth(),
-			feedbackInfo.feedbackDate(), planInfo.remindTime());
+		BaseTime feedbackDate = BaseTime.parse(
+			planInfo.createdYear(),
+			feedbackInfo.feedbackMonth(),
+			feedbackInfo.feedbackDate(),
+			planInfo.remindTime()
+		);
 
-		return feedbackDate.isBetween(TimeValue.parse(planInfo.createdYear(),
-			feedbackPeriod.remindMonth(), feedbackPeriod.remindDate(), planInfo.remindTime()));
+		return feedbackDate.isWithinAMonth(BaseTime.parse(
+			planInfo.createdYear(),
+			feedbackPeriod.remindMonth(),
+			feedbackPeriod.remindDate(),
+			planInfo.remindTime())
+		);
 	}
 }

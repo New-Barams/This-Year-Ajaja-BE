@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import me.ajaja.global.common.TimeValue;
+import me.ajaja.global.common.BaseTime;
 import me.ajaja.global.exception.AjajaException;
 import me.ajaja.global.exception.ErrorCode;
 import me.ajaja.module.feedback.domain.Feedback;
@@ -25,16 +25,16 @@ public class UpdateFeedbackService {
 
 	public void updateFeedback(Long userId, Long planId, int rate, String message) {
 		Plan plan = findTargetPort.findByUserIdAndPlanId(userId, planId);
-		TimeValue now = TimeValue.now();
+		BaseTime now = BaseTime.now();
 
-		TimeValue period = plan.getFeedbackPeriod(now);
+		BaseTime period = plan.getFeedbackPeriod(now);
 		checkExistFeedback(planId, period);
 
 		Feedback feedback = Feedback.create(userId, planId, rate, message);
 		feedbackRepository.save(feedback);
 	}
 
-	private void checkExistFeedback(Long planId, TimeValue period) {
+	private void checkExistFeedback(Long planId, BaseTime period) {
 		if (feedbackQueryRepository.existByPlanIdAndPeriod(planId, period)) {
 			throw new AjajaException(ErrorCode.ALREADY_FEEDBACK);
 		}

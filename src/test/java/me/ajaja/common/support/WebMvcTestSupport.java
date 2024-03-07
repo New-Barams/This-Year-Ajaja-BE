@@ -34,6 +34,7 @@ import me.ajaja.module.auth.application.port.in.ReissueTokenUseCase;
 import me.ajaja.module.feedback.application.LoadFeedbackInfoService;
 import me.ajaja.module.feedback.application.LoadTotalAchieveService;
 import me.ajaja.module.feedback.application.UpdateFeedbackService;
+import me.ajaja.module.footprint.application.port.in.CreateFootprintUseCase;
 import me.ajaja.module.plan.application.port.in.CreatePlanUseCase;
 import me.ajaja.module.plan.application.port.in.DeletePlanUseCase;
 import me.ajaja.module.plan.application.port.in.LoadPlanDetailUseCase;
@@ -41,9 +42,8 @@ import me.ajaja.module.plan.application.port.in.SwitchPlanStatusUseCase;
 import me.ajaja.module.plan.application.port.in.UpdatePlanUseCase;
 import me.ajaja.module.plan.application.port.in.ValidateContentUseCase;
 import me.ajaja.module.plan.application.port.out.FindAllPlansQuery;
-import me.ajaja.module.remind.application.port.in.GetRemindInfoUseCase;
 import me.ajaja.module.remind.application.port.in.GetTargetInfoUseCase;
-import me.ajaja.module.remind.application.port.in.SendTestRemindUseCase;
+import me.ajaja.module.remind.application.port.in.SendTrialRemindUseCase;
 import me.ajaja.module.remind.application.port.in.UpdateRemindInfoUseCase;
 import me.ajaja.module.remind.application.port.out.FindTargetRemindQuery;
 import me.ajaja.module.user.application.port.in.ChangeRemindTypeUseCase;
@@ -57,9 +57,10 @@ import me.ajaja.module.user.application.port.out.GetMyPageQuery;
 /**
  * Supports Cached Context On WebMvcTest with Monkey <br>
  * When Authentication is required USE @ApiTest, @ParameterizedApiTest
+ *
+ * @author hejow
  * @see ApiTest
  * @see ParameterizedApiTest
- * @author hejow
  */
 @WebMvcTest
 @ExtendWith(RestDocumentationExtension.class)
@@ -70,6 +71,7 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 	protected static final String PLAN_END_POINT = "/plans";
 	protected static final String FEEDBACK_END_POINT = "/feedbacks";
 	protected static final String REMIND_END_POINT = "/reminds";
+	protected static final String FOOTPRINT_END_POINT = "/footprints";
 	protected static final String BEARER_TOKEN = "Bearer eyJhbGxMiJ9.eyJzWpvdyJ9.avFKonhbIIhEg8H1dycQkhQ";
 
 	@Autowired
@@ -164,11 +166,13 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 	@MockBean
 	protected GetTargetInfoUseCase getTargetInfoUseCase;
 	@MockBean
-	protected GetRemindInfoUseCase getRemindInfoUseCase;
-	@MockBean
 	protected UpdateRemindInfoUseCase updateRemindInfoUseCase;
 	@MockBean
 	protected FindTargetRemindQuery findTargetRemindQuery;
 	@MockBean
-	protected SendTestRemindUseCase sendTestRemindUseCase;
+	protected SendTrialRemindUseCase sendTrialRemindUseCase;
+
+	// footprint
+	@MockBean
+	protected CreateFootprintUseCase createFootprintUseCase;
 }

@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Bean;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import lombok.RequiredArgsConstructor;
-import me.ajaja.global.common.TimeValue;
+import me.ajaja.global.common.BaseTime;
 
 @RequiredArgsConstructor
 class NaverFeignHeaderConfiguration {
@@ -38,7 +38,7 @@ class NaverFeignHeaderConfiguration {
 	}
 
 	private String epochTime() {
-		return String.valueOf(TimeValue.now().getTimeMillis());
+		return String.valueOf(BaseTime.now().getTimeMillis());
 	}
 
 	private String generateSignature(RequestTemplate request, String timestamp) {

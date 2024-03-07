@@ -28,6 +28,7 @@ public enum ErrorCode {
 	EXPIRED_FEEDBACK(BAD_REQUEST, "피드백 기간이 아닙니다."),
 	NON_NUMERIC_INPUT(BAD_REQUEST, "휴대폰 번호로 숫자 이외의 값을 입력할 수 없습니다."),
 	REMIND_TASK_FAILED(BAD_REQUEST, "리마인드 전송에 실패하였습니다."),
+	INVALID_FOOTPRINT_TYPE(BAD_REQUEST, "지원하지 않는 발자취 유형입니다."),
 
 	// 404
 	NOT_SUPPORT_END_POINT(NOT_FOUND, "지원하지 않는 API 입니다."),
@@ -35,6 +36,7 @@ public enum ErrorCode {
 	EMPTY_CACHE(NOT_FOUND, "캐시에 저장된 값이 없습니다."),
 	NOT_FOUND_PLAN(NOT_FOUND, "계획 정보가 존재하지 않습니다."),
 	NOT_FOUND_FEEDBACK(NOT_FOUND, "피드백 정보가 존재하지 않습니다."),
+	NOT_FOUND_FOOTPRINT(NOT_FOUND, "작성한 발자취가 존재하지 않습니다."),
 
 	// 409
 	ALREADY_FEEDBACK(CONFLICT, "이미 평가된 피드백 정보가 있습니다."),
@@ -46,7 +48,8 @@ public enum ErrorCode {
 
 	// 500
 	AJAJA_SERVER_ERROR(INTERNAL_SERVER_ERROR, "서버 내부 오류입니다. 관리자에게 문의바랍니다."),
-	EXTERNAL_API_FAIL(INTERNAL_SERVER_ERROR, "외부 API 호출에 실패했습니다.");
+	EXTERNAL_API_FAIL(INTERNAL_SERVER_ERROR, "외부 API 호출에 실패했습니다."),
+	ATTEMPTS_EXCEED_MAXIMUM_COUNT(INTERNAL_SERVER_ERROR, "외부 API 최대 요청 재시도 횟수를 초과하였습니다.");
 
 	private final HttpStatus httpStatus;
 	private final String message;

@@ -1,5 +1,8 @@
 #!/usr/bin/env sh
 
+docker stop mysql
+docker stop redis
+
 docker rm mysql redis
 docker rmi mysql:latest redis:latest
 

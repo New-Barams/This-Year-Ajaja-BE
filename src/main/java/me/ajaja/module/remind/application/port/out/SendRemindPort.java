@@ -1,10 +1,8 @@
 package me.ajaja.module.remind.application.port.out;
 
-import me.ajaja.global.common.TimeValue;
-import me.ajaja.module.remind.domain.Remind;
+import me.ajaja.infra.feign.ncp.model.NaverRequest;
+import me.ajaja.infra.feign.ncp.model.NaverResponse;
 
 public interface SendRemindPort {
-	String send(String remindTime, TimeValue now);
-
-	String sendTest(Remind remind, String mainPageUrl);
+	NaverResponse.AlimTalk send(NaverRequest.Alimtalk request);
 }
