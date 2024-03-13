@@ -7,9 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import me.ajaja.module.tag.domain.FootprintTag;
+import me.ajaja.module.tag.domain.FootprintTagRepository;
 import me.ajaja.module.tag.domain.Tag;
-import me.ajaja.module.tag.domain.repository.FootprintTagRepository;
-import me.ajaja.module.tag.domain.repository.TagRepository;
+import me.ajaja.module.tag.domain.TagRepository;
 
 @Service
 @Transactional

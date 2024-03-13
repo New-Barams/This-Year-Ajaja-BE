@@ -13,9 +13,9 @@ import org.mockito.Mock;
 
 import me.ajaja.common.support.MockTestSupport;
 import me.ajaja.module.tag.domain.FootprintTag;
+import me.ajaja.module.tag.domain.FootprintTagRepository;
 import me.ajaja.module.tag.domain.Tag;
-import me.ajaja.module.tag.domain.repository.FootprintTagRepository;
-import me.ajaja.module.tag.domain.repository.TagRepository;
+import me.ajaja.module.tag.domain.TagRepository;
 
 class CreateFootprintTagsServiceTest extends MockTestSupport {
 	@InjectMocks
