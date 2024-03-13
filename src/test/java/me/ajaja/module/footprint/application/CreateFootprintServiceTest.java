@@ -1,4 +1,4 @@
-package me.ajaja.module.footprint.application.port;
+package me.ajaja.module.footprint.application;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -12,10 +12,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import me.ajaja.common.support.MockTestSupport;
+import me.ajaja.module.footprint.application.CreateFootprintService;
 import me.ajaja.module.footprint.application.port.out.CreateFootprintPort;
+import me.ajaja.module.footprint.application.port.out.CreateTagsPort;
 import me.ajaja.module.footprint.domain.Footprint;
 import me.ajaja.module.footprint.dto.FootprintRequest;
-import me.ajaja.module.tag.application.port.out.CreateTagPort;
 
 class CreateFootprintServiceTest extends MockTestSupport {
 	@InjectMocks
@@ -25,7 +26,7 @@ class CreateFootprintServiceTest extends MockTestSupport {
 	private CreateFootprintPort createFootprintPort;
 
 	@Mock
-	private CreateTagPort createTagPort;
+	private CreateTagsPort createTagPort;
 
 	private FootprintRequest.Create param;
 
@@ -54,7 +55,7 @@ class CreateFootprintServiceTest extends MockTestSupport {
 		Long expectedFootprintId = 1L;
 
 		when(createFootprintPort.create(any())).thenReturn(expectedFootprintId);
-		when(createTagPort.create(anyLong(), anyList())).thenReturn(List.of("tag1", "tag2"));
+		doNothing().when(createTagPort).create(anyLong(), anyList());
 
 		// when
 		createFootprintService.create(userId, param);

@@ -13,7 +13,7 @@ import me.ajaja.module.plan.application.port.out.SavePlanPort;
 import me.ajaja.module.plan.domain.Plan;
 import me.ajaja.module.plan.dto.PlanRequest;
 import me.ajaja.module.plan.mapper.PlanMapper;
-import me.ajaja.module.tag.application.CreatePlanTagService;
+import me.ajaja.module.tag.application.CreatePlanTagsService;
 
 @Service
 @Transactional
@@ -23,7 +23,7 @@ class CreatePlanService implements CreatePlanUseCase {
 
 	private final SavePlanPort savePlanPort;
 	private final CountPlanPort countPlanPort;
-	private final CreatePlanTagService createPlanTagService;
+	private final CreatePlanTagsService createPlanTagService;
 	private final PlanMapper planMapper;
 
 	@Override
