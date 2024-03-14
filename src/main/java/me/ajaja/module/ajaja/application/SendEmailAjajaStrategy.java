@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
 import me.ajaja.global.schedule.EmailSendable;
-import me.ajaja.infra.ses.SesSendAjajaRemindService;
+import me.ajaja.infra.mail.SesSendAjajaRemindService;
 import me.ajaja.module.ajaja.domain.Ajaja;
 import me.ajaja.module.ajaja.domain.AjajaQueryRepository;
 import me.ajaja.module.ajaja.mapper.AjajaMapper;

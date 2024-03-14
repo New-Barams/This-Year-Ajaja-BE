@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import lombok.extern.slf4j.Slf4j;
 import me.ajaja.global.common.BaseTime;
 import me.ajaja.global.schedule.EmailSendable;
-import me.ajaja.infra.ses.SesSendPlanRemindService;
+import me.ajaja.infra.mail.SesSendPlanRemindService;
 import me.ajaja.module.remind.application.port.out.FindRemindableTargetsPort;
 import me.ajaja.module.remind.domain.Remind;
 
