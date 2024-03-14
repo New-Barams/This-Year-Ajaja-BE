@@ -1,6 +1,6 @@
 package me.ajaja.global.security.filter;
 
-import static org.apache.commons.codec.CharEncoding.*;
+import static org.eclipse.jdt.internal.compiler.util.Util.*;
 import static org.springframework.http.MediaType.*;
 
 import java.io.IOException;

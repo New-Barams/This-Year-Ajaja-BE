@@ -18,6 +18,12 @@ spring:
   flyway:
     enabled: false
 
+  mail:
+    host: thisisfortest
+    port: 1234
+    username: thisisfortest
+    password: thisisfortest
+
 logging:
   level:
     org:
@@ -47,8 +53,3 @@ secret:
 
   discord:
     web-hook: thisisfortest
-
-ses:
-  credentials:
-    access-key: thisisfortest
-    secret-key: thisisfortest

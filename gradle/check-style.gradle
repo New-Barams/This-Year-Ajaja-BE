@@ -11,4 +11,4 @@ checkstyle {
 checkstyleMain
         .exclude('me/ajaja/infra/feign/kakao/model/KakaoRequest.java')
         .exclude('me/ajaja/infra/feign/ncp/model/AlimtalkTemplate.java')
-        .exclude('me/ajaja/infra/ses/HtmlEmailTemplate.java')
+        .exclude('me/ajaja/infra/mail/HtmlEmailTemplate.java')

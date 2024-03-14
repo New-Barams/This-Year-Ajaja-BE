@@ -23,6 +23,7 @@ apply from: 'gradle/rest-docs.gradle'
 dependencies {
     // Spring
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'org.springframework.boot:spring-boot-starter-quartz'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
@@ -31,9 +32,6 @@ dependencies {
 
     // Test
     testImplementation 'org.springframework.security:spring-security-test'
-
-    // AWS - spring jcl logging conflict
-    implementation 'com.amazonaws:aws-java-sdk-ses:1.12.580' exclude group: 'commons-logging', module: 'commons-logging'
 
     // Openfeign
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.0.4'

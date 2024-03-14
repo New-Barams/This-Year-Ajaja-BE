@@ -1,4 +1,4 @@
-package me.ajaja.infra.ses;
+package me.ajaja.infra.mail;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

@@ -1,7 +1,7 @@
 package me.ajaja.common.support;
 
 import static me.ajaja.global.exception.ErrorCode.*;
-import static org.apache.commons.codec.CharEncoding.*;
+import static org.apache.commons.lang3.CharEncoding.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
