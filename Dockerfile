@@ -17,4 +17,4 @@ ENTRYPOINT java -jar -Duser.timezone=Asia/Seoul ajaja.jar \
             --spring.profiles.active=${spring_profile} \
             --JASYPT_PASSWORD=${jasypt_password} \
             --MAIL_USERNAME=${mail_username} \
-            --MAIL_PASSWORD=${mail_password} \
+            --MAIL_PASSWORD=${mail_password}
