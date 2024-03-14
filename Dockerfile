@@ -11,7 +11,7 @@ COPY ${JAR_FILE} ajaja.jar
 ENV spring_profile=${SPRING_PROFILE} \
     jasypt_password=${JASYPT_PASSWORD} \
     mail_username=${MAIL_USERNAME} \
-    mail_password=${MAIL_PASSWORD} \
+    mail_password=${MAIL_PASSWORD}
 
 ENTRYPOINT java -jar -Duser.timezone=Asia/Seoul ajaja.jar \
             --spring.profiles.active=${spring_profile} \
