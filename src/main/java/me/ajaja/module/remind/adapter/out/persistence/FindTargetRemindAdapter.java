@@ -24,7 +24,8 @@ public class FindTargetRemindAdapter implements FindTargetRemindQuery {
 		Plan plan = findTargetPort.findByUserIdAndPlanId(userId, planId);
 
 		List<RemindResponse.Message> messages = plan.getMessages()
-			.stream().map(mapper::toMessage)
+			.stream().map(message ->
+				mapper.toMessage(message, plan.getCreatedAt().getYear(), plan.getRemindTime()))
 			.toList();
 
 		return mapper.toRemindInfo(plan, messages);

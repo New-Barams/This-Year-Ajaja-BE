@@ -20,15 +20,15 @@ public interface RemindInfoMapper {
 	@Mapping(source = "plan.info.remindDate", target = "remindDate")
 	RemindResponse.RemindInfo toRemindInfo(Plan plan, List<RemindResponse.Message> messageResponses);
 
-	@Mapping(target = "reminded", expression = "java(isReminded(message.getRemindDate()))")
-	@Mapping(source = "remindDate.remindMonth", target = "remindMonth")
-	@Mapping(source = "remindDate.remindDay", target = "remindDay")
-	@Mapping(source = "content", target = "remindMessage")
-	RemindResponse.Message toMessage(Message message);
+	@Mapping(target = "reminded", expression = "java(isReminded(message.getRemindDate(),planYear,remindHour))")
+	@Mapping(source = "message.remindDate.remindMonth", target = "remindMonth")
+	@Mapping(source = "message.remindDate.remindDay", target = "remindDay")
+	@Mapping(source = "message.content", target = "remindMessage")
+	RemindResponse.Message toMessage(Message message, int planYear, int remindHour);
 
-	default boolean isReminded(RemindDate date) {
+	default boolean isReminded(RemindDate date, int planYear, int remindHour) {
 		BaseTime now = BaseTime.now();
-		BaseTime sendDate = BaseTime.parse(2024, date.getRemindMonth(), date.getRemindDay(), 9); // todo:수정
+		BaseTime sendDate = BaseTime.parse(planYear, date.getRemindMonth(), date.getRemindDay(), remindHour);
 		return now.isAfter(sendDate);
 	}
 }
