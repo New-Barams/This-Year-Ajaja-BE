@@ -1,6 +1,7 @@
 package me.ajaja.module.feedback.mapper;
 
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.mapstruct.Mapper;
@@ -8,6 +9,7 @@ import org.mapstruct.Mapping;
 
 import me.ajaja.global.common.BaseTime;
 import me.ajaja.module.feedback.application.model.PlanFeedbackInfo;
+import me.ajaja.module.feedback.application.model.UpdatableFeedback;
 import me.ajaja.module.feedback.domain.Feedback;
 import me.ajaja.module.feedback.dto.FeedbackResponse;
 import me.ajaja.module.feedback.infra.FeedbackEntity;
@@ -58,5 +60,14 @@ public interface FeedbackMapper {
 	default boolean isReminded(BaseTime sendDate) {
 		BaseTime now = BaseTime.now();
 		return now.isAfter(sendDate);
+	}
+
+	@Mapping(target = "remainPeriod", expression = "java(getRemainPeriod(feedback.deadLine()))")
+	@Mapping(target = "month", expression = "java(feedback.deadLine().getMonth())")
+	@Mapping(target = "date", expression = "java(feedback.deadLine().getDate())")
+	FeedbackResponse.UpdatableFeedback toResponse(UpdatableFeedback feedback);
+
+	default long getRemainPeriod(BaseTime deadLine) {
+		return ChronoUnit.DAYS.between(deadLine.getInstant(), BaseTime.now().getInstant());
 	}
 }

@@ -33,6 +33,7 @@ import me.ajaja.module.auth.application.port.in.LoginUseCase;
 import me.ajaja.module.auth.application.port.in.ReissueTokenUseCase;
 import me.ajaja.module.feedback.application.LoadFeedbackInfoService;
 import me.ajaja.module.feedback.application.LoadTotalAchieveService;
+import me.ajaja.module.feedback.application.LoadUpdatableFeedbackService;
 import me.ajaja.module.feedback.application.UpdateFeedbackService;
 import me.ajaja.module.footprint.application.port.in.CreateFootprintUseCase;
 import me.ajaja.module.plan.application.port.in.CreatePlanUseCase;
@@ -161,6 +162,8 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 	protected LoadTotalAchieveService loadTotalAchieveService;
 	@MockBean
 	protected LoadFeedbackInfoService loadFeedbackInfoService;
+	@MockBean
+	protected LoadUpdatableFeedbackService loadUpdatableFeedbackService;
 
 	// Remind
 	@MockBean

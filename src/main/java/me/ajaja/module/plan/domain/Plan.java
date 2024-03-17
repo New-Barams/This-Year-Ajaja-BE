@@ -142,20 +142,24 @@ public class Plan {
 		this.status = status.disable();
 	}
 
-	public BaseTime getFeedbackPeriod(BaseTime current) {
+	public BaseTime getFeedbackPeriod(BaseTime now) {
 		return this.messages.stream()
-			.filter(message -> current.isWithinAMonth(
-				BaseTime.parse(
-					this.createdAt.getYear(),
-					message.getRemindDate().getRemindMonth(),
-					message.getRemindDate().getRemindDay(),
-					this.getRemindTime()))
-			)
+			.filter(message -> isWithinPeriod(now))
 			.findAny()
 			.map(message -> BaseTime.parse(this.createdAt.getYear(),
 				message.getRemindDate().getRemindMonth(),
 				message.getRemindDate().getRemindDay(),
 				this.getRemindTime()))
 			.orElseThrow(() -> new AjajaException(EXPIRED_FEEDBACK));
+	}
+
+	public boolean isWithinPeriod(BaseTime now) {
+		return this.messages.stream().anyMatch(message -> now.isWithinAMonth(
+			BaseTime.parse(
+				this.createdAt.getYear(),
+				message.getRemindDate().getRemindMonth(),
+				message.getRemindDate().getRemindDay(),
+				this.getRemindTime()))
+		);
 	}
 }
