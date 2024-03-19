@@ -9,7 +9,7 @@ import me.ajaja.module.footprint.dto.FootprintRequest;
 @AllArgsConstructor
 public abstract class Footprint extends SelfValidating<Footprint> {
 	public enum Type {
-		FREE, KPT
+		FREE, AJAJA
 	}
 
 	private final Long id;
@@ -17,12 +17,13 @@ public abstract class Footprint extends SelfValidating<Footprint> {
 	private final Writer writer;
 	private final Type type;
 
+	private Integer iconNumber;
 	private Title title;
 	private boolean visible;
 	private boolean deleted;
 
-	public Footprint(Target target, Writer writer, Type type, Title title, boolean visible) {
-		this(null, target, writer, type, title, visible, false);
+	public Footprint(Target target, Writer writer, Type type, Integer iconNumber, Title title, boolean visible) {
+		this(null, target, writer, type, iconNumber, title, visible, false);
 	}
 
 	public static Footprint init(Long userId, FootprintRequest.Create param) {
@@ -31,14 +32,16 @@ public abstract class Footprint extends SelfValidating<Footprint> {
 				Target.init(param.getTargetId()),
 				Writer.init(userId),
 				param.getType(),
+				param.getIconNumber(),
 				Title.init(param.getTitle()),
 				param.isVisible(),
 				param.getContent()
 			);
-			case KPT -> new AjajaFootprint(
+			case AJAJA -> new AjajaFootprint(
 				Target.init(param.getTargetId()),
 				Writer.init(userId),
 				param.getType(),
+				param.getIconNumber(),
 				Title.init(param.getTitle()),
 				param.isVisible(),
 				param.getEmotion(),

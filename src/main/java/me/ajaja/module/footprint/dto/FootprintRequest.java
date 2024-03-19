@@ -10,6 +10,7 @@ public final class FootprintRequest {
 	public static class Create {
 		private final Long targetId;
 		private final Footprint.Type type;
+		private final Integer iconNumber;
 		private final String title;
 		private final boolean visible;
 		private final String content;

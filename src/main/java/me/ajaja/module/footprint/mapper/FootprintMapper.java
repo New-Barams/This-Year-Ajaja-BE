@@ -19,6 +19,7 @@ public interface FootprintMapper {
 	@Mapping(target = "id", ignore = true)
 	@Mapping(source = "target.id", target = "targetId")
 	@Mapping(source = "writer.id", target = "writerId")
+	@Mapping(source = "iconNumber", target = "iconNumber")
 	@Mapping(source = "title.title", target = "title")
 	@Mapping(source = "visible", target = "visible")
 	@Mapping(source = "deleted", target = "deleted")
@@ -70,6 +71,7 @@ public interface FootprintMapper {
 				new Target(target.getId(), target.getTitle()),
 				new Writer(writer.getId(), writer.getNickname()),
 				Footprint.Type.FREE,
+				footprintEntity.getIconNumber(),
 				new Title(footprintEntity.getTitle()),
 				footprintEntity.isVisible(),
 				footprintEntity.isDeleted(),
@@ -80,7 +82,8 @@ public interface FootprintMapper {
 				footprintEntity.getId(),
 				new Target(target.getId(), target.getTitle()),
 				new Writer(writer.getId(), writer.getNickname()),
-				Footprint.Type.KPT,
+				Footprint.Type.AJAJA,
+				footprintEntity.getIconNumber(),
 				new Title(footprintEntity.getTitle()),
 				footprintEntity.isVisible(),
 				footprintEntity.isDeleted(),

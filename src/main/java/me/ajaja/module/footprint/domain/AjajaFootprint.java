@@ -16,9 +16,10 @@ public class AjajaFootprint extends Footprint {
 	@NotBlank
 	private String postScript;
 
-	public AjajaFootprint(Long id, Target target, Writer writer, Type type, Title title, boolean visible,
+	public AjajaFootprint(Long id, Target target, Writer writer, Type type, Integer iconNumber, Title title,
+		boolean visible,
 		boolean deleted, String emotion, String reason, String strengths, String weaknesses, String postScript) {
-		super(id, target, writer, type, title, visible, deleted);
+		super(id, target, writer, type, iconNumber, title, visible, deleted);
 		this.emotion = emotion;
 		this.reason = reason;
 		this.strengths = strengths;
@@ -27,9 +28,10 @@ public class AjajaFootprint extends Footprint {
 		this.validateSelf();
 	}
 
-	public AjajaFootprint(Target target, Writer writer, Type type, Title title, boolean visible, String emotion,
-		String reason, String strengths, String weaknesses, String postScript) {
-		super(target, writer, type, title, visible);
+	public AjajaFootprint(Target target, Writer writer, Type type, Integer iconNumber, Title title, boolean visible,
+		String emotion, String reason, String strengths, String weaknesses, String postScript
+	) {
+		super(target, writer, type, iconNumber, title, visible);
 		this.emotion = emotion;
 		this.reason = reason;
 		this.strengths = strengths;

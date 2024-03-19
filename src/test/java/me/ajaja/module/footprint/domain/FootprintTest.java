@@ -18,7 +18,7 @@ class FootprintTest extends MonkeySupport {
 		FootprintRequest.Create param = sut.giveMeBuilder(FootprintRequest.Create.class)
 			.set("title", "title")
 			.set("content", "content")
-			.set("emotion", "keepContent")
+			.set("emotion", "emotion")
 			.set("reason", "reason")
 			.set("strengths", "strengths")
 			.set("weaknesses", "weaknesses")
@@ -30,7 +30,7 @@ class FootprintTest extends MonkeySupport {
 			() -> assertThat(footprint.getId()).isNull(),
 			() -> assertThat(footprint.getTarget()).isNotNull(),
 			() -> assertThat(footprint.getWriter()).isNotNull(),
-			() -> assertThat(footprint.getType()).isNotNull().isIn(Footprint.Type.FREE, Footprint.Type.KPT),
+			() -> assertThat(footprint.getType()).isNotNull().isIn(Footprint.Type.FREE, Footprint.Type.AJAJA),
 			() -> assertThat(footprint.getTitle()).isNotNull(),
 			() -> assertThat(footprint.isVisible()).isNotNull(),
 			() -> assertThat(footprint.isDeleted()).isFalse()

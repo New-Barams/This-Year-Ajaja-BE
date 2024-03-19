@@ -32,6 +32,9 @@ public class FootprintEntity extends TimeEntity {
 	@Column(name = "footprint_type", nullable = false, length = 10)
 	private String type;
 
+	@Column(nullable = false)
+	private Integer iconNumber;
+
 	@Column(nullable = false, length = 50)
 	private String title;
 
