@@ -35,15 +35,17 @@ public abstract class Footprint extends SelfValidating<Footprint> {
 				param.isVisible(),
 				param.getContent()
 			);
-			case KPT -> new KptFootprint(
+			case KPT -> new AjajaFootprint(
 				Target.init(param.getTargetId()),
 				Writer.init(userId),
 				param.getType(),
 				Title.init(param.getTitle()),
 				param.isVisible(),
-				param.getKeepContent(),
-				param.getProblemContent(),
-				param.getTryContent()
+				param.getEmotion(),
+				param.getReason(),
+				param.getStrengths(),
+				param.getWeaknesses(),
+				param.getPostScript()
 			);
 		};
 	}

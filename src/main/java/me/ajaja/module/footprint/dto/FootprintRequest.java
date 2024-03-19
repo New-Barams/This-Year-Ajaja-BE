@@ -13,9 +13,11 @@ public final class FootprintRequest {
 		private final String title;
 		private final boolean visible;
 		private final String content;
-		private final String keepContent;
-		private final String problemContent;
-		private final String tryContent;
+		private final String emotion;
+		private final String reason;
+		private final String strengths;
+		private final String weaknesses;
+		private final String postScript;
 		private final List<String> tags;
 	}
 }
