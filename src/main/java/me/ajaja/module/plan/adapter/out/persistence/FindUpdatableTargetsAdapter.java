@@ -22,7 +22,8 @@ public class FindUpdatableTargetsAdapter implements FindUpdatableTargetService {
 	private final PlanMapper mapper;
 
 	@Override
-	public List<UpdatableFeedback> findUpdatableTargetsByUserId(Long userId, BaseTime now) {
+	public List<UpdatableFeedback> findUpdatableTargetsByUserId(Long userId) {
+		BaseTime now = BaseTime.now();
 		List<Plan> plans = queryFactory.selectFrom(planEntity)
 			.where(planEntity.userId.eq(userId)
 				.and(planEntity.createdAt.year().eq(now.getYear())))

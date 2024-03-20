@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import me.ajaja.global.common.AjajaResponse;
-import me.ajaja.global.common.BaseTime;
 import me.ajaja.global.security.annotation.Authorization;
 import me.ajaja.global.util.SecurityUtil;
 import me.ajaja.module.feedback.application.LoadFeedbackInfoService;
@@ -58,7 +57,7 @@ public class FeedbackController {
 	public AjajaResponse<List<FeedbackResponse.UpdatableFeedback>> getUpdatableFeedbacks() {
 		Long userId = SecurityUtil.getUserId();
 		List<FeedbackResponse.UpdatableFeedback> feedbacks
-			= loadUpdatableFeedbackService.loadUpdatableFeedbacksByUserId(userId, BaseTime.now());
+			= loadUpdatableFeedbackService.loadUpdatableFeedbacksByUserId(userId);
 		return AjajaResponse.ok(feedbacks);
 	}
 }

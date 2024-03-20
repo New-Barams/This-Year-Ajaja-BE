@@ -33,7 +33,7 @@ public class GetUpdatableFeedbacksTest extends WebMvcTestSupport {
 	@DisplayName("업데이트 가능한 피드백 목록들을 불러온다.")
 	void getUpdatableFeedbacks_Success_WithNoException() throws Exception {
 		// given
-		given(loadUpdatableFeedbackService.loadUpdatableFeedbacksByUserId(anyLong(), any())).willReturn(response);
+		given(loadUpdatableFeedbackService.loadUpdatableFeedbacksByUserId(anyLong())).willReturn(response);
 
 		// when
 		var result = mockMvc.perform(get(FEEDBACK_END_POINT + "/updatable")
@@ -75,7 +75,7 @@ public class GetUpdatableFeedbacksTest extends WebMvcTestSupport {
 	void getFeedbackInfo_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
 		// given
 		AjajaException tokenException = new AjajaException(errorCode);
-		doThrow(tokenException).when(loadUpdatableFeedbackService).loadUpdatableFeedbacksByUserId(anyLong(), any());
+		doThrow(tokenException).when(loadUpdatableFeedbackService).loadUpdatableFeedbacksByUserId(anyLong());
 
 		// when
 		var result = mockMvc.perform(get(FEEDBACK_END_POINT + "/updatable")

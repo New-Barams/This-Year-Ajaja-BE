@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import me.ajaja.global.common.BaseTime;
 import me.ajaja.module.feedback.domain.FeedbackQueryRepository;
 import me.ajaja.module.feedback.dto.FeedbackResponse;
 import me.ajaja.module.feedback.mapper.FeedbackMapper;
@@ -19,8 +18,8 @@ public class LoadUpdatableFeedbackService {
 	private final FindUpdatableTargetService findUpdatableTargetService;
 	private final FeedbackMapper mapper;
 
-	public List<FeedbackResponse.UpdatableFeedback> loadUpdatableFeedbacksByUserId(Long userId, BaseTime now) {
-		return findUpdatableTargetService.findUpdatableTargetsByUserId(userId, now).stream()
+	public List<FeedbackResponse.UpdatableFeedback> loadUpdatableFeedbacksByUserId(Long userId) {
+		return findUpdatableTargetService.findUpdatableTargetsByUserId(userId).stream()
 			.filter(feedback -> !feedbackQueryRepository.existByPlanIdAndPeriod(feedback.planId(), feedback.deadLine()))
 			.map(mapper::toResponse)
 			.toList();
