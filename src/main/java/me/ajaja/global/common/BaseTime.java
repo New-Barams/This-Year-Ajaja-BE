@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 import lombok.Getter;
@@ -73,6 +74,10 @@ public final class BaseTime {
 
 	public boolean isWithinAMonth(BaseTime time) {
 		return zonedDateTime.isBefore(time.oneMonthLater()) && zonedDateTime.isAfter(time.zonedDateTime);
+	}
+
+	public long getBetweenDays(BaseTime endDate) {
+		return ChronoUnit.DAYS.between(instant, BaseTime.now().getInstant());
 	}
 
 	private static LocalDateTime parseDateTime(int year, int month, int date, int hour, int minute) {
