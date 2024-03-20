@@ -26,7 +26,7 @@ public final class FeedbackResponse {
 	}
 
 	@Data
-	public static class UpdatableFeedback {
+	public static class EvaluableFeedback {
 		private final String title;
 		private final Long planId;
 		private final long remainPeriod;

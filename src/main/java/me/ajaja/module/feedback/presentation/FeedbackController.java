@@ -16,8 +16,8 @@ import lombok.RequiredArgsConstructor;
 import me.ajaja.global.common.AjajaResponse;
 import me.ajaja.global.security.annotation.Authorization;
 import me.ajaja.global.util.SecurityUtil;
+import me.ajaja.module.feedback.application.LoadEvaluableFeedbacksService;
 import me.ajaja.module.feedback.application.LoadFeedbackInfoService;
-import me.ajaja.module.feedback.application.LoadUpdatableFeedbackService;
 import me.ajaja.module.feedback.application.UpdateFeedbackService;
 import me.ajaja.module.feedback.dto.FeedbackRequest;
 import me.ajaja.module.feedback.dto.FeedbackResponse;
@@ -28,7 +28,7 @@ import me.ajaja.module.feedback.dto.FeedbackResponse;
 public class FeedbackController {
 	private final UpdateFeedbackService updateFeedbackService;
 	private final LoadFeedbackInfoService loadFeedbackInfoService;
-	private final LoadUpdatableFeedbackService loadUpdatableFeedbackService;
+	private final LoadEvaluableFeedbacksService loadEvaluableFeedbacksService;
 
 	@Authorization
 	@PostMapping("/{planId}")
@@ -54,10 +54,10 @@ public class FeedbackController {
 	@Authorization
 	@GetMapping("/updatable")
 	@ResponseStatus(OK)
-	public AjajaResponse<List<FeedbackResponse.UpdatableFeedback>> getUpdatableFeedbacks() {
+	public AjajaResponse<List<FeedbackResponse.EvaluableFeedback>> getUpdatableFeedbacks() {
 		Long userId = SecurityUtil.getUserId();
-		List<FeedbackResponse.UpdatableFeedback> feedbacks
-			= loadUpdatableFeedbackService.loadUpdatableFeedbacksByUserId(userId);
+		List<FeedbackResponse.EvaluableFeedback> feedbacks
+			= loadEvaluableFeedbacksService.loadEvaluableFeedbacksByUserId(userId);
 		return AjajaResponse.ok(feedbacks);
 	}
 }

@@ -22,18 +22,18 @@ import me.ajaja.global.exception.AjajaException;
 import me.ajaja.global.exception.ErrorCode;
 import me.ajaja.module.feedback.dto.FeedbackResponse;
 
-public class GetUpdatableFeedbacksTest extends WebMvcTestSupport {
-	private final List<FeedbackResponse.UpdatableFeedback> response
+public class GetEvaluableFeedbacksTest extends WebMvcTestSupport {
+	private final List<FeedbackResponse.EvaluableFeedback> response
 		= List.of(
-		new FeedbackResponse.UpdatableFeedback("계획1", 1L, 0, 5, 1),
-		new FeedbackResponse.UpdatableFeedback("계획2", 2L, 13, 5, 12)
+		new FeedbackResponse.EvaluableFeedback("계획1", 1L, 0, 5, 1),
+		new FeedbackResponse.EvaluableFeedback("계획2", 2L, 13, 5, 12)
 	);
 
 	@ApiTest
 	@DisplayName("업데이트 가능한 피드백 목록들을 불러온다.")
 	void getUpdatableFeedbacks_Success_WithNoException() throws Exception {
 		// given
-		given(loadUpdatableFeedbackService.loadUpdatableFeedbacksByUserId(anyLong())).willReturn(response);
+		given(loadEvaluableFeedbacksService.loadEvaluableFeedbacksByUserId(anyLong())).willReturn(response);
 
 		// when
 		var result = mockMvc.perform(get(FEEDBACK_END_POINT + "/updatable")
@@ -75,7 +75,7 @@ public class GetUpdatableFeedbacksTest extends WebMvcTestSupport {
 	void getFeedbackInfo_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
 		// given
 		AjajaException tokenException = new AjajaException(errorCode);
-		doThrow(tokenException).when(loadUpdatableFeedbackService).loadUpdatableFeedbacksByUserId(anyLong());
+		doThrow(tokenException).when(loadEvaluableFeedbacksService).loadEvaluableFeedbacksByUserId(anyLong());
 
 		// when
 		var result = mockMvc.perform(get(FEEDBACK_END_POINT + "/updatable")

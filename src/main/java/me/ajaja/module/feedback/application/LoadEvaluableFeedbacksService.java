@@ -11,15 +11,15 @@ import me.ajaja.module.feedback.dto.FeedbackResponse;
 import me.ajaja.module.feedback.mapper.FeedbackMapper;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
-public class LoadUpdatableFeedbackService {
+@Transactional(readOnly = true)
+public class LoadEvaluableFeedbacksService {
 	private final FeedbackQueryRepository feedbackQueryRepository;
-	private final FindUpdatableTargetService findUpdatableTargetService;
+	private final LoadEvaluableTargetsService loadEvaluableTargetsService;
 	private final FeedbackMapper mapper;
 
-	public List<FeedbackResponse.UpdatableFeedback> loadUpdatableFeedbacksByUserId(Long userId) {
-		return findUpdatableTargetService.findUpdatableTargetsByUserId(userId).stream()
+	public List<FeedbackResponse.EvaluableFeedback> loadEvaluableFeedbacksByUserId(Long userId) {
+		return loadEvaluableTargetsService.findEvaluableTargetsByUserId(userId).stream()
 			.filter(feedback -> !feedbackQueryRepository.existByPlanIdAndPeriod(feedback.planId(), feedback.deadLine()))
 			.map(mapper::toResponse)
 			.toList();
