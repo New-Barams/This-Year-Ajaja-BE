@@ -151,6 +151,6 @@ public interface PlanMapper {
 	UpdatableFeedback toFeedbackModel(Plan plan);
 
 	default BaseTime getRemindPeriod(Plan plan) {
-		return plan.getFeedbackPeriod(BaseTime.now());
+		return plan.findFeedbackPeriod(BaseTime.now());
 	}
 }

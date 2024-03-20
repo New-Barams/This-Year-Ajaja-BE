@@ -142,7 +142,7 @@ public class Plan {
 		this.status = status.disable();
 	}
 
-	public BaseTime getFeedbackPeriod(BaseTime now) {
+	public BaseTime findFeedbackPeriod(BaseTime now) {
 		return this.messages.stream()
 			.filter(message -> isWithinPeriod(now))
 			.findAny()

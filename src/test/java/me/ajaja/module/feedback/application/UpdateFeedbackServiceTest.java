@@ -44,7 +44,7 @@ class UpdateFeedbackServiceTest extends MockTestSupport {
 		void updateFeedback_Success_WithNoException() {
 			// given
 			given(findTargetPort.findByUserIdAndPlanId(anyLong(), anyLong())).willReturn(mockPlan);
-			given(mockPlan.getFeedbackPeriod(any())).willReturn(BaseTime.now());
+			given(mockPlan.findFeedbackPeriod(any())).willReturn(BaseTime.now());
 			given(feedbackQueryRepository.existByPlanIdAndPeriod(any(), any())).willReturn(false);
 			doNothing().when(feedbackRepository).save(any());
 
@@ -70,7 +70,7 @@ class UpdateFeedbackServiceTest extends MockTestSupport {
 		void updateFeedback_Fail_ByExpiredFeedbackPeriod() {
 			// given
 			given(findTargetPort.findByUserIdAndPlanId(anyLong(), anyLong())).willReturn(mockPlan);
-			doThrow(AjajaException.class).when(mockPlan).getFeedbackPeriod(any());
+			doThrow(AjajaException.class).when(mockPlan).findFeedbackPeriod(any());
 
 			// when,then
 			assertThatException().isThrownBy(
@@ -83,7 +83,7 @@ class UpdateFeedbackServiceTest extends MockTestSupport {
 		void updateFeedback_Fail_ByAlreadyFeedbackFound() {
 			// given
 			given(findTargetPort.findByUserIdAndPlanId(anyLong(), anyLong())).willReturn(mockPlan);
-			given(mockPlan.getFeedbackPeriod(any())).willReturn(BaseTime.now());
+			given(mockPlan.findFeedbackPeriod(any())).willReturn(BaseTime.now());
 			given(feedbackQueryRepository.existByPlanIdAndPeriod(any(), any())).willReturn(true);
 
 			// when,then
