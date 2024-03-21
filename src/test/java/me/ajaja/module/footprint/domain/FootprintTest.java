@@ -22,7 +22,7 @@ class FootprintTest extends MonkeySupport {
 			.set("reason", "reason")
 			.set("strengths", "strengths")
 			.set("weaknesses", "weaknesses")
-			.set("postScript", "postScript")
+			.set("jujuljujul", "Jujuljujul")
 			.sample();
 		Footprint footprint = Footprint.init(userId, param);
 
@@ -48,7 +48,7 @@ class FootprintTest extends MonkeySupport {
 			.set("reason", "")
 			.set("strengths", "")
 			.set("weaknesses", "")
-			.set("postScript", "")
+			.set("jujuljujul", "")
 			.sample();
 
 		assertThatExceptionOfType(ConstraintViolationException.class).isThrownBy(

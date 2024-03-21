@@ -60,5 +60,5 @@ public class FootprintEntity extends TimeEntity {
 	private String weaknesses;
 
 	@Column(columnDefinition = "TEXT")
-	private String postScript;
+	private String jujuljujul;
 }

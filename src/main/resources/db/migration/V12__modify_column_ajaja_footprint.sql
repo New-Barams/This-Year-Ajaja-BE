@@ -6,4 +6,5 @@ ADD COLUMN emotion TEXT,
 ADD COLUMN reason TEXT,
 ADD COLUMN strengths TEXT,
 ADD COLUMN weaknesses TEXT,
-ADD COLUMN post_script TEXT;
+ADD COLUMN Jujuljujul TEXT,
+ADD COLUMN icon_number  INTEGER  NOT NULL AFTER footprint_type;

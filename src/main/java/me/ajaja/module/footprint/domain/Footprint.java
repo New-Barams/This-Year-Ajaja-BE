@@ -48,7 +48,7 @@ public abstract class Footprint extends SelfValidating<Footprint> {
 				param.getReason(),
 				param.getStrengths(),
 				param.getWeaknesses(),
-				param.getPostScript()
+				param.getJujuljujul()
 			);
 		};
 	}

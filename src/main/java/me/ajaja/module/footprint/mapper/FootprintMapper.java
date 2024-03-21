@@ -29,7 +29,7 @@ public interface FootprintMapper {
 	@Mapping(target = "reason", expression = "java(toReason(footprint))")
 	@Mapping(target = "strengths", expression = "java(toStrengths(footprint))")
 	@Mapping(target = "weaknesses", expression = "java(toWeaknesses(footprint))")
-	@Mapping(target = "postScript", expression = "java(toPostScript(footprint))")
+	@Mapping(target = "jujuljujul", expression = "java(toJujuljujul(footprint))")
 	FootprintEntity toEntity(Footprint footprint);
 
 	default String toType(Footprint footprint) {
@@ -56,8 +56,8 @@ public interface FootprintMapper {
 		return (footprint instanceof AjajaFootprint) ? ((AjajaFootprint)footprint).getWeaknesses() : null;
 	}
 
-	default String toPostScript(Footprint footprint) {
-		return (footprint instanceof AjajaFootprint) ? ((AjajaFootprint)footprint).getPostScript() : null;
+	default String toJujuljujul(Footprint footprint) {
+		return (footprint instanceof AjajaFootprint) ? ((AjajaFootprint)footprint).getJujuljujul() : null;
 	}
 
 	Footprint toDomain(FootprintEntity footprintEntity, Entity.Target target, Entity.Writer writer);
@@ -91,7 +91,7 @@ public interface FootprintMapper {
 				footprintEntity.getReason(),
 				footprintEntity.getStrengths(),
 				footprintEntity.getWeaknesses(),
-				footprintEntity.getPostScript()
+				footprintEntity.getJujuljujul()
 			);
 		}
 	}

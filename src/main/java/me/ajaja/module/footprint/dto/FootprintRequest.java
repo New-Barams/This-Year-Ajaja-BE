@@ -18,7 +18,7 @@ public final class FootprintRequest {
 		private final String reason;
 		private final String strengths;
 		private final String weaknesses;
-		private final String postScript;
+		private final String jujuljujul;
 		private final List<String> tags;
 	}
 }
