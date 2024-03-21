@@ -11,8 +11,8 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import me.ajaja.global.exception.Exceptions;
 import me.ajaja.global.exception.UnexpectedExceptionEvent;
-import me.ajaja.global.util.Exceptions;
 
 @Slf4j
 @EnableAsync

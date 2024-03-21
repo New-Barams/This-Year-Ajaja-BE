@@ -1,4 +1,4 @@
-package me.ajaja.global.util;
+package me.ajaja.global.exception;
 
 import java.util.Arrays;
 import java.util.List;
