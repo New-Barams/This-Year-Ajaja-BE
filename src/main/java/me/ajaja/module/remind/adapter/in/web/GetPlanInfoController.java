@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import me.ajaja.global.common.AjajaResponse;
-import me.ajaja.global.security.annotation.Authorization;
+import me.ajaja.global.security.annotation.Authorize;
 import me.ajaja.global.util.SecurityUtil;
 import me.ajaja.module.plan.dto.PlanResponse;
 import me.ajaja.module.remind.application.port.in.GetTargetInfoUseCase;
@@ -20,7 +20,7 @@ import me.ajaja.module.remind.application.port.in.GetTargetInfoUseCase;
 public class GetPlanInfoController {
 	private final GetTargetInfoUseCase getTargetInfoUseCase;
 
-	@Authorization
+	@Authorize
 	@GetMapping("/plans/main")
 	@ResponseStatus(OK)
 	public AjajaResponse<List<PlanResponse.MainInfo>> getPlanInfo() {

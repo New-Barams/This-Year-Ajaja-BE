@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import me.ajaja.global.common.AjajaResponse;
-import me.ajaja.global.security.annotation.Authorization;
+import me.ajaja.global.security.annotation.Authorize;
 import me.ajaja.global.util.SecurityUtil;
 import me.ajaja.module.plan.application.port.in.SwitchPlanStatusUseCase;
 
@@ -20,7 +20,7 @@ import me.ajaja.module.plan.application.port.in.SwitchPlanStatusUseCase;
 class SwitchPlanStatusController {
 	private final SwitchPlanStatusUseCase switchPlanStatusUseCase;
 
-	@Authorization
+	@Authorize
 	@PutMapping("/public")
 	@ResponseStatus(OK)
 	public AjajaResponse<Void> switchPublicStatus(@PathVariable Long id) {
@@ -30,7 +30,7 @@ class SwitchPlanStatusController {
 		return AjajaResponse.ok();
 	}
 
-	@Authorization
+	@Authorize
 	@PutMapping("/remindable")
 	@ResponseStatus(OK)
 	public AjajaResponse<Void> switchRemindStatus(@PathVariable Long id) {
@@ -40,7 +40,7 @@ class SwitchPlanStatusController {
 		return AjajaResponse.ok();
 	}
 
-	@Authorization
+	@Authorize
 	@PutMapping("/ajajable")
 	@ResponseStatus(OK)
 	public AjajaResponse<Void> switchAjajaStatus(@PathVariable Long id) {

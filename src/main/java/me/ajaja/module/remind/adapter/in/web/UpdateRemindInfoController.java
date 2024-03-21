@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import me.ajaja.global.common.AjajaResponse;
-import me.ajaja.global.security.annotation.Authorization;
+import me.ajaja.global.security.annotation.Authorize;
 import me.ajaja.global.util.SecurityUtil;
 import me.ajaja.module.plan.dto.PlanRequest;
 import me.ajaja.module.remind.application.port.in.UpdateRemindInfoUseCase;
@@ -20,7 +20,7 @@ import me.ajaja.module.remind.application.port.in.UpdateRemindInfoUseCase;
 public class UpdateRemindInfoController {
 	private final UpdateRemindInfoUseCase updateRemindInfoUseCase;
 
-	@Authorization
+	@Authorize
 	@PutMapping("/plans/{id}/reminds")
 	@ResponseStatus(OK)
 	public AjajaResponse<Void> modifyRemindInfo(

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import me.ajaja.global.common.AjajaResponse;
-import me.ajaja.global.security.annotation.Authorization;
+import me.ajaja.global.security.annotation.Authorize;
 import me.ajaja.global.util.SecurityUtil;
 import me.ajaja.module.footprint.application.port.in.CreateFootprintUseCase;
 import me.ajaja.module.footprint.dto.FootprintRequest;
@@ -19,7 +19,7 @@ import me.ajaja.module.footprint.dto.FootprintRequest;
 public class CreateFootprintController {
 	private final CreateFootprintUseCase createFootprintUseCase;
 
-	@Authorization
+	@Authorize
 	@PostMapping("/footprints")
 	@ResponseStatus(CREATED)
 	public AjajaResponse<Void> createFootprint(@RequestBody FootprintRequest.Create request) {

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.ajaja.global.common.AjajaResponse;
-import me.ajaja.global.security.annotation.Authorization;
+import me.ajaja.global.security.annotation.Authorize;
 import me.ajaja.module.plan.application.port.in.ValidateContentUseCase;
 import me.ajaja.module.plan.dto.BanWordValidationResult;
 import me.ajaja.module.plan.dto.PlanRequest;
@@ -20,7 +20,7 @@ import me.ajaja.module.plan.dto.PlanRequest;
 class ValidateBanWordController {
 	private final ValidateContentUseCase validateContentUseCase;
 
-	@Authorization
+	@Authorize
 	@PostMapping("/plans/validate-content")
 	@ResponseStatus(OK)
 	public AjajaResponse<BanWordValidationResult> validateBanWord(

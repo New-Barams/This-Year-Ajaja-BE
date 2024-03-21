@@ -13,7 +13,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import me.ajaja.global.common.AjajaResponse;
-import me.ajaja.global.security.annotation.Authorization;
+import me.ajaja.global.security.annotation.Authorize;
 import me.ajaja.global.util.SecurityUtil;
 import me.ajaja.module.plan.application.port.in.UpdatePlanUseCase;
 import me.ajaja.module.plan.dto.PlanRequest;
@@ -24,7 +24,7 @@ import me.ajaja.module.plan.dto.PlanResponse;
 class UpdatePlanController {
 	private final UpdatePlanUseCase updatePlanUseCase;
 
-	@Authorization
+	@Authorize
 	@PutMapping("/plans/{id}")
 	@ResponseStatus(OK)
 	public AjajaResponse<PlanResponse.Detail> updatePlan(

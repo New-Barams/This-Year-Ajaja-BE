@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import me.ajaja.global.common.AjajaResponse;
-import me.ajaja.global.security.annotation.Authorization;
+import me.ajaja.global.security.annotation.Authorize;
 import me.ajaja.global.util.SecurityUtil;
 import me.ajaja.module.feedback.application.LoadFeedbackInfoService;
 import me.ajaja.module.feedback.application.UpdateFeedbackService;
@@ -26,7 +26,7 @@ public class FeedbackController {
 	private final UpdateFeedbackService updateFeedbackService;
 	private final LoadFeedbackInfoService loadFeedbackInfoService;
 
-	@Authorization
+	@Authorize
 	@PostMapping("/{planId}")
 	@ResponseStatus(OK)
 	public AjajaResponse<Void> updateFeedback(
@@ -38,7 +38,7 @@ public class FeedbackController {
 		return AjajaResponse.ok();
 	}
 
-	@Authorization
+	@Authorize
 	@GetMapping("/{planId}")
 	@ResponseStatus(OK)
 	public AjajaResponse<FeedbackResponse.FeedbackInfo> getFeedbackInfo(@PathVariable Long planId) {

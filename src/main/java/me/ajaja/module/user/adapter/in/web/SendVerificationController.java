@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import me.ajaja.global.security.annotation.Authorization;
+import me.ajaja.global.security.annotation.Authorize;
 import me.ajaja.global.util.SecurityUtil;
 import me.ajaja.module.user.application.port.in.SendVerificationEmailUseCase;
 import me.ajaja.module.user.dto.UserRequest;
@@ -19,7 +19,7 @@ import me.ajaja.module.user.dto.UserRequest;
 class SendVerificationController {
 	private final SendVerificationEmailUseCase sendVerificationEmailUseCase;
 
-	@Authorization
+	@Authorize
 	@PostMapping("/users/send-verification")
 	@ResponseStatus(NO_CONTENT)
 	public void sendVerification(@Valid @RequestBody UserRequest.EmailVerification request) {

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
-import me.ajaja.global.security.annotation.Authorization;
+import me.ajaja.global.security.annotation.Authorize;
 import me.ajaja.global.util.SecurityUtil;
 import me.ajaja.module.user.application.port.in.LogoutUseCase;
 
@@ -16,7 +16,7 @@ import me.ajaja.module.user.application.port.in.LogoutUseCase;
 class LogoutController {
 	private final LogoutUseCase logoutUseCase;
 
-	@Authorization
+	@Authorize
 	@PostMapping("/users/logout")
 	@ResponseStatus(NO_CONTENT)
 	public void logout() {
