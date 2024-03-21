@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import me.ajaja.global.security.annotation.Authorize;
 import me.ajaja.global.security.jwt.JwtParser;
-import me.ajaja.global.util.BearerUtil;
+import me.ajaja.global.util.BearerUtils;
 
 @Component
 @RequiredArgsConstructor
@@ -26,8 +26,8 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
 		if (isAuthorizeRequired(handler)) {
 			String token = request.getHeader(AUTHORIZATION);
-			BearerUtil.validate(token);
-			authorize(BearerUtil.resolve(token));
+			BearerUtils.validate(token);
+			authorize(BearerUtils.resolve(token));
 		}
 
 		return true;

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import me.ajaja.global.common.AjajaResponse;
 import me.ajaja.global.security.jwt.JwtParser;
-import me.ajaja.global.util.BearerUtil;
+import me.ajaja.global.util.BearerUtils;
 import me.ajaja.module.plan.application.port.in.LoadPlanDetailUseCase;
 import me.ajaja.module.plan.dto.PlanResponse;
 
@@ -38,7 +38,7 @@ class GetPlanController {
 			return null;
 		}
 
-		BearerUtil.validate(accessToken);
-		return jwtParser.parseId(BearerUtil.resolve(accessToken));
+		BearerUtils.validate(accessToken);
+		return jwtParser.parseId(BearerUtils.resolve(accessToken));
 	}
 }
