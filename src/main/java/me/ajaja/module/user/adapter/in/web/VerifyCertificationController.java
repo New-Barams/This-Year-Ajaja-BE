@@ -11,7 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.ajaja.global.common.AjajaResponse;
 import me.ajaja.global.security.annotation.Authorize;
-import me.ajaja.global.util.SecurityUtil;
+import me.ajaja.global.security.annotation.Login;
 import me.ajaja.module.user.application.port.in.VerifyCertificationUseCase;
 import me.ajaja.module.user.dto.UserRequest;
 
@@ -23,8 +23,10 @@ class VerifyCertificationController {
 	@Authorize
 	@PostMapping("/users/verify")
 	@ResponseStatus(OK)
-	public AjajaResponse<Void> verifyCertification(@Valid @RequestBody UserRequest.Certification request) {
-		Long id = SecurityUtil.getUserId();
+	public AjajaResponse<Void> verifyCertification(
+		@Login Long id,
+		@Valid @RequestBody UserRequest.Certification request
+	) {
 		verifyCertificationUseCase.verify(id, request.getCertification());
 		return AjajaResponse.ok();
 	}

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import me.ajaja.global.common.AjajaResponse;
 import me.ajaja.global.security.annotation.Authorize;
-import me.ajaja.global.util.SecurityUtil;
+import me.ajaja.global.security.annotation.Login;
 import me.ajaja.module.user.application.port.in.WithdrawUseCase;
 
 @RestController
@@ -20,8 +20,7 @@ class WithdrawController {
 	@Authorize
 	@DeleteMapping("/users")
 	@ResponseStatus(OK)
-	public AjajaResponse<Void> withdraw() {
-		Long id = SecurityUtil.getUserId();
+	public AjajaResponse<Void> withdraw(@Login Long id) {
 		withdrawUseCase.withdraw(id);
 		return AjajaResponse.ok();
 	}

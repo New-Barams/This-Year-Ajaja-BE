@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import me.ajaja.global.common.AjajaResponse;
 import me.ajaja.global.security.annotation.Authorize;
-import me.ajaja.global.util.SecurityUtil;
+import me.ajaja.global.security.annotation.Login;
 import me.ajaja.module.plan.dto.PlanResponse;
 import me.ajaja.module.remind.application.port.in.GetTargetInfoUseCase;
 
@@ -23,8 +23,7 @@ public class GetPlanInfoController {
 	@Authorize
 	@GetMapping("/plans/main")
 	@ResponseStatus(OK)
-	public AjajaResponse<List<PlanResponse.MainInfo>> getPlanInfo() {
-		Long userId = SecurityUtil.getUserId();
+	public AjajaResponse<List<PlanResponse.MainInfo>> getPlanInfo(@Login Long userId) {
 		List<PlanResponse.MainInfo> response = getTargetInfoUseCase.load(userId);
 		return AjajaResponse.ok(response);
 	}

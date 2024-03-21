@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import me.ajaja.global.common.AjajaResponse;
 import me.ajaja.global.security.annotation.Authorize;
-import me.ajaja.global.util.SecurityUtil;
+import me.ajaja.global.security.annotation.Login;
 import me.ajaja.module.plan.dto.PlanRequest;
 import me.ajaja.module.remind.application.port.in.UpdateRemindInfoUseCase;
 
@@ -24,10 +24,10 @@ public class UpdateRemindInfoController {
 	@PutMapping("/plans/{id}/reminds")
 	@ResponseStatus(OK)
 	public AjajaResponse<Void> modifyRemindInfo(
+		@Login Long userId,
 		@PathVariable Long id,
 		@RequestBody PlanRequest.UpdateRemind request
 	) {
-		Long userId = SecurityUtil.getUserId();
 		updateRemindInfoUseCase.update(userId, id, request);
 		return AjajaResponse.ok();
 	}

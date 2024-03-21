@@ -14,7 +14,7 @@ import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import me.ajaja.global.common.AjajaResponse;
 import me.ajaja.global.security.annotation.Authorize;
-import me.ajaja.global.util.SecurityUtil;
+import me.ajaja.global.security.annotation.Login;
 import me.ajaja.module.plan.application.port.in.UpdatePlanUseCase;
 import me.ajaja.module.plan.dto.PlanRequest;
 import me.ajaja.module.plan.dto.PlanResponse;
@@ -28,13 +28,12 @@ class UpdatePlanController {
 	@PutMapping("/plans/{id}")
 	@ResponseStatus(OK)
 	public AjajaResponse<PlanResponse.Detail> updatePlan(
+		@Login Long userId,
 		@PathVariable Long id,
 		@RequestBody PlanRequest.Update request,
 		@RequestHeader(name = "Month") @Min(1) @Max(12) int month
 	) {
-		Long userId = SecurityUtil.getUserId();
 		PlanResponse.Detail response = updatePlanUseCase.update(id, userId, request, month);
-
 		return AjajaResponse.ok(response);
 	}
 }

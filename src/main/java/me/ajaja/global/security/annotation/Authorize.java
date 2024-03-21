@@ -5,6 +5,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import me.ajaja.global.security.interceptor.AuthorizationInterceptor;
+
 /**
  * This annotation indicates that the API requires authorization
  * <pre>
@@ -15,7 +17,7 @@ import java.lang.annotation.Target;
  * }
  * </pre>
  *
- * @see me.ajaja.global.security.interceptor.AuthorizationInterceptor
+ * @see AuthorizationInterceptor
  * @author hejow
  */
 @Target(ElementType.METHOD)

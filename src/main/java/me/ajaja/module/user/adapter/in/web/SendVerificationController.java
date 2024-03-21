@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.ajaja.global.security.annotation.Authorize;
-import me.ajaja.global.util.SecurityUtil;
+import me.ajaja.global.security.annotation.Login;
 import me.ajaja.module.user.application.port.in.SendVerificationEmailUseCase;
 import me.ajaja.module.user.dto.UserRequest;
 
@@ -22,8 +22,7 @@ class SendVerificationController {
 	@Authorize
 	@PostMapping("/users/send-verification")
 	@ResponseStatus(NO_CONTENT)
-	public void sendVerification(@Valid @RequestBody UserRequest.EmailVerification request) {
-		Long id = SecurityUtil.getUserId();
+	public void sendVerification(@Login Long id, @Valid @RequestBody UserRequest.EmailVerification request) {
 		sendVerificationEmailUseCase.sendVerification(id, request.getEmail());
 	}
 }

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import me.ajaja.global.common.AjajaResponse;
 import me.ajaja.global.security.annotation.Authorize;
-import me.ajaja.global.util.SecurityUtil;
+import me.ajaja.global.security.annotation.Login;
 import me.ajaja.module.user.application.port.out.GetMyPageQuery;
 import me.ajaja.module.user.dto.UserResponse;
 
@@ -21,8 +21,7 @@ class GetMyPageController {
 	@Authorize
 	@GetMapping("/users")
 	@ResponseStatus(OK)
-	public AjajaResponse<UserResponse.MyPage> getMyPage() {
-		Long id = SecurityUtil.getUserId();
+	public AjajaResponse<UserResponse.MyPage> getMyPage(@Login Long id) {
 		UserResponse.MyPage response = getMyPageQuery.findUserInfoById(id);
 		return AjajaResponse.ok(response);
 	}
