@@ -15,7 +15,7 @@ class ApplyChangeAdapter implements ApplyChangePort {
 	private final UserMapper userMapper;
 
 	@Override
-	public void apply(User user) { // todo: user dependency
+	public void apply(User user) {
 		UserEntity userEntity = userMapper.toEntity(user);
 		userJpaRepository.save(userEntity);
 	}
