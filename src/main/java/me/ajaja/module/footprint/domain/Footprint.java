@@ -35,7 +35,7 @@ public abstract class Footprint extends SelfValidating<Footprint> {
 				param.getIconNumber(),
 				Title.init(param.getTitle()),
 				param.isVisible(),
-				param.getContent()
+				new FreeContent(param.getContent())
 			);
 			case AJAJA -> new AjajaFootprint(
 				Target.init(param.getTargetId()),
@@ -44,11 +44,13 @@ public abstract class Footprint extends SelfValidating<Footprint> {
 				param.getIconNumber(),
 				Title.init(param.getTitle()),
 				param.isVisible(),
-				param.getEmotion(),
-				param.getReason(),
-				param.getStrengths(),
-				param.getWeaknesses(),
-				param.getJujuljujul()
+				new AjajaContent(
+					param.getEmotion(),
+					param.getReason(),
+					param.getStrengths(),
+					param.getWeaknesses(),
+					param.getJujuljujul()
+				)
 			);
 		};
 	}

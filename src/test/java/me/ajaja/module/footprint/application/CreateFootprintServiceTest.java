@@ -12,7 +12,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import me.ajaja.common.support.MockTestSupport;
-import me.ajaja.module.footprint.application.CreateFootprintService;
 import me.ajaja.module.footprint.application.port.out.CreateFootprintPort;
 import me.ajaja.module.footprint.application.port.out.CreateTagsPort;
 import me.ajaja.module.footprint.domain.Footprint;
@@ -47,7 +46,7 @@ class CreateFootprintServiceTest extends MockTestSupport {
 		param = sut.giveMeBuilder(FootprintRequest.Create.class)
 			.set("title", "title")
 			.set("type", Footprint.Type.FREE)
-			.set("content", "contents")
+			.set("content", "content")
 			.set("tags", List.of("tag1", "tag2"))
 			.sample();
 

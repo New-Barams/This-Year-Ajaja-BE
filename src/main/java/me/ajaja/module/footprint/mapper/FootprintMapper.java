@@ -6,8 +6,10 @@ import org.mapstruct.ObjectFactory;
 import org.mapstruct.ReportingPolicy;
 
 import me.ajaja.module.footprint.adapter.out.persistence.model.FootprintEntity;
+import me.ajaja.module.footprint.domain.AjajaContent;
 import me.ajaja.module.footprint.domain.AjajaFootprint;
 import me.ajaja.module.footprint.domain.Footprint;
+import me.ajaja.module.footprint.domain.FreeContent;
 import me.ajaja.module.footprint.domain.FreeFootprint;
 import me.ajaja.module.footprint.domain.Target;
 import me.ajaja.module.footprint.domain.Title;
@@ -37,27 +39,27 @@ public interface FootprintMapper {
 	}
 
 	default String toContent(Footprint footprint) {
-		return (footprint instanceof FreeFootprint) ? ((FreeFootprint)footprint).getContent() : null;
+		return (footprint instanceof FreeFootprint) ? ((FreeFootprint)footprint).getContent().getContent() : null;
 	}
 
 	default String toEmotion(Footprint footprint) {
-		return (footprint instanceof AjajaFootprint) ? ((AjajaFootprint)footprint).getEmotion() : null;
+		return (footprint instanceof AjajaFootprint) ? ((AjajaFootprint)footprint).getContent().getEmotion() : null;
 	}
 
 	default String toReason(Footprint footprint) {
-		return (footprint instanceof AjajaFootprint) ? ((AjajaFootprint)footprint).getReason() : null;
+		return (footprint instanceof AjajaFootprint) ? ((AjajaFootprint)footprint).getContent().getReason() : null;
 	}
 
 	default String toStrengths(Footprint footprint) {
-		return (footprint instanceof AjajaFootprint) ? ((AjajaFootprint)footprint).getStrengths() : null;
+		return (footprint instanceof AjajaFootprint) ? ((AjajaFootprint)footprint).getContent().getStrengths() : null;
 	}
 
 	default String toWeaknesses(Footprint footprint) {
-		return (footprint instanceof AjajaFootprint) ? ((AjajaFootprint)footprint).getWeaknesses() : null;
+		return (footprint instanceof AjajaFootprint) ? ((AjajaFootprint)footprint).getContent().getWeaknesses() : null;
 	}
 
 	default String toJujuljujul(Footprint footprint) {
-		return (footprint instanceof AjajaFootprint) ? ((AjajaFootprint)footprint).getJujuljujul() : null;
+		return (footprint instanceof AjajaFootprint) ? ((AjajaFootprint)footprint).getContent().getJujuljujul() : null;
 	}
 
 	Footprint toDomain(FootprintEntity footprintEntity, Entity.Target target, Entity.Writer writer);
@@ -75,7 +77,7 @@ public interface FootprintMapper {
 				new Title(footprintEntity.getTitle()),
 				footprintEntity.isVisible(),
 				footprintEntity.isDeleted(),
-				footprintEntity.getContent()
+				new FreeContent(footprintEntity.getContent())
 			);
 		} else {
 			return new AjajaFootprint(
@@ -87,11 +89,13 @@ public interface FootprintMapper {
 				new Title(footprintEntity.getTitle()),
 				footprintEntity.isVisible(),
 				footprintEntity.isDeleted(),
-				footprintEntity.getEmotion(),
-				footprintEntity.getReason(),
-				footprintEntity.getStrengths(),
-				footprintEntity.getWeaknesses(),
-				footprintEntity.getJujuljujul()
+				new AjajaContent(
+					footprintEntity.getEmotion(),
+					footprintEntity.getReason(),
+					footprintEntity.getStrengths(),
+					footprintEntity.getWeaknesses(),
+					footprintEntity.getJujuljujul()
+				)
 			);
 		}
 	}
