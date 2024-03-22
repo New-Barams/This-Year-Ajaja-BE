@@ -18,9 +18,11 @@ class FootprintTest extends MonkeySupport {
 		FootprintRequest.Create param = sut.giveMeBuilder(FootprintRequest.Create.class)
 			.set("title", "title")
 			.set("content", "content")
-			.set("keepContent", "keepContent")
-			.set("problemContent", "problemContent")
-			.set("tryContent", "tryContent")
+			.set("emotion", "emotion")
+			.set("reason", "reason")
+			.set("strengths", "strengths")
+			.set("weaknesses", "weaknesses")
+			.set("jujuljujul", "Jujuljujul")
 			.sample();
 		Footprint footprint = Footprint.init(userId, param);
 
@@ -28,7 +30,7 @@ class FootprintTest extends MonkeySupport {
 			() -> assertThat(footprint.getId()).isNull(),
 			() -> assertThat(footprint.getTarget()).isNotNull(),
 			() -> assertThat(footprint.getWriter()).isNotNull(),
-			() -> assertThat(footprint.getType()).isNotNull().isIn(Footprint.Type.FREE, Footprint.Type.KPT),
+			() -> assertThat(footprint.getType()).isNotNull().isIn(Footprint.Type.FREE, Footprint.Type.AJAJA),
 			() -> assertThat(footprint.getTitle()).isNotNull(),
 			() -> assertThat(footprint.isVisible()).isNotNull(),
 			() -> assertThat(footprint.isDeleted()).isFalse()
@@ -42,9 +44,11 @@ class FootprintTest extends MonkeySupport {
 		FootprintRequest.Create param = sut.giveMeBuilder(FootprintRequest.Create.class)
 			.set("title", "title")
 			.set("content", "")
-			.set("keepContent", "")
-			.set("problemContent", "")
-			.set("tryContent", "")
+			.set("emotion", "")
+			.set("reason", "")
+			.set("strengths", "")
+			.set("weaknesses", "")
+			.set("jujuljujul", "")
 			.sample();
 
 		assertThatExceptionOfType(ConstraintViolationException.class).isThrownBy(

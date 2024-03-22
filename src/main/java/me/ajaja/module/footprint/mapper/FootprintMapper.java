@@ -6,9 +6,11 @@ import org.mapstruct.ObjectFactory;
 import org.mapstruct.ReportingPolicy;
 
 import me.ajaja.module.footprint.adapter.out.persistence.model.FootprintEntity;
+import me.ajaja.module.footprint.domain.AjajaContent;
+import me.ajaja.module.footprint.domain.AjajaFootprint;
 import me.ajaja.module.footprint.domain.Footprint;
+import me.ajaja.module.footprint.domain.FreeContent;
 import me.ajaja.module.footprint.domain.FreeFootprint;
-import me.ajaja.module.footprint.domain.KptFootprint;
 import me.ajaja.module.footprint.domain.Target;
 import me.ajaja.module.footprint.domain.Title;
 import me.ajaja.module.footprint.domain.Writer;
@@ -19,14 +21,17 @@ public interface FootprintMapper {
 	@Mapping(target = "id", ignore = true)
 	@Mapping(source = "target.id", target = "targetId")
 	@Mapping(source = "writer.id", target = "writerId")
+	@Mapping(source = "iconNumber", target = "iconNumber")
 	@Mapping(source = "title.title", target = "title")
 	@Mapping(source = "visible", target = "visible")
 	@Mapping(source = "deleted", target = "deleted")
 	@Mapping(target = "type", expression = "java(toType(footprint))")
 	@Mapping(target = "content", expression = "java(toContent(footprint))")
-	@Mapping(target = "keepContent", expression = "java(toKeepContent(footprint))")
-	@Mapping(target = "problemContent", expression = "java(toProblemContent(footprint))")
-	@Mapping(target = "tryContent", expression = "java(toTryContent(footprint))")
+	@Mapping(target = "emotion", expression = "java(toEmotion(footprint))")
+	@Mapping(target = "reason", expression = "java(toReason(footprint))")
+	@Mapping(target = "strengths", expression = "java(toStrengths(footprint))")
+	@Mapping(target = "weaknesses", expression = "java(toWeaknesses(footprint))")
+	@Mapping(target = "jujuljujul", expression = "java(toJujuljujul(footprint))")
 	FootprintEntity toEntity(Footprint footprint);
 
 	default String toType(Footprint footprint) {
@@ -34,26 +39,33 @@ public interface FootprintMapper {
 	}
 
 	default String toContent(Footprint footprint) {
-		return (footprint instanceof FreeFootprint) ? ((FreeFootprint)footprint).getContent() : null;
+		return (footprint instanceof FreeFootprint) ? ((FreeFootprint)footprint).getContent().getContent() : null;
 	}
 
-	default String toKeepContent(Footprint footprint) {
-		return (footprint instanceof KptFootprint) ? ((KptFootprint)footprint).getKeepContent() : null;
+	default String toEmotion(Footprint footprint) {
+		return (footprint instanceof AjajaFootprint) ? ((AjajaFootprint)footprint).getContent().getEmotion() : null;
 	}
 
-	default String toProblemContent(Footprint footprint) {
-		return (footprint instanceof KptFootprint) ? ((KptFootprint)footprint).getProblemContent() : null;
+	default String toReason(Footprint footprint) {
+		return (footprint instanceof AjajaFootprint) ? ((AjajaFootprint)footprint).getContent().getReason() : null;
 	}
 
-	default String toTryContent(Footprint footprint) {
-		return (footprint instanceof KptFootprint) ? ((KptFootprint)footprint).getTryContent() : null;
+	default String toStrengths(Footprint footprint) {
+		return (footprint instanceof AjajaFootprint) ? ((AjajaFootprint)footprint).getContent().getStrengths() : null;
+	}
+
+	default String toWeaknesses(Footprint footprint) {
+		return (footprint instanceof AjajaFootprint) ? ((AjajaFootprint)footprint).getContent().getWeaknesses() : null;
+	}
+
+	default String toJujuljujul(Footprint footprint) {
+		return (footprint instanceof AjajaFootprint) ? ((AjajaFootprint)footprint).getContent().getJujuljujul() : null;
 	}
 
 	Footprint toDomain(FootprintEntity footprintEntity, Entity.Target target, Entity.Writer writer);
 
 	@ObjectFactory
-	default Footprint createFootprint(FootprintEntity footprintEntity, Entity.Target target,
-		Entity.Writer writer) {
+	default Footprint createFootprint(FootprintEntity footprintEntity, Entity.Target target, Entity.Writer writer) {
 		String type = footprintEntity.getType();
 		if (type.equals("FREE")) {
 			return new FreeFootprint(
@@ -61,23 +73,29 @@ public interface FootprintMapper {
 				new Target(target.getId(), target.getTitle()),
 				new Writer(writer.getId(), writer.getNickname()),
 				Footprint.Type.FREE,
+				footprintEntity.getIconNumber(),
 				new Title(footprintEntity.getTitle()),
 				footprintEntity.isVisible(),
 				footprintEntity.isDeleted(),
-				footprintEntity.getContent()
+				new FreeContent(footprintEntity.getContent())
 			);
 		} else {
-			return new KptFootprint(
+			return new AjajaFootprint(
 				footprintEntity.getId(),
 				new Target(target.getId(), target.getTitle()),
 				new Writer(writer.getId(), writer.getNickname()),
-				Footprint.Type.KPT,
+				Footprint.Type.AJAJA,
+				footprintEntity.getIconNumber(),
 				new Title(footprintEntity.getTitle()),
 				footprintEntity.isVisible(),
 				footprintEntity.isDeleted(),
-				footprintEntity.getKeepContent(),
-				footprintEntity.getProblemContent(),
-				footprintEntity.getTryContent()
+				new AjajaContent(
+					footprintEntity.getEmotion(),
+					footprintEntity.getReason(),
+					footprintEntity.getStrengths(),
+					footprintEntity.getWeaknesses(),
+					footprintEntity.getJujuljujul()
+				)
 			);
 		}
 	}

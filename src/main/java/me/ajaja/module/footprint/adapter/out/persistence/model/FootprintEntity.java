@@ -32,6 +32,9 @@ public class FootprintEntity extends TimeEntity {
 	@Column(name = "footprint_type", nullable = false, length = 10)
 	private String type;
 
+	@Column(nullable = false)
+	private Integer iconNumber;
+
 	@Column(nullable = false, length = 50)
 	private String title;
 
@@ -45,11 +48,17 @@ public class FootprintEntity extends TimeEntity {
 	private String content;
 
 	@Column(columnDefinition = "TEXT")
-	private String keepContent;
+	private String emotion;
 
 	@Column(columnDefinition = "TEXT")
-	private String problemContent;
+	private String reason;
 
 	@Column(columnDefinition = "TEXT")
-	private String tryContent;
+	private String strengths;
+
+	@Column(columnDefinition = "TEXT")
+	private String weaknesses;
+
+	@Column(columnDefinition = "TEXT")
+	private String jujuljujul;
 }

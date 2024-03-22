@@ -10,7 +10,7 @@ import me.ajaja.common.support.MockTestSupport;
 import me.ajaja.module.plan.dto.BanWordValidationResult;
 import me.ajaja.module.plan.dto.PlanRequest;
 
-class ValidateContentServiceTest extends MockTestSupport {
+class ValidateAjajaContentServiceTest extends MockTestSupport {
 	@InjectMocks
 	private ValidateContentService validateContentService;
 
