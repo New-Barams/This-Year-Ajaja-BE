@@ -12,10 +12,10 @@ import me.ajaja.module.footprint.domain.Footprint;
 import me.ajaja.module.footprint.dto.FootprintRequest;
 import me.ajaja.module.footprint.mapper.FootprintMapperImpl;
 
-@ContextConfiguration(classes = {CreateFootprintAdaptor.class, FootprintMapperImpl.class})
-class CreateFootprintAdaptorTest extends JpaTestSupport {
+@ContextConfiguration(classes = {CreateFootprintAdapter.class, FootprintMapperImpl.class})
+class CreateFootprintAdapterTest extends JpaTestSupport {
 	@Autowired
-	private CreateFootprintAdaptor createFootprintAdaptor;
+	private CreateFootprintAdapter createFootprintAdaptor;
 
 	@Test
 	@DisplayName("자유 형식 발자취 생성 매핑 기능 구현 테스트")

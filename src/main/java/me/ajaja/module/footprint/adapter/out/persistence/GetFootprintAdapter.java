@@ -22,7 +22,7 @@ import me.ajaja.module.footprint.mapper.FootprintMapper;
 @Repository
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class GetFootprintAdaptor implements GetFootprintPort {
+public class GetFootprintAdapter implements GetFootprintPort {
 	private final JPAQueryFactory queryFactory;
 	private final FootprintMapper footprintMapper;
 

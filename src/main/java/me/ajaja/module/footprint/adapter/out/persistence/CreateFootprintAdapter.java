@@ -12,7 +12,7 @@ import me.ajaja.module.footprint.mapper.FootprintMapper;
 @Repository
 @Transactional
 @RequiredArgsConstructor
-public class CreateFootprintAdaptor implements CreateFootprintPort {
+public class CreateFootprintAdapter implements CreateFootprintPort {
 	private final FootprintJpaRepository footprintJpaRepository;
 	private final FootprintMapper footprintMapper;
 

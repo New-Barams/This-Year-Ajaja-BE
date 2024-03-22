@@ -16,11 +16,11 @@ import me.ajaja.module.footprint.dto.FootprintRequest;
 import me.ajaja.module.footprint.mapper.FootprintMapperImpl;
 
 @ContextConfiguration(classes = {
-	CreateFootprintAdaptor.class,
-	GetFootprintAdaptor.class,
+	CreateFootprintAdapter.class,
+	GetFootprintAdapter.class,
 	FootprintMapperImpl.class
 })
-class GetFootprintAdaptorTest extends JpaTestSupport {
+class GetFootprintAdapterTest extends JpaTestSupport {
 	private final String userCreateQuery = """
 		INSERT INTO users
 		(deleted, verified, created_at, oauth_id, updated_at, user_id, phone_number, nickname, remind_type, email,
@@ -40,10 +40,10 @@ class GetFootprintAdaptorTest extends JpaTestSupport {
 		""";
 
 	@Autowired
-	private CreateFootprintAdaptor createFootprintAdaptor;
+	private CreateFootprintAdapter createFootprintAdaptor;
 
 	@Autowired
-	private GetFootprintAdaptor getFootprintAdaptor;
+	private GetFootprintAdapter getFootprintAdaptor;
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
