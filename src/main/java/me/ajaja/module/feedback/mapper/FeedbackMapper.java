@@ -61,8 +61,8 @@ public interface FeedbackMapper {
 		return now.isAfter(sendDate);
 	}
 
-	@Mapping(target = "remainPeriod", expression = "java(feedback.deadLine().getBetweenDays(BaseTime.now()))")
-	@Mapping(target = "month", expression = "java(feedback.deadLine().getMonth())")
-	@Mapping(target = "date", expression = "java(feedback.deadLine().getDate())")
+	@Mapping(target = "remainPeriod", expression = "java(feedback.period().getBetweenDays(BaseTime.now()))")
+	@Mapping(target = "month", expression = "java(feedback.period().getMonth())")
+	@Mapping(target = "date", expression = "java(feedback.period().getDate())")
 	FeedbackResponse.EvaluableFeedback toResponse(UpdatableFeedback feedback);
 }

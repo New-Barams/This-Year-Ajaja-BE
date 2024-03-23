@@ -5,6 +5,6 @@ import me.ajaja.global.common.BaseTime;
 public record UpdatableFeedback(
 	String title,
 	Long planId,
-	BaseTime deadLine
+	BaseTime period
 ) {
 }

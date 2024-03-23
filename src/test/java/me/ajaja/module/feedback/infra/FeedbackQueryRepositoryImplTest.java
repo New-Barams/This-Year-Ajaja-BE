@@ -41,7 +41,7 @@ class FeedbackQueryRepositoryImplTest {
 		Long planId = 1L;
 
 		// when
-		List<Feedback> feedbacks = feedbackQueryRepository.findAllFeedbackByPlanId(planId);
+		List<Feedback> feedbacks = feedbackQueryRepository.findAllFeedbacksByPlanId(planId);
 
 		// then
 		assertThat(feedbacks).hasSize(1);
@@ -54,7 +54,7 @@ class FeedbackQueryRepositoryImplTest {
 		Long planId = 2L;
 
 		// when
-		List<Feedback> feedbacks = feedbackQueryRepository.findAllFeedbackByPlanId(planId);
+		List<Feedback> feedbacks = feedbackQueryRepository.findAllFeedbacksByPlanId(planId);
 
 		// then
 		assertThat(feedbacks).isEmpty();

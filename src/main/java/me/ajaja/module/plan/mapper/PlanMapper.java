@@ -147,7 +147,7 @@ public interface PlanMapper {
 
 	@Mapping(source = "id", target = "planId")
 	@Mapping(source = "content.title", target = "title")
-	@Mapping(target = "deadLine", expression = "java(getRemindPeriod(plan))")
+	@Mapping(target = "period", expression = "java(getRemindPeriod(plan))")
 	UpdatableFeedback toFeedbackModel(Plan plan);
 
 	default BaseTime getRemindPeriod(Plan plan) {
