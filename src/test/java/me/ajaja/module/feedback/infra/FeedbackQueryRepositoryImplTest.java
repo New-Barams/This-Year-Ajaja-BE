@@ -48,6 +48,19 @@ class FeedbackQueryRepositoryImplTest {
 	}
 
 	@Test
+	@DisplayName("플랜 id에 맞는 피드백 정보를 가져온다.")
+	void findRemindInfoByUserId_Success_WithNoException() {
+		// given
+		Long userId = 1L;
+
+		// when
+		List<Feedback> feedbacks = feedbackQueryRepository.findAllFeedbacksByUserId(userId);
+
+		// then
+		assertThat(feedbacks).hasSize(1);
+	}
+
+	@Test
 	@DisplayName("만약 플랜id에 맞는 피드백 정보가 없으면 빈 리스트를 반환한다.")
 	void findNoRemindInfoByPlanId_Success_WithNoException() {
 		// given
