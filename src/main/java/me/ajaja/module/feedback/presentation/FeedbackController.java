@@ -52,9 +52,9 @@ public class FeedbackController {
 	}
 
 	@Authorization
-	@GetMapping("/updatable")
+	@GetMapping("/evaluables")
 	@ResponseStatus(OK)
-	public AjajaResponse<List<FeedbackResponse.EvaluableFeedback>> getUpdatableFeedbacks() {
+	public AjajaResponse<List<FeedbackResponse.EvaluableFeedback>> getEvaluableFeedbacks() {
 		Long userId = SecurityUtil.getUserId();
 		List<FeedbackResponse.EvaluableFeedback> feedbacks
 			= loadEvaluableFeedbacksService.loadEvaluableFeedbacksByUserId(userId);
