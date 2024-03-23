@@ -21,8 +21,9 @@ public class LoadEvaluablePlansService implements LoadEvaluableTargetsService {
 
 	@Override
 	public List<UpdatableFeedback> findEvaluableTargetsByUserId(Long userId) {
-		return findEvaluablePlansPort.findEvaluablePlansByUserId(userId).stream()
-			.filter(plan -> plan.isWithinPeriod(BaseTime.now()))
+		BaseTime now = BaseTime.now();
+		return findEvaluablePlansPort.findEvaluablePlansByUserIdAndTime(userId, now).stream()
+			.filter(plan -> plan.isWithinPeriod(now))
 			.map(mapper::toFeedbackModel)
 			.toList();
 	}

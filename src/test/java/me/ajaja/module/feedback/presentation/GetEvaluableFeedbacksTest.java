@@ -36,7 +36,7 @@ public class GetEvaluableFeedbacksTest extends WebMvcTestSupport {
 		given(loadEvaluableFeedbacksService.loadEvaluableFeedbacksByUserId(anyLong())).willReturn(response);
 
 		// when
-		var result = mockMvc.perform(get(FEEDBACK_END_POINT + "/updatable")
+		var result = mockMvc.perform(get(FEEDBACK_END_POINT + "/evaluables")
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.contentType(MediaType.APPLICATION_JSON));
 
@@ -78,7 +78,7 @@ public class GetEvaluableFeedbacksTest extends WebMvcTestSupport {
 		doThrow(tokenException).when(loadEvaluableFeedbacksService).loadEvaluableFeedbacksByUserId(anyLong());
 
 		// when
-		var result = mockMvc.perform(get(FEEDBACK_END_POINT + "/updatable")
+		var result = mockMvc.perform(get(FEEDBACK_END_POINT + "/evaluables")
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.contentType(MediaType.APPLICATION_JSON));
 

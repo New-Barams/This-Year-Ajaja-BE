@@ -21,10 +21,10 @@ public class FindEvaluablePlansAdapter implements FindEvaluablePlansPort {
 	private final PlanMapper mapper;
 
 	@Override
-	public List<Plan> findEvaluablePlansByUserId(Long id) {
+	public List<Plan> findEvaluablePlansByUserIdAndTime(Long id, BaseTime now) {
 		return queryFactory.selectFrom(planEntity)
 			.where(planEntity.userId.eq(id)
-				.and(planEntity.createdAt.year().eq(BaseTime.now().getYear())))
+				.and(planEntity.createdAt.year().eq(now.getYear())))
 			.fetch()
 			.stream()
 			.map(mapper::toDomain)
