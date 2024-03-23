@@ -28,8 +28,9 @@ logging:
   level:
     org:
       springframework:
+        jdbc.datasource.init: debug
         test.context.cache: debug
-    com.newbarams.ajaja: DEBUG
+    com.newbarams.ajaja: debug
 
 jasypt:
   encryptor:
