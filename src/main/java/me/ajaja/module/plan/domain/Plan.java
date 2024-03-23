@@ -146,20 +146,13 @@ public class Plan {
 		return this.messages.stream()
 			.filter(message -> isWithinPeriod(now))
 			.findAny()
-			.map(message -> BaseTime.parse(this.createdAt.getYear(),
-				message.getRemindDate().getRemindMonth(),
-				message.getRemindDate().getRemindDay(),
-				this.getRemindTime()))
+			.map(message -> message.parsePeriod(this.createdAt.getYear(), this.getRemindTime()))
 			.orElseThrow(() -> new AjajaException(EXPIRED_FEEDBACK));
 	}
 
 	public boolean isWithinPeriod(BaseTime now) {
 		return this.messages.stream().anyMatch(message -> now.isWithinAMonth(
-			BaseTime.parse(
-				this.createdAt.getYear(),
-				message.getRemindDate().getRemindMonth(),
-				message.getRemindDate().getRemindDay(),
-				this.getRemindTime()))
-		);
+			message.parsePeriod(this.createdAt.getYear(), this.getRemindTime())
+		));
 	}
 }

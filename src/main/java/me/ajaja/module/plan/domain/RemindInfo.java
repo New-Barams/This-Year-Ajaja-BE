@@ -6,11 +6,22 @@ import jakarta.validation.constraints.Positive;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import me.ajaja.global.common.SelfValidating;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RemindInfo extends SelfValidating<RemindInfo> {
+	@Getter
+	@RequiredArgsConstructor
+	private enum RemindTime {
+		MORNING(9),
+		AFTERNOON(13),
+		EVENING(22);
+
+		private final int time;
+	}
+
 	@Positive
 	private int remindTotalPeriod;
 
