@@ -42,7 +42,7 @@ class FindTargetRemindAdapterTest extends MockTestSupport {
 
 		// when
 		given(findTargetPort.findByUserIdAndPlanId(anyLong(), anyLong())).willReturn(plan);
-		given(mapper.toMessage(any())).willReturn(message);
+		given(mapper.toMessage(any(), anyInt(), anyInt())).willReturn(message);
 
 		// then
 		assertThatNoException().isThrownBy(() ->

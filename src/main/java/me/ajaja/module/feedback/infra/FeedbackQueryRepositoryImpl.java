@@ -26,10 +26,21 @@ class FeedbackQueryRepositoryImpl implements FeedbackQueryRepository {
 	private final FeedbackMapper mapper;
 
 	@Override
-	public List<Feedback> findAllFeedbackByPlanId(Long planId) {
+	public List<Feedback> findAllFeedbacksByPlanId(Long planId) {
 		List<FeedbackEntity> entities = queryFactory.selectFrom(feedbackEntity)
 			.where(feedbackEntity.planId.eq(planId))
 			.orderBy(feedbackEntity.createdAt.asc())
+			.fetch();
+
+		return mapper.toDomain(entities);
+	}
+
+	@Override
+	public List<Feedback> findAllFeedbacksByUserId(Long userId) {
+		List<FeedbackEntity> entities = queryFactory.selectFrom(feedbackEntity)
+			.where(feedbackEntity.userId.eq(userId)
+				.and(feedbackEntity.createdAt.year().eq(BaseTime.now().getYear())))
+			.orderBy(feedbackEntity.planId.asc())
 			.fetch();
 
 		return mapper.toDomain(entities);

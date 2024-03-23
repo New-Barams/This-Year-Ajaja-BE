@@ -16,6 +16,6 @@ public class LoadFeedbackService {
 	private final FeedbackQueryRepository feedbackQueryRepository;
 
 	public List<Feedback> loadFeedback(Long planId) {
-		return feedbackQueryRepository.findAllFeedbackByPlanId(planId);
+		return feedbackQueryRepository.findAllFeedbacksByPlanId(planId);
 	}
 }

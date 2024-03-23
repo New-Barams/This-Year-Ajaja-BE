@@ -12,6 +12,7 @@ import me.ajaja.global.common.BaseTime;
 import me.ajaja.module.ajaja.infra.AjajaEntity;
 import me.ajaja.module.feedback.application.model.FeedbackPeriod;
 import me.ajaja.module.feedback.application.model.PlanFeedbackInfo;
+import me.ajaja.module.feedback.application.model.UpdatableFeedback;
 import me.ajaja.module.plan.adapter.out.persistence.model.PlanEntity;
 import me.ajaja.module.plan.domain.Content;
 import me.ajaja.module.plan.domain.Message;
@@ -142,5 +143,14 @@ public interface PlanMapper {
 		return messages.stream().map(Message::getRemindDate)
 			.map(remindDate -> new FeedbackPeriod(remindDate.getRemindMonth(), remindDate.getRemindDay()))
 			.toList();
+	}
+
+	@Mapping(source = "id", target = "planId")
+	@Mapping(source = "content.title", target = "title")
+	@Mapping(target = "period", expression = "java(getRemindPeriod(plan))")
+	UpdatableFeedback toFeedbackModel(Plan plan);
+
+	default BaseTime getRemindPeriod(Plan plan) {
+		return plan.findFeedbackPeriod(BaseTime.now());
 	}
 }

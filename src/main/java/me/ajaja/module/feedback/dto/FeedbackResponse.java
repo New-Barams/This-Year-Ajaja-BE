@@ -24,4 +24,13 @@ public final class FeedbackResponse {
 		private final int endDate;
 		private final boolean reminded;
 	}
+
+	@Data
+	public static class EvaluableFeedback {
+		private final String title;
+		private final Long planId;
+		private final long remainPeriod;
+		private final int month;
+		private final int date;
+	}
 }

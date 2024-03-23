@@ -41,7 +41,20 @@ class FeedbackQueryRepositoryImplTest {
 		Long planId = 1L;
 
 		// when
-		List<Feedback> feedbacks = feedbackQueryRepository.findAllFeedbackByPlanId(planId);
+		List<Feedback> feedbacks = feedbackQueryRepository.findAllFeedbacksByPlanId(planId);
+
+		// then
+		assertThat(feedbacks).hasSize(1);
+	}
+
+	@Test
+	@DisplayName("플랜 id에 맞는 피드백 정보를 가져온다.")
+	void findRemindInfoByUserId_Success_WithNoException() {
+		// given
+		Long userId = 1L;
+
+		// when
+		List<Feedback> feedbacks = feedbackQueryRepository.findAllFeedbacksByUserId(userId);
 
 		// then
 		assertThat(feedbacks).hasSize(1);
@@ -54,7 +67,7 @@ class FeedbackQueryRepositoryImplTest {
 		Long planId = 2L;
 
 		// when
-		List<Feedback> feedbacks = feedbackQueryRepository.findAllFeedbackByPlanId(planId);
+		List<Feedback> feedbacks = feedbackQueryRepository.findAllFeedbacksByPlanId(planId);
 
 		// then
 		assertThat(feedbacks).isEmpty();

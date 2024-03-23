@@ -31,6 +31,7 @@ import me.ajaja.global.security.jwt.JwtParser;
 import me.ajaja.module.ajaja.application.SwitchAjajaService;
 import me.ajaja.module.auth.application.port.in.LoginUseCase;
 import me.ajaja.module.auth.application.port.in.ReissueTokenUseCase;
+import me.ajaja.module.feedback.application.LoadEvaluableFeedbacksService;
 import me.ajaja.module.feedback.application.LoadFeedbackInfoService;
 import me.ajaja.module.feedback.application.LoadTotalAchieveService;
 import me.ajaja.module.feedback.application.UpdateFeedbackService;
@@ -161,6 +162,8 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 	protected LoadTotalAchieveService loadTotalAchieveService;
 	@MockBean
 	protected LoadFeedbackInfoService loadFeedbackInfoService;
+	@MockBean
+	protected LoadEvaluableFeedbacksService loadEvaluableFeedbacksService;
 
 	// Remind
 	@MockBean

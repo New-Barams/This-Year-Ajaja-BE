@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.ajaja.global.common.BaseTime;
 import me.ajaja.global.common.SelfValidating;
 
 @Getter
@@ -25,5 +26,14 @@ public class Message extends SelfValidating<Message> {
 		this.content = content;
 		this.remindDate = new RemindDate(remindMonth, remindDay);
 		this.validateSelf();
+	}
+
+	BaseTime parsePeriod(int year, int remindTime) {
+		return BaseTime.parse(
+			year,
+			remindDate.getRemindMonth(),
+			remindDate.getRemindDay(),
+			remindTime
+		);
 	}
 }

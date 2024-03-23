@@ -27,7 +27,7 @@ public class UpdateFeedbackService {
 		Plan plan = findTargetPort.findByUserIdAndPlanId(userId, planId);
 		BaseTime now = BaseTime.now();
 
-		BaseTime period = plan.getFeedbackPeriod(now);
+		BaseTime period = plan.findFeedbackPeriod(now);
 		checkExistFeedback(planId, period);
 
 		Feedback feedback = Feedback.create(userId, planId, rate, message);

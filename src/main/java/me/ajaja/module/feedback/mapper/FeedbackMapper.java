@@ -8,6 +8,7 @@ import org.mapstruct.Mapping;
 
 import me.ajaja.global.common.BaseTime;
 import me.ajaja.module.feedback.application.model.PlanFeedbackInfo;
+import me.ajaja.module.feedback.application.model.UpdatableFeedback;
 import me.ajaja.module.feedback.domain.Feedback;
 import me.ajaja.module.feedback.dto.FeedbackResponse;
 import me.ajaja.module.feedback.infra.FeedbackEntity;
@@ -59,4 +60,9 @@ public interface FeedbackMapper {
 		BaseTime now = BaseTime.now();
 		return now.isAfter(sendDate);
 	}
+
+	@Mapping(target = "remainPeriod", expression = "java(feedback.period().betweenDays(BaseTime.now()))")
+	@Mapping(target = "month", expression = "java(feedback.period().getMonth())")
+	@Mapping(target = "date", expression = "java(feedback.period().getDate())")
+	FeedbackResponse.EvaluableFeedback toResponse(UpdatableFeedback feedback);
 }

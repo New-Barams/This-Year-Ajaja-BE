@@ -2,6 +2,8 @@ package me.ajaja.module.feedback.presentation;
 
 import static org.springframework.http.HttpStatus.*;
 
+import java.util.List;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import me.ajaja.global.common.AjajaResponse;
 import me.ajaja.global.security.annotation.Authorization;
 import me.ajaja.global.util.SecurityUtil;
+import me.ajaja.module.feedback.application.LoadEvaluableFeedbacksService;
 import me.ajaja.module.feedback.application.LoadFeedbackInfoService;
 import me.ajaja.module.feedback.application.UpdateFeedbackService;
 import me.ajaja.module.feedback.dto.FeedbackRequest;
@@ -25,6 +28,7 @@ import me.ajaja.module.feedback.dto.FeedbackResponse;
 public class FeedbackController {
 	private final UpdateFeedbackService updateFeedbackService;
 	private final LoadFeedbackInfoService loadFeedbackInfoService;
+	private final LoadEvaluableFeedbacksService loadEvaluableFeedbacksService;
 
 	@Authorization
 	@PostMapping("/{planId}")
@@ -45,5 +49,15 @@ public class FeedbackController {
 		Long userId = SecurityUtil.getUserId();
 		FeedbackResponse.FeedbackInfo feedbackInfo = loadFeedbackInfoService.loadFeedbackInfoByPlanId(userId, planId);
 		return AjajaResponse.ok(feedbackInfo);
+	}
+
+	@Authorization
+	@GetMapping("/evaluables")
+	@ResponseStatus(OK)
+	public AjajaResponse<List<FeedbackResponse.EvaluableFeedback>> getEvaluableFeedbacks() {
+		Long userId = SecurityUtil.getUserId();
+		List<FeedbackResponse.EvaluableFeedback> feedbacks
+			= loadEvaluableFeedbacksService.loadEvaluableFeedbacksByUserId(userId);
+		return AjajaResponse.ok(feedbacks);
 	}
 }

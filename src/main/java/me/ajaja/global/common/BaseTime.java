@@ -75,6 +75,10 @@ public final class BaseTime {
 		return zonedDateTime.isBefore(time.oneMonthLater()) && zonedDateTime.isAfter(time.zonedDateTime);
 	}
 
+	public long betweenDays(BaseTime compare) {
+		return Duration.between(this.instant, compare.instant).toDays();
+	}
+
 	private static LocalDateTime parseDateTime(int year, int month, int date, int hour, int minute) {
 		return LocalDateTime.of(year, month, date, hour, minute);
 	}

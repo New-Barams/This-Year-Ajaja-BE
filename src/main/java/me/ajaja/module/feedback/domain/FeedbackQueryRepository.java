@@ -7,9 +7,11 @@ import me.ajaja.module.feedback.infra.model.AchieveInfo;
 import me.ajaja.module.feedback.infra.model.FeedbackInfo;
 
 public interface FeedbackQueryRepository {
-	List<Feedback> findAllFeedbackByPlanId(Long planId);
+	List<Feedback> findAllFeedbacksByPlanId(Long planId);
 
-	boolean existByPlanIdAndPeriod(Long feedbackId, BaseTime period);
+	List<Feedback> findAllFeedbacksByUserId(Long userId);
+
+	boolean existByPlanIdAndPeriod(Long planId, BaseTime period);
 
 	List<FeedbackInfo> findFeedbackInfosByPlanId(Long planId);
 
