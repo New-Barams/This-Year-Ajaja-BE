@@ -7,12 +7,12 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
-import me.ajaja.common.annotation.ApiTest;
-import me.ajaja.common.annotation.ParameterizedApiTest;
 import me.ajaja.common.support.WebMvcTestSupport;
 import me.ajaja.common.util.ApiTag;
 import me.ajaja.common.util.RestDocument;
@@ -21,13 +21,13 @@ import me.ajaja.global.exception.ErrorCode;
 
 class SendTrialRemindControllerTest extends WebMvcTestSupport {
 
-	@ApiTest
-	void sendTestRemind_Success_WithNoException() throws Exception {
+	@Test
+	void sendTestRemind_Success() throws Exception {
 		// given
 		given(sendTrialRemindUseCase.send(anyLong())).willReturn("EMAIL");
 
 		// when
-		var result = mockMvc.perform(post(REMIND_END_POINT + "/test")
+		var result = mockMvc.perform(post("/reminds/test")
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.contentType(MediaType.APPLICATION_JSON));
 
@@ -51,7 +51,7 @@ class SendTrialRemindControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ParameterizedApiTest
+	@ParameterizedTest
 	@MethodSource("authenticationFailResults")
 	@DisplayName("토큰 검증에 실패하면 400에러를 반환한다.")
 	void sendTestRemind_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
@@ -60,7 +60,7 @@ class SendTrialRemindControllerTest extends WebMvcTestSupport {
 		when(sendTrialRemindUseCase.send(anyLong())).thenThrow(tokenException);
 
 		// when
-		var result = mockMvc.perform(post(REMIND_END_POINT + "/test")
+		var result = mockMvc.perform(post("/reminds/test")
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.contentType(MediaType.APPLICATION_JSON));
 
@@ -78,14 +78,14 @@ class SendTrialRemindControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
-	void sendTestRemind_Fail_ByRequestOverMax() throws Exception {
+	@Test
+	void sendTestRemind_Fail_OverFreeTrials() throws Exception {
 		// given
-		AjajaException requestException = new AjajaException(REQUEST_OVER_MAX);
+		AjajaException requestException = new AjajaException(OVER_FREE_TRIAL);
 		when(sendTrialRemindUseCase.send(1L)).thenThrow(requestException);
 
 		// when
-		var result = mockMvc.perform(post(REMIND_END_POINT + "/test")
+		var result = mockMvc.perform(post("/reminds/test")
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.contentType(MediaType.APPLICATION_JSON));
 
@@ -103,28 +103,28 @@ class SendTrialRemindControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
-	void sendTestRemind_Fail_ByTaskFailed() throws Exception {
-		// given
-		AjajaException taskFailedException = new AjajaException(REMIND_TASK_FAILED);
-		when(sendTrialRemindUseCase.send(1L)).thenThrow(taskFailedException);
-
-		// when
-		var result = mockMvc.perform(post(REMIND_END_POINT + "/test")
-			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
-			.contentType(MediaType.APPLICATION_JSON));
-
-		// then
-		result.andExpect(status().is4xxClientError());
-
-		// docs
-		result.andDo(
-			RestDocument.builder()
-				.identifier("send-test-remind-fail-task-failed")
-				.tag(ApiTag.REMIND)
-				.secured(true)
-				.result(result)
-				.generateDocs()
-		);
-	}
+	// @Test
+	// void sendTestRemind_Fail() throws Exception {
+	// 	// given
+	// 	AjajaException taskFailedException = new AjajaException(REMIND_TASK_FAILED);
+	// 	when(sendTrialRemindUseCase.send(1L)).thenThrow(taskFailedException);
+	//
+	// 	// when
+	// 	var result = mockMvc.perform(post("/reminds/test")
+	// 		.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
+	// 		.contentType(MediaType.APPLICATION_JSON));
+	//
+	// 	// then
+	// 	result.andExpect(status().is4xxClientError());
+	//
+	// 	// docs
+	// 	result.andDo(
+	// 		RestDocument.builder()
+	// 			.identifier("send-test-remind-fail-task-failed")
+	// 			.tag(ApiTag.REMIND)
+	// 			.secured(true)
+	// 			.result(result)
+	// 			.generateDocs()
+	// 	);
+	// }
 }

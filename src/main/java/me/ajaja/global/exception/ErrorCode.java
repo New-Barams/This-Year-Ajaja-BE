@@ -42,7 +42,7 @@ public enum ErrorCode {
 	CERTIFICATION_NOT_MATCH(CONFLICT, "인증 번호가 일치하지 않습니다."),
 
 	// 429
-	REQUEST_OVER_MAX(TOO_MANY_REQUESTS, "테스트 리마인드는 하루에 3회만 보낼 수 있습니다."),
+	OVER_FREE_TRIAL(TOO_MANY_REQUESTS, "테스트 리마인드는 하루에 3회만 보낼 수 있습니다."),
 
 	// 500
 	AJAJA_SERVER_ERROR(INTERNAL_SERVER_ERROR, "서버 내부 오류입니다. 관리자에게 문의바랍니다."),

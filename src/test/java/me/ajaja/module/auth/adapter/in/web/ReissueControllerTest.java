@@ -6,12 +6,12 @@ import static org.springframework.http.HttpStatus.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 
-import me.ajaja.common.annotation.ApiTest;
-import me.ajaja.common.annotation.ParameterizedApiTest;
 import me.ajaja.common.support.WebMvcTestSupport;
 import me.ajaja.common.util.ApiTag;
 import me.ajaja.common.util.RestDocument;
@@ -23,7 +23,7 @@ import me.ajaja.module.auth.dto.AuthResponse;
 class ReissueControllerTest extends WebMvcTestSupport {
 	private final AuthRequest.Reissue request = new AuthRequest.Reissue("accessToken", "refreshToken");
 
-	@ApiTest
+	@Test
 	@DisplayName("유효한 토큰으로 토큰 재발급 요청하면 성공한다.")
 	void reissue_Success() throws Exception {
 		// given
@@ -77,7 +77,7 @@ class ReissueControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ParameterizedApiTest
+	@ParameterizedTest
 	@MethodSource("authenticationFailResults")
 	@DisplayName("토큰 검증에 실패하면 400에러를 반환한다.")
 	void reissue_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
@@ -109,7 +109,7 @@ class ReissueControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@Test
 	@DisplayName("로그인한 이력(캐시가 비어있다면)이 존재하지 않으면 404에러를 반환한다.")
 	void reissue_Fail_ByNeverLogin() throws Exception {
 		// given

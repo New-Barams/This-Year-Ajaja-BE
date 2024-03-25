@@ -8,12 +8,12 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
-import me.ajaja.common.annotation.ApiTest;
-import me.ajaja.common.annotation.ParameterizedApiTest;
 import me.ajaja.common.support.WebMvcTestSupport;
 import me.ajaja.common.util.ApiTag;
 import me.ajaja.common.util.RestDocument;
@@ -22,11 +22,11 @@ import me.ajaja.global.exception.ErrorCode;
 import me.ajaja.module.user.dto.UserRequest;
 
 class VerifyCertificationControllerTest extends WebMvcTestSupport {
-	private static final String VERIFY_END_POINT = USER_END_POINT + "/verify";
+	private static final String VERIFY_END_POINT = "/users/verify";
 
 	private final UserRequest.Certification request = new UserRequest.Certification("123456");
 
-	@ApiTest
+	@Test
 	@DisplayName("검증 데이터가 일치하면 요청에 성공한다.")
 	void verifyCertification_Success() throws Exception {
 		// given
@@ -53,7 +53,7 @@ class VerifyCertificationControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ParameterizedApiTest
+	@ParameterizedTest
 	@MethodSource("authenticationFailResults")
 	@DisplayName("요청 시 인증에 실패하면 400에러를 반환한다.")
 	void verifyCertification_Fail_ByAuthentication(ErrorCode errorCode, String identifier) throws Exception {
@@ -87,7 +87,7 @@ class VerifyCertificationControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@Test
 	@DisplayName("존재하지 않는 회원으로 요청하면 404에러를 반환한다.")
 	void verifyCertification_Fail_ByNotExistUser() throws Exception {
 		// given
@@ -120,7 +120,7 @@ class VerifyCertificationControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@Test
 	@DisplayName("잘못된 인증 번호로 요청하면 409에러를 반환한다.")
 	void verifyCertification_Fail_ByCertificationNotMatch() throws Exception {
 		// given

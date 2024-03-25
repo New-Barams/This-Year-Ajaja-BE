@@ -33,9 +33,10 @@ class SendTrialRemindService implements SendTrialRemindUseCase {
 		return address.getRemindType();
 	}
 
-	private void sendRemind(Remind address) {
+	private void sendRemind(Remind address) { // todo 리팩토링
 		Integer sendCount = getSendCount(address.getPhoneNumber());
-		factory.get(address.getRemindType()).sendTrial(address);
+		factory.get(address.getRemindType())
+			.sendTrial(address);
 		increaseCount(address.getPhoneNumber(), sendCount);
 	}
 
@@ -43,8 +44,9 @@ class SendTrialRemindService implements SendTrialRemindUseCase {
 		Integer sendCount = (Integer)redisTemplate.opsForValue().get(phoneNumber);
 
 		if (sendCount != null && sendCount >= MAX_SEND_COUNT) {
-			throw new AjajaException(REQUEST_OVER_MAX);
+			throw new AjajaException(OVER_FREE_TRIAL);
 		}
+
 		return sendCount;
 	}
 

@@ -1,36 +1,35 @@
 package me.ajaja.module.feedback.presentation;
 
 import static me.ajaja.global.exception.ErrorCode.*;
+import static me.ajaja.module.feedback.dto.FeedbackRequest.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
-import me.ajaja.common.annotation.ApiTest;
-import me.ajaja.common.annotation.ParameterizedApiTest;
 import me.ajaja.common.support.WebMvcTestSupport;
 import me.ajaja.common.util.ApiTag;
 import me.ajaja.common.util.RestDocument;
 import me.ajaja.global.exception.AjajaException;
 import me.ajaja.global.exception.ErrorCode;
-import me.ajaja.module.feedback.dto.FeedbackRequest;
 
 class UpdateFeedbackControllerTest extends WebMvcTestSupport {
-	private final FeedbackRequest.UpdateFeedback request
-		= new FeedbackRequest.UpdateFeedback(50, "fighting");
+	private final UpdateFeedback request = new UpdateFeedback(50, "fighting");
 
-	@ApiTest
+	@Test
 	@DisplayName("요청 받은 값으로 유저의 피드백을 실행한다.")
 	void updateFeedback_Success_WithNoException() throws Exception {
 		// given
 		doNothing().when(updateFeedbackService).updateFeedback(anyLong(), anyLong(), anyInt(), anyString());
 
 		// when
-		var result = mockMvc.perform(post(FEEDBACK_END_POINT + "/{planId}", 1)
+		var result = mockMvc.perform(post("/feedbacks/{planId}", 1)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(request)));
@@ -51,7 +50,7 @@ class UpdateFeedbackControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ParameterizedApiTest
+	@ParameterizedTest
 	@MethodSource("authenticationFailResults")
 	@DisplayName("토큰 검증에 실패하면 400에러를 반환한다.")
 	void updateFeedback_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
@@ -61,7 +60,7 @@ class UpdateFeedbackControllerTest extends WebMvcTestSupport {
 			.updateFeedback(anyLong(), anyLong(), anyInt(), anyString());
 
 		// when
-		var result = mockMvc.perform(post(FEEDBACK_END_POINT + "/{planId}", 1)
+		var result = mockMvc.perform(post("/feedbacks/{planId}", 1)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(request)));
@@ -80,7 +79,7 @@ class UpdateFeedbackControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@Test
 	@DisplayName("만일 피드백 기간이 아니라면 예외를 던진다.")
 	void updateFeedback_Fail_ByExpiredFeedback() throws Exception {
 		// given
@@ -89,7 +88,7 @@ class UpdateFeedbackControllerTest extends WebMvcTestSupport {
 			.updateFeedback(anyLong(), anyLong(), anyInt(), anyString());
 
 		// when
-		var result = mockMvc.perform(post(FEEDBACK_END_POINT + "/{planId}", 1)
+		var result = mockMvc.perform(post("/feedbacks/{planId}", 1)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(request)));
@@ -108,7 +107,7 @@ class UpdateFeedbackControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@Test
 	@DisplayName("만일 피드백 대상 계획이 조회되지 않는다면 예외를 던진다.")
 	void updateFeedback_Fail_ByPlanNotFound() throws Exception {
 		// given
@@ -117,7 +116,7 @@ class UpdateFeedbackControllerTest extends WebMvcTestSupport {
 			.updateFeedback(anyLong(), anyLong(), anyInt(), anyString());
 
 		// when
-		var result = mockMvc.perform(post(FEEDBACK_END_POINT + "/{planId}", 1)
+		var result = mockMvc.perform(post("/feedbacks/{planId}", 1)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(request)));
@@ -136,7 +135,7 @@ class UpdateFeedbackControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@Test
 	@DisplayName("해당 기간에 이미 피드백 했다면 예외를 던진다.")
 	void updateFeedback_Fail_ByAlreadyFeedback() throws Exception {
 		// given
@@ -145,7 +144,7 @@ class UpdateFeedbackControllerTest extends WebMvcTestSupport {
 			.updateFeedback(anyLong(), anyLong(), anyInt(), anyString());
 
 		// when
-		var result = mockMvc.perform(post(FEEDBACK_END_POINT + "/{planId}", 1)
+		var result = mockMvc.perform(post("/feedbacks/{planId}", 1)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(request)));

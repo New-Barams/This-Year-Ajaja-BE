@@ -8,12 +8,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
-import me.ajaja.common.annotation.ApiTest;
-import me.ajaja.common.annotation.ParameterizedApiTest;
 import me.ajaja.common.support.WebMvcTestSupport;
 import me.ajaja.common.util.ApiTag;
 import me.ajaja.common.util.RestDocument;
@@ -23,7 +23,7 @@ import me.ajaja.module.plan.dto.PlanResponse;
 
 class GetPlanInfoControllerTest extends WebMvcTestSupport {
 
-	@ApiTest
+	@Test
 	@DisplayName("메인 페이지에서 유저의 모든 계획 정보들을 가져온다.")
 	void getPlanInfo_Success_WithNoException() throws Exception {
 		// given
@@ -36,7 +36,7 @@ class GetPlanInfoControllerTest extends WebMvcTestSupport {
 		given(getTargetInfoUseCase.load(anyLong())).willReturn(response);
 
 		// when
-		var result = mockMvc.perform(get(PLAN_END_POINT + "/main")
+		var result = mockMvc.perform(get("/plans/main")
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.contentType(MediaType.APPLICATION_JSON));
 
@@ -78,7 +78,7 @@ class GetPlanInfoControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ParameterizedApiTest
+	@ParameterizedTest
 	@MethodSource("authenticationFailResults")
 	@DisplayName("토큰 검증에 실패하면 400에러를 반환한다.")
 	void getPlanInfo_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
@@ -87,7 +87,7 @@ class GetPlanInfoControllerTest extends WebMvcTestSupport {
 		when(getTargetInfoUseCase.load(anyLong())).thenThrow(tokenException);
 
 		// when
-		var result = mockMvc.perform(get(PLAN_END_POINT + "/main")
+		var result = mockMvc.perform(get("/plans/main")
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.contentType(MediaType.APPLICATION_JSON));
 
@@ -105,7 +105,7 @@ class GetPlanInfoControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@Test
 	@DisplayName("존재하지 않는 회원으로 요청하면 404에러를 반환한다.")
 	void getPlanInfo_Fail_ByUserNotFound() throws Exception {
 		// given
@@ -113,7 +113,7 @@ class GetPlanInfoControllerTest extends WebMvcTestSupport {
 		when(getTargetInfoUseCase.load(anyLong())).thenThrow(notFoundException);
 
 		// when
-		var result = mockMvc.perform(get(PLAN_END_POINT + "/main")
+		var result = mockMvc.perform(get("/plans/main")
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.contentType(MediaType.APPLICATION_JSON));
 
