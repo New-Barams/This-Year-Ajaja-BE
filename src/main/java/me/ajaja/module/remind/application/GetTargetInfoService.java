@@ -16,7 +16,7 @@ import me.ajaja.module.remind.application.port.out.FindTargetInfoPort;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class GetTargetInfoService implements GetTargetInfoUseCase {
+class GetTargetInfoService implements GetTargetInfoUseCase {
 	private final FindTargetInfoPort findTargetInfoPort;
 	private final PlanMapper mapper;
 

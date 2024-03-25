@@ -50,6 +50,10 @@ public class Remind extends SelfValidating<Remind> {
 		return new Remind(receiver, target, message, type, time.getMonth(), time.getDate());
 	}
 
+	public Remind asPlan(String sendType, BaseTime when) {
+		return Remind.plan(getUserId(), sendType, getPlanId(), this.message, when);
+	}
+
 	public boolean isValidNumber() {
 		return !Objects.equals(this.getPhoneNumber(), "01000000000");
 	}

@@ -15,6 +15,7 @@ import me.ajaja.global.common.BaseTime;
 import me.ajaja.global.schedule.AlimtalkSendable;
 import me.ajaja.infra.feign.ncp.model.NaverResponse;
 import me.ajaja.module.remind.application.port.out.FindRemindableTargetsPort;
+import me.ajaja.module.remind.application.port.out.SaveRemindPort;
 import me.ajaja.module.remind.application.port.out.SendRemindPort;
 import me.ajaja.module.remind.domain.Remind;
 
@@ -26,10 +27,10 @@ class SendAlimtalkRemindStrategy extends SendRemindStrategy implements AlimtalkS
 	public SendAlimtalkRemindStrategy(
 		FindRemindableTargetsPort findRemindableTargetsPort,
 		ApplicationEventPublisher eventPublisher,
-		CreateRemindService createRemindService,
+		SaveRemindPort saveRemindPort,
 		SendRemindPort sendRemindPort
 	) {
-		super(findRemindableTargetsPort, eventPublisher, createRemindService);
+		super(findRemindableTargetsPort, eventPublisher, saveRemindPort);
 		this.sendRemindPort = sendRemindPort;
 	}
 
