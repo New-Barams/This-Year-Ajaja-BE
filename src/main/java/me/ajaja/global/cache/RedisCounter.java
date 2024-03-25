@@ -14,8 +14,8 @@ import me.ajaja.module.remind.application.SendTrialCounter;
 @Component
 @RequiredArgsConstructor
 class RedisCounter implements SendTrialCounter {
-	private static final int INITIAL_COUNT = 1;
 	private static final int MAX_TRY = 3;
+	private static final int INITIAL_COUNT = 1;
 
 	private final RedisTemplate<String, Object> redisTemplate;
 
@@ -31,5 +31,7 @@ class RedisCounter implements SendTrialCounter {
 		if (count >= MAX_TRY) {
 			throw new AjajaException(OVER_FREE_TRIAL);
 		}
+
+		redisTemplate.opsForValue().set(contact, count + 1, Duration.ofDays(1));
 	}
 }
