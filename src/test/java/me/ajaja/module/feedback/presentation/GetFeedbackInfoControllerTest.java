@@ -8,12 +8,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
-import me.ajaja.common.annotation.ApiTest;
-import me.ajaja.common.annotation.ParameterizedApiTest;
 import me.ajaja.common.support.WebMvcTestSupport;
 import me.ajaja.common.util.ApiTag;
 import me.ajaja.common.util.RestDocument;
@@ -23,7 +23,7 @@ import me.ajaja.module.feedback.dto.FeedbackResponse;
 
 public class GetFeedbackInfoControllerTest extends WebMvcTestSupport {
 
-	@ApiTest
+	@Test
 	@DisplayName("유저의 피드백 정보들을 가져온다.")
 	void getFeedbackInfo_Success_WithNoException() throws Exception {
 		// given
@@ -38,7 +38,7 @@ public class GetFeedbackInfoControllerTest extends WebMvcTestSupport {
 		given(loadFeedbackInfoService.loadFeedbackInfoByPlanId(anyLong(), anyLong())).willReturn(response);
 
 		// when
-		var result = mockMvc.perform(get(FEEDBACK_END_POINT + "/{planId}", 1)
+		var result = mockMvc.perform(get("/feedbacks/{planId}", 1)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.contentType(MediaType.APPLICATION_JSON));
 
@@ -79,7 +79,7 @@ public class GetFeedbackInfoControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ParameterizedApiTest
+	@ParameterizedTest
 	@MethodSource("authenticationFailResults")
 	@DisplayName("토큰 검증에 실패하면 400에러를 반환한다.")
 	void getFeedbackInfo_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
@@ -88,7 +88,7 @@ public class GetFeedbackInfoControllerTest extends WebMvcTestSupport {
 		doThrow(tokenException).when(loadFeedbackInfoService).loadFeedbackInfoByPlanId(anyLong(), anyLong());
 
 		// when
-		var result = mockMvc.perform(get(FEEDBACK_END_POINT + "/{planId}", 1)
+		var result = mockMvc.perform(get("/feedbacks/{planId}", 1)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.contentType(MediaType.APPLICATION_JSON));
 
@@ -105,7 +105,7 @@ public class GetFeedbackInfoControllerTest extends WebMvcTestSupport {
 				.generateDocs());
 	}
 
-	@ApiTest
+	@Test
 	@DisplayName("만일 조회된 계획이 없다면 예외를 던진다.")
 	void getFeedbackInfo_Fail_ByPlanNotFound() throws Exception {
 		// given
@@ -113,7 +113,7 @@ public class GetFeedbackInfoControllerTest extends WebMvcTestSupport {
 		doThrow(notFoundException).when(loadFeedbackInfoService).loadFeedbackInfoByPlanId(anyLong(), anyLong());
 
 		// when
-		var result = mockMvc.perform(get(FEEDBACK_END_POINT + "/{planId}", 1)
+		var result = mockMvc.perform(get("/feedbacks/{planId}", 1)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.contentType(MediaType.APPLICATION_JSON));
 

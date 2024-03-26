@@ -3,7 +3,7 @@ package me.ajaja.module.auth.adapter.out.kakao;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
-import me.ajaja.global.util.BearerUtil;
+import me.ajaja.global.util.BearerUtils;
 import me.ajaja.infra.feign.kakao.client.KakaoAuthorizeFeignClient;
 import me.ajaja.infra.feign.kakao.client.KakaoProfileFeignClient;
 import me.ajaja.infra.feign.kakao.client.KakaoProperties;
@@ -24,7 +24,7 @@ class KakaoAuthorizeAdapter implements AuthorizePort {
 		KakaoRequest.Authorize request = kakaoProperties.authorizeRequest(authorizationCode, redirectUri);
 		AccessToken accessToken = kakaoAuthorizeFeignClient.authorize(request);
 
-		String bearerAccessToken = BearerUtil.toBearer(accessToken.getContent());
+		String bearerAccessToken = BearerUtils.toBearer(accessToken.getContent());
 		return kakaoProfileFeignClient.getKakaoProfile(bearerAccessToken);
 	}
 }

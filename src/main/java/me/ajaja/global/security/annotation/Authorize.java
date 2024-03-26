@@ -5,22 +5,22 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import me.ajaja.global.security.aspect.AuthorizationAspect;
+import me.ajaja.global.security.interceptor.AuthorizationInterceptor;
 
 /**
  * This annotation indicates that the API requires authorization
  * <pre>
- * &#064;Authorization
+ * &#064;Authorize
  * &#064;PostMapping("/hello")
- * public AjajaResponse<*> hello() {
+ * public AjajaResponse<?> hello() {
  * 	// do something...
  * }
  * </pre>
  *
- * @see AuthorizationAspect
+ * @see AuthorizationInterceptor
  * @author hejow
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Authorization {
+public @interface Authorize {
 }

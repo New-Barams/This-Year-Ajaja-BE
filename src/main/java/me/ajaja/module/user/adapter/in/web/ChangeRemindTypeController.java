@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import me.ajaja.global.common.AjajaResponse;
-import me.ajaja.global.security.annotation.Authorization;
-import me.ajaja.global.util.SecurityUtil;
+import me.ajaja.global.security.annotation.Authorize;
+import me.ajaja.global.security.annotation.Login;
 import me.ajaja.module.user.application.port.in.ChangeRemindTypeUseCase;
 import me.ajaja.module.user.dto.UserRequest;
 
@@ -19,11 +19,10 @@ import me.ajaja.module.user.dto.UserRequest;
 class ChangeRemindTypeController {
 	private final ChangeRemindTypeUseCase changeRemindTypeUseCase;
 
-	@Authorization
+	@Authorize
 	@PutMapping("/users/receive")
 	@ResponseStatus(OK)
-	public AjajaResponse<Void> changeRemindType(@RequestBody UserRequest.Receive request) {
-		Long id = SecurityUtil.getUserId();
+	public AjajaResponse<Void> changeRemindType(@Login Long id, @RequestBody UserRequest.Receive request) {
 		changeRemindTypeUseCase.change(id, request.getType());
 		return AjajaResponse.ok();
 	}

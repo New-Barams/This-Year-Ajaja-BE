@@ -4,9 +4,9 @@ import static org.mockito.BDDMockito.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
-import me.ajaja.common.annotation.ApiTest;
 import me.ajaja.common.support.WebMvcTestSupport;
 import me.ajaja.common.util.ApiTag;
 import me.ajaja.common.util.RestDocument;
@@ -15,7 +15,7 @@ import me.ajaja.module.auth.dto.AuthResponse;
 
 class LoginControllerTest extends WebMvcTestSupport {
 
-	@ApiTest
+	@Test
 	void login_Success() throws Exception {
 		// given
 		AuthRequest.Login request = new AuthRequest.Login(

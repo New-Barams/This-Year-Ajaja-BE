@@ -1,7 +1,6 @@
 package me.ajaja.global.exception;
 
 import me.ajaja.global.event.DiscordEvent;
-import me.ajaja.global.util.Exceptions;
 
 public class UnexpectedExceptionEvent extends DiscordEvent {
 

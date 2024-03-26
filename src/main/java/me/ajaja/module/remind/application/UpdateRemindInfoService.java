@@ -14,7 +14,7 @@ import me.ajaja.module.remind.application.port.out.SaveTargetPort;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UpdateRemindInfoService implements UpdateRemindInfoUseCase {
+class UpdateRemindInfoService implements UpdateRemindInfoUseCase {
 	private final FindTargetPort findTargetPort;
 	private final SaveTargetPort saveTargetPort;
 	private final MessageMapper mapper;

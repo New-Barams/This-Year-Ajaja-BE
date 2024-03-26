@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import me.ajaja.global.common.AjajaResponse;
-import me.ajaja.global.security.annotation.Authorization;
-import me.ajaja.global.util.SecurityUtil;
+import me.ajaja.global.security.annotation.Authorize;
+import me.ajaja.global.security.annotation.Login;
 import me.ajaja.module.remind.application.port.in.SendTrialRemindUseCase;
 
 @RestController
@@ -17,11 +17,10 @@ import me.ajaja.module.remind.application.port.in.SendTrialRemindUseCase;
 public class SendTrialRemindController {
 	private final SendTrialRemindUseCase sendTrialRemindUseCase;
 
-	@Authorization
+	@Authorize
 	@PostMapping("/reminds/test")
 	@ResponseStatus(OK)
-	public AjajaResponse<String> sendTrialRemind() {
-		Long userId = SecurityUtil.getUserId();
+	public AjajaResponse<String> sendTrialRemind(@Login Long userId) {
 		String remindType = sendTrialRemindUseCase.send(userId);
 		return AjajaResponse.ok(remindType);
 	}

@@ -6,12 +6,12 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
-import me.ajaja.common.annotation.ApiTest;
-import me.ajaja.common.annotation.ParameterizedApiTest;
 import me.ajaja.common.support.WebMvcTestSupport;
 import me.ajaja.common.util.ApiTag;
 import me.ajaja.common.util.RestDocument;
@@ -21,7 +21,7 @@ import me.ajaja.module.user.dto.UserResponse;
 
 class GetMyPageControllerTest extends WebMvcTestSupport {
 
-	@ApiTest
+	@Test
 	@DisplayName("유효한 토큰으로 마이페이지 조회 요청을 보내면 성공한다.")
 	void getMyPage_Success() throws Exception {
 		// given
@@ -31,7 +31,7 @@ class GetMyPageControllerTest extends WebMvcTestSupport {
 		given(getMyPageQuery.findUserInfoById(anyLong())).willReturn(response);
 
 		// when
-		var result = mockMvc.perform(get(USER_END_POINT)
+		var result = mockMvc.perform(get("/users")
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.contentType(MediaType.APPLICATION_JSON));
 
@@ -59,7 +59,7 @@ class GetMyPageControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ParameterizedApiTest
+	@ParameterizedTest
 	@MethodSource("authenticationFailResults")
 	@DisplayName("요청 시 인증에 실패하면 400에러를 반환한다.")
 	void getMyPage_Fail_ByAuthentication(ErrorCode errorCode, String identifier) throws Exception {
@@ -69,7 +69,7 @@ class GetMyPageControllerTest extends WebMvcTestSupport {
 		willThrow(authenticationFailed).given(getMyPageQuery).findUserInfoById(anyLong());
 
 		// when
-		var result = mockMvc.perform(get(USER_END_POINT)
+		var result = mockMvc.perform(get("/users")
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.contentType(MediaType.APPLICATION_JSON));
 

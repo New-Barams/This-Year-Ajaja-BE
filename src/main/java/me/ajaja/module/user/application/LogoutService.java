@@ -18,7 +18,7 @@ class LogoutService implements LogoutUseCase {
 
 	@Override
 	public void logout(Long id) {
-		validateExist(id); // todo: delete
+		validateExist(id);
 		jwtExpirer.expire(id);
 	}
 

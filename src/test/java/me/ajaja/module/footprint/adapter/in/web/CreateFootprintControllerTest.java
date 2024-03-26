@@ -11,10 +11,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 
 import jakarta.validation.ConstraintViolationException;
-import me.ajaja.common.annotation.ApiTest;
 import me.ajaja.common.support.WebMvcTestSupport;
 import me.ajaja.common.util.ApiTag;
 import me.ajaja.common.util.RestDocument;
@@ -23,7 +23,7 @@ import me.ajaja.module.footprint.dto.FootprintRequest;
 
 class CreateFootprintControllerTest extends WebMvcTestSupport {
 
-	@ApiTest
+	@Test
 	@DisplayName("발자취 유형에 맞는 형식에 요청 값에 대해 발자취 생성에 성공한다.")
 	void createFootprint_Success_With_NoExceptions() throws Exception {
 		// given
@@ -36,7 +36,7 @@ class CreateFootprintControllerTest extends WebMvcTestSupport {
 		doNothing().when(createFootprintUseCase).create(anyLong(), any());
 
 		// when
-		var result = mockMvc.perform(post(FOOTPRINT_END_POINT)
+		var result = mockMvc.perform(post("/footprints")
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.accept(APPLICATION_JSON)
 			.contentType(APPLICATION_JSON)
@@ -56,7 +56,7 @@ class CreateFootprintControllerTest extends WebMvcTestSupport {
 			.generateDocs());
 	}
 
-	@ApiTest
+	@Test
 	@DisplayName("발자취 유형에 해당 하는 항목 값이 빈 문자일 때 대해 발자취 생성에 실패한다.")
 	void createFootprint_Fail_By_InvalidContents() throws Exception {
 		// given
@@ -69,7 +69,7 @@ class CreateFootprintControllerTest extends WebMvcTestSupport {
 			.create(anyLong(), any());
 
 		// when
-		var result = mockMvc.perform(post(FOOTPRINT_END_POINT)
+		var result = mockMvc.perform(post("/footprints")
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.accept(APPLICATION_JSON)
 			.contentType(APPLICATION_JSON)

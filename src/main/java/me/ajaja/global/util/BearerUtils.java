@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import me.ajaja.global.exception.AjajaException;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class BearerUtil {
+public class BearerUtils {
 	private static final String BEARER_PREFIX = "Bearer ";
 
 	public static String toBearer(String token) {

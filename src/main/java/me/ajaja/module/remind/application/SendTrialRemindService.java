@@ -1,58 +1,28 @@
 package me.ajaja.module.remind.application;
 
-import static me.ajaja.global.exception.ErrorCode.*;
-
-import java.time.Duration;
-
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import me.ajaja.global.exception.AjajaException;
 import me.ajaja.module.remind.application.port.in.SendTrialRemindUseCase;
 import me.ajaja.module.remind.application.port.out.FindRemindAddressPort;
 import me.ajaja.module.remind.domain.Remind;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 class SendTrialRemindService implements SendTrialRemindUseCase {
-	private static final int MAX_SEND_COUNT = 3;
-	private static final int INIT_COUNT_VALUE = 1;
-
 	private final FindRemindAddressPort findRemindAddressPort;
-	private final SendRemindStrategyFactory factory;
-
-	private final RedisTemplate<String, Object> redisTemplate;
+	private final SendRemindStrategyFactory strategyFactory;
+	private final SendTrialCounter sendTrialCounter;
 
 	@Override
 	public String send(Long userId) {
-		Remind address = findRemindAddressPort.findRemindByUserId(userId);
-		sendRemind(address);
-		return address.getRemindType();
-	}
+		Remind remind = findRemindAddressPort.findRemindByUserId(userId);
 
-	private void sendRemind(Remind address) {
-		Integer sendCount = getSendCount(address.getPhoneNumber());
-		factory.get(address.getRemindType()).sendTrial(address);
-		increaseCount(address.getPhoneNumber(), sendCount);
-	}
+		sendTrialCounter.count(remind.getPhoneNumber());
 
-	private Integer getSendCount(String phoneNumber) {
-		Integer sendCount = (Integer)redisTemplate.opsForValue().get(phoneNumber);
+		var strategy = strategyFactory.get(remind.getRemindType());
+		strategy.sendTrial(remind);
 
-		if (sendCount != null && sendCount >= MAX_SEND_COUNT) {
-			throw new AjajaException(REQUEST_OVER_MAX);
-		}
-		return sendCount;
-	}
-
-	private void increaseCount(String phoneNumber, Integer sendCount) {
-		if (sendCount == null) {
-			redisTemplate.opsForValue().set(phoneNumber, INIT_COUNT_VALUE, Duration.ofDays(1));
-			return;
-		}
-		redisTemplate.opsForValue().increment(phoneNumber);
+		return remind.getRemindType();
 	}
 }

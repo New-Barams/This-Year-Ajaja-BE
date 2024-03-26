@@ -8,12 +8,12 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
-import me.ajaja.common.annotation.ApiTest;
-import me.ajaja.common.annotation.ParameterizedApiTest;
 import me.ajaja.common.support.WebMvcTestSupport;
 import me.ajaja.common.util.ApiTag;
 import me.ajaja.common.util.RestDocument;
@@ -21,9 +21,9 @@ import me.ajaja.global.exception.AjajaException;
 import me.ajaja.global.exception.ErrorCode;
 
 class LogoutControllerTest extends WebMvcTestSupport {
-	private static final String LOGOUT_END_POINT = USER_END_POINT + "/logout";
+	private static final String LOGOUT_END_POINT = "/users/logout";
 
-	@ApiTest
+	@Test
 	@DisplayName("유효한 토큰으로 로그아웃 요청을 보내면 성공한다.")
 	void logout_Success() throws Exception {
 		// given
@@ -49,7 +49,7 @@ class LogoutControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ParameterizedApiTest
+	@ParameterizedTest
 	@MethodSource("authenticationFailResults")
 	@DisplayName("요청 시 인증에 실패하면 400에러를 반환한다.")
 	void logout_Fail_ByAuthentication(ErrorCode errorCode, String identifier) throws Exception {
@@ -82,7 +82,7 @@ class LogoutControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@Test
 	@DisplayName("존재하지 않는 회원으로 요청하면 404에러를 반환한다.")
 	void logout_Fail_ByNotExistUser() throws Exception {
 		// given

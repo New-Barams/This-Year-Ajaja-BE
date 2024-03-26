@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import me.ajaja.global.common.AjajaResponse;
-import me.ajaja.global.security.annotation.Authorization;
-import me.ajaja.global.util.SecurityUtil;
+import me.ajaja.global.security.annotation.Authorize;
+import me.ajaja.global.security.annotation.Login;
 import me.ajaja.module.plan.application.port.in.SwitchPlanStatusUseCase;
 
 @RestController
@@ -20,33 +20,27 @@ import me.ajaja.module.plan.application.port.in.SwitchPlanStatusUseCase;
 class SwitchPlanStatusController {
 	private final SwitchPlanStatusUseCase switchPlanStatusUseCase;
 
-	@Authorization
+	@Authorize
 	@PutMapping("/public")
 	@ResponseStatus(OK)
-	public AjajaResponse<Void> switchPublicStatus(@PathVariable Long id) {
-		Long userId = SecurityUtil.getUserId();
+	public AjajaResponse<Void> switchPublicStatus(@Login Long userId, @PathVariable Long id) {
 		switchPlanStatusUseCase.switchPublic(id, userId);
-
 		return AjajaResponse.ok();
 	}
 
-	@Authorization
+	@Authorize
 	@PutMapping("/remindable")
 	@ResponseStatus(OK)
-	public AjajaResponse<Void> switchRemindStatus(@PathVariable Long id) {
-		Long userId = SecurityUtil.getUserId();
+	public AjajaResponse<Void> switchRemindStatus(@Login Long userId, @PathVariable Long id) {
 		switchPlanStatusUseCase.switchRemindable(id, userId);
-
 		return AjajaResponse.ok();
 	}
 
-	@Authorization
+	@Authorize
 	@PutMapping("/ajajable")
 	@ResponseStatus(OK)
-	public AjajaResponse<Void> switchAjajaStatus(@PathVariable Long id) {
-		Long userId = SecurityUtil.getUserId();
+	public AjajaResponse<Void> switchAjajaStatus(@Login Long userId, @PathVariable Long id) {
 		switchPlanStatusUseCase.switchAjajable(id, userId);
-
 		return AjajaResponse.ok();
 	}
 }

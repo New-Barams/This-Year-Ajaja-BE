@@ -21,7 +21,7 @@ public interface Sendable {
 
 	default void checkAttempts(int attempts) {
 		if (attempts == MAX_TRY) {
-			throw new AjajaException(ErrorCode.ATTEMPTS_EXCEED_MAXIMUM_COUNT);
+			throw new AjajaException(ErrorCode.EXCEED_MAX_TRY);
 		}
 	}
 }

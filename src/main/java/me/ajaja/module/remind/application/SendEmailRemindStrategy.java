@@ -13,6 +13,7 @@ import me.ajaja.global.common.BaseTime;
 import me.ajaja.global.schedule.EmailSendable;
 import me.ajaja.infra.mail.SesSendPlanRemindService;
 import me.ajaja.module.remind.application.port.out.FindRemindableTargetsPort;
+import me.ajaja.module.remind.application.port.out.SaveRemindPort;
 import me.ajaja.module.remind.domain.Remind;
 
 @Slf4j
@@ -23,10 +24,10 @@ class SendEmailRemindStrategy extends SendRemindStrategy implements EmailSendabl
 	public SendEmailRemindStrategy(
 		FindRemindableTargetsPort findRemindableTargetsPort,
 		ApplicationEventPublisher eventPublisher,
-		CreateRemindService createRemindService,
+		SaveRemindPort saveRemindPort,
 		SesSendPlanRemindService sesSendPlanRemindService
 	) {
-		super(findRemindableTargetsPort, eventPublisher, createRemindService);
+		super(findRemindableTargetsPort, eventPublisher, saveRemindPort);
 		this.sesSendPlanRemindService = sesSendPlanRemindService;
 	}
 

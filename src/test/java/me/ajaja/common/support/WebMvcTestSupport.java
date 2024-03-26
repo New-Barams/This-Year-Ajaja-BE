@@ -2,11 +2,13 @@ package me.ajaja.common.support;
 
 import static me.ajaja.global.exception.ErrorCode.*;
 import static org.apache.commons.lang3.CharEncoding.*;
+import static org.mockito.BDDMockito.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 
+import java.util.Collections;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +19,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -24,8 +28,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import me.ajaja.common.annotation.ApiTest;
-import me.ajaja.common.annotation.ParameterizedApiTest;
+import me.ajaja.global.security.common.UserAdapter;
 import me.ajaja.global.security.jwt.JwtGenerator;
 import me.ajaja.global.security.jwt.JwtParser;
 import me.ajaja.module.ajaja.application.SwitchAjajaService;
@@ -55,29 +58,27 @@ import me.ajaja.module.user.application.port.in.WithdrawUseCase;
 import me.ajaja.module.user.application.port.out.GetMyPageQuery;
 
 /**
- * Supports Cached Context On WebMvcTest with Monkey <br>
- * When Authentication is required USE @ApiTest, @ParameterizedApiTest
+ * Supports Cached Context On WebMvcTest with Monkey.
  *
  * @author hejow
- * @see ApiTest
- * @see ParameterizedApiTest
  */
 @WebMvcTest
 @ExtendWith(RestDocumentationExtension.class)
 public abstract class WebMvcTestSupport extends MonkeySupport {
+	private static final Authentication MOCK_AUTHENTICATION =
+		new UsernamePasswordAuthenticationToken(new UserAdapter(1L, 1L), null, Collections.emptyList());
+
 	private static final String ANY_END_POINT = "/**";
 
-	protected static final String USER_END_POINT = "/users";
-	protected static final String PLAN_END_POINT = "/plans";
-	protected static final String FEEDBACK_END_POINT = "/feedbacks";
-	protected static final String REMIND_END_POINT = "/reminds";
-	protected static final String FOOTPRINT_END_POINT = "/footprints";
 	protected static final String BEARER_TOKEN = "Bearer eyJhbGxMiJ9.eyJzWpvdyJ9.avFKonhbIIhEg8H1dycQkhQ";
 
 	@Autowired
 	protected MockMvc mockMvc;
 	@Autowired
 	protected ObjectMapper objectMapper;
+
+	@MockBean
+	protected JwtParser jwtParser; // interceptor
 
 	@BeforeEach
 	void setup(
@@ -93,6 +94,8 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 			.defaultRequest(put(ANY_END_POINT).with(csrf().asHeader()))
 			.defaultRequest(delete(ANY_END_POINT).with(csrf().asHeader()))
 			.build();
+
+		given(jwtParser.parseAuthentication(anyString())).willReturn(MOCK_AUTHENTICATION);
 	}
 
 	protected static Stream<Arguments> authenticationFailResults() {
@@ -111,8 +114,6 @@ public abstract class WebMvcTestSupport extends MonkeySupport {
 	 */
 	@MockBean
 	protected JwtGenerator jwtGenerator; // mock login
-	@MockBean
-	protected JwtParser jwtParser; // todo: delete after authentication aop applied
 
 	// Auth
 	@MockBean

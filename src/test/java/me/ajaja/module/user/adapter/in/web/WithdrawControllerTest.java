@@ -7,12 +7,12 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
-import me.ajaja.common.annotation.ApiTest;
-import me.ajaja.common.annotation.ParameterizedApiTest;
 import me.ajaja.common.support.WebMvcTestSupport;
 import me.ajaja.common.util.ApiTag;
 import me.ajaja.common.util.RestDocument;
@@ -21,13 +21,13 @@ import me.ajaja.global.exception.ErrorCode;
 
 class WithdrawControllerTest extends WebMvcTestSupport {
 
-	@ApiTest
+	@Test
 	@DisplayName("유효한 토큰으로 요청하면 회원 탈퇴에 성공한다.")
 	void withdraw_Success() throws Exception {
 		// given
 
 		// when
-		var result = mockMvc.perform(delete(USER_END_POINT)
+		var result = mockMvc.perform(delete("/users")
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.contentType(MediaType.APPLICATION_JSON));
 
@@ -47,7 +47,7 @@ class WithdrawControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ParameterizedApiTest
+	@ParameterizedTest
 	@MethodSource("authenticationFailResults")
 	@DisplayName("요청 시 인증에 실패하면 400에러를 반환한다.")
 	void withdraw_Fail_ByAuthentication(ErrorCode errorCode, String identifier) throws Exception {
@@ -57,7 +57,7 @@ class WithdrawControllerTest extends WebMvcTestSupport {
 		willThrow(authenticationFailed).given(withdrawUseCase).withdraw(anyLong());
 
 		// when
-		var result = mockMvc.perform(delete(USER_END_POINT)
+		var result = mockMvc.perform(delete("/users")
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.contentType(MediaType.APPLICATION_JSON));
 
@@ -80,7 +80,7 @@ class WithdrawControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@Test
 	@DisplayName("존재하지 않는 회원으로 요청하면 404에러를 반환한다.")
 	void withdraw_Fail_ByNotExistUser() throws Exception {
 		// given
@@ -89,7 +89,7 @@ class WithdrawControllerTest extends WebMvcTestSupport {
 		willThrow(useNotFound).given(withdrawUseCase).withdraw(anyLong());
 
 		// when
-		var result = mockMvc.perform(delete(USER_END_POINT)
+		var result = mockMvc.perform(delete("/users")
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.contentType(MediaType.APPLICATION_JSON));
 

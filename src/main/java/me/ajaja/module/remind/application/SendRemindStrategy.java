@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import me.ajaja.global.common.BaseTime;
 import me.ajaja.global.exception.UnexpectedExceptionEvent;
 import me.ajaja.module.remind.application.port.out.FindRemindableTargetsPort;
+import me.ajaja.module.remind.application.port.out.SaveRemindPort;
 import me.ajaja.module.remind.domain.Remind;
 
 @Slf4j
@@ -21,7 +22,7 @@ abstract class SendRemindStrategy {
 
 	protected final FindRemindableTargetsPort findRemindableTargetsPort;
 	private final ApplicationEventPublisher eventPublisher;
-	private final CreateRemindService createRemindService;
+	private final SaveRemindPort saveRemindPort;
 
 	public abstract void send(String remindTime, BaseTime now);
 
@@ -31,9 +32,9 @@ abstract class SendRemindStrategy {
 
 	protected abstract List<Remind> loadRemindables(String scheduledTime, String endPoint, BaseTime now);
 
-	protected void onSuccess(Remind remind, String endPoint, BaseTime now, long tries) {
-		log.info("[NCP] Remind Sent To : {} After {} tries", remind.getPhoneNumber(), tries);
-		createRemindService.create(remind, now, endPoint);
+	protected void onSuccess(Remind unsaved, String sendType, BaseTime now, long tries) {
+		log.info("[NCP] Remind Sent To : {} After {} tries", unsaved.getPhoneNumber(), tries);
+		saveRemindPort.save(unsaved.asPlan(sendType, now));
 	}
 
 	protected Void handleFail(Throwable throwable) {

@@ -9,12 +9,12 @@ import java.time.Instant;
 import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
-import me.ajaja.common.annotation.ApiTest;
-import me.ajaja.common.annotation.ParameterizedApiTest;
 import me.ajaja.common.support.WebMvcTestSupport;
 import me.ajaja.common.util.ApiTag;
 import me.ajaja.common.util.RestDocument;
@@ -26,15 +26,18 @@ import me.ajaja.module.plan.dto.PlanResponse;
 
 class PlanControllerTest extends WebMvcTestSupport {
 	private static final List<String> TAG_FIXTURE = List.of("올해도", "아좌좌");
-	private static final List<PlanRequest.Message> MESSAGE_FIXTURE = List.of(new PlanRequest.Message("content1", 6, 1),
-		new PlanRequest.Message("content2", 12, 1));
+
+	private static final List<PlanRequest.Message> MESSAGE_FIXTURE =
+		List.of(new PlanRequest.Message("content1", 6, 1), new PlanRequest.Message("content2", 12, 1));
+
 	private static final PlanResponse.Detail DETAIL_RESPONSE_FIXTURE = new PlanResponse.Detail(
 		new PlanResponse.Writer("공부하는 돼지", true, true),
 		1L, "올해도 아좌좌", "아좌좌 마이 라이프", 1, true, true, true, 15000,
-		TAG_FIXTURE, Instant.now()
+		TAG_FIXTURE,
+		Instant.now()
 	);
 
-	@ApiTest
+	@Test
 	@DisplayName("[계획 수정] 요청이 들어오면 요청된 데이터로 계획이 수정된다.")
 	void updatePlan_Success() throws Exception {
 		// given
@@ -44,7 +47,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		given(updatePlanService.update(anyLong(), anyLong(), any(), anyInt())).willReturn(response);
 
 		// when
-		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}"), 1)
+		var result = mockMvc.perform(put("/plans/{id}", 1)
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.header("Month", 12)
@@ -82,7 +85,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@Test
 	@DisplayName("[계획 수정] 플랜이 존재하지 않을 경우 404 에러를 반환한다.")
 	void updatePlan_Fail_ByNotFoundPlan() throws Exception {
 		// given
@@ -92,7 +95,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 			new AjajaException(NOT_FOUND_PLAN));
 
 		// when
-		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}"), 1)
+		var result = mockMvc.perform(put("/plans/{id}", 1)
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.header("Month", 1)
@@ -112,7 +115,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@Test
 	@DisplayName("[계획 수정] 수정 가능한 기간이 아닌 경우 400 에러를 반환한다.")
 	void updatePlan_Fail_ByNotModifiableMonth() throws Exception {
 		// given
@@ -122,7 +125,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 			new AjajaException(UNMODIFIABLE_DURATION));
 
 		// when
-		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}"), 1)
+		var result = mockMvc.perform(put("/plans/{id}", 1)
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.header("Month", 1)
@@ -142,17 +145,17 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@Test
 	@DisplayName("[계획 수정] 잘못된 유저의 접근일 경우 400 에러를 반환한다.")
 	void updatePlan_Fail_ByInvalidUserAccess() throws Exception {
 		// given
 		PlanRequest.Update request = new PlanRequest.Update(1, "올해도 아좌좌", "아좌좌 마이 라이프", true, true, TAG_FIXTURE);
 
-		given(updatePlanService.update(anyLong(), anyLong(), any(), anyInt())).willThrow(
-			new AjajaException(NOT_AUTHOR));
+		given(updatePlanService.update(anyLong(), anyLong(), any(), anyInt()))
+			.willThrow(new AjajaException(NOT_AUTHOR));
 
 		// when
-		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}"), 1)
+		var result = mockMvc.perform(put("/plans/{id}", 1)
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.header("Month", 1)
@@ -172,7 +175,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ParameterizedApiTest
+	@ParameterizedTest
 	@MethodSource("authenticationFailResults")
 	@DisplayName("[계획 수정] 토큰 검증에 실패할 경우 400 에러를 반환한다.")
 	void updatePlan_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
@@ -182,7 +185,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		given(updatePlanService.update(anyLong(), anyLong(), any(), anyInt())).willThrow(new AjajaException(errorCode));
 
 		// when
-		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}"), 1)
+		var result = mockMvc.perform(put("/plans/{id}", 1)
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.header("Month", 1)
@@ -202,7 +205,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@Test
 	@DisplayName("[계획 전체 조회] 요청이 들어오면 전체 계획을 조회할 수 있다.")
 	void getAllPlans_Success() throws Exception {
 		// given
@@ -213,7 +216,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		given(findAllPlansQuery.findAllByCursorAndSorting(request)).willReturn(response);
 
 		// when
-		var result = mockMvc.perform(get(PLAN_END_POINT)
+		var result = mockMvc.perform(get("/plans")
 			.contentType(MediaType.APPLICATION_JSON)
 			.param("sort", request.getSort())
 			.param("current", String.valueOf(request.isCurrent()))
@@ -274,14 +277,14 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@Test
 	@DisplayName("[계획 삭제] 요청이 들어오면 계획이 삭제된다.")
 	void deletePlan_Success() throws Exception {
 		// given
 		doNothing().when(deletePlanService).delete(anyLong(), anyLong(), anyInt());
 
 		// when
-		var result = mockMvc.perform(delete(PLAN_END_POINT.concat("/{id}"), 1)
+		var result = mockMvc.perform(delete("/plans/{id}", 1)
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.header("Month", 1));
@@ -302,14 +305,14 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@Test
 	@DisplayName("[계획 삭제] 플랜이 존재하지 않을 경우 404 에러를 반환한다.")
 	void deletePlan_Fail_ByNotFoundPlan() throws Exception {
 		// given
 		doThrow(new AjajaException(NOT_FOUND_PLAN)).when(deletePlanService).delete(anyLong(), anyLong(), anyInt());
 
 		// when
-		var result = mockMvc.perform(delete(PLAN_END_POINT.concat("/{id}"), 1)
+		var result = mockMvc.perform(delete("/plans/{id}", 1)
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.header("Month", 1));
@@ -328,7 +331,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@Test
 	@DisplayName("[계획 삭제] 삭제 가능한 기간이 아닌 경우 400 에러를 반환한다.")
 	void deletePlan_Fail_ByNotModifiableMonth() throws Exception {
 		// given
@@ -336,7 +339,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		doThrow(unmodifiableDuration).when(deletePlanService).delete(anyLong(), anyLong(), anyInt());
 
 		// when
-		var result = mockMvc.perform(delete(PLAN_END_POINT.concat("/{id}"), 1)
+		var result = mockMvc.perform(delete("/plans/{id}", 1)
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.header("Month", 1));
@@ -355,14 +358,14 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@Test
 	@DisplayName("[계획 삭제] 잘못된 유저의 접근일 경우 400 에러를 반환한다.")
 	void deletePlan_Fail_ByInvalidUserAccess() throws Exception {
 		// given
 		doThrow(new AjajaException(NOT_AUTHOR)).when(deletePlanService).delete(anyLong(), anyLong(), anyInt());
 
 		// when
-		var result = mockMvc.perform(delete(PLAN_END_POINT.concat("/{id}"), 1)
+		var result = mockMvc.perform(delete("/plans/{id}", 1)
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.header("Month", 1));
@@ -381,7 +384,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ParameterizedApiTest
+	@ParameterizedTest
 	@MethodSource("authenticationFailResults")
 	@DisplayName("[계획 삭제] 토큰 검증에 실패할 경우 400 에러를 반환한다.")
 	void deletePlan_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
@@ -389,7 +392,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		doThrow(new AjajaException(errorCode)).when(deletePlanService).delete(anyLong(), anyLong(), anyInt());
 
 		// when
-		var result = mockMvc.perform(delete(PLAN_END_POINT.concat("/{id}"), 1)
+		var result = mockMvc.perform(delete("/plans/{id}", 1)
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.header("Month", 1));
@@ -408,7 +411,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@Test
 	@DisplayName("[계획 단건 조회] 요청이 들어오면 계획 정보를 조회할 수 있다.")
 	void getPlan_Success() throws Exception {
 		// given
@@ -417,7 +420,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		given(loadPlanDetailUseCase.loadByIdAndOptionalUser(anyLong(), anyLong())).willReturn(response);
 
 		// when
-		var result = mockMvc.perform(get(PLAN_END_POINT.concat("/{id}"), 1)
+		var result = mockMvc.perform(get("/plans/{id}", 1)
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.header("Month", 1));
@@ -454,7 +457,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ParameterizedApiTest
+	@ParameterizedTest
 	@MethodSource("authenticationFailResults")
 	@DisplayName("[계획 단건 조회] 토큰 검증에 실패할 경우 400 에러를 반환한다.")
 	void getPlan_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
@@ -463,7 +466,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 			.willThrow(new AjajaException(errorCode));
 
 		// when
-		var result = mockMvc.perform(get(PLAN_END_POINT.concat("/{id}"), 1)
+		var result = mockMvc.perform(get("/plans/{id}", 1)
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.header("Month", 1));
@@ -482,7 +485,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@Test
 	@DisplayName("[계획 생성] 요청된 데이터로 계획을 생성한다.")
 	void createPlan_Success() throws Exception {
 		// given
@@ -492,7 +495,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		given(createPlanService.create(anyLong(), any(), anyInt())).willReturn(1L);
 
 		// when
-		var result = mockMvc.perform(post(PLAN_END_POINT)
+		var result = mockMvc.perform(post("/plans")
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.header("Month", 1)
@@ -519,7 +522,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@Test
 	@DisplayName("[계획 생성] 생성 가능한 기간이 아닌 경우 400 에러를 반환한다.")
 	void createPlan_Fail_ByNotCreatableMonth() throws Exception {
 		// given
@@ -530,7 +533,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		willThrow(unmodifiableDuration).given(createPlanService).create(anyLong(), any(), anyInt());
 
 		// when
-		var result = mockMvc.perform(post(PLAN_END_POINT)
+		var result = mockMvc.perform(post("/plans")
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.header("Month", 1)
@@ -550,7 +553,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ParameterizedApiTest
+	@ParameterizedTest
 	@MethodSource("authenticationFailResults")
 	@DisplayName("[계획 생성] 토큰 검증에 실패할 경우 400 에러를 반환한다.")
 	void createPlan_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
@@ -561,7 +564,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		given(createPlanService.create(anyLong(), any(), anyInt())).willThrow(new AjajaException(errorCode));
 
 		// when
-		var result = mockMvc.perform(post(PLAN_END_POINT)
+		var result = mockMvc.perform(post("/plans")
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.header("Month", 1)
@@ -581,14 +584,14 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@Test
 	@DisplayName("[계획 공개 여부 변경] 요청이 들어오면 계획의 공개 여부가 변경된다.")
 	void updatePlanPublicStatus_Success() throws Exception {
 		// given
 		doNothing().when(switchPlanStatusUseCase).switchPublic(anyLong(), anyLong());
 
 		// when
-		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}/public"), 1)
+		var result = mockMvc.perform(put("/plans/{id}/public", 1)
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN));
 
@@ -608,7 +611,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@Test
 	@DisplayName("[계획 공개 여부 변경] 플랜이 존재하지 않을 경우 404 에러를 반환한다.")
 	void updatePlanPublicStatus_Fail_ByNotFoundPlan() throws Exception {
 		// given
@@ -616,7 +619,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 			.when(switchPlanStatusUseCase).switchPublic(anyLong(), anyLong());
 
 		// when
-		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}/public"), 1)
+		var result = mockMvc.perform(put("/plans/{id}/public", 1)
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN));
 
@@ -634,14 +637,14 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@Test
 	@DisplayName("[계획 공개 여부 변경] 잘못된 유저의 접근일 경우 400 에러를 반환한다.")
 	void updatePlanPublicStatus_Fail_ByInvalidUserAccess() throws Exception {
 		// given
 		doThrow(new AjajaException(NOT_AUTHOR)).when(switchPlanStatusUseCase).switchPublic(anyLong(), anyLong());
 
 		// when
-		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}/public"), 1)
+		var result = mockMvc.perform(put("/plans/{id}/public", 1)
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN));
 
@@ -659,7 +662,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ParameterizedApiTest
+	@ParameterizedTest
 	@MethodSource("authenticationFailResults")
 	@DisplayName("[계획 공개 여부 변경] 토큰 검증에 실패할 경우 400 에러를 반환한다.")
 	void updatePlanPublicStatus_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
@@ -667,7 +670,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		doThrow(new AjajaException(errorCode)).when(switchPlanStatusUseCase).switchPublic(anyLong(), anyLong());
 
 		// when
-		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}/public"), 1)
+		var result = mockMvc.perform(put("/plans/{id}/public", 1)
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN));
 
@@ -685,14 +688,14 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@Test
 	@DisplayName("[계획 리마인드 알림 여부 변경] 요청이 들어오면 리마인드 알림 여부가 변경된다.")
 	void updatePlanRemindStatus_Success() throws Exception {
 		// given
 		doNothing().when(switchPlanStatusUseCase).switchRemindable(anyLong(), anyLong());
 
 		// when
-		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}/remindable"), 1)
+		var result = mockMvc.perform(put("/plans/{id}/remindable", 1)
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN));
 
@@ -712,7 +715,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@Test
 	@DisplayName("[계획 리마인드 알림 여부 변경] 플랜이 존재하지 않을 경우 404 에러를 반환한다.")
 	void updatePlanRemindStatus_Fail_ByNotFoundPlan() throws Exception {
 		// given
@@ -720,7 +723,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 			.when(switchPlanStatusUseCase).switchRemindable(anyLong(), anyLong());
 
 		// when
-		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}/remindable"), 1)
+		var result = mockMvc.perform(put("/plans/{id}/remindable", 1)
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN));
 
@@ -738,14 +741,14 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@Test
 	@DisplayName("[계획 리마인드 알림 여부 변경] 잘못된 유저의 접근일 경우 400 에러를 반환한다.")
 	void updatePlanRemindStatus_Fail_ByInvalidUserAccess() throws Exception {
 		// given
 		doThrow(new AjajaException(NOT_AUTHOR)).when(switchPlanStatusUseCase).switchRemindable(anyLong(), anyLong());
 
 		// when
-		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}/remindable"), 1)
+		var result = mockMvc.perform(put("/plans/{id}/remindable", 1)
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN));
 
@@ -763,7 +766,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ParameterizedApiTest
+	@ParameterizedTest
 	@MethodSource("authenticationFailResults")
 	@DisplayName("[계획 리마인드 알림 여부 변경] 토큰 검증에 실패할 경우 400 에러를 반환한다.")
 	void updatePlanRemindStatus_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
@@ -771,7 +774,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		doThrow(new AjajaException(errorCode)).when(switchPlanStatusUseCase).switchRemindable(anyLong(), anyLong());
 
 		// when
-		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}/remindable"), 1)
+		var result = mockMvc.perform(put("/plans/{id}/remindable", 1)
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN));
 
@@ -789,14 +792,14 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@Test
 	@DisplayName("[응원 메시지 알림 여부 변경] 요청이 들어오면 응원 메시지 알림 여부가 변경된다.")
 	void updatePlanAjajaStatus_Success() throws Exception {
 		// given
 		doNothing().when(switchPlanStatusUseCase).switchAjajable(anyLong(), anyLong());
 
 		// when
-		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}/ajajable"), 1)
+		var result = mockMvc.perform(put("/plans/{id}/ajajable", 1)
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN));
 
@@ -816,7 +819,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@Test
 	@DisplayName("[응원 메시지 알림 여부 변경] 플랜이 존재하지 않을 경우 404 에러를 반환한다.")
 	void updatePlanAjajaStatus_Fail_ByNotFoundPlan() throws Exception {
 		// given
@@ -824,7 +827,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 			.when(switchPlanStatusUseCase).switchAjajable(anyLong(), anyLong());
 
 		// when
-		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}/ajajable"), 1)
+		var result = mockMvc.perform(put("/plans/{id}/ajajable", 1)
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN));
 
@@ -842,14 +845,14 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@Test
 	@DisplayName("[응원 메시지 알림 여부 변경] 잘못된 유저의 접근일 경우 400 에러를 반환한다.")
 	void updatePlanAjajaStatus_Fail_ByInvalidUserAccess() throws Exception {
 		// given
 		doThrow(new AjajaException(NOT_AUTHOR)).when(switchPlanStatusUseCase).switchAjajable(anyLong(), anyLong());
 
 		// when
-		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}/ajajable"), 1)
+		var result = mockMvc.perform(put("/plans/{id}/ajajable", 1)
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN));
 
@@ -867,7 +870,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ParameterizedApiTest
+	@ParameterizedTest
 	@MethodSource("authenticationFailResults")
 	@DisplayName("[응원 메시지 알림 여부 변경] 토큰 검증에 실패할 경우 400 에러를 반환한다.")
 	void updatePlanAjajaStatus_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
@@ -875,7 +878,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		doThrow(new AjajaException(errorCode)).when(switchPlanStatusUseCase).switchAjajable(anyLong(), anyLong());
 
 		// when
-		var result = mockMvc.perform(put(PLAN_END_POINT.concat("/{id}/ajajable"), 1)
+		var result = mockMvc.perform(put("/plans/{id}/ajajable", 1)
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN));
 
@@ -893,14 +896,14 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@Test
 	@DisplayName("[아좌좌 추가 or 취소] 요청이 들어오면 아좌좌 누름 여부가 변경된다.")
 	void switchAjaja_Success() throws Exception {
 		// given
 		doNothing().when(switchAjajaService).switchOrAddIfNotExist(anyLong(), anyLong());
 
 		// when
-		var result = mockMvc.perform(post(PLAN_END_POINT.concat("/{id}/ajaja"), 1)
+		var result = mockMvc.perform(post("/plans/{id}/ajaja", 1)
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN));
 
@@ -920,7 +923,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@Test
 	@DisplayName("[아좌좌 추가 or 취소] 플랜이 존재하지 않을 경우 404 에러를 반환한다.")
 	void switchAjaja_Fail_ByNotFoundPlan() throws Exception {
 		// given
@@ -928,7 +931,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		willThrow(notFound).given(switchAjajaService).switchOrAddIfNotExist(anyLong(), anyLong());
 
 		// when
-		var result = mockMvc.perform(post(PLAN_END_POINT.concat("/{id}/ajaja"), 1)
+		var result = mockMvc.perform(post("/plans/{id}/ajaja", 1)
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN));
 
@@ -946,7 +949,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ParameterizedApiTest
+	@ParameterizedTest
 	@MethodSource("authenticationFailResults")
 	@DisplayName("[아좌좌 추가 or 취소] 토큰 검증에 실패할 경우 400 에러를 반환한다.")
 	void switchAjaja_Fail_ByInvalidToken(ErrorCode errorCode, String identifier) throws Exception {
@@ -954,7 +957,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		doThrow(new AjajaException(errorCode)).when(switchAjajaService).switchOrAddIfNotExist(anyLong(), anyLong());
 
 		// when
-		var result = mockMvc.perform(post(PLAN_END_POINT.concat("/{id}/ajaja"), 1)
+		var result = mockMvc.perform(post("/plans/{id}/ajaja", 1)
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN));
 
@@ -972,7 +975,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		);
 	}
 
-	@ApiTest
+	@Test
 	@DisplayName("[비속어 검증] 요청된 데이터에 대한 검증을 수행한다.")
 	void validateContent_Success() throws Exception {
 		// given
@@ -985,7 +988,7 @@ class PlanControllerTest extends WebMvcTestSupport {
 		given(validateContentUseCase.check(request)).willReturn(response);
 
 		// when
-		var result = mockMvc.perform(post(PLAN_END_POINT.concat("/validate-content"))
+		var result = mockMvc.perform(post("/plans".concat("/validate-content"))
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, BEARER_TOKEN)
 			.content(objectMapper.writeValueAsString(request)));

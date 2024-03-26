@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import me.ajaja.global.common.AjajaResponse;
-import me.ajaja.global.security.annotation.Authorization;
-import me.ajaja.global.util.SecurityUtil;
+import me.ajaja.global.security.annotation.Authorize;
+import me.ajaja.global.security.annotation.Login;
 import me.ajaja.module.user.application.port.in.RefreshNicknameUseCase;
 
 @RestController
@@ -17,11 +17,10 @@ import me.ajaja.module.user.application.port.in.RefreshNicknameUseCase;
 class RefreshNicknameController {
 	private final RefreshNicknameUseCase refreshNicknameUseCase;
 
-	@Authorization
+	@Authorize
 	@PostMapping("/users/refresh")
 	@ResponseStatus(OK)
-	public AjajaResponse<Void> refreshNickname() {
-		Long id = SecurityUtil.getUserId();
+	public AjajaResponse<Void> refreshNickname(@Login Long id) {
 		refreshNicknameUseCase.refresh(id);
 		return AjajaResponse.ok();
 	}

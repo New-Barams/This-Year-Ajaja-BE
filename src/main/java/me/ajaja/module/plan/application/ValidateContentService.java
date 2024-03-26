@@ -24,10 +24,8 @@ class ValidateContentService implements ValidateContentUseCase {
 	private BanWordValidationResult.Common getResult(String origin) {
 		List<String> result = BanWordFilter.validate(origin);
 
-		if (result.isEmpty()) {
-			return new BanWordValidationResult.Common(false, Collections.emptyList());
-		}
-
-		return new BanWordValidationResult.Common(true, result);
+		return result.isEmpty()
+			? new BanWordValidationResult.Common(false, Collections.emptyList())
+			: new BanWordValidationResult.Common(true, result);
 	}
 }
